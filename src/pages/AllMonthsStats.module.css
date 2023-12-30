@@ -1,0 +1,137 @@
+.tableWrapper {
+  width: 2000px;
+  overflow-x: scroll;
+  margin-top: 25px;
+  margin-left: 200px;
+}
+.infoTable {
+  width: "100%";
+}
+.infoTable tbody > tr {
+  border-bottom: 1px solid white;
+}
+.infoTable thead {
+  background: blue;
+}
+
+.infoTable tbody tr .month {
+  width: 80px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .border {
+  width: 100px;
+  border-bottom: 2px solid white;
+}
+.infoTable table {
+  width: 100%;
+}
+.infoTable table > tr:not(:last-child) {
+  border-bottom: 1px solid white;
+}
+
+.infoTable tbody tr .breakfast {
+  width: 100px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .launch {
+  width: 100px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .dinner {
+  width: 100px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .totalMeal {
+  width: 120px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .overAllMeal {
+  width: 130px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .totalDeposite {
+  width: 130px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .totalShop {
+  width: 120px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .overAllShop {
+  width: 120px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .mealRate {
+  width: 120px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .borderConsume {
+  width: 200px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .restBalance {
+  width: 250px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .totalBalance {
+  width: 150px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .headingRemainingBalance {
+  width: 150px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+.infoTable tbody tr .remainingBalance {
+  width: 150px;
+  border-right: 1px solid white;
+  border-bottom: 2px solid white;
+}
+
+.fixedMonthAndName {
+  position: fixed;
+  left: 0;
+  width: 200px;
+  top: 0;
+  background: white;
+  /* border-right: 2px solid; */
+  /* border-bottom: 40px solid; */
+}
+
+.bodyMonthAndName {
+  position: fixed;
+  left: 0;
+  top: 25px;
+  width: 200px;
+  bottom: 0;
+  overflow: scroll;
+  /* border-right: 1.5px solid; */
+  border-bottom: 2px solid white;
+  background: green;
+}
+.customTableHeaderWrapper {
+  position: fixed;
+  left: 200px;
+  right: 0;
+  top: 0;
+  background: red;
+  z-index: 1000;
+  overflow-x: scroll;
+}
+
+.customTableHeaderWrapper .infoTable {
+  width: 2000px;
+}

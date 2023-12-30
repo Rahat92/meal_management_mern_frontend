@@ -1,0 +1,14 @@
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: "white";
+}
