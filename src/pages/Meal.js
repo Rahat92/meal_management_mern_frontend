@@ -378,8 +378,8 @@ const Meal = () => {
     }
   }, []);
   useEffect(() => {
-    signUp()
-  }, [])
+    signUp();
+  }, []);
   useEffect(() => {
     window.addEventListener("scroll", function () {
       tableBodyRef.current.scrollTo(0, window.pageYOffset);
@@ -518,7 +518,11 @@ const Meal = () => {
           >
             <table
               style={{
-                width: currentUser !== "all" ? "226px" : "1200px",
+                // width: currentUser !== "all" ? "226px" : "1200px",
+                width:
+                  currentUser !== "all"
+                    ? "226px"
+                    : registeredUsers?.length *2* 150+150 + "px",
                 height: "100%",
                 background: "white",
                 borderBottom: "4px solid black",
@@ -578,13 +582,16 @@ const Meal = () => {
                     })}
                   <th
                     style={{
-                      width: currentUser !== "all" && "150px",
-                      minWidth: currentUser !== "all" && "150px",
+                      // width: currentUser !== "all" && "150px",
+                      // minWidth: currentUser !== "all" && "150px",
+                      width: "150px",
+                      borderRight: "2px solid black",
                       display: currentUser !== "all" ? "none" : "",
                     }}
                   >
                     Total Meal
                   </th>
+                  <th></th>
                 </tr>
               </thead>
             </table>
@@ -596,7 +603,10 @@ const Meal = () => {
       <table
         ref={tableBodyRef}
         style={{
-          width: currentUser !== "all" ? "226px" : "1200px",
+          // width: currentUser !== "all" ? "226px" : "1200px",
+          width: currentUser !== "all"
+          ? "226px"
+          : registeredUsers?.length *2* 150+150 + "px",
           marginTop: headHeight + 50,
           marginLeft: "150px",
         }}
