@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { userLoggedIn } from "./features/auth/authSlice";
 import Test from "./pages/Test";
+import SignUp from "./pages/SignUp";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -19,7 +20,8 @@ const App = () => {
     <div>
       <Router>
         <Routes>
-          <Route path="/meal" element={<Meal />} />
+          <Route path="/" element={<Meal />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/all-month-stats" element={<AllMonthsStats />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/test" element={<Test />} />

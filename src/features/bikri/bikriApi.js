@@ -180,18 +180,18 @@ const bikriApi = apiSlice.injectEndpoints({
         console.log(args);
         try {
           const { data } = await queryFulfilled;
+          console.log(data)
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              undefined,
+              {getMonth: args.month, getYear: args.year},
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
                 );
                 console.log(JSON.stringify(desireMeal));
-                desireMeal["money"][args.borderIndex] = [...data.meal.money][
-                  args.borderIndex
-                ];
+                desireMeal["money"][args.borderIndex] = data.meal.money[args.borderIndex]
+
               }
             )
           );
@@ -200,7 +200,7 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              undefined,
+              {getMonth: args.month, getYear: args.year},
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
@@ -230,30 +230,36 @@ const bikriApi = apiSlice.injectEndpoints({
         console.log(args);
         try {
           const { data } = await queryFulfilled;
+          console.log(data);
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              undefined,
+              {getMonth: args.month, getYear: args.year},
+              (meals) => {
+                const desireMeal = meals?.monthlyMeals.find(
+                  (item) => item.id === args.id
+                );
+                // desireMeal["shop"][args.borderIndex] = [
+                //   ...desireMeal["shop"],
+                // ][args.borderIndex];
+                // desireMeal["shop"] = [...desireMeal["shop"]];
+                desireMeal["shop"][args.borderIndex] = data.meal.shop[args.borderIndex]
+                // desireMeal["shop"] = [...desireMeal["shop"]];
+              }
+            )
+          );
+        } catch (err) {
+          console.log("shop error");
+          dispatch(
+            apiSlice.util.updateQueryData(
+              "getMonthlyMeals",
+              {getMonth: args.month, getYear: args.year},
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
                 );
                 console.log(JSON.stringify(desireMeal));
-                desireMeal["shop"][args.borderIndex] = [...data.meal.shop][
-                  args.borderIndex
-                ];
-              }
-            )
-          );
-        } catch (err) {
-          dispatch(
-            apiSlice.util.updateQueryData(
-              "getMonthlyMeals",
-              undefined,
-              (meals) => {
-                const desireMeal = meals?.monthlyMeals.find(
-                  (item) => item.id === args.id
-                );
+                console.log(JSON.stringify([...desireMeal["shop"]]))
                 desireMeal["shop"][args.borderIndex] = [...desireMeal["shop"]][
                   args.borderIndex
                 ];
@@ -279,15 +285,10 @@ const bikriApi = apiSlice.injectEndpoints({
       query: () => `/year-month`,
     }),
     signUp: builder.mutation({
-      query: () => ({
+      query: (data) => ({
         url: `/users/register`,
         method: "POST",
-        body: {
-          name: "Rahat",
-          email: "rahat92@gmail.com",
-          password: "rahat1234",
-          passwordConfirm: "rahat1234",
-        },
+        body: data
       }),
     }),
     login: builder.mutation({

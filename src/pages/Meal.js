@@ -181,6 +181,7 @@ const Meal = () => {
   }, [isMealStatusError]);
   useEffect(() => {
     if (isShopMoneyError) {
+      console.log('good')
       alert(shopMoneyError?.data?.message);
     }
   }, [isShopMoneyError]);
@@ -272,6 +273,7 @@ const Meal = () => {
           id: el._id,
           date: el.date,
           month: el.month,
+          year: el.year,
           breakfast: el.breakfast,
           launch: el.launch,
           dinner: el.dinner,
@@ -377,9 +379,9 @@ const Meal = () => {
       setHeadHeight(headRef.current.offsetHeight);
     }
   }, []);
-  useEffect(() => {
-    signUp();
-  }, []);
+  // useEffect(() => {
+  //   signUp();
+  // }, []);
   useEffect(() => {
     window.addEventListener("scroll", function () {
       tableBodyRef.current.scrollTo(0, window.pageYOffset);
@@ -453,7 +455,6 @@ const Meal = () => {
             </select>
           </form>
         </div>
-
         <div>
           <button
             style={{ color: isChanged ? "red" : "white" }}
@@ -522,7 +523,7 @@ const Meal = () => {
                 width:
                   currentUser !== "all"
                     ? "226px"
-                    : registeredUsers?.length *2* 150+150 + "px",
+                    : registeredUsers?.length * 150 + 151 + "px",
                 height: "100%",
                 background: "white",
                 borderBottom: "4px solid black",
@@ -604,9 +605,10 @@ const Meal = () => {
         ref={tableBodyRef}
         style={{
           // width: currentUser !== "all" ? "226px" : "1200px",
-          width: currentUser !== "all"
-          ? "226px"
-          : registeredUsers?.length *2* 150+150 + "px",
+          width:
+            currentUser !== "all"
+              ? "226px"
+              : registeredUsers?.length * 150 + 150 + "px",
           marginTop: headHeight + 50,
           marginLeft: "150px",
         }}
@@ -905,6 +907,8 @@ const Meal = () => {
                                     setArrOfMeals([...arrOfMeals]);
                                     updateMoney({
                                       id: el.id,
+                                      year: el.year,
+                                      month: el.month,
                                       borderIndex: index,
                                       money: e.target.value * 1,
                                     });
@@ -949,6 +953,8 @@ const Meal = () => {
                                     setArrOfMeals([...arrOfMeals]);
                                     updateShopMoney({
                                       id: el.id,
+                                      month: el.month,
+                                      year: el.year,
                                       borderIndex: index,
                                       shop: e.target.value * 1,
                                     });
