@@ -181,7 +181,7 @@ const Meal = () => {
   }, [isMealStatusError]);
   useEffect(() => {
     if (isShopMoneyError) {
-      console.log('good')
+      console.log("good");
       alert(shopMoneyError?.data?.message);
     }
   }, [isShopMoneyError]);
@@ -634,6 +634,7 @@ const Meal = () => {
                     // borderLeft: "1px solid white",
                     borderBottom: "2px solid green",
                     borderTop: "2px solid white",
+                    height: "100px",
                   }}
                 >
                   {registeredUsers?.map((element, index) => {
@@ -1311,7 +1312,7 @@ const Meal = () => {
                       borderRight: "4px solid black",
                       borderBottom: "2px solid green",
                       width: "100%",
-                      height: "99.33px",
+                      // height: "99.33px",
                     }}
                   >
                     <td
@@ -1324,9 +1325,9 @@ const Meal = () => {
                       {el.date?.split(" ")[0]}
                     </td>
                     <td
-                      style={{ background: "", height: "100%", color: "black" }}
+                      style={{ background: "", height: "100px", color: "black" }}
                     >
-                      <table style={{ width: "100%", height: "97.33px" }}>
+                      <table style={{ width: "100%",  }}>
                         <tr style={{ borderBottom: "1px solid white" }}>
                           <td style={{ textAlign: "center" }}>Breakfast</td>
                         </tr>

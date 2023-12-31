@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -13,9 +13,9 @@ const SignIn = () => {
   const [login, { isSuccess }] = useLoginMutation();
   useEffect(() => {
     if (isSuccess) {
-      navigate('/meal')
+      navigate("/");
     }
-  }, [isSuccess])
+  }, [isSuccess]);
   return (
     <div>
       <table>
