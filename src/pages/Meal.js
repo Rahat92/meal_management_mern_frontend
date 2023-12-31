@@ -482,7 +482,7 @@ const Meal = () => {
               borderBottom: "4px solid black",
             }}
           >
-            <table style={{ width: "100%", height: "100%" }}>
+            <table style={{ width: "100%", height: "50px" }}>
               <tr
                 style={{
                   borderLeft: "2px solid white",
