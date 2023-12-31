@@ -633,7 +633,7 @@ const Meal = () => {
                   style={{
                     // borderLeft: "1px solid white",
                     borderBottom: "2px solid green",
-                    borderTop: "2px solid white",
+                    // borderTop: "2px solid white",
                     height: "100px",
                   }}
                 >
@@ -1309,6 +1309,7 @@ const Meal = () => {
                   <tr
                     style={{
                       border: "2px solid white",
+                      borderTop: "0",
                       borderRight: "4px solid black",
                       borderBottom: "2px solid green",
                       width: "100%",
@@ -1325,9 +1326,13 @@ const Meal = () => {
                       {el.date?.split(" ")[0]}
                     </td>
                     <td
-                      style={{ background: "", height: "100px", color: "black" }}
+                      style={{
+                        background: "",
+                        height: "100px",
+                        color: "black",
+                      }}
                     >
-                      <table style={{ width: "100%",  }}>
+                      <table style={{ width: "100%" }}>
                         <tr style={{ borderBottom: "1px solid white" }}>
                           <td style={{ textAlign: "center" }}>Breakfast</td>
                         </tr>
