@@ -12,3 +12,7 @@
 body {
   background: "white";
 }
+
+.selectMonthYear {
+  color: black;
+}
