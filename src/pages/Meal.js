@@ -379,7 +379,7 @@ const Meal = () => {
       console.log(headRef.current.offsetHeight);
       setHeadHeight(headRef.current.offsetHeight);
     }
-  }, []);
+  }, [headRef?.current]);
   // useEffect(() => {
   //   signUp();
   // }, []);
@@ -468,7 +468,10 @@ const Meal = () => {
         </div>
 
         <button
-          style={{ display: user?.role !== "admin" ? "none" : "", color:'black' }}
+          style={{
+            display: user?.role !== "admin" ? "none" : "",
+            color: "black",
+          }}
           onClick={() => createMeal(dates)}
         >
           Create Meal
@@ -612,7 +615,7 @@ const Meal = () => {
             currentUser !== "all"
               ? "226px"
               : registeredUsers?.length * 150 + 150 + "px",
-          marginTop: headHeight + 50,
+          marginTop: headHeight + 50 + "px",
           marginLeft: "150px",
         }}
       >
@@ -634,9 +637,7 @@ const Meal = () => {
               return (
                 <tr
                   style={{
-                    // borderLeft: "1px solid white",
                     borderBottom: "2px solid green",
-                    // borderTop: "2px solid white",
                     height: "100px",
                   }}
                 >
@@ -844,12 +845,18 @@ const Meal = () => {
                       );
                     }
                   })}
-                  <td style={{ display: currentUser !== "all" ? "none" : "" }}>
+                  <td
+                    style={{
+                      display: currentUser !== "all" ? "none" : "",
+                      borderRight: "2px solid black",
+                    }}
+                  >
                     <table
                       style={{
                         background: "white",
                         color: "black",
-                        width: "149px",
+                        // width: "148px",
+                        width: "100%",
                       }}
                     >
                       <tr>
@@ -882,12 +889,13 @@ const Meal = () => {
       </table>
       {/* </div> */}
       {/* fixed */}
+      {console.log(headHeight)}
       <div
         ref={dateRef}
         style={{
           position: "fixed",
           width: "150px",
-          top: headHeight + 50,
+          top: headHeight+50+'px',
           bottom: "0",
           background: "white",
           overflowY: "scroll",
