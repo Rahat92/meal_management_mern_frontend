@@ -704,7 +704,7 @@ const Meal = () => {
                                     background: "white",
                                     border: "1.5px solid black",
                                     borderRadius: "5px",
-                                    width: "30px",
+                                    width: "40px",
                                     textAlign: "center",
                                   }}
                                   type={
@@ -755,7 +755,7 @@ const Meal = () => {
                                     background: "white",
                                     border: "1.5px solid black",
                                     borderRadius: "5px",
-                                    width: "30px",
+                                    width: "40px",
                                     textAlign: "center",
                                   }}
                                   type={
@@ -814,7 +814,7 @@ const Meal = () => {
                                     background: "white",
                                     border: "1.5px solid black",
                                     borderRadius: "5px",
-                                    width: "30px",
+                                    width: "40px",
                                     textAlign: "center",
                                   }}
                                   type={
@@ -895,7 +895,7 @@ const Meal = () => {
         style={{
           position: "fixed",
           width: "150px",
-          top: headHeight+50+'px',
+          top: headHeight + 50 + "px",
           bottom: "0",
           background: "white",
           overflowY: "scroll",

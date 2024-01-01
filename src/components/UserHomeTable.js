@@ -1,6 +1,17 @@
 import React from "react";
 
-const UserHomeTable = ({el, index, arrOfMeals, setArrOfMeals, updateMealHandler, updatePersonFullMeal,registeredUsers, user, updateMoney, updateShopMoney}) => {
+const UserHomeTable = ({
+  el,
+  index,
+  arrOfMeals,
+  setArrOfMeals,
+  updateMealHandler,
+  updatePersonFullMeal,
+  registeredUsers,
+  user,
+  updateMoney,
+  updateShopMoney,
+}) => {
   return (
     <>
       <td
@@ -24,7 +35,7 @@ const UserHomeTable = ({el, index, arrOfMeals, setArrOfMeals, updateMealHandler,
                   background: "white",
                   border: "1.5px solid black",
                   borderRadius: "5px",
-                  width: "30px",
+                  width: "40px",
                   textAlign: "center",
                   marginRight: ".5rem",
                 }}
@@ -92,7 +103,7 @@ const UserHomeTable = ({el, index, arrOfMeals, setArrOfMeals, updateMealHandler,
                   background: "white",
                   border: "1.5px solid black",
                   borderRadius: "5px",
-                  width: "30px",
+                  width: "40px",
                   textAlign: "center",
                   marginRight: ".5rem",
                 }}
@@ -298,7 +309,7 @@ const UserHomeTable = ({el, index, arrOfMeals, setArrOfMeals, updateMealHandler,
                   background: "white",
                   border: "1.5px solid black",
                   borderRadius: "5px",
-                  width: "30px",
+                  width: "40px",
                   textAlign: "center",
                   marginRight: ".5rem",
                 }}
