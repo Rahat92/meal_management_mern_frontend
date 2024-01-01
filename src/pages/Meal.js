@@ -482,7 +482,7 @@ const Meal = () => {
               borderBottom: "4px solid black",
             }}
           >
-            <table style={{ width: "100%", height: "50px" }}>
+            <table style={{ width: "100%", height: "100%" }}>
               <tr
                 style={{
                   borderLeft: "2px solid white",
@@ -664,8 +664,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1.5px solid black",
+                                    // borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                     marginRight: ".5rem",
@@ -744,8 +744,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1.5px solid black",
+                                    // borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                     marginRight: ".5rem",
@@ -920,8 +920,8 @@ const Meal = () => {
                                   placeholder="জমা"
                                   style={{
                                     color: "black",
-                                    border: "1px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1px solid black",
+                                    // borderRadius: "5px",
                                     width: "50px",
                                     textAlign: "center",
                                   }}
@@ -967,8 +967,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     width: "50px",
-                                    border: "1px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1px solid black",
+                                    // borderRadius: "5px",
                                     textAlign: "center",
                                   }}
                                 />
@@ -976,17 +976,19 @@ const Meal = () => {
                             </tr>
                             <tr>
                               <td
-                                style={{
-                                  padding: "1px 0",
-                                  paddingBottom: "6px",
-                                }}
+                                style={
+                                  {
+                                    // padding: "1px 0",
+                                    // paddingBottom: "6px",
+                                  }
+                                }
                               >
                                 <input
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1px solid black",
+                                    // borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                     marginRight: ".5rem",
@@ -1073,10 +1075,12 @@ const Meal = () => {
                               }}
                             >
                               <td
-                                style={{
-                                  padding: "1px 0",
-                                  paddingTop: "6px",
-                                }}
+                                style={
+                                  {
+                                    // padding: "1px 0",
+                                    // paddingTop: "6px",
+                                  }
+                                }
                               >
                                 <input
                                   disabled={
@@ -1098,8 +1102,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1.5px solid black",
+                                    // borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                   }}
@@ -1149,8 +1153,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1.5px solid black",
+                                    // borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                   }}
@@ -1179,10 +1183,12 @@ const Meal = () => {
                             </tr>
                             <tr>
                               <td
-                                style={{
-                                  padding: "1px 0",
-                                  paddingBottom: "6px",
-                                }}
+                                style={
+                                  {
+                                    // padding: "1px 0",
+                                    // paddingBottom: "6px",
+                                  }
+                                }
                               >
                                 <input
                                   disabled={
@@ -1206,8 +1212,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
-                                    borderRadius: "5px",
+                                    // border: "1.5px solid black",
+                                    // borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                   }}
