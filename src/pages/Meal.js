@@ -654,18 +654,13 @@ const Meal = () => {
                                 borderBottom: "1px solid white",
                               }}
                             >
-                              <td
-                                style={{
-                                  padding: "1px 0",
-                                  paddingTop: "6px",
-                                }}
-                              >
+                              <td>
                                 <input
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    // border: "1.5px solid black",
-                                    // borderRadius: "5px",
+                                    border: "1.5px solid black",
+                                    borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                     marginRight: ".5rem",
@@ -732,7 +727,7 @@ const Meal = () => {
                               </td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid white" }}>
-                              <td style={{ padding: "1px 0" }}>
+                              <td>
                                 <input
                                   type={
                                     el.launch &&
@@ -744,8 +739,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    // border: "1.5px solid black",
-                                    // borderRadius: "5px",
+                                    border: "1.5px solid black",
+                                    borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                     marginRight: ".5rem",
@@ -931,20 +926,14 @@ const Meal = () => {
                                 <input
                                   type="text"
                                   onChange={(e) => {
-                                    console.log(e.target.value);
                                     const desireMealIndex =
                                       arrOfMeals.findIndex(
                                         (item) => item.id === el.id
                                       );
-                                    console.log(desireMealIndex);
                                     const desireMeal =
                                       arrOfMeals[desireMealIndex];
                                     const copyDesireMeal = { ...desireMeal };
-                                    // const moneys = desireMeal.money;
-                                    // const desireMoney = moneys[index];
-                                    // console.log(desireMoney)
                                     const shops = copyDesireMeal.shop;
-                                    console.log(shops);
                                     const copyshops = [...shops];
                                     copyshops[index] = e.target.value;
                                     arrOfMeals[desireMealIndex] = {
@@ -987,8 +976,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    // border: "1px solid black",
-                                    // borderRadius: "5px",
+                                    border: "1.5px solid black",
+                                    borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                     marginRight: ".5rem",
@@ -1102,8 +1091,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    // border: "1.5px solid black",
-                                    // borderRadius: "5px",
+                                    border: "1.5px solid black",
+                                    borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                   }}
@@ -1132,7 +1121,7 @@ const Meal = () => {
                             </tr>
                             {/* All User Launch */}
                             <tr style={{ borderBottom: "1px solid white" }}>
-                              <td style={{ padding: "1px 0" }}>
+                              <td>
                                 <input
                                   disabled={
                                     (el.launch &&
@@ -1153,8 +1142,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    // border: "1.5px solid black",
-                                    // borderRadius: "5px",
+                                    border: "1.5px solid black",
+                                    borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                   }}
@@ -1212,8 +1201,8 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    // border: "1.5px solid black",
-                                    // borderRadius: "5px",
+                                    border: "1.5px solid black",
+                                    borderRadius: "5px",
                                     width: "30px",
                                     textAlign: "center",
                                   }}
