@@ -238,7 +238,7 @@ const Meal = () => {
   }, [users?.borders]);
 
   useEffect(() => {
-    if (user && user.role !== "admin") {
+    if (user && user.role !== "admin" && user && user.role !== "superadmin") {
       setCurrentUser(user.name + " " + user._id);
     } else {
       setCurrentUser("all");
@@ -385,9 +385,9 @@ const Meal = () => {
   // }, []);
   useEffect(() => {
     window.addEventListener("scroll", function () {
-      tableBodyRef.current.scrollTo(0, window.pageYOffset);
-      dateRef.current.scrollTo(0, window.pageYOffset);
-      nameRef.current.scrollTo(window.pageXOffset, 0);
+      tableBodyRef?.current?.scrollTo(0, window.pageYOffset);
+      dateRef?.current?.scrollTo(0, window.pageYOffset);
+      nameRef?.current?.scrollTo(window.pageXOffset, 0);
     });
   }, [window.pageYOffset, window.pageXOffset]);
   console.log(getMonth, getYear);
@@ -400,7 +400,7 @@ const Meal = () => {
         ref={headRef}
         style={{
           position: "fixed",
-          top: 0,
+          top: "50px",
           right: "0",
           left: "0",
           background: "gray",
@@ -435,7 +435,7 @@ const Meal = () => {
               style={{ color: "black" }}
               onChange={(e) => setCurrentUser(e.target.value)}
             >
-              {user?.role !== "admin" && (
+              {user?.role !== "admin" && user?.role !== "superadmin" && (
                 <option value={user?.name + " " + user?._id}>
                   {user?.name}
                 </option>
@@ -446,7 +446,7 @@ const Meal = () => {
                   {user?.name}
                 </option>
               )}
-              {user?.role === "admin" &&
+              {(user?.role === "admin" || user?.role === "superadmin") &&
                 registeredUsers
                   ?.filter((el) => el._id !== user?._id)
                   .map((el) => {
@@ -479,7 +479,7 @@ const Meal = () => {
         <div style={{ background: "" }}>
           <div
             style={{
-              width: "150px",
+              width: currentUser !== "all" ? "35%" : "150px",
               position: "fixed",
               top: headRef,
               height: "50px",
@@ -513,7 +513,7 @@ const Meal = () => {
             ref={nameRef}
             style={{
               position: "fixed",
-              left: "150px",
+              left: currentUser !== "all" ? "35%" : "150px",
               top: headRef,
               right: "0",
               color: "black",
@@ -528,7 +528,7 @@ const Meal = () => {
                 // width: currentUser !== "all" ? "226px" : "1200px",
                 width:
                   currentUser !== "all"
-                    ? "226px"
+                    ? "100%"
                     : registeredUsers?.length * 150 + 151 + "px",
                 height: "100%",
                 background: "white",
@@ -556,7 +556,7 @@ const Meal = () => {
                         // Start Here
                         <td
                           style={{
-                            width: currentUser !== "all" ? "250px" : "150px",
+                            width: currentUser !== "all" ? "100%" : "150px",
                             borderRight: "2px solid green",
                             textAlign: "center",
                           }}
@@ -564,7 +564,7 @@ const Meal = () => {
                           <table
                             style={{
                               height: "100%",
-                              width: currentUser !== "all" ? "224px" : "",
+                              width: currentUser !== "all" ? "100%" : "",
                             }}
                           >
                             <tr
@@ -577,7 +577,7 @@ const Meal = () => {
                               <th
                                 style={{
                                   width:
-                                    currentUser !== "all" ? "250px" : "150px",
+                                    currentUser !== "all" ? "65%" : "150px",
                                 }}
                               >
                                 {el.name}
@@ -613,10 +613,10 @@ const Meal = () => {
           // width: currentUser !== "all" ? "226px" : "1200px",
           width:
             currentUser !== "all"
-              ? "226px"
+              ? "65%"
               : registeredUsers?.length * 150 + 150 + "px",
-          marginTop: headHeight + 50 + "px",
-          marginLeft: "150px",
+          marginTop: headHeight + 100 + "px",
+          marginLeft: currentUser !== "all" ? "35%" : "150px",
         }}
       >
         <tbody>
@@ -894,8 +894,8 @@ const Meal = () => {
         ref={dateRef}
         style={{
           position: "fixed",
-          width: "150px",
-          top: headHeight + 50 + "px",
+          width: currentUser !== "all" ? "35%" : "150px",
+          top: headHeight + 100 + "px",
           bottom: "0",
           background: "white",
           overflowY: "scroll",
