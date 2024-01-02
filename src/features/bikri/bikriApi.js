@@ -319,6 +319,32 @@ const bikriApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    logout:builder.mutation({
+      query:()=>({
+        url:`/users/logout`,
+        method:"GET",
+        headers: {
+          authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("auth")).token
+          }`,
+        },
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          localStorage.removeItem("auth");
+          dispatch(
+            userLoggedIn({
+              accessToken: undefined,
+              user: undefined,
+            })
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    }),
     getUsers: builder.query({
       query: () => `/users`,
     }),
@@ -402,4 +428,5 @@ export const {
   useUpdateMoneyMutation,
   useUpdateShopMoneyMutation,
   useGetYearMonthQuery,
+  useLogoutMutation
 } = bikriApi;

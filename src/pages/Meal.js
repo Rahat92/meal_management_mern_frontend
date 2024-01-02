@@ -16,9 +16,10 @@ import {
   useUpdatePersonFullMealMutation,
   useUpdateShopMoneyMutation,
 } from "../features/bikri/bikriApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import style from "./Meal.module.css";
 import UserHomeTable from "../components/UserHomeTable";
+import { locationPathChanged } from "../features/locationPath";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -79,6 +80,10 @@ const Meal = () => {
       skip: !isSkipped,
     }
   );
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(locationPathChanged(window.location.pathname))
+  }, []);
   useEffect(() => {
     if (yearMonth?.yearMonth?.length > 0) {
       setGetMonth(yearMonth?.yearMonth[0].month * 1);
@@ -252,6 +257,7 @@ const Meal = () => {
       setCurrentIndex(index);
     }
   }, [user, registeredUsers]);
+  console.log(window.location.pathname)
   useEffect(() => {
     // updateMeal({data:needUpdateObj,id})
   }, [needUpdateObj]);

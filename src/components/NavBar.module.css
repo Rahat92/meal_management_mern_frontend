@@ -1,0 +1,28 @@
+.navbarWrapper {
+  height: 50px;
+  background: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.wrapper {
+  display: flex;
+}
+.wrapper > .btnDiv {
+  margin-left: auto;
+  margin-right: 10px;
+  padding: 0 10px;
+}
+.wrapper > div > button {
+  width: 100%;
+  height: 50px;
+  background: blue;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 10px;
+}
