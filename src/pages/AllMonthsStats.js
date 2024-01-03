@@ -155,7 +155,7 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
-              <td className={style.overAllShop}>Total Shop</td>
+              <td className={style.overAllShop}>Overall Shop</td>
               {/* Meal Rate */}
               <td className={style.mealRate}>Meal Rate</td>
               <td className={style.borderConsume}>
@@ -182,7 +182,7 @@ const AllMonthsStats = () => {
         </table>
       </div>
       <div className={style.tableWrapper}>
-        <table className={style.infoTable}>
+        <table className={style.infoTable + " " + style.infoTableBody}>
           <tbody ref={bodyRef}>
             <div ref={dateNameRef} className={style.bodyMonthAndName}>
               {mealStatMonthly &&

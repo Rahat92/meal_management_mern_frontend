@@ -8,10 +8,9 @@
   width: "100%";
   color: black;
 }
-.infoTable tbody > tr {
-  /* border-bottom: 1px solid black; */
-}
-.infoTable thead {
+.infoTableBody tbody tr table tr {
+  height: 35px;
+  text-align: center;
 }
 
 .infoTable tbody tr .month {
@@ -25,7 +24,9 @@
 }
 .infoTable table {
   width: 100%;
+  text-align: center;
 }
+
 .infoTable table > tr:not(:last-child) {
   border-bottom: 1px solid black;
 }
@@ -55,6 +56,17 @@
   width: 130px;
   border-right: 1px solid black;
   border-bottom: 2px solid black;
+}
+
+.infoTable tbody tr .overAllMeal,
+.infoTable tbody tr .totalShop,
+.infoTable tbody tr .mealRate,
+.infoTable tbody tr .totalBalance,
+.infoTable tbody tr .overAllShop,
+.infoTable tbody tr .restBalance,
+.headingRemainingBalance,
+.infoTable tbody tr .remainingBalance {
+  text-align: center;
 }
 .infoTable tbody tr .totalDeposite {
   width: 130px;
@@ -86,6 +98,7 @@
   border-right: 1px solid black;
   border-bottom: 2px solid black;
 }
+
 .infoTable tbody tr .totalBalance {
   width: 150px;
   border-right: 1px solid black;
@@ -111,11 +124,17 @@
   color: black;
   /* border-right: 2px solid; */
   border-bottom: 2px solid;
+  text-align: center;
 }
+
 .fixedMonthAndName .border {
   width: 100px;
   border-right: 1px solid black;
   border-left: 1px solid black;
+}
+.fixedMonthAndName .border td {
+  width: 100px;
+  text-align: center;
 }
 .fixedMonthAndName .month {
   width: 100px;
@@ -131,6 +150,9 @@
   /* border-right: 2px solid; */
   /* border-bottom: 2px solid black; */
   background: white;
+}
+.bodyMonthAndName table tr {
+  height: 34px;
 }
 .bodyMonthAndName .border {
   width: 100px;
