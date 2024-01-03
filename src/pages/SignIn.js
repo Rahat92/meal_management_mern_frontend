@@ -16,7 +16,7 @@ const SignIn = () => {
   const [login, { isSuccess }] = useLoginMutation();
   useEffect(() => {
     if (isSuccess) {
-      navigate("/");
+      navigate("/meals");
     }
   }, [isSuccess]);
   useEffect(() => {
@@ -24,6 +24,8 @@ const SignIn = () => {
   }, []);
   return (
     <div className={style.tableWrapper}>
+      <div className={style.wrapper}>
+      <h1>Sign In</h1>
       <table>
         <tr>
           <td>Email</td>
@@ -54,6 +56,7 @@ const SignIn = () => {
         </tr>
       </table>
       <button onClick={() => login(formValue)}>Login</button>
+      </div>
     </div>
   );
 };

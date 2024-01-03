@@ -7,7 +7,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (isSuccess) {
-      navigate("/login");
+      navigate("/");
     }
   }, [isSuccess]);
   return (

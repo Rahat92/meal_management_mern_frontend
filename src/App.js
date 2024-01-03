@@ -10,6 +10,8 @@ import { locationPathChanged } from "./features/locationPath";
 import Test from "./pages/Test";
 import SignUp from "./pages/SignUp";
 import NavBar from "./components/NavBar";
+import AuthRoute from "./components/AuthRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   console.log(pathname);
@@ -21,17 +23,21 @@ const App = () => {
     );
     // dispatch(locationPathChanged(window.location.pathname))
   }, []);
-  
+
   return (
     <div>
       <Router>
-        {pathname !== "/login"&&pathname&& <NavBar />}
+        {pathname !== "/" && pathname && <NavBar />}
         <Routes>
-          <Route path="/" element={<Meal />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/all-month-stats" element={<AllMonthsStats />} />
-          <Route path="/login" element={<SignIn />} />
           <Route path="/test" element={<Test />} />
+          <Route element={<AuthRoute />}>
+            <Route path="/" element={<SignIn />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/meals" element={<Meal />} />
+          </Route>
         </Routes>
       </Router>
     </div>
