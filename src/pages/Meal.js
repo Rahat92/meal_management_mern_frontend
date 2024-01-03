@@ -343,7 +343,7 @@ const Meal = () => {
     console.log(totalBorderDeposite);
     setBorderTotalDeposite(totalBorderDeposite);
   }, [arrOfMeals, currentIndex]);
-  
+
   const updateMealHandler = (e, date, id, mealIndex, mealName, type) => {
     console.log(mealIndex, e.target.value);
 
@@ -507,14 +507,13 @@ const Meal = () => {
               height: "50px",
               background: "white",
               color: "black",
-              borderBottom: "4px solid black",
+              borderBottom: "2px solid black",
             }}
           >
             <table style={{ width: "100%", height: "100%" }}>
               <tr
                 style={{
-                  borderLeft: "2px solid white",
-                  borderRight: "4px solid black",
+                  borderRight: "2px solid black",
                   width: "100%",
                 }}
               >
@@ -554,7 +553,7 @@ const Meal = () => {
                     : registeredUsers?.length * 150 + 151 + "px",
                 height: "100%",
                 background: "white",
-                borderBottom: "4px solid black",
+                borderBottom: "2px solid black",
               }}
             >
               <thead>
@@ -581,12 +580,14 @@ const Meal = () => {
                             width: currentUser !== "all" ? "100%" : "150px",
                             borderRight: "2px solid green",
                             textAlign: "center",
+                            borderLeft: "1px solid blue",
                           }}
                         >
                           <table
                             style={{
                               height: "100%",
                               width: currentUser !== "all" ? "100%" : "",
+                              // background: 'red',
                             }}
                           >
                             <tr
@@ -643,7 +644,9 @@ const Meal = () => {
           marginLeft: currentUser !== "all" ? "35%" : "150px",
         }}
       >
-        <tbody>
+        <tbody
+          style={{ borderLeft: "1px solid blue", borderTop: "1px solid blue" }}
+        >
           {arrOfMeals
             .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
             .filter((item) => {
@@ -689,7 +692,6 @@ const Meal = () => {
                             width: "150px",
                             textAlign: "center",
                             borderRight: "2px solid green",
-                            background: "white",
                           }}
                         >
                           <table style={{ width: "100%" }}>
@@ -926,7 +928,9 @@ const Meal = () => {
           overflowX: "hidden",
         }}
       >
-        <table style={{ width: "100%", color: "black" }}>
+        <table
+          style={{ width: "100%", color: "black", borderTop: "1px solid blue" }}
+        >
           <tbody>
             {arrOfMeals
               .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
@@ -946,8 +950,9 @@ const Meal = () => {
                   <tr
                     style={{
                       border: "2px solid white",
+                      borderLeft: "0",
                       borderTop: "0",
-                      borderRight: "4px solid black",
+                      borderRight: "2px solid black",
                       borderBottom: "2px solid green",
                       width: "100%",
                       // height: "99.33px",
