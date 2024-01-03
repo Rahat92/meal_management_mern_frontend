@@ -1,104 +1,105 @@
 .tableWrapper {
   width: 2000px;
   overflow-x: scroll;
-  margin-top: 25px;
+  margin-top: 26px;
   margin-left: 200px;
 }
 .infoTable {
   width: "100%";
+  color: black;
 }
 .infoTable tbody > tr {
-  border-bottom: 1px solid white;
+  /* border-bottom: 1px solid black; */
 }
 .infoTable thead {
-  background: blue;
 }
 
 .infoTable tbody tr .month {
-  width: 80px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  width: 100px;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .border {
   width: 100px;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid black;
 }
 .infoTable table {
   width: 100%;
 }
 .infoTable table > tr:not(:last-child) {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid black;
 }
 
 .infoTable tbody tr .breakfast {
   width: 100px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-left: 2px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .launch {
   width: 100px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .dinner {
   width: 100px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .totalMeal {
   width: 120px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .overAllMeal {
   width: 130px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .totalDeposite {
   width: 130px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .totalShop {
   width: 120px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .overAllShop {
   width: 120px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .mealRate {
   width: 120px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .borderConsume {
   width: 200px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .restBalance {
   width: 250px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .totalBalance {
   width: 150px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .headingRemainingBalance {
   width: 150px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 .infoTable tbody tr .remainingBalance {
   width: 150px;
-  border-right: 1px solid white;
-  border-bottom: 2px solid white;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
 }
 
 .fixedMonthAndName {
@@ -107,27 +108,31 @@
   width: 200px;
   top: 0;
   background: white;
+  color: black;
   /* border-right: 2px solid; */
-  /* border-bottom: 40px solid; */
+  border-bottom: 2px solid;
 }
 
+.fixedMonthAndName .month {
+  width: 100px;
+  border-right: 1px solid black;
+}
 .bodyMonthAndName {
   position: fixed;
   left: 0;
-  top: 25px;
+  top: 26px;
   width: 200px;
-  bottom: 0;
+  /* bottom: 0; */
   overflow: scroll;
-  /* border-right: 1.5px solid; */
-  border-bottom: 2px solid white;
-  background: green;
+  /* border-right: 2px solid; */
+  /* border-bottom: 2px solid black; */
+  background: white;
 }
 .customTableHeaderWrapper {
   position: fixed;
   left: 200px;
   right: 0;
   top: 0;
-  background: red;
   z-index: 1000;
   overflow-x: scroll;
 }

@@ -174,16 +174,7 @@ const AllMonthsStats = () => {
               </td>
               <td className={style.totalBalance}>Over all Money</td>
               <td className={style.headingRemainingBalance}>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    background: "gray",
-                    borderRadius: "5px",
-                  }}
-                >
-                  Remaining Balance
-                </div>
+                <div>Remaining Balance</div>
               </td>
               <td></td>
             </tr>
@@ -192,25 +183,6 @@ const AllMonthsStats = () => {
       </div>
       <div className={style.tableWrapper}>
         <table className={style.infoTable}>
-          <thead>
-            <tr>
-              {/* <th style={{ textAlign: "left" }}>Month</th>
-              <th style={{ textAlign: "left" }}>Borders</th> */}
-              {/* <th style={{ textAlign: "left" }}>Breakfast</th>
-              <th style={{ textAlign: "left" }}>Launch</th>
-              <th style={{ textAlign: "left" }}>Dinner</th>
-              <th style={{ textAlign: "left" }}>Total Meal</th>
-              <th style={{ textAlign: "left" }}>Overall Meal</th>
-              <th style={{ textAlign: "left" }}>Total Deposite</th>
-              <th style={{ textAlign: "left" }}>Total Shop</th>
-              <th style={{ textAlign: "left" }}>Overall Shop</th>
-              <th style={{ textAlign: "left" }}>Meal Rate</th>
-              <th style={{ textAlign: "left" }}>Border Consume</th>
-              <th style={{ textAlign: "left" }}>Border Remaining Balance</th>
-              <th style={{ textAlign: "left" }}>Overall Deposite</th>
-              <th style={{ textAlign: "left" }}>Remaining Balance</th> */}
-            </tr>
-          </thead>
           <tbody ref={bodyRef}>
             <div ref={dateNameRef} className={style.bodyMonthAndName}>
               {mealStatMonthly &&
@@ -239,18 +211,6 @@ const AllMonthsStats = () => {
               mealStatMonthly.map((el) => {
                 return (
                   <tr>
-                    {/* <td className={style.month}>{el.month}</td>
-                    <td className={style.border}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr>
-                              <td>{el.border}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td> */}
                     <td className={style.breakfast}>
                       <table>
                         {el.finalArr?.map((el) => {
