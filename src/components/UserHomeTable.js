@@ -218,9 +218,8 @@ const UserHomeTable = ({
             </td>
             <td>
               <input
-                type="text"
+                type="number"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   const desireMealIndex = arrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
@@ -232,7 +231,7 @@ const UserHomeTable = ({
                   // console.log(desireMoney)
                   const moneys = copyDesireMeal.money;
                   const copyMoneys = [...moneys];
-                  copyMoneys[index] = e.target.value;
+                  copyMoneys[index] = e.target.value*1;
                   arrOfMeals[desireMealIndex] = {
                     ...copyDesireMeal,
                     money: copyMoneys,

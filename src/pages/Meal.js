@@ -27,6 +27,7 @@ const Meal = () => {
   const dateRef = useRef();
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
+  const [borderTotalDeposite, setBorderTotalDeposite] = useState([]);
   const [headHeight, setHeadHeight] = useState(0);
   const [currentIndex, setCurrentIndex] = useState();
   const [id, setId] = useState("");
@@ -80,9 +81,9 @@ const Meal = () => {
       skip: !isSkipped,
     }
   );
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(locationPathChanged(window.location.pathname))
+    dispatch(locationPathChanged(window.location.pathname));
   }, []);
   useEffect(() => {
     if (yearMonth?.yearMonth?.length > 0) {
@@ -254,10 +255,11 @@ const Meal = () => {
       const index = registeredUsers.findIndex(
         (item) => item.name === user.name
       );
-      setCurrentIndex(index);
+      if (user.role !== "admin" && user.role !== "superadmin") {
+        setCurrentIndex(index);
+      }
     }
   }, [user, registeredUsers]);
-  console.log(window.location.pathname)
   useEffect(() => {
     // updateMeal({data:needUpdateObj,id})
   }, [needUpdateObj]);
@@ -292,7 +294,6 @@ const Meal = () => {
       setPrevArrOfMeals(mealsArr);
     }
   }, [monthlyMeals?.monthlyMeals]);
-  console.log(arrOfMeals);
   useEffect(() => {
     if (prevArrOfMeals?.length > 0) {
       const changedArr = arrOfMeals.filter((item, i) => {
@@ -317,11 +318,14 @@ const Meal = () => {
   }, [prevArrOfMeals, arrOfMeals]);
 
   useEffect(() => {
+    let totalBorderDeposite = 0;
     if (arrOfMeals.length > 0) {
       const totalMealsCalc = arrOfMeals.map((el) => {
         const totalBreakfast = el.breakfast.reduce((f, c) => f + c[0], 0);
         const totalLaunch = el.launch.reduce((f, c) => f + c[0], 0);
         const totalDinner = el.dinner.reduce((f, c) => f + c[0], 0);
+        const currentUserMoney = el.money[currentIndex];
+        totalBorderDeposite += currentUserMoney;
         return {
           id: el.id,
           date: el.date,
@@ -336,7 +340,10 @@ const Meal = () => {
         ),
       ]);
     }
-  }, [arrOfMeals]);
+    console.log(totalBorderDeposite);
+    setBorderTotalDeposite(totalBorderDeposite);
+  }, [arrOfMeals, currentIndex]);
+  
   const updateMealHandler = (e, date, id, mealIndex, mealName, type) => {
     console.log(mealIndex, e.target.value);
 
@@ -439,7 +446,16 @@ const Meal = () => {
           <form>
             <select
               style={{ color: "black" }}
-              onChange={(e) => setCurrentUser(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value);
+                if (e.target.value !== "all") {
+                  const index = registeredUsers.findIndex(
+                    (item) => item._id === e.target.value.split(" ")[1]
+                  );
+                  setCurrentIndex(index);
+                }
+                setCurrentUser(e.target.value);
+              }}
             >
               {user?.role !== "admin" && user?.role !== "superadmin" && (
                 <option value={user?.name + " " + user?._id}>
@@ -586,7 +602,9 @@ const Meal = () => {
                                     currentUser !== "all" ? "65%" : "150px",
                                 }}
                               >
-                                {el.name}
+                                {currentUser !== "all"
+                                  ? `Total Deposite: ${borderTotalDeposite}`
+                                  : el.name}
                               </th>
                             </tr>
                           </table>
