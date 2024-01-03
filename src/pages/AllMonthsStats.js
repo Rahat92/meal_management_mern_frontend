@@ -3,12 +3,16 @@ import { useGetMonthlyStatsQuery } from "../features/bikri/bikriApi";
 import { useEffect } from "react";
 import { useState } from "react";
 import style from "./AllMonthsStats.module.css";
+import { useDispatch } from "react-redux";
+import { locationPathChanged } from "../features/locationPath";
 const AllMonthsStats = () => {
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const { data: getMonthlyMealStats } = useGetMonthlyStatsQuery();
+  console.log(getMonthlyMealStats?.monthlyMeals);
   const dateNameRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (getMonthlyMealStats?.monthlyMeals?.length > 0) {
       let mealInfo = [];
@@ -29,7 +33,7 @@ const AllMonthsStats = () => {
         moneys.push(el.money);
         shops.push(el.shop);
         return {
-          month: el._id,
+          month: el._id?.month,
         };
       });
 
@@ -71,7 +75,7 @@ const AllMonthsStats = () => {
           });
         });
         mealInfo[i] = {
-          month: months[i],
+          month: months[i]?.month + " " + months[i]?.year,
           overAllShop: finalArr.reduce((f, c) => f + c.totalShop, 0),
           overAllMoney: finalArr.reduce((f, c) => f + c.totalMoney, 0),
           finalArr,
@@ -87,11 +91,15 @@ const AllMonthsStats = () => {
   console.log(mealStatMonthly);
   useEffect(() => {
     window.addEventListener("scroll", function () {
-      bodyRef.current.scrollTo(0, window.pageYOffset);
-      dateNameRef.current.scrollTo(0, window.pageYOffset);
-      headRef.current.scrollTo(window.pageXOffset, 0);
+      bodyRef?.current?.scrollTo(0, window.pageYOffset);
+      dateNameRef?.current?.scrollTo(0, window.pageYOffset);
+      headRef?.current?.scrollTo(window.pageXOffset, 0);
     });
   }, [window.pageYOffset, window.pageXOffset]);
+
+  useEffect(() => {
+    dispatch(locationPathChanged(window.location.pathname));
+  }, []);
   return (
     <div>
       <div className={style.fixedMonthAndName}>
@@ -190,7 +198,42 @@ const AllMonthsStats = () => {
                   return (
                     <table>
                       <tr>
-                        <td className={style.month}>{el.month}</td>
+                        <td className={style.month}>
+                          <div
+                            style={{
+                              // transform: "rotate(-50deg)",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {el.month.split(" ")[0] === "0"
+                              ? "January"
+                              : el.month.split(" ")[0] === "1"
+                              ? "February"
+                              : el.month.split(" ")[0] === "2"
+                              ? "March"
+                              : el.month.split(" ")[0] === "3"
+                              ? "April"
+                              : el.month.split(" ")[0] === "4"
+                              ? "May"
+                              : el.month.split(" ")[0] === "5"
+                              ? "June"
+                              : el.month.split(" ")[0] === "6"
+                              ? "July"
+                              : el.month.split(" ")[0] === "7"
+                              ? "August"
+                              : el.month.split(" ")[0] === "8"
+                              ? "September"
+                              : el.month.split(" ")[0] === "9"
+                              ? "Octobor"
+                              : el.month.split(" ")[0] === "10"
+                              ? "November"
+                              : el.month.split(" ")[0] === "11"
+                              ? "December"
+                              : ""}{" "}
+                            <br />
+                            {el.month.split(" ")[1]}
+                          </div>
+                        </td>
                         <td className={style.border}>
                           <table>
                             {el.finalArr?.map((el) => {
