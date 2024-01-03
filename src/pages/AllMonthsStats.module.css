@@ -112,10 +112,14 @@
   /* border-right: 2px solid; */
   border-bottom: 2px solid;
 }
-
-.fixedMonthAndName .month {
+.fixedMonthAndName .border {
   width: 100px;
   border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+.fixedMonthAndName .month {
+  width: 100px;
+  /* border-right: 1px solid black; */
 }
 .bodyMonthAndName {
   position: fixed;
@@ -127,6 +131,10 @@
   /* border-right: 2px solid; */
   /* border-bottom: 2px solid black; */
   background: white;
+}
+.bodyMonthAndName .border {
+  width: 100px;
+  border-right: 1px solid black;
 }
 .customTableHeaderWrapper {
   position: fixed;
