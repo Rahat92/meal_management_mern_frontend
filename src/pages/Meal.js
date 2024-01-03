@@ -540,7 +540,6 @@ const Meal = () => {
               color: "black",
               height: "50px",
               overflowX: "scroll",
-
               width: currentUser !== "all" ? "" : "",
             }}
           >
@@ -554,6 +553,7 @@ const Meal = () => {
                 height: "100%",
                 background: "white",
                 borderBottom: "2px solid black",
+                borderRight: "2px solid black",
               }}
             >
               <thead>
@@ -617,13 +617,13 @@ const Meal = () => {
                       // width: currentUser !== "all" && "150px",
                       // minWidth: currentUser !== "all" && "150px",
                       width: "150px",
-                      borderRight: "2px solid black",
+                      // borderRight: "2px solid black",
                       display: currentUser !== "all" ? "none" : "",
                     }}
                   >
                     Total Meal
                   </th>
-                  <th></th>
+                  {/* <th></th> */}
                 </tr>
               </thead>
             </table>
@@ -639,14 +639,16 @@ const Meal = () => {
           width:
             currentUser !== "all"
               ? "65%"
-              : registeredUsers?.length * 150 + 150 + "px",
+              : registeredUsers?.length * 150 + 151 + "px",
+
           marginTop: headHeight + 100 + "px",
           marginLeft: currentUser !== "all" ? "35%" : "150px",
+          borderRight: "2px solid black",
+          borderLeft: "1px solid blue",
+          borderTop: "1px solid blue",
         }}
       >
-        <tbody
-          style={{ borderLeft: "1px solid blue", borderTop: "1px solid blue" }}
-        >
+        <tbody style={{}}>
           {arrOfMeals
             .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
             .filter((item) => {
@@ -874,7 +876,6 @@ const Meal = () => {
                   <td
                     style={{
                       display: currentUser !== "all" ? "none" : "",
-                      borderRight: "2px solid black",
                     }}
                   >
                     <table
