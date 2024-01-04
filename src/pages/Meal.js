@@ -345,8 +345,6 @@ const Meal = () => {
   }, [arrOfMeals, currentIndex]);
 
   const updateMealHandler = (e, date, id, mealIndex, mealName, type) => {
-    console.log(mealIndex, e.target.value);
-
     setId(id);
     const dateIndex = arrOfMeals.findIndex((item) => item.id === id);
     const copyArrOfMeals = [...arrOfMeals];
@@ -370,6 +368,70 @@ const Meal = () => {
     setArrOfMeals([...copyArrOfMeals]);
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
+    console.log(updatedDateObj)
+    let mealError = "";
+    if (
+      user?.role === "user" &&
+      mealName === "breakfast" &&
+      new Date() >
+        new Date(
+          updatedDateObj.year,
+          updatedDateObj.month,
+          updatedDateObj.date.split(" ")[0],
+          6
+        )
+    ) {
+      mealError = "You can't change previous Meal";
+    }
+    if (
+      user?.role === "user" &&
+      mealName === "launch" &&
+      new Date() >
+        new Date(
+          updatedDateObj.year,
+          updatedDateObj.month,
+          updatedDateObj.date.split(" ")[0],
+          10
+        )
+    ) {
+      mealError = "You can't change previous Meal";
+    }
+    if (
+      user?.role === "user" &&
+      mealName === "dinner" &&
+      new Date() >
+        new Date(
+          updatedDateObj.year,
+          updatedDateObj.month,
+          updatedDateObj.date.split(" ")[0],
+          18
+        )
+    ) {
+      mealError = "You can't change previous Meal";
+    }
+    if (
+      (user?.role === "admin" || user?.role === "superadmin") &&
+      (mealName === "breakfast" ||
+        mealName === "launch" ||
+        mealName === "dinner") &&
+      new Date() >
+        new Date(
+          updatedDateObj.year,
+          updatedDateObj.month,
+          updatedDateObj.date.split(" ")[0],
+          24
+        )
+    ) {
+      mealError = "Admin can't change previous days Meal";
+    }
+
+    if (mealError) {
+      alert(mealError);
+      console.log(prevArrOfMeals)
+      prevArrOfMeals[dateIndex] = { ...obj, [mealName]: mealArr };
+      setArrOfMeals([...prevArrOfMeals]);
+      return;
+    }
     updateMyMealStatus({
       id,
       [mealName]: updatedDateObj[mealName],
