@@ -17,9 +17,8 @@ const UserHomeTable = ({
     <>
       <td className={style.userHomeTableTd}>
         <table>
-          <tr
-          >
-            <td>
+          <tr>
+            <td style={{ width: "33.333333%" }}>
               <input
                 style={{
                   color: "black",
@@ -82,7 +81,7 @@ const UserHomeTable = ({
             </td>
           </tr>
           <tr>
-            <td>
+            <td style={{ position: "relative" }}>
               <input
                 type={
                   el.launch && el.launch[index] && el.launch[index][1] === "off"
@@ -134,9 +133,13 @@ const UserHomeTable = ({
                   checked={el.launch[index][1] === "on" ? true : false}
                 />
               )}
-            </td>
-            <td>
               <input
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "90%",
+                  transform: "translateY(-50%)",
+                }}
                 checked={
                   el["breakfast"][index][1] === "on" ||
                   el["launch"][index][1] === "on" ||
@@ -216,7 +219,7 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td>
+            <td style={{ width: "33.333333%" }}>
               <input
                 type="number"
                 onChange={(e) => {
@@ -256,9 +259,9 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td>
+            <td style={{ width: "33.333333%" }}>
               <input
-                type="text"
+                type="number"
                 onChange={(e) => {
                   const desireMealIndex = arrOfMeals.findIndex(
                     (item) => item.id === el.id
@@ -267,7 +270,7 @@ const UserHomeTable = ({
                   const copyDesireMeal = { ...desireMeal };
                   const shops = copyDesireMeal.shop;
                   const copyshops = [...shops];
-                  copyshops[index] = e.target.value;
+                  copyshops[index] = e.target.value * 1;
                   arrOfMeals[desireMealIndex] = {
                     ...copyDesireMeal,
                     shop: copyshops,
@@ -293,6 +296,7 @@ const UserHomeTable = ({
               />
             </td>
           </tr>
+          {/* dinner */}
           <tr>
             <td>
               <input

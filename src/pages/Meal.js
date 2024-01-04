@@ -28,7 +28,8 @@ const Meal = () => {
   const dateRef = useRef();
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
-  const [borderTotalDeposite, setBorderTotalDeposite] = useState([]);
+  const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
+  const [borderTotalShop, setBorderTotalShop] = useState(0);
   const [headHeight, setHeadHeight] = useState(0);
   const [currentIndex, setCurrentIndex] = useState();
   const [id, setId] = useState("");
@@ -320,13 +321,14 @@ const Meal = () => {
 
   useEffect(() => {
     let totalBorderDeposite = 0;
+    let totalBorderShop = 0;
     if (arrOfMeals.length > 0) {
       const totalMealsCalc = arrOfMeals.map((el) => {
         const totalBreakfast = el.breakfast.reduce((f, c) => f + c[0], 0);
         const totalLaunch = el.launch.reduce((f, c) => f + c[0], 0);
         const totalDinner = el.dinner.reduce((f, c) => f + c[0], 0);
-        const currentUserMoney = el.money[currentIndex];
-        totalBorderDeposite += currentUserMoney;
+        totalBorderDeposite += el.money[currentIndex];
+        totalBorderShop += el.shop[currentIndex];
         return {
           id: el.id,
           date: el.date,
@@ -342,8 +344,8 @@ const Meal = () => {
       ]);
     }
     setBorderTotalDeposite(totalBorderDeposite);
+    setBorderTotalShop(totalBorderShop);
   }, [arrOfMeals, currentIndex]);
-
   const updateMealHandler = (e, date, id, mealIndex, mealName, type) => {
     setId(id);
     const dateIndex = arrOfMeals.findIndex((item) => item.id === id);
@@ -621,9 +623,94 @@ const Meal = () => {
                                     currentUser !== "all" ? "65%" : "150px",
                                 }}
                               >
-                                {currentUser !== "all"
+                                {/* {currentUser !== "all"
                                   ? `Total Deposite: ${borderTotalDeposite}`
-                                  : el.name}
+                                  : el.name} */}
+                                {currentUser !== "all" ? (
+                                  <table
+                                    style={{
+                                      width: "100%",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <tr>
+                                      <td
+                                        style={{
+                                          width: "33.333333%",
+                                        }}
+                                      >
+                                        <span
+                                          style={{
+                                            display: "inline-block",
+                                            marginLeft: "-1.4rem",
+                                          }}
+                                        >
+                                          Meal
+                                        </span>
+                                      </td>
+                                      {/* <td>jsj</td> */}
+                                      <td
+                                        style={{
+                                          width: "33.333333%",
+                                          position: "relative",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        <p
+                                          style={{
+                                            position: "absolute",
+                                            top: "-.2rem",
+                                            width: "100%",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          Deposite
+                                        </p>
+                                        <p
+                                          style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            textAlign: "center",
+                                            marginTop: "3px",
+                                          }}
+                                        >
+                                          {borderTotalDeposite} Tk
+                                        </p>
+                                      </td>
+
+                                      <td
+                                        style={{
+                                          width: "33.333333%",
+                                          position: "relative",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        <p
+                                          style={{
+                                            position: "absolute",
+                                            top: "-.2rem",
+                                            width: "100%",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          Shop
+                                        </p>
+                                        <p
+                                          style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            textAlign: "center",
+                                            marginTop: "3px",
+                                          }}
+                                        >
+                                          {borderTotalShop} Tk
+                                        </p>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                ) : (
+                                  el.name
+                                )}
                               </th>
                             </tr>
                           </table>
@@ -661,7 +748,7 @@ const Meal = () => {
 
           marginTop: headHeight + 90 + "px",
           marginLeft: currentUser !== "all" ? "35%" : "150px",
-          borderRight: currentUser === 'all'?"2px solid black":'',
+          borderRight: currentUser === "all" ? "2px solid black" : "",
           borderLeft: "1px solid blue",
           borderTop: "1px solid blue",
         }}
