@@ -145,7 +145,6 @@ const UserHomeTable = ({
                 />
               )}
             </td>
-            {console.log(el)}
             <td>
               <input
                 checked={

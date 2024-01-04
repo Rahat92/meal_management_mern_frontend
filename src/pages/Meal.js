@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import style from "./Meal.module.css";
 import UserHomeTable from "../components/UserHomeTable";
 import { locationPathChanged } from "../features/locationPath";
+import FilterBox from "../components/FilterBox";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -395,6 +396,13 @@ const Meal = () => {
     ) {
       mealError = "You can't change previous Meal";
     }
+    console.log(new Date(
+      updatedDateObj.year,
+      updatedDateObj.month,
+      updatedDateObj.date.split(" ")[0],
+      18
+    ))
+    console.log(new Date)
     if (
       user?.role === "user" &&
       mealName === "dinner" &&
@@ -478,65 +486,16 @@ const Meal = () => {
           zIndex: "100",
         }}
       >
-        <div>
-          <form>
-            <select
-              className={style.selectMonthYear}
-              onChange={(e) => {
-                setGetYear(e.target.value.split(" ")[1] * 1);
-                setGetMonth(e.target.value.split(" ")[0] * 1);
-              }}
-            >
-              {yearMonth?.yearMonth?.map((el) => {
-                return (
-                  <option value={el.month + " " + el.year}>
-                    {el.month === 0
-                      ? "January"
-                      : el.month === 11
-                      ? "December"
-                      : ""}{" "}
-                    {el.year}
-                  </option>
-                );
-              })}
-            </select>
-          </form>
-          <form>
-            <select
-              style={{ color: "black" }}
-              onChange={(e) => {
-                console.log(e.target.value);
-                if (e.target.value !== "all") {
-                  const index = registeredUsers.findIndex(
-                    (item) => item._id === e.target.value.split(" ")[1]
-                  );
-                  setCurrentIndex(index);
-                }
-                setCurrentUser(e.target.value);
-              }}
-            >
-              {user?.role !== "admin" && user?.role !== "superadmin" && (
-                <option value={user?.name + " " + user?._id}>
-                  {user?.name}
-                </option>
-              )}
-              <option>all</option>
-              {user?.role === "admin" && (
-                <option value={user?.name + " " + user?._id}>
-                  {user?.name}
-                </option>
-              )}
-              {(user?.role === "admin" || user?.role === "superadmin") &&
-                registeredUsers
-                  ?.filter((el) => el._id !== user?._id)
-                  .map((el) => {
-                    return (
-                      <option value={el.name + " " + el._id}>{el.name}</option>
-                    );
-                  })}
-            </select>
-          </form>
-        </div>
+        <FilterBox
+          setGetYear={setGetYear}
+          setGetMonth={setGetMonth}
+          style={style}
+          yearMonth={yearMonth}
+          registeredUsers={registeredUsers}
+          setCurrentIndex={setCurrentIndex}
+          setCurrentUser={setCurrentUser}
+          user={user}
+        />
         <div>
           <button
             style={{ color: isChanged ? "red" : "white" }}
