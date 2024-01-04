@@ -396,13 +396,15 @@ const Meal = () => {
     ) {
       mealError = "You can't change previous Meal";
     }
-    console.log(new Date(
-      updatedDateObj.year,
-      updatedDateObj.month,
-      updatedDateObj.date.split(" ")[0],
-      18
-    ))
-    console.log(new Date)
+    console.log(
+      new Date(
+        updatedDateObj.year,
+        updatedDateObj.month,
+        updatedDateObj.date.split(" ")[0],
+        18
+      )
+    );
+    console.log(new Date());
     if (
       user?.role === "user" &&
       mealName === "dinner" &&
@@ -472,7 +474,6 @@ const Meal = () => {
       nameRef?.current?.scrollTo(window.pageXOffset, 0);
     });
   }, [window.pageYOffset, window.pageXOffset]);
-  console.log(getMonth, getYear);
   return (
     <div>
       <div
@@ -562,7 +563,6 @@ const Meal = () => {
           >
             <table
               style={{
-                // width: currentUser !== "all" ? "226px" : "1200px",
                 width:
                   currentUser !== "all"
                     ? "100%"
@@ -570,7 +570,7 @@ const Meal = () => {
                 height: "100%",
                 background: "white",
                 borderBottom: "2px solid black",
-                borderRight: "2px solid black",
+                borderRight: currentUser == "all" ? "2px solid black" : "",
               }}
             >
               <thead>
@@ -595,7 +595,8 @@ const Meal = () => {
                         <td
                           style={{
                             width: currentUser !== "all" ? "100%" : "150px",
-                            borderRight: "2px solid green",
+                            borderRight:
+                              currentUser == "all" ? "2px solid green" : "",
                             textAlign: "center",
                             borderLeft: "1px solid blue",
                           }}
@@ -660,7 +661,7 @@ const Meal = () => {
 
           marginTop: headHeight + 90 + "px",
           marginLeft: currentUser !== "all" ? "35%" : "150px",
-          borderRight: "2px solid black",
+          borderRight: currentUser === 'all'?"2px solid black":'',
           borderLeft: "1px solid blue",
           borderTop: "1px solid blue",
         }}

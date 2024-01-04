@@ -1,5 +1,5 @@
 import React from "react";
-
+import style from "./UserHomeTable.module.css";
 const UserHomeTable = ({
   el,
   index,
@@ -11,23 +11,13 @@ const UserHomeTable = ({
   user,
   updateMoney,
   updateShopMoney,
-  prevArrOfMeals
+  prevArrOfMeals,
 }) => {
   return (
     <>
-      <td
-        style={{
-          width: "250px",
-          textAlign: "center",
-          borderRight: "2px solid green",
-          background: "white",
-        }}
-      >
-        <table style={{ width: "100%" }}>
+      <td className={style.userHomeTableTd}>
+        <table>
           <tr
-            style={{
-              borderBottom: "1px solid white",
-            }}
           >
             <td>
               <input
@@ -91,7 +81,7 @@ const UserHomeTable = ({
               )}
             </td>
           </tr>
-          <tr style={{ borderBottom: "1px solid white" }}>
+          <tr>
             <td>
               <input
                 type={
@@ -165,7 +155,7 @@ const UserHomeTable = ({
                   const launch = el["launch"][index];
                   const dinner = el["dinner"][index];
                   const copyArrOfMeals = [...arrOfMeals];
-                  
+
                   const desireItemIndex = copyArrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
@@ -173,7 +163,7 @@ const UserHomeTable = ({
                   const breakfastArr = [...desireItem["breakfast"]];
                   const launchArr = [...desireItem["launch"]];
                   const dinnerArr = [...desireItem["dinner"]];
-                  
+
                   breakfastArr[index] =
                     e.target.value === "off"
                       ? [0, "off", "admin"]
@@ -196,13 +186,16 @@ const UserHomeTable = ({
                   copyArrOfMeals[desireItemIndex] = copyDesireItem;
                   console.log(el);
                   setArrOfMeals([...copyArrOfMeals]);
-                  let mealError = ''
-                  if (new Date()>new Date(el.year, el.month, el.date.split(" ")[0]*1, 6)) {
-                    mealError = 'Previous day meal request time is over';
+                  let mealError = "";
+                  if (
+                    new Date() >
+                    new Date(el.year, el.month, el.date.split(" ")[0] * 1, 6)
+                  ) {
+                    mealError = "Previous day meal request time is over";
                   }
                   if (mealError) {
                     alert(mealError);
-                    console.log(prevArrOfMeals)
+                    console.log(prevArrOfMeals);
                     // prevArrOfMeals[desireItemIndex] = { ...obj, [mealName]: mealArr };
                     setArrOfMeals([...prevArrOfMeals]);
                     return;
@@ -238,7 +231,7 @@ const UserHomeTable = ({
                   // console.log(desireMoney)
                   const moneys = copyDesireMeal.money;
                   const copyMoneys = [...moneys];
-                  copyMoneys[index] = e.target.value*1;
+                  copyMoneys[index] = e.target.value * 1;
                   arrOfMeals[desireMealIndex] = {
                     ...copyDesireMeal,
                     money: copyMoneys,
@@ -301,14 +294,7 @@ const UserHomeTable = ({
             </td>
           </tr>
           <tr>
-            <td
-              style={
-                {
-                  // padding: "1px 0",
-                  // paddingBottom: "6px",
-                }
-              }
-            >
+            <td>
               <input
                 style={{
                   color: "black",

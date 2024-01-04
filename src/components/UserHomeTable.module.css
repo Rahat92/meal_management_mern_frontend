@@ -1,0 +1,9 @@
+.userHomeTableTd {
+  text-align: center;
+}
+.userHomeTableTd table {
+  width: 100%;
+}
+.userHomeTableTd table tr:nth-child(1),.userHomeTableTd table tr:nth-child(2){
+    border-bottom: 1px solid white;
+}
