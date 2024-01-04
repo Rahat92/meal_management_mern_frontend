@@ -11,6 +11,7 @@ const UserHomeTable = ({
   user,
   updateMoney,
   updateShopMoney,
+  prevArrOfMeals
 }) => {
   return (
     <>
@@ -144,6 +145,7 @@ const UserHomeTable = ({
                 />
               )}
             </td>
+            {console.log(el)}
             <td>
               <input
                 checked={
@@ -164,6 +166,7 @@ const UserHomeTable = ({
                   const launch = el["launch"][index];
                   const dinner = el["dinner"][index];
                   const copyArrOfMeals = [...arrOfMeals];
+                  
                   const desireItemIndex = copyArrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
@@ -171,13 +174,7 @@ const UserHomeTable = ({
                   const breakfastArr = [...desireItem["breakfast"]];
                   const launchArr = [...desireItem["launch"]];
                   const dinnerArr = [...desireItem["dinner"]];
-                  // let personBreakfast = [...breakfastArr][
-                  //   index
-                  // ];
-                  // const copyBreakfast = [...breakfast];
-                  // copyBreakfast[1] = "off";
-                  // copyBreakfast[2] = "admin";
-                  // personBreakfast = copyBreakfast;
+                  
                   breakfastArr[index] =
                     e.target.value === "off"
                       ? [0, "off", "admin"]
@@ -200,6 +197,17 @@ const UserHomeTable = ({
                   copyArrOfMeals[desireItemIndex] = copyDesireItem;
                   console.log(el);
                   setArrOfMeals([...copyArrOfMeals]);
+                  let mealError = ''
+                  if (new Date()>new Date(el.year, el.month, el.date.split(" ")[0]*1, 6)) {
+                    mealError = 'Previous day meal request time is over';
+                  }
+                  if (mealError) {
+                    alert(mealError);
+                    console.log(prevArrOfMeals)
+                    // prevArrOfMeals[desireItemIndex] = { ...obj, [mealName]: mealArr };
+                    setArrOfMeals([...prevArrOfMeals]);
+                    return;
+                  }
                   updatePersonFullMeal({
                     id: el.id,
                     personIndex: index,

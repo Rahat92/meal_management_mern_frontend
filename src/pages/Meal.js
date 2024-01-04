@@ -340,7 +340,6 @@ const Meal = () => {
         ),
       ]);
     }
-    console.log(totalBorderDeposite);
     setBorderTotalDeposite(totalBorderDeposite);
   }, [arrOfMeals, currentIndex]);
 
@@ -368,7 +367,7 @@ const Meal = () => {
     setArrOfMeals([...copyArrOfMeals]);
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
-    console.log(updatedDateObj)
+    console.log(updatedDateObj);
     let mealError = "";
     if (
       user?.role === "user" &&
@@ -427,7 +426,7 @@ const Meal = () => {
 
     if (mealError) {
       alert(mealError);
-      console.log(prevArrOfMeals)
+      console.log(prevArrOfMeals);
       prevArrOfMeals[dateIndex] = { ...obj, [mealName]: mealArr };
       setArrOfMeals([...prevArrOfMeals]);
       return;
@@ -468,14 +467,11 @@ const Meal = () => {
   console.log(getMonth, getYear);
   return (
     <div>
-      {/* <button onClick={() => {
-        signUp()
-      }}>Sign Up</button> */}
       <div
         ref={headRef}
         style={{
           position: "fixed",
-          top: "50px",
+          top: "40px",
           right: "0",
           left: "0",
           background: "gray",
@@ -703,7 +699,7 @@ const Meal = () => {
               ? "65%"
               : registeredUsers?.length * 150 + 151 + "px",
 
-          marginTop: headHeight + 100 + "px",
+          marginTop: headHeight + 90 + "px",
           marginLeft: currentUser !== "all" ? "35%" : "150px",
           borderRight: "2px solid black",
           borderLeft: "1px solid blue",
@@ -746,6 +742,7 @@ const Meal = () => {
                           user={user}
                           updateMoney={updateMoney}
                           updateShopMoney={updateShopMoney}
+                          prevArrOfMeals={prevArrOfMeals}
                         />
                       );
                     } else if (currentUser === "all") {
@@ -984,7 +981,7 @@ const Meal = () => {
         style={{
           position: "fixed",
           width: currentUser !== "all" ? "35%" : "150px",
-          top: headHeight + 100 + "px",
+          top: headHeight + 90 + "px",
           bottom: "0",
           background: "white",
           overflowY: "scroll",
