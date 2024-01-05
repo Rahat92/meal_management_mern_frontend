@@ -519,37 +519,39 @@ const Meal = () => {
           Create Meal
         </button>
         <div style={{ background: "" }}>
-          <div
-            style={{
-              width: currentUser !== "all" ? "35%" : "150px",
-              position: "fixed",
-              top: headRef,
-              height: "50px",
-              background: "white",
-              color: "black",
-              borderBottom: "2px solid black",
-            }}
-          >
-            <table style={{ width: "100%", height: "100%" }}>
-              <tr
-                style={{
-                  borderRight: "2px solid black",
-                  width: "100%",
-                }}
-              >
-                <th
+          {arrOfMeals?.length > 0 && (
+            <div
+              style={{
+                width: currentUser !== "all" ? "35%" : "150px",
+                position: "fixed",
+                top: headRef,
+                height: "50px",
+                background: "white",
+                color: "black",
+                borderBottom: "2px solid black",
+              }}
+            >
+              <table style={{ width: "100%", height: "100%" }}>
+                <tr
                   style={{
-                    textAlign: "center",
-                    width: "50px",
-                    borderRight: "2px solid green",
+                    borderRight: "2px solid black",
+                    width: "100%",
                   }}
                 >
-                  Dates
-                </th>
-                <th style={{ textAlign: "center" }}>Meal</th>
-              </tr>
-            </table>
-          </div>
+                  <th
+                    style={{
+                      textAlign: "center",
+                      width: "50px",
+                      borderRight: "2px solid green",
+                    }}
+                  >
+                    Dates
+                  </th>
+                  <th style={{ textAlign: "center" }}>Meal</th>
+                </tr>
+              </table>
+            </div>
+          )}
           <div
             ref={nameRef}
             style={{
@@ -717,7 +719,8 @@ const Meal = () => {
                         </td>
                       );
                     })}
-                  <th
+                  {arrOfMeals?.length > 0 && (
+                    <th
                     style={{
                       // width: currentUser !== "all" && "150px",
                       // minWidth: currentUser !== "all" && "150px",
@@ -728,7 +731,7 @@ const Meal = () => {
                   >
                     Total Meal
                   </th>
-                  {/* <th></th> */}
+                  )}
                 </tr>
               </thead>
             </table>
