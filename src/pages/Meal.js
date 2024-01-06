@@ -10,6 +10,7 @@ import {
   useGetUsersQuery,
   useGetYearMonthQuery,
   useSignUpMutation,
+  useUpdateExtraShopMoneyMutation,
   useUpdateMealMutation,
   useUpdateMoneyMutation,
   useUpdateMyMealStatusMutation,
@@ -30,6 +31,7 @@ const Meal = () => {
   const [arrOfMeals, setArrOfMeals] = useState([]);
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
+  const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
   const [headHeight, setHeadHeight] = useState(0);
   const [currentIndex, setCurrentIndex] = useState();
   const [id, setId] = useState("");
@@ -44,6 +46,10 @@ const Meal = () => {
     updateShopMoney,
     { data: shopMoney, isError: isShopMoneyError, error: shopMoneyError },
   ] = useUpdateShopMoneyMutation();
+  const [
+    updateExtraShopMoney,
+    { data: extraShopMoney, isError: isShopExtraMoneyError, error: extraShopMoneyError },
+  ] = useUpdateExtraShopMoneyMutation();
   const [createMeal, { data: meals }] = useCreateMealMutation();
   const { data: yearMonth } = useGetYearMonthQuery();
   const [getMonth, setGetMonth] = useState(yearMonth?.yearMonth[0]?.month * 1);
@@ -235,10 +241,6 @@ const Meal = () => {
           month,
           year,
           mealManager: "6570001d7e42deb0b24b9657",
-          // border: borderIds,
-          // breakfast: Array(borderIds.length).fill([0, "on"]),
-          // launch: Array(borderIds.length).fill([0, "on"]),
-          // dinner: Array(borderIds.length).fill([0, "on"]),
         };
       });
     }
@@ -280,6 +282,7 @@ const Meal = () => {
           monthlyMeals.monthlyMeals[0].border),
       ]);
       const mealsArr = monthlyMeals?.monthlyMeals?.map((el) => {
+        console.log(el)
         return {
           id: el._id,
           date: el.date,
@@ -290,6 +293,7 @@ const Meal = () => {
           dinner: el.dinner,
           money: el.money,
           shop: el.shop,
+          extraShop: el.extraShop,
         };
       });
       setArrOfMeals(mealsArr);
@@ -322,6 +326,7 @@ const Meal = () => {
   useEffect(() => {
     let totalBorderDeposite = 0;
     let totalBorderShop = 0;
+    let totalBorderExtraShop = 0;
     if (arrOfMeals.length > 0) {
       const totalMealsCalc = arrOfMeals.map((el) => {
         const totalBreakfast = el.breakfast.reduce((f, c) => f + c[0], 0);
@@ -329,6 +334,7 @@ const Meal = () => {
         const totalDinner = el.dinner.reduce((f, c) => f + c[0], 0);
         totalBorderDeposite += el.money[currentIndex];
         totalBorderShop += el.shop[currentIndex];
+        totalBorderExtraShop += el.extraShop[currentIndex];
         return {
           id: el.id,
           date: el.date,
@@ -345,7 +351,9 @@ const Meal = () => {
     }
     setBorderTotalDeposite(totalBorderDeposite);
     setBorderTotalShop(totalBorderShop);
+    setBorderTotalExtraShop(totalBorderExtraShop);
   }, [arrOfMeals, currentIndex]);
+
   const updateMealHandler = (e, date, id, mealIndex, mealName, type) => {
     setId(id);
     const dateIndex = arrOfMeals.findIndex((item) => item.id === id);
@@ -406,7 +414,6 @@ const Meal = () => {
         18
       )
     );
-    console.log(new Date());
     if (
       user?.role === "user" &&
       mealName === "dinner" &&
@@ -421,7 +428,7 @@ const Meal = () => {
       mealError = "You can't change previous Meal";
     }
     if (
-      (user?.role === "admin" || user?.role === "superadmin") &&
+      (user?.role === "admin") &&
       (mealName === "breakfast" ||
         mealName === "launch" ||
         mealName === "dinner") &&
@@ -638,7 +645,7 @@ const Meal = () => {
                                     <tr>
                                       <td
                                         style={{
-                                          width: "33.333333%",
+                                          width: "25%",
                                         }}
                                       >
                                         <span
@@ -653,7 +660,7 @@ const Meal = () => {
                                       {/* <td>jsj</td> */}
                                       <td
                                         style={{
-                                          width: "33.333333%",
+                                          width: "25%",
                                           position: "relative",
                                           fontSize: "12px",
                                         }}
@@ -682,7 +689,7 @@ const Meal = () => {
 
                                       <td
                                         style={{
-                                          width: "33.333333%",
+                                          width: "25%",
                                           position: "relative",
                                           fontSize: "12px",
                                         }}
@@ -708,6 +715,34 @@ const Meal = () => {
                                           {borderTotalShop} Tk
                                         </p>
                                       </td>
+                                      <td
+                                        style={{
+                                          width: "25%",
+                                          position: "relative",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        <p
+                                          style={{
+                                            position: "absolute",
+                                            top: "-.2rem",
+                                            width: "100%",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          Extra Shop
+                                        </p>
+                                        <p
+                                          style={{
+                                            position: "absolute",
+                                            width: "100%",
+                                            textAlign: "center",
+                                            marginTop: "3px",
+                                          }}
+                                        >
+                                          {borderTotalExtraShop} Tk
+                                        </p>
+                                      </td>
                                     </tr>
                                   </table>
                                 ) : (
@@ -721,16 +756,16 @@ const Meal = () => {
                     })}
                   {arrOfMeals?.length > 0 && (
                     <th
-                    style={{
-                      // width: currentUser !== "all" && "150px",
-                      // minWidth: currentUser !== "all" && "150px",
-                      width: "150px",
-                      // borderRight: "2px solid black",
-                      display: currentUser !== "all" ? "none" : "",
-                    }}
-                  >
-                    Total Meal
-                  </th>
+                      style={{
+                        // width: currentUser !== "all" && "150px",
+                        // minWidth: currentUser !== "all" && "150px",
+                        width: "150px",
+                        // borderRight: "2px solid black",
+                        display: currentUser !== "all" ? "none" : "",
+                      }}
+                    >
+                      Total Meal
+                    </th>
                   )}
                 </tr>
               </thead>
@@ -792,6 +827,7 @@ const Meal = () => {
                           user={user}
                           updateMoney={updateMoney}
                           updateShopMoney={updateShopMoney}
+                          updateExtraShopMoney={updateExtraShopMoney}
                           prevArrOfMeals={prevArrOfMeals}
                         />
                       );

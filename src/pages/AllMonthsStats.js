@@ -23,6 +23,7 @@ const AllMonthsStats = () => {
       let months = [];
       let moneys = [];
       let shops = [];
+      let extraShops = [];
       getMonthlyMealStats.monthlyMeals.map((el) => {
         months.push(el._id);
         mealInfo.push([]);
@@ -32,6 +33,7 @@ const AllMonthsStats = () => {
         dinners.push(el.dinner);
         moneys.push(el.money);
         shops.push(el.shop);
+        extraShops.push(el.extraShop);
         return {
           month: el._id?.month,
         };
@@ -51,6 +53,7 @@ const AllMonthsStats = () => {
               dinner: obj.dinner + dinners[i][elIndex][0],
               money: obj.money + moneys[i][elIndex],
               shop: obj.shop + shops[i][elIndex],
+              extraShop: obj.extraShop + extraShops[i][elIndex],
             };
           } else {
             arrEle.push({
@@ -60,6 +63,7 @@ const AllMonthsStats = () => {
               dinner: dinners[i][elIndex][0],
               money: moneys[i][elIndex],
               shop: shops[i][elIndex],
+              extraShop: extraShops[i][elIndex],
             });
           }
           finalArr = arrEle.map((el) => {
@@ -71,12 +75,14 @@ const AllMonthsStats = () => {
               totalMeal: el.breakfast + el.launch + el.dinner,
               totalMoney: el.money,
               totalShop: el.shop,
+              totalExtraShop: el.extraShop,
             };
           });
         });
         mealInfo[i] = {
           month: months[i]?.month + " " + months[i]?.year,
           overAllShop: finalArr.reduce((f, c) => f + c.totalShop, 0),
+          overAllExtraShop: finalArr.reduce((f, c) => f + c.totalExtraShop, 0),
           overAllMoney: finalArr.reduce((f, c) => f + c.totalMoney, 0),
           finalArr,
           totalMeal: finalArr.reduce((f, c) => f + c.totalMeal, 0),
@@ -163,6 +169,13 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
+              <td className={style.totalExtraShop}>
+                <table>
+                  <tr>
+                    <td>Total Extra Shop</td>
+                  </tr>
+                </table>
+              </td>
               <td className={style.overAllShop}>Overall Shop</td>
               {/* Meal Rate */}
               <td className={style.mealRate}>Meal Rate</td>
@@ -189,6 +202,7 @@ const AllMonthsStats = () => {
           </tbody>
         </table>
       </div>
+      {console.log(mealStatMonthly)}
       <div className={style.tableWrapper}>
         <table className={style.infoTable + " " + style.infoTableBody}>
           <tbody ref={bodyRef}>
@@ -323,7 +337,20 @@ const AllMonthsStats = () => {
                         })}
                       </table>
                     </td>
-                    <td className={style.overAllShop}>{el.overAllShop}</td>
+                    <td className={style.totalExtraShop}>
+                      <table>
+                        {el.finalArr?.map((el) => {
+                          return (
+                            <tr>
+                              <td>{el.totalExtraShop}</td>
+                            </tr>
+                          );
+                        })}
+                      </table>
+                    </td>
+                    <td className={style.overAllShop}>
+                      {el.overAllShop + el.overAllExtraShop}
+                    </td>
                     {/* Meal Rate */}
                     {console.log(JSON.stringify(el.mealRate))}
                     <td className={style.mealRate}>
@@ -333,13 +360,22 @@ const AllMonthsStats = () => {
                     </td>
                     <td className={style.borderConsume}>
                       <table>
+                        {console.log(el.finalArr)}
                         {el.finalArr?.map((ele) => {
                           return (
                             <tr>
                               <td>
-                                {isNaN((ele.totalMeal * el.mealRate).toFixed(2))
+                                {isNaN(
+                                  (
+                                    ele.totalMeal * el.mealRate +
+                                    el.overAllExtraShop / el.finalArr.length
+                                  ).toFixed(2)
+                                )
                                   ? 0
-                                  : (ele.totalMeal * el.mealRate).toFixed(2)}
+                                  : (
+                                      ele.totalMeal * el.mealRate +
+                                      el.overAllExtraShop / el.finalArr.length
+                                    ).toFixed(2)}
                               </td>
                             </tr>
                           );
@@ -349,16 +385,19 @@ const AllMonthsStats = () => {
                     <td className={style.restBalance}>
                       <table>
                         {el.finalArr?.map((ele) => {
+                          console.log(el);
                           return (
                             <tr>
                               <td>
                                 {isNaN(
-                                  ele.totalMoney - ele.totalMeal * el.mealRate
+                                  ele.totalMoney -
+                                    ele.totalMeal * el.mealRate -
+                                    el.overAllExtraShop / el.finalArr.length
                                 )
                                   ? 0
                                   : (
                                       ele.totalMoney -
-                                      ele.totalMeal * el.mealRate
+                                      ele.totalMeal * el.mealRate-el.overAllExtraShop / el.finalArr.length
                                     ).toFixed(2)}
                               </td>
                             </tr>
@@ -368,7 +407,7 @@ const AllMonthsStats = () => {
                     </td>
                     <td className={style.totalBalance}>{el.overAllMoney}</td>
                     <td className={style.remainingBalance}>
-                      {el.overAllMoney - el.overAllShop}
+                      {el.overAllMoney - el.overAllShop - el.overAllExtraShop}
                     </td>
                   </tr>
                 );

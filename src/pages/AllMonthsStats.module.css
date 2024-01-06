@@ -60,6 +60,7 @@
 
 .infoTable tbody tr .overAllMeal,
 .infoTable tbody tr .totalShop,
+.infoTable tbody tr .totalExtraShop,
 .infoTable tbody tr .mealRate,
 .infoTable tbody tr .totalBalance,
 .infoTable tbody tr .overAllShop,
@@ -74,6 +75,11 @@
   border-bottom: 2px solid black;
 }
 .infoTable tbody tr .totalShop {
+  width: 120px;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
+}
+.infoTable tbody tr .totalExtraShop {
   width: 120px;
   border-right: 1px solid black;
   border-bottom: 2px solid black;

@@ -24,7 +24,7 @@ const FilterBox = ({
           {yearMonth?.yearMonth?.map((el) => {
             return (
               <option value={el.month + " " + el.year}>
-                {el.month === 0 ? "January" : el.month === 11 ? "December" : ""}{" "}
+                {el.month === 0 ? "January" : el.month === 1 ? "February" :el.month ===2?'Merch':el.month ===3?'April':el.month ===4?'May':el.month ===5?"June":el.month === 6?"July":el.month === 7?"August":el.month ===8?'September':el.month === 9?"October":el.month === 10?"November":el.month ===11?"December": ""}{" "}
                 {el.year}
               </option>
             );

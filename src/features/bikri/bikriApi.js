@@ -270,6 +270,61 @@ const bikriApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateExtraShopMoney: builder.mutation({
+      query: (data) => ({
+        url: `/meal/update-extra-shop-money/${data.id}`,
+        method: "PATCH",
+        body: data,
+        headers: {
+          authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("auth")).token
+          }`,
+        },
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        console.log(args);
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          dispatch(
+            apiSlice.util.updateQueryData(
+              "getMonthlyMeals",
+              {getMonth: args.month, getYear: args.year},
+              (meals) => {
+                const desireMeal = meals?.monthlyMeals.find(
+                  (item) => item.id === args.id
+                );
+                // desireMeal["shop"][args.borderIndex] = [
+                //   ...desireMeal["shop"],
+                // ][args.borderIndex];
+                // desireMeal["shop"] = [...desireMeal["shop"]];
+                desireMeal["extraShop"][args.borderIndex] = data.meal.extraShop[args.borderIndex]
+                // desireMeal["shop"] = [...desireMeal["shop"]];
+              }
+            )
+          );
+        } catch (err) {
+          console.log("Extra shop error");
+          dispatch(
+            apiSlice.util.updateQueryData(
+              "getMonthlyMeals",
+              {getMonth: args.month, getYear: args.year},
+              (meals) => {
+                const desireMeal = meals?.monthlyMeals.find(
+                  (item) => item.id === args.id
+                );
+                console.log(JSON.stringify(desireMeal));
+                console.log(JSON.stringify([...desireMeal["extraShop"]]))
+                desireMeal["extraShop"][args.borderIndex] = [...desireMeal["extraShop"]][
+                  args.borderIndex
+                ];
+                desireMeal["extraShop"] = [...desireMeal["extraShop"]];
+              }
+            )
+          );
+        }
+      },
+    }),
     getMonthlyStats: builder.query({
       query: () => ({
         url: `/meal/monthly-borders-stats`,
@@ -427,6 +482,7 @@ export const {
   useUpdatePersonFullMealMutation,
   useUpdateMoneyMutation,
   useUpdateShopMoneyMutation,
+  useUpdateExtraShopMoneyMutation,
   useGetYearMonthQuery,
   useLogoutMutation
 } = bikriApi;

@@ -12,13 +12,14 @@ const UserHomeTable = ({
   updateMoney,
   updateShopMoney,
   prevArrOfMeals,
+  updateExtraShopMoney
 }) => {
   return (
     <>
       <td className={style.userHomeTableTd}>
         <table>
           <tr>
-            <td style={{ width: "33.333333%" }}>
+            <td style={{ width: "25%" }}>
               <input
                 style={{
                   color: "black",
@@ -219,7 +220,7 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td style={{ width: "33.333333%" }}>
+            <td style={{ width: "25%" }}>
               <input
                 type="number"
                 onChange={(e) => {
@@ -259,7 +260,7 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td style={{ width: "33.333333%" }}>
+            <td style={{ width: "25%" }}>
               <input
                 type="number"
                 onChange={(e) => {
@@ -286,6 +287,42 @@ const UserHomeTable = ({
                 }}
                 placeholder="খরচ"
                 value={el.shop[index] === 0 ? "" : el.shop[index]}
+                style={{
+                  color: "black",
+                  width: "50px",
+                  // border: "1px solid black",
+                  // borderRadius: "5px",
+                  textAlign: "center",
+                }}
+              />
+            </td>
+            <td style={{ width: "25%" }}>
+              <input
+                type="number"
+                onChange={(e) => {
+                  const desireMealIndex = arrOfMeals.findIndex(
+                    (item) => item.id === el.id
+                  );
+                  const desireMeal = arrOfMeals[desireMealIndex];
+                  const copyDesireMeal = { ...desireMeal };
+                  const extraShops = copyDesireMeal.extraShop;
+                  const copyExtraShops = [...extraShops];
+                  copyExtraShops[index] = e.target.value * 1;
+                  arrOfMeals[desireMealIndex] = {
+                    ...copyDesireMeal,
+                    extraShop: copyExtraShops,
+                  };
+                  setArrOfMeals([...arrOfMeals]);
+                  updateExtraShopMoney({
+                    id: el.id,
+                    month: el.month,
+                    year: el.year,
+                    borderIndex: index,
+                    extraShop: e.target.value * 1,
+                  });
+                }}
+                placeholder="Extra"
+                value={el.extraShop[index] === 0 ? "" : el.extraShop[index]}
                 style={{
                   color: "black",
                   width: "50px",
