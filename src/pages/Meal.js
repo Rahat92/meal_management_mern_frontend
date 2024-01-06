@@ -43,6 +43,7 @@ const Meal = () => {
   const [needUpdateObj, setNeedUpdateObj] = useState({});
   const [updatedArrOfMeals, setUpdatedArrOfMeals] = useState([]);
   const [screenWidth, setScreenWidth] = useState(null);
+  const [moneyOption, setMoneyOption] = useState("Deposite");
   const [
     updateShopMoney,
     { data: shopMoney, isError: isShopMoneyError, error: shopMoneyError },
@@ -492,9 +493,10 @@ const Meal = () => {
     setScreenWidth(window.screen.availWidth);
     window.addEventListener("resize", function () {
       setScreenWidth(window.screen.availWidth);
+      setMoneyOption('Deposite')
     });
   }, [window.screen]);
-  console.log(screenWidth);
+  console.log(moneyOption);
   return (
     <div>
       <div
@@ -685,7 +687,19 @@ const Meal = () => {
                                             textAlign: "center",
                                           }}
                                         >
-                                          Deposite
+                                          {screenWidth < 600 ? (
+                                            <select
+                                              onChange={(e) => {
+                                                setMoneyOption(e.target.value);
+                                              }}
+                                            >
+                                              <option>Deposite</option>
+                                              <option>Meal Shop</option>
+                                              <option>Extra Shop</option>
+                                            </select>
+                                          ) : (
+                                            "Deposite"
+                                          )}
                                         </p>
                                         <p
                                           style={{
@@ -695,7 +709,14 @@ const Meal = () => {
                                             marginTop: "3px",
                                           }}
                                         >
-                                          {borderTotalDeposite} Tk
+                                          {moneyOption === "Deposite"
+                                            ? borderTotalDeposite
+                                            : moneyOption === "Meal Shop"
+                                            ? borderTotalShop
+                                            : moneyOption === "Extra Shop"
+                                            ? borderTotalExtraShop
+                                            : ""}{" "}
+                                          Tk
                                         </p>
                                       </td>
 
@@ -705,7 +726,9 @@ const Meal = () => {
                                           position: "relative",
                                           fontSize: "12px",
                                           display:
-                                            screenWidth < 600 ? "none" : "",
+                                            screenWidth < 600
+                                              ? "none"
+                                              : "",
                                         }}
                                       >
                                         <p
@@ -735,7 +758,9 @@ const Meal = () => {
                                           position: "relative",
                                           fontSize: "12px",
                                           display:
-                                            screenWidth < 600 ? "none" : "",
+                                            screenWidth < 600
+                                              ? "none"
+                                              : "",
                                         }}
                                       >
                                         <p
@@ -846,6 +871,7 @@ const Meal = () => {
                           updateExtraShopMoney={updateExtraShopMoney}
                           prevArrOfMeals={prevArrOfMeals}
                           screenWidth={screenWidth}
+                          moneyOption={moneyOption}
                         />
                       );
                     } else if (currentUser === "all") {

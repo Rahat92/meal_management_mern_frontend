@@ -14,6 +14,7 @@ const UserHomeTable = ({
   prevArrOfMeals,
   updateExtraShopMoney,
   screenWidth,
+  moneyOption,
 }) => {
   return (
     <>
@@ -221,7 +222,7 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td style={{ width: "25%" }}>
+            <td style={{ width: "25%", display: screenWidth<600&&moneyOption!=='Deposite'?'none':'' }}>
               <input
                 type="number"
                 onChange={(e) => {
@@ -262,7 +263,7 @@ const UserHomeTable = ({
               />
             </td>
             <td
-              style={{ width: "25%", display: screenWidth < 600 ? "none" : "" }}
+              style={{ width: "25%", display: screenWidth < 600&&moneyOption!=='Meal Shop' ? "none" : "" }}
             >
               <input
                 type="number"
@@ -300,7 +301,7 @@ const UserHomeTable = ({
               />
             </td>
             <td
-              style={{ width: "25%", display: screenWidth < 600 ? "none" : "" }}
+              style={{ width: "25%", display: screenWidth < 600 && moneyOption!=='Extra Shop' ? "none" : "" }}
             >
               <input
                 type="number"
