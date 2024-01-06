@@ -48,7 +48,11 @@ const Meal = () => {
   ] = useUpdateShopMoneyMutation();
   const [
     updateExtraShopMoney,
-    { data: extraShopMoney, isError: isShopExtraMoneyError, error: extraShopMoneyError },
+    {
+      data: extraShopMoney,
+      isError: isShopExtraMoneyError,
+      error: extraShopMoneyError,
+    },
   ] = useUpdateExtraShopMoneyMutation();
   const [createMeal, { data: meals }] = useCreateMealMutation();
   const { data: yearMonth } = useGetYearMonthQuery();
@@ -238,6 +242,7 @@ const Meal = () => {
       days = days.map((el) => {
         return {
           date: el.date,
+          day: el.date.split(" ")[0],
           month,
           year,
           mealManager: "6570001d7e42deb0b24b9657",
@@ -282,7 +287,7 @@ const Meal = () => {
           monthlyMeals.monthlyMeals[0].border),
       ]);
       const mealsArr = monthlyMeals?.monthlyMeals?.map((el) => {
-        console.log(el)
+        console.log(el);
         return {
           id: el._id,
           date: el.date,
@@ -428,7 +433,7 @@ const Meal = () => {
       mealError = "You can't change previous Meal";
     }
     if (
-      (user?.role === "admin") &&
+      user?.role === "admin" &&
       (mealName === "breakfast" ||
         mealName === "launch" ||
         mealName === "dinner") &&
