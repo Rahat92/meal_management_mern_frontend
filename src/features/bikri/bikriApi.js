@@ -48,8 +48,8 @@ const bikriApi = apiSlice.injectEndpoints({
             JSON.parse(localStorage.getItem("auth")).token
           }`,
         },
-        // invalidatesTags: ["getMeals", "getAllMonthStat"],
       }),
+      invalidatesTags:['getAllMonthStat'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         const month =
@@ -128,6 +128,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
+      invalidatesTags:['getAllMonthStat'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -176,6 +177,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
+      invalidatesTags:['getAllMonthStat'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -226,6 +228,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
+      invalidatesTags:['getAllMonthStat'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -281,6 +284,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
+      invalidatesTags:['getAllMonthStat'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -402,63 +406,6 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     getUsers: builder.query({
       query: () => `/users`,
-    }),
-    createCategory: builder.mutation({
-      query: () => ({
-        url: `/category`,
-        method: "post",
-        body: {
-          category: "Fruit",
-        },
-      }),
-    }),
-    getCategories: builder.query({
-      query: () => `/category`,
-    }),
-    getCategory: builder.query({
-      query: (id) => `/category/${id}`,
-    }),
-    getCustomerSellYear: builder.query({
-      query: () => `/bikri/customers-sell/2023`,
-    }),
-    getCustomerBikris: builder.query({
-      query: ({ customerId, page }) =>
-        `/bikri/customer/${customerId}?page=${page}&limit=10`,
-      transformResponse: (response) => {
-        console.log(response);
-        const customerBikri = response.customerBikri.sort((a, b) => {
-          if (a.cartAt > b.cartAt) {
-            return -1;
-          }
-          if (b.cartAt > a.cartAt) {
-            return 1;
-          }
-          return 0;
-        });
-        const pages = response.pages;
-        const totalCartAmount = response.totalCart;
-        const totalBuyAmount = response.totalBuyAmount;
-        const totalDue = response.totalDue;
-        const currentPage = response.currentPage;
-        const allSubmitMoney = response.allSubmitMoney;
-        return {
-          customerBikri,
-          totalBuyAmount,
-          totalDue,
-          pages,
-          totalCartAmount,
-          currentPage,
-          allSubmitMoney,
-        };
-      },
-    }),
-    getCustomerBikriStatics: builder.query({
-      //   query: () => `/bikri/customer/${customerId}/${productName}/stats/2023`,
-      query: ({ desireProduct, customerId }) =>
-        `/bikri/customer/${customerId}/stats/2023`,
-    }),
-    getSellerBikriStatsMonthly: builder.query({
-      query: () => `/bikri/stats/2023`,
     }),
   }),
 });

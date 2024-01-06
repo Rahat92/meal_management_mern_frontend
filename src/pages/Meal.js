@@ -42,6 +42,7 @@ const Meal = () => {
   const [registeredUsers, setRegisteredUsers] = useState([]);
   const [needUpdateObj, setNeedUpdateObj] = useState({});
   const [updatedArrOfMeals, setUpdatedArrOfMeals] = useState([]);
+  const [screenWidth, setScreenWidth] = useState(null);
   const [
     updateShopMoney,
     { data: shopMoney, isError: isShopMoneyError, error: shopMoneyError },
@@ -287,7 +288,6 @@ const Meal = () => {
           monthlyMeals.monthlyMeals[0].border),
       ]);
       const mealsArr = monthlyMeals?.monthlyMeals?.map((el) => {
-        console.log(el);
         return {
           id: el._id,
           date: el.date,
@@ -488,6 +488,13 @@ const Meal = () => {
       nameRef?.current?.scrollTo(window.pageXOffset, 0);
     });
   }, [window.pageYOffset, window.pageXOffset]);
+  useEffect(() => {
+    setScreenWidth(window.screen.availWidth);
+    window.addEventListener("resize", function () {
+      setScreenWidth(window.screen.availWidth);
+    });
+  }, [window.screen]);
+  console.log(screenWidth);
   return (
     <div>
       <div
@@ -697,6 +704,8 @@ const Meal = () => {
                                           width: "25%",
                                           position: "relative",
                                           fontSize: "12px",
+                                          display:
+                                            screenWidth < 600 ? "none" : "",
                                         }}
                                       >
                                         <p
@@ -725,6 +734,8 @@ const Meal = () => {
                                           width: "25%",
                                           position: "relative",
                                           fontSize: "12px",
+                                          display:
+                                            screenWidth < 600 ? "none" : "",
                                         }}
                                       >
                                         <p
@@ -834,6 +845,7 @@ const Meal = () => {
                           updateShopMoney={updateShopMoney}
                           updateExtraShopMoney={updateExtraShopMoney}
                           prevArrOfMeals={prevArrOfMeals}
+                          screenWidth={screenWidth}
                         />
                       );
                     } else if (currentUser === "all") {

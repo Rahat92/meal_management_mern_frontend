@@ -12,7 +12,8 @@ const UserHomeTable = ({
   updateMoney,
   updateShopMoney,
   prevArrOfMeals,
-  updateExtraShopMoney
+  updateExtraShopMoney,
+  screenWidth,
 }) => {
   return (
     <>
@@ -260,7 +261,9 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td style={{ width: "25%" }}>
+            <td
+              style={{ width: "25%", display: screenWidth < 600 ? "none" : "" }}
+            >
               <input
                 type="number"
                 onChange={(e) => {
@@ -296,7 +299,9 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td style={{ width: "25%" }}>
+            <td
+              style={{ width: "25%", display: screenWidth < 600 ? "none" : "" }}
+            >
               <input
                 type="number"
                 onChange={(e) => {
