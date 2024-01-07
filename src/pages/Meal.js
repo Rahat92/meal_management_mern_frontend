@@ -58,6 +58,7 @@ const Meal = () => {
   ] = useUpdateExtraShopMoneyMutation();
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
+  const todayDate = new Date().getDate();
   const [createMeal, { data: meals }] = useCreateMealMutation();
   const { data: yearMonth } = useGetYearMonthQuery();
   const [getMonth, setGetMonth] = useState(todayMonth);
@@ -484,6 +485,9 @@ const Meal = () => {
       setMoneyOption("Deposite");
     });
   }, [window.screen]);
+  useEffect(() => {
+    window.scroll(0, (todayDate - 1) * 100);
+  }, [arrOfMeals?.length, currentUser]);
   return (
     <div>
       <div
@@ -867,13 +871,19 @@ const Meal = () => {
                             width: "150px",
                             textAlign: "center",
                             borderRight: "2px solid green",
+                            // background:
+                            //   el.date.split(" ")[0] == todayDate ? "red" : "",
                           }}
                         >
-                          <table style={{ width: "100%" }}>
+                          <table
+                            style={{
+                              width: "100%",
+                              height: "86px",
+                            }}
+                          >
                             <tr
                               style={{
                                 borderBottom: "1px solid white",
-                                background
                               }}
                             >
                               <td
@@ -1103,7 +1113,11 @@ const Meal = () => {
         }}
       >
         <table
-          style={{ width: "100%", color: "black", borderTop: "1px solid blue" }}
+          style={{
+            width: "100%",
+            color: "black",
+            borderTop: "1px solid blue",
+          }}
         >
           <tbody>
             {arrOfMeals
@@ -1129,7 +1143,6 @@ const Meal = () => {
                       borderRight: "2px solid black",
                       borderBottom: "2px solid green",
                       width: "100%",
-                      // height: "99.33px",
                     }}
                   >
                     <td
@@ -1137,6 +1150,8 @@ const Meal = () => {
                         borderRight: "2px solid green",
                         width: "50px",
                         textAlign: "center",
+                        background:
+                          el.date.split(" ")[0] == todayDate ? "red" : "",
                       }}
                     >
                       {el.date?.split(" ")[0]}
@@ -1148,7 +1163,7 @@ const Meal = () => {
                         color: "black",
                       }}
                     >
-                      <table style={{ width: "100%" }}>
+                      <table style={{ width: "100%", height: "86px" }}>
                         <tr style={{ borderBottom: "1px solid white" }}>
                           <td style={{ textAlign: "center" }}>Breakfast</td>
                         </tr>

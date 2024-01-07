@@ -19,7 +19,7 @@ const UserHomeTable = ({
   return (
     <>
       <td className={style.userHomeTableTd}>
-        <table>
+        <table style={{ height: "86px" }}>
           <tr>
             <td style={{ width: "25%" }}>
               <input
@@ -222,7 +222,13 @@ const UserHomeTable = ({
                 }}
               />
             </td>
-            <td style={{ width: "25%", display: screenWidth<600&&moneyOption!=='Deposite'?'none':'' }}>
+            <td
+              style={{
+                width: "25%",
+                display:
+                  screenWidth < 600 && moneyOption !== "Deposite" ? "none" : "",
+              }}
+            >
               <input
                 type="number"
                 onChange={(e) => {
@@ -263,7 +269,13 @@ const UserHomeTable = ({
               />
             </td>
             <td
-              style={{ width: "25%", display: screenWidth < 600&&moneyOption!=='Meal Shop' ? "none" : "" }}
+              style={{
+                width: "25%",
+                display:
+                  screenWidth < 600 && moneyOption !== "Meal Shop"
+                    ? "none"
+                    : "",
+              }}
             >
               <input
                 type="number"
@@ -301,7 +313,13 @@ const UserHomeTable = ({
               />
             </td>
             <td
-              style={{ width: "25%", display: screenWidth < 600 && moneyOption!=='Extra Shop' ? "none" : "" }}
+              style={{
+                width: "25%",
+                display:
+                  screenWidth < 600 && moneyOption !== "Extra Shop"
+                    ? "none"
+                    : "",
+              }}
             >
               <input
                 type="number"
