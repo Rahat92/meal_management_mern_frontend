@@ -56,12 +56,12 @@ const Meal = () => {
       error: extraShopMoneyError,
     },
   ] = useUpdateExtraShopMoneyMutation();
+  const todayMonth = new Date().getMonth();
+  const todayYear = new Date().getFullYear();
   const [createMeal, { data: meals }] = useCreateMealMutation();
   const { data: yearMonth } = useGetYearMonthQuery();
-  const [getMonth, setGetMonth] = useState(yearMonth?.yearMonth[0]?.month * 1);
-  const [getYear, setGetYear] = useState(
-    yearMonth?.yearMonth && yearMonth.yearMonth[0]?.year * 1
-  );
+  const [getMonth, setGetMonth] = useState(todayMonth);
+  const [getYear, setGetYear] = useState(todayYear);
 
   const [
     updateMoney,
@@ -100,15 +100,15 @@ const Meal = () => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
   useEffect(() => {
-    if (yearMonth?.yearMonth?.length > 0) {
-      setGetMonth(yearMonth?.yearMonth[0].month * 1);
-      setGetYear(yearMonth?.yearMonth[0].year * 1);
-      setIsSkipped(true);
-    }
+    // if (yearMonth?.yearMonth?.length > 0) {
+    //   setGetMonth(yearMonth?.yearMonth[0].month * 1);
+    //   setGetYear(yearMonth?.yearMonth[0].year * 1);
+    //   setIsSkipped(true);
+    // }
   }, [yearMonth?.yearMonth]);
 
   let monthLength = 0;
-  let month = 0;
+  let month = 1;
   let year = 2024;
   const currentDay = new Date().getDate();
   switch (month) {
@@ -202,7 +202,6 @@ const Meal = () => {
   }, [isMealStatusError]);
   useEffect(() => {
     if (isShopMoneyError) {
-      console.log("good");
       alert(shopMoneyError?.data?.message);
     }
   }, [isShopMoneyError]);
@@ -384,7 +383,6 @@ const Meal = () => {
     setArrOfMeals([...copyArrOfMeals]);
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
-    console.log(updatedDateObj);
     let mealError = "";
     if (
       user?.role === "user" &&
@@ -412,14 +410,6 @@ const Meal = () => {
     ) {
       mealError = "You can't change previous Meal";
     }
-    console.log(
-      new Date(
-        updatedDateObj.year,
-        updatedDateObj.month,
-        updatedDateObj.date.split(" ")[0],
-        18
-      )
-    );
     if (
       user?.role === "user" &&
       mealName === "dinner" &&
@@ -451,7 +441,6 @@ const Meal = () => {
 
     if (mealError) {
       alert(mealError);
-      console.log(prevArrOfMeals);
       prevArrOfMeals[dateIndex] = { ...obj, [mealName]: mealArr };
       setArrOfMeals([...prevArrOfMeals]);
       return;
@@ -475,7 +464,6 @@ const Meal = () => {
   };
   useEffect(() => {
     if (headRef.current) {
-      console.log(headRef.current.offsetHeight);
       setHeadHeight(headRef.current.offsetHeight);
     }
   }, [headRef?.current]);
@@ -493,10 +481,9 @@ const Meal = () => {
     setScreenWidth(window.screen.availWidth);
     window.addEventListener("resize", function () {
       setScreenWidth(window.screen.availWidth);
-      setMoneyOption('Deposite')
+      setMoneyOption("Deposite");
     });
   }, [window.screen]);
-  console.log(moneyOption);
   return (
     <div>
       <div
@@ -519,6 +506,8 @@ const Meal = () => {
           setCurrentIndex={setCurrentIndex}
           setCurrentUser={setCurrentUser}
           user={user}
+          todayMonth={todayMonth}
+          todayYear={todayYear}
         />
         <div>
           <button
@@ -726,9 +715,7 @@ const Meal = () => {
                                           position: "relative",
                                           fontSize: "12px",
                                           display:
-                                            screenWidth < 600
-                                              ? "none"
-                                              : "",
+                                            screenWidth < 600 ? "none" : "",
                                         }}
                                       >
                                         <p
@@ -758,9 +745,7 @@ const Meal = () => {
                                           position: "relative",
                                           fontSize: "12px",
                                           display:
-                                            screenWidth < 600
-                                              ? "none"
-                                              : "",
+                                            screenWidth < 600 ? "none" : "",
                                         }}
                                       >
                                         <p
@@ -1104,7 +1089,6 @@ const Meal = () => {
       </table>
       {/* </div> */}
       {/* fixed */}
-      {console.log(headHeight)}
       <div
         ref={dateRef}
         style={{

@@ -208,7 +208,7 @@ const AllMonthsStats = () => {
           <tbody ref={bodyRef}>
             <div ref={dateNameRef} className={style.bodyMonthAndName}>
               {mealStatMonthly &&
-                mealStatMonthly.map((el) => {
+                mealStatMonthly?.sort((a,b) => b.month.split(' ')[0]-a.month.split(' ')[0])?.sort((a,b) => b.month.split(' ')[1]-a.month.split(' ')[1] )?.map((el) => {
                   return (
                     <table>
                       <tr>

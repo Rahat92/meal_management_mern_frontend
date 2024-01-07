@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import filterBoxStyle from "./FilterBox.module.css";
 const FilterBox = ({
   setGetYear,
@@ -9,7 +9,20 @@ const FilterBox = ({
   setCurrentIndex,
   setCurrentUser,
   user,
+  todayMonth,
+  todayYear,
 }) => {
+  const [yearMonthArr, setYearMonthArr] = useState([]);
+  useEffect(() => {
+    if (todayMonth && todayYear && yearMonth?.yearMonth?.length > 0) {
+      const arr = yearMonth?.yearMonth?.filter((el) => el.month !== todayMonth);
+      console.log(arr);
+      setYearMonthArr(arr);
+    }
+  }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
+  console.log(yearMonth);
+  console.log(todayMonth, todayYear);
+  console.log(yearMonth?.yearMonth?.filter((el) => el.month!==todayMonth));
   return (
     <div className={filterBoxStyle.wrapper}>
       <form className={filterBoxStyle.filterDate}>
@@ -21,21 +34,74 @@ const FilterBox = ({
             setGetMonth(e.target.value.split(" ")[0] * 1);
           }}
         >
-          {yearMonth?.yearMonth?.map((el) => {
-            return (
-              <option value={el.month + " " + el.year}>
-                {el.month === 0 ? "January" : el.month === 1 ? "February" :el.month ===2?'Merch':el.month ===3?'April':el.month ===4?'May':el.month ===5?"June":el.month === 6?"July":el.month === 7?"August":el.month ===8?'September':el.month === 9?"October":el.month === 10?"November":el.month ===11?"December": ""}{" "}
-                {el.year}
-              </option>
-            );
-          })}
+          <option value={todayMonth + " " + todayYear}>
+            {todayMonth === 0
+              ? "January"
+              : todayMonth === 1
+              ? "February"
+              : todayMonth === 2
+              ? "Merch"
+              : todayMonth === 3
+              ? "April"
+              : todayMonth === 4
+              ? "May"
+              : todayMonth === 5
+              ? "June"
+              : todayMonth === 6
+              ? "July"
+              : todayMonth === 7
+              ? "August"
+              : todayMonth === 8
+              ? "September"
+              : todayMonth === 9
+              ? "October"
+              : todayMonth === 10
+              ? "November"
+              : todayMonth === 11
+              ? "December"
+              : ""}{" "}
+            {todayYear}
+          </option>
+          {yearMonth?.yearMonth
+            ?.filter((el) => `${el.month}+${el.year}` !== `${todayMonth}+${todayYear}`)
+            ?.map((el) => {
+              return (
+                <option value={el.month + " " + el.year}>
+                  {el.month === 0
+                    ? "January"
+                    : el.month === 1
+                    ? "February"
+                    : el.month === 2
+                    ? "Merch"
+                    : el.month === 3
+                    ? "April"
+                    : el.month === 4
+                    ? "May"
+                    : el.month === 5
+                    ? "June"
+                    : el.month === 6
+                    ? "July"
+                    : el.month === 7
+                    ? "August"
+                    : el.month === 8
+                    ? "September"
+                    : el.month === 9
+                    ? "October"
+                    : el.month === 10
+                    ? "November"
+                    : el.month === 11
+                    ? "December"
+                    : ""}{" "}
+                  {el.year}
+                </option>
+              );
+            })}
         </select>
       </form>
       <form>
         <select
           style={{ color: "black", borderRadius: "10px" }}
           onChange={(e) => {
-            console.log(e.target.value);
             if (e.target.value !== "all") {
               const index = registeredUsers.findIndex(
                 (item) => item._id === e.target.value.split(" ")[1]

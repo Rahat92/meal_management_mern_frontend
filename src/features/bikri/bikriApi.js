@@ -49,7 +49,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
-      invalidatesTags:['getAllMonthStat'],
+      invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         const month =
@@ -87,11 +87,9 @@ const bikriApi = apiSlice.injectEndpoints({
               { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals?.find(
-                  (item) =>
-                    item.date ===
-                    `${updatedData.meal.date}`
+                  (item) => item.date === `${updatedData.meal.date}`
                 );
-                    console.log(JSON.stringify(desireMeal));
+                console.log(JSON.stringify(desireMeal));
                 desireMeal[args.mealName][args.mealIndex] = [
                   ...args[args.mealName][args.mealIndex],
                 ];
@@ -128,7 +126,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
-      invalidatesTags:['getAllMonthStat'],
+      invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -137,7 +135,7 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals?.find(
                   (item) => item._id === data.existingMeal._id
@@ -152,7 +150,7 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals?.find(
                   (item) => item._id === args.id
@@ -177,23 +175,23 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
-      invalidatesTags:['getAllMonthStat'],
+      invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
           const { data } = await queryFulfilled;
-          console.log(data)
+          console.log(data);
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
                 );
                 console.log(JSON.stringify(desireMeal));
-                desireMeal["money"][args.borderIndex] = data.meal.money[args.borderIndex]
-
+                desireMeal["money"][args.borderIndex] =
+                  data.meal.money[args.borderIndex];
               }
             )
           );
@@ -202,7 +200,7 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
@@ -228,7 +226,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
-      invalidatesTags:['getAllMonthStat'],
+      invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -237,7 +235,7 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
@@ -246,7 +244,8 @@ const bikriApi = apiSlice.injectEndpoints({
                 //   ...desireMeal["shop"],
                 // ][args.borderIndex];
                 // desireMeal["shop"] = [...desireMeal["shop"]];
-                desireMeal["shop"][args.borderIndex] = data.meal.shop[args.borderIndex]
+                desireMeal["shop"][args.borderIndex] =
+                  data.meal.shop[args.borderIndex];
                 // desireMeal["shop"] = [...desireMeal["shop"]];
               }
             )
@@ -256,13 +255,13 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
                 );
                 console.log(JSON.stringify(desireMeal));
-                console.log(JSON.stringify([...desireMeal["shop"]]))
+                console.log(JSON.stringify([...desireMeal["shop"]]));
                 desireMeal["shop"][args.borderIndex] = [...desireMeal["shop"]][
                   args.borderIndex
                 ];
@@ -284,7 +283,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
-      invalidatesTags:['getAllMonthStat'],
+      invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -293,7 +292,7 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
@@ -302,7 +301,8 @@ const bikriApi = apiSlice.injectEndpoints({
                 //   ...desireMeal["shop"],
                 // ][args.borderIndex];
                 // desireMeal["shop"] = [...desireMeal["shop"]];
-                desireMeal["extraShop"][args.borderIndex] = data.meal.extraShop[args.borderIndex]
+                desireMeal["extraShop"][args.borderIndex] =
+                  data.meal.extraShop[args.borderIndex];
                 // desireMeal["shop"] = [...desireMeal["shop"]];
               }
             )
@@ -312,16 +312,16 @@ const bikriApi = apiSlice.injectEndpoints({
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
-              {getMonth: args.month, getYear: args.year},
+              { getMonth: args.month, getYear: args.year },
               (meals) => {
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
                 );
                 console.log(JSON.stringify(desireMeal));
-                console.log(JSON.stringify([...desireMeal["extraShop"]]))
-                desireMeal["extraShop"][args.borderIndex] = [...desireMeal["extraShop"]][
-                  args.borderIndex
-                ];
+                console.log(JSON.stringify([...desireMeal["extraShop"]]));
+                desireMeal["extraShop"][args.borderIndex] = [
+                  ...desireMeal["extraShop"],
+                ][args.borderIndex];
                 desireMeal["extraShop"] = [...desireMeal["extraShop"]];
               }
             )
@@ -330,14 +330,20 @@ const bikriApi = apiSlice.injectEndpoints({
       },
     }),
     getMonthlyStats: builder.query({
-      query: () => ({
-        url: `/meal/monthly-borders-stats`,
-        headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
-        },
-      }),
+      query: () => {
+        const month = new Date().getMonth();
+        console.log(month)
+        const year = new Date().getFullYear();
+        const day = new Date().getDate();
+        return {
+          url: `/meal/monthly-borders-stats/${year}/${month}/${day}`,
+          headers: {
+            authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("auth")).token
+            }`,
+          },
+        };
+      },
       providesTags: ["getAllMonthStat"],
     }),
     getYearMonth: builder.query({
@@ -347,7 +353,7 @@ const bikriApi = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `/users/register`,
         method: "POST",
-        body: data
+        body: data,
       }),
     }),
     login: builder.mutation({
@@ -378,10 +384,10 @@ const bikriApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    logout:builder.mutation({
-      query:()=>({
-        url:`/users/logout`,
-        method:"GET",
+    logout: builder.mutation({
+      query: () => ({
+        url: `/users/logout`,
+        method: "GET",
         headers: {
           authorization: `Bearer ${
             JSON.parse(localStorage.getItem("auth")).token
@@ -431,5 +437,5 @@ export const {
   useUpdateShopMoneyMutation,
   useUpdateExtraShopMoneyMutation,
   useGetYearMonthQuery,
-  useLogoutMutation
+  useLogoutMutation,
 } = bikriApi;
