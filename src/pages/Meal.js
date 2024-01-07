@@ -873,6 +873,7 @@ const Meal = () => {
                             <tr
                               style={{
                                 borderBottom: "1px solid white",
+                                background
                               }}
                             >
                               <td

@@ -3,12 +3,12 @@ import { useGetMonthlyStatsQuery } from "../features/bikri/bikriApi";
 import { useEffect } from "react";
 import { useState } from "react";
 import style from "./AllMonthsStats.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { locationPathChanged } from "../features/locationPath";
 const AllMonthsStats = () => {
+  const { user } = useSelector((state) => state.auth);
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const { data: getMonthlyMealStats } = useGetMonthlyStatsQuery();
-  console.log(getMonthlyMealStats?.monthlyMeals);
   const dateNameRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
@@ -94,7 +94,6 @@ const AllMonthsStats = () => {
       setMealStatMonthly(mealInfo);
     }
   }, [getMonthlyMealStats?.monthlyMeals]);
-  console.log(mealStatMonthly);
   useEffect(() => {
     window.addEventListener("scroll", function () {
       bodyRef?.current?.scrollTo(0, window.pageYOffset);
@@ -155,13 +154,7 @@ const AllMonthsStats = () => {
                 </table>
               </td>
               <td className={style.overAllMeal}>Over all Meal</td>
-              <td className={style.totalDeposite}>
-                <table>
-                  <tr>
-                    <td>Total Deposite</td>
-                  </tr>
-                </table>
-              </td>
+
               <td className={style.totalShop}>
                 <table>
                   <tr>
@@ -176,9 +169,16 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
-              <td className={style.overAllShop}>Overall Shop</td>
+              {/* <td className={style.overAllShop}>Overall Shop</td> */}
               {/* Meal Rate */}
               <td className={style.mealRate}>Meal Rate</td>
+              <td className={style.totalDeposite}>
+                <table>
+                  <tr>
+                    <td>Total Deposite</td>
+                  </tr>
+                </table>
+              </td>
               <td className={style.borderConsume}>
                 <table>
                   <tr>
@@ -193,7 +193,8 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
-              <td className={style.totalBalance}>Over all Money</td>
+              <td className={style.totalBalance}>Overall Deposite</td>
+              <td className={style.overAllShop}>Overall Shop</td>
               <td className={style.headingRemainingBalance}>
                 <div>Remaining Balance</div>
               </td>
@@ -208,61 +209,74 @@ const AllMonthsStats = () => {
           <tbody ref={bodyRef}>
             <div ref={dateNameRef} className={style.bodyMonthAndName}>
               {mealStatMonthly &&
-                mealStatMonthly?.sort((a,b) => b.month.split(' ')[0]-a.month.split(' ')[0])?.sort((a,b) => b.month.split(' ')[1]-a.month.split(' ')[1] )?.map((el) => {
-                  return (
-                    <table>
-                      <tr>
-                        <td className={style.month}>
-                          <div
-                            style={{
-                              // transform: "rotate(-50deg)",
-                              fontWeight: "700",
-                            }}
-                          >
-                            {el.month.split(" ")[0] === "0"
-                              ? "January"
-                              : el.month.split(" ")[0] === "1"
-                              ? "February"
-                              : el.month.split(" ")[0] === "2"
-                              ? "March"
-                              : el.month.split(" ")[0] === "3"
-                              ? "April"
-                              : el.month.split(" ")[0] === "4"
-                              ? "May"
-                              : el.month.split(" ")[0] === "5"
-                              ? "June"
-                              : el.month.split(" ")[0] === "6"
-                              ? "July"
-                              : el.month.split(" ")[0] === "7"
-                              ? "August"
-                              : el.month.split(" ")[0] === "8"
-                              ? "September"
-                              : el.month.split(" ")[0] === "9"
-                              ? "Octobor"
-                              : el.month.split(" ")[0] === "10"
-                              ? "November"
-                              : el.month.split(" ")[0] === "11"
-                              ? "December"
-                              : ""}{" "}
-                            <br />
-                            {el.month.split(" ")[1]}
-                          </div>
-                        </td>
-                        <td className={style.border}>
-                          <table>
-                            {el.finalArr?.map((el) => {
-                              return (
-                                <tr>
-                                  <td>{el.border}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-                  );
-                })}
+                mealStatMonthly
+                  ?.sort(
+                    (a, b) => b.month.split(" ")[0] - a.month.split(" ")[0]
+                  )
+                  ?.sort(
+                    (a, b) => b.month.split(" ")[1] - a.month.split(" ")[1]
+                  )
+                  ?.map((el) => {
+                    console.log(el);
+                    return (
+                      <table>
+                        <tr>
+                          <td className={style.month}>
+                            <div
+                              style={{
+                                // transform: "rotate(-50deg)",
+                                fontWeight: "700",
+                              }}
+                            >
+                              {el.month.split(" ")[0] === "0"
+                                ? "January"
+                                : el.month.split(" ")[0] === "1"
+                                ? "February"
+                                : el.month.split(" ")[0] === "2"
+                                ? "March"
+                                : el.month.split(" ")[0] === "3"
+                                ? "April"
+                                : el.month.split(" ")[0] === "4"
+                                ? "May"
+                                : el.month.split(" ")[0] === "5"
+                                ? "June"
+                                : el.month.split(" ")[0] === "6"
+                                ? "July"
+                                : el.month.split(" ")[0] === "7"
+                                ? "August"
+                                : el.month.split(" ")[0] === "8"
+                                ? "September"
+                                : el.month.split(" ")[0] === "9"
+                                ? "Octobor"
+                                : el.month.split(" ")[0] === "10"
+                                ? "November"
+                                : el.month.split(" ")[0] === "11"
+                                ? "December"
+                                : ""}{" "}
+                              <br />
+                              {el.month.split(" ")[1]}
+                            </div>
+                          </td>
+                          <td className={style.border}>
+                            <table>
+                              {el.finalArr?.map((el) => {
+                                return (
+                                  <tr
+                                    style={{
+                                      background:
+                                        el.border === user?.name ? "red" : "",
+                                    }}
+                                  >
+                                    <td>{el.border}</td>
+                                  </tr>
+                                );
+                              })}
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    );
+                  })}
             </div>
             {mealStatMonthly &&
               mealStatMonthly.map((el) => {
@@ -272,7 +286,12 @@ const AllMonthsStats = () => {
                       <table>
                         {el.finalArr?.map((el) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td style={{ textAlign: "center" }}>
                                 {el.breakfast}
                               </td>
@@ -285,7 +304,12 @@ const AllMonthsStats = () => {
                       <table>
                         {el.finalArr?.map((el) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>{el.launch}</td>
                             </tr>
                           );
@@ -296,7 +320,12 @@ const AllMonthsStats = () => {
                       <table>
                         {el.finalArr?.map((el) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>{el.dinner}</td>
                             </tr>
                           );
@@ -307,63 +336,91 @@ const AllMonthsStats = () => {
                       <table>
                         {el.finalArr?.map((el) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>{el.totalMeal}</td>
                             </tr>
                           );
                         })}
                       </table>
                     </td>
+                    {/* Overall Meal */}
                     <td className={style.overAllMeal}>{el.totalMeal}</td>
-                    <td className={style.totalDeposite}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr>
-                              <td>{el.totalMoney}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
+                    {/* Total Shop */}
                     <td className={style.totalShop}>
                       <table>
                         {el.finalArr?.map((el) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>{el.totalShop}</td>
                             </tr>
                           );
                         })}
                       </table>
                     </td>
+                    {/* total Extra Shop */}
                     <td className={style.totalExtraShop}>
                       <table>
                         {el.finalArr?.map((el) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>{el.totalExtraShop}</td>
                             </tr>
                           );
                         })}
                       </table>
                     </td>
-                    <td className={style.overAllShop}>
+
+                    {/* Overall Shop */}
+                    {/* <td className={style.overAllShop}>
                       {el.overAllShop + el.overAllExtraShop}
-                    </td>
+                    </td> */}
                     {/* Meal Rate */}
-                    {console.log(JSON.stringify(el.mealRate))}
                     <td className={style.mealRate}>
                       {isNaN(el.mealRate.toFixed(2))
                         ? 0
                         : el.mealRate.toFixed(2)}
                     </td>
+                    <td className={style.totalDeposite}>
+                      <table>
+                        {el.finalArr?.map((el) => {
+                          return (
+                            <tr
+                              style={{
+                                background:
+                                  el.border === user?.name ? "red" : "",
+                              }}
+                            >
+                              <td>{el.totalMoney}</td>
+                            </tr>
+                          );
+                        })}
+                      </table>
+                    </td>
                     <td className={style.borderConsume}>
                       <table>
-                        {console.log(el.finalArr)}
                         {el.finalArr?.map((ele) => {
                           return (
-                            <tr>
+                            <tr
+                              style={{
+                                background:
+                                  ele.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>
                                 {isNaN(
                                   (
@@ -385,9 +442,8 @@ const AllMonthsStats = () => {
                     <td className={style.restBalance}>
                       <table>
                         {el.finalArr?.map((ele) => {
-                          console.log(el);
                           return (
-                            <tr>
+                            <tr style = {{ background:ele.border === user?.name?'red':'' }}>
                               <td>
                                 {isNaN(
                                   ele.totalMoney -
@@ -397,7 +453,8 @@ const AllMonthsStats = () => {
                                   ? 0
                                   : (
                                       ele.totalMoney -
-                                      ele.totalMeal * el.mealRate-el.overAllExtraShop / el.finalArr.length
+                                      ele.totalMeal * el.mealRate -
+                                      el.overAllExtraShop / el.finalArr.length
                                     ).toFixed(2)}
                               </td>
                             </tr>
@@ -406,6 +463,9 @@ const AllMonthsStats = () => {
                       </table>
                     </td>
                     <td className={style.totalBalance}>{el.overAllMoney}</td>
+                    <td className={style.overAllShop}>
+                      {el.overAllShop + el.overAllExtraShop}
+                    </td>
                     <td className={style.remainingBalance}>
                       {el.overAllMoney - el.overAllShop - el.overAllExtraShop}
                     </td>
