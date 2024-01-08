@@ -271,7 +271,11 @@ const AllMonthsStats = () => {
                                   <tr
                                     style={{
                                       background:
-                                        el.border === user?.name ? "red" : "",
+                                        el.border === user?.name
+                                          ? "rgba(100, 255,200,.8)"
+                                          : "",
+                                      color:
+                                        el.border === user?.name ? "black" : "",
                                     }}
                                   >
                                     <td>{el.border}</td>
@@ -296,7 +300,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td style={{ textAlign: "center" }}>
@@ -314,7 +319,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>{el.launch}</td>
@@ -330,7 +336,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>{el.dinner}</td>
@@ -346,7 +353,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>{el.totalMeal}</td>
@@ -365,7 +373,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>{el.totalShop}</td>
@@ -382,7 +391,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>{el.totalExtraShop}</td>
@@ -409,7 +419,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  el.border === user?.name ? "red" : "",
+                                  el.border === user?.name ? "green" : "",
+                                color: el.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>{el.totalMoney}</td>
@@ -425,7 +436,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  ele.border === user?.name ? "red" : "",
+                                  ele.border === user?.name ? "green" : "",
+                                color: ele.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>
@@ -453,7 +465,8 @@ const AllMonthsStats = () => {
                             <tr
                               style={{
                                 background:
-                                  ele.border === user?.name ? "red" : "",
+                                  ele.border === user?.name ? "green" : "",
+                                color: ele.border === user?.name ? "white" : "",
                               }}
                             >
                               <td>
@@ -469,7 +482,7 @@ const AllMonthsStats = () => {
                                       el.overAllExtraShop / el.finalArr.length
                                     ).toFixed(2)}
                               </td>
-                              <td>
+                              {/* <td>
                                 <button
                                   onClick={() =>
                                     sendSms({
@@ -483,7 +496,7 @@ const AllMonthsStats = () => {
                                 >
                                   Send Sms
                                 </button>
-                              </td>
+                              </td> */}
                             </tr>
                           );
                         })}

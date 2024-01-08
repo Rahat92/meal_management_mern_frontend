@@ -391,6 +391,13 @@ const bikriApi = apiSlice.injectEndpoints({
         body:body
       }),
     }),
+    forgotPassword: builder.mutation({
+      query: () => ({
+        url: `/users/forgot-password`,
+        method: "POST",
+        body: {email:'shamim@gmail.com'},
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: `/users/logout`,
@@ -445,5 +452,6 @@ export const {
   useUpdateExtraShopMoneyMutation,
   useGetYearMonthQuery,
   useLogoutMutation,
-  useSendSmsMutation
+  useSendSmsMutation,
+  useForgotPasswordMutation
 } = bikriApi;
