@@ -486,7 +486,7 @@ const Meal = () => {
     });
   }, [window.screen]);
   useEffect(() => {
-    window.scroll(0, (todayDate - 1) * 100);
+    window.scrollTo(0, (todayDate - 1) * 100);
   }, [arrOfMeals?.length, currentUser]);
   return (
     <div>
@@ -568,6 +568,9 @@ const Meal = () => {
           )}
           <div
             ref={nameRef}
+            onScroll={() => {
+              window.scrollTo(nameRef.current.scrollLeft, window.pageYOffset);
+            }}
             style={{
               position: "fixed",
               left: currentUser !== "all" ? "35%" : "150px",
@@ -577,6 +580,7 @@ const Meal = () => {
               height: "50px",
               overflowX: "scroll",
               width: currentUser !== "all" ? "" : "",
+              // display: "none",
             }}
           >
             <table
@@ -1102,6 +1106,10 @@ const Meal = () => {
       {/* fixed */}
       <div
         ref={dateRef}
+        onScroll={() => {
+          console.log(dateRef.current.scrollTop);
+          window.scrollTo(window.pageXOffset, dateRef.current.scrollTop);
+        }}
         style={{
           position: "fixed",
           width: currentUser !== "all" ? "35%" : "150px",

@@ -1,5 +1,8 @@
 import React, { useRef } from "react";
-import { useGetMonthlyStatsQuery } from "../features/bikri/bikriApi";
+import {
+  useGetMonthlyStatsQuery,
+  useSendSmsMutation,
+} from "../features/bikri/bikriApi";
 import { useEffect } from "react";
 import { useState } from "react";
 import style from "./AllMonthsStats.module.css";
@@ -9,10 +12,14 @@ const AllMonthsStats = () => {
   const { user } = useSelector((state) => state.auth);
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const { data: getMonthlyMealStats } = useGetMonthlyStatsQuery();
+  const [sendSms] = useSendSmsMutation();
   const dateNameRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
   const dispatch = useDispatch();
+  // useEffect(() => {
+  //   sendSms()
+  // }, [])
   useEffect(() => {
     if (getMonthlyMealStats?.monthlyMeals?.length > 0) {
       let mealInfo = [];
@@ -443,7 +450,12 @@ const AllMonthsStats = () => {
                       <table>
                         {el.finalArr?.map((ele) => {
                           return (
-                            <tr style = {{ background:ele.border === user?.name?'red':'' }}>
+                            <tr
+                              style={{
+                                background:
+                                  ele.border === user?.name ? "red" : "",
+                              }}
+                            >
                               <td>
                                 {isNaN(
                                   ele.totalMoney -
@@ -456,6 +468,21 @@ const AllMonthsStats = () => {
                                       ele.totalMeal * el.mealRate -
                                       el.overAllExtraShop / el.finalArr.length
                                     ).toFixed(2)}
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() =>
+                                    sendSms({
+                                      restBalance: (
+                                        ele.totalMoney -
+                                        ele.totalMeal * el.mealRate -
+                                        el.overAllExtraShop / el.finalArr.length
+                                      ).toFixed(2),
+                                    })
+                                  }
+                                >
+                                  Send Sms
+                                </button>
                               </td>
                             </tr>
                           );

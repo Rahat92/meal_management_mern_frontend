@@ -384,6 +384,13 @@ const bikriApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    sendSms: builder.mutation({
+      query: (body) => ({
+        url: `/users/send-message`,
+        method: "POST",
+        body:body
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: `/users/logout`,
@@ -438,4 +445,5 @@ export const {
   useUpdateExtraShopMoneyMutation,
   useGetYearMonthQuery,
   useLogoutMutation,
+  useSendSmsMutation
 } = bikriApi;
