@@ -112,6 +112,7 @@ const AllMonthsStats = () => {
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
+
   return (
     <div>
       <div className={style.fixedMonthAndName}>
@@ -128,7 +129,13 @@ const AllMonthsStats = () => {
           </tr>
         </table>
       </div>
-      <div ref={headRef} className={style.customTableHeaderWrapper}>
+      <div
+        onScroll={() => {
+          window.scrollTo(headRef.current.scrollLeft, window.pageYOffset)
+        }}
+        ref={headRef}
+        className={style.customTableHeaderWrapper}
+      >
         <table className={style.infoTable}>
           <tbody>
             <tr>
@@ -160,7 +167,10 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
-              <td className={style.overAllMeal}>Over all Meal</td>
+              <td className={style.overAllMeal}>
+                Overall
+                <br /> Meal
+              </td>
 
               <td className={style.totalShop}>
                 <table>
@@ -172,13 +182,18 @@ const AllMonthsStats = () => {
               <td className={style.totalExtraShop}>
                 <table>
                   <tr>
-                    <td>Total Extra Shop</td>
+                    <td>
+                      Total Extra
+                      <br /> Shop
+                    </td>
                   </tr>
                 </table>
               </td>
               {/* <td className={style.overAllShop}>Overall Shop</td> */}
-              {/* Meal Rate */}
+              {/* Meal Rate start */}
               <td className={style.mealRate}>Meal Rate</td>
+              {/* Meal Rate end */}
+              {/* total deposite person */}
               <td className={style.totalDeposite}>
                 <table>
                   <tr>
@@ -186,6 +201,8 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
+              {/* total deposite person */}
+
               <td className={style.borderConsume}>
                 <table>
                   <tr>
@@ -196,14 +213,21 @@ const AllMonthsStats = () => {
               <td className={style.restBalance}>
                 <table>
                   <tr>
-                    <td>Border remaining Balance</td>
+                    <td>
+                      Border remaining
+                      <br /> Balance
+                    </td>
                   </tr>
                 </table>
               </td>
               <td className={style.totalBalance}>Overall Deposite</td>
-              <td className={style.overAllShop}>Overall Shop</td>
+              <td className={style.overAllShop}>
+                Overall
+                <br /> Shop
+              </td>
               <td className={style.headingRemainingBalance}>
-                <div>Remaining Balance</div>
+                Remaining
+                <br /> Balance
               </td>
               <td></td>
             </tr>
