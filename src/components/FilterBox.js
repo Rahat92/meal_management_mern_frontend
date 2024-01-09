@@ -20,9 +20,6 @@ const FilterBox = ({
       setYearMonthArr(arr);
     }
   }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
-  console.log(yearMonth);
-  console.log(todayMonth, todayYear);
-  console.log(yearMonth?.yearMonth?.filter((el) => el.month!==todayMonth));
   return (
     <div className={filterBoxStyle.wrapper}>
       <form className={filterBoxStyle.filterDate}>

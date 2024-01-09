@@ -29,6 +29,7 @@ const Meal = () => {
   const dateRef = useRef();
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
+  const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
   const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
@@ -865,6 +866,8 @@ const Meal = () => {
                           prevArrOfMeals={prevArrOfMeals}
                           screenWidth={screenWidth}
                           moneyOption={moneyOption}
+                          item={item}
+                          setItem={setItem}
                         />
                       );
                     } else if (currentUser === "all") {
@@ -899,6 +902,18 @@ const Meal = () => {
                                 }
                               >
                                 <input
+                                  onMouseEnter={() => {
+                                    setItem({
+                                      ...item,
+                                      type: "number",
+                                      borderIndex: index,
+                                      date: el.date,
+                                      mealName: "breakfast",
+                                    });
+                                  }}
+                                  onMouseLeave={() => {
+                                    setItem("text");
+                                  }}
                                   disabled={
                                     (el.breakfast &&
                                       el.breakfast[index] &&
@@ -924,11 +939,14 @@ const Meal = () => {
                                     textAlign: "center",
                                   }}
                                   type={
-                                    el.breakfast &&
+                                    item.type === "number" &&
+                                    item.borderIndex === index &&
+                                    item.date === el.date &&
+                                    item.mealName === "breakfast" &&
                                     el.breakfast[index] &&
-                                    el.breakfast[index][1] === "off"
-                                      ? "text"
-                                      : "number"
+                                    el.breakfast[index][1] !== "off"
+                                      ? "number"
+                                      : "text"
                                   }
                                   value={
                                     el.breakfast &&
@@ -950,6 +968,18 @@ const Meal = () => {
                             <tr style={{ borderBottom: "1px solid white" }}>
                               <td>
                                 <input
+                                  onMouseEnter={() => {
+                                    setItem({
+                                      ...item,
+                                      type: "number",
+                                      borderIndex: index,
+                                      date: el.date,
+                                      mealName: "launch",
+                                    });
+                                  }}
+                                  onMouseLeave={() => {
+                                    setItem("text");
+                                  }}
                                   disabled={
                                     (el.launch &&
                                       el.launch[index] &&
@@ -975,11 +1005,14 @@ const Meal = () => {
                                     textAlign: "center",
                                   }}
                                   type={
-                                    el.launch &&
+                                    item.type === "number" &&
+                                    item.borderIndex === index &&
+                                    item.date === el.date &&
+                                    item.mealName === "launch" &&
                                     el.launch[index] &&
-                                    el.launch[index][1] === "off"
-                                      ? "text"
-                                      : "number"
+                                    el.launch[index][1] !== "off"
+                                      ? "number"
+                                      : "text"
                                   }
                                   value={
                                     el.launch &&
@@ -1007,6 +1040,18 @@ const Meal = () => {
                                 }
                               >
                                 <input
+                                  onMouseEnter={() => {
+                                    setItem({
+                                      ...item,
+                                      type: "number",
+                                      borderIndex: index,
+                                      date: el.date,
+                                      mealName: "dinner",
+                                    });
+                                  }}
+                                  onMouseLeave={() => {
+                                    setItem("text");
+                                  }}
                                   disabled={
                                     (el.dinner &&
                                       el.dinner[index] &&
@@ -1034,11 +1079,18 @@ const Meal = () => {
                                     textAlign: "center",
                                   }}
                                   type={
+                                    // (el.dinner &&
+                                    //   el.dinner[index] &&
+                                    //   el.dinner[index][1] === "off") ||
+                                    item.type === "number" &&
+                                    item.borderIndex === index &&
+                                    item.date === el.date &&
+                                    item.mealName === "dinner" &&
                                     el.dinner &&
                                     el.dinner[index] &&
-                                    el.dinner[index][1] === "off"
-                                      ? "text"
-                                      : "number"
+                                    el.dinner[index][1] !== "off"
+                                      ? "number"
+                                      : "text"
                                   }
                                   value={
                                     el.dinner &&

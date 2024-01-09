@@ -15,6 +15,8 @@ const UserHomeTable = ({
   updateExtraShopMoney,
   screenWidth,
   moneyOption,
+  item,
+  setItem
 }) => {
   return (
     <>
@@ -23,6 +25,18 @@ const UserHomeTable = ({
           <tr>
             <td style={{ width: "25%" }}>
               <input
+                onMouseEnter={() => {
+                  setItem({
+                    ...item,
+                    type: 'number',
+                    borderIndex: index,
+                    date: el.date,
+                    mealName: "breakfast",
+                  });
+                }}
+                onMouseLeave={() => {
+                  setItem({});
+                }}
                 style={{
                   color: "black",
                   background: "white",
@@ -41,11 +55,14 @@ const UserHomeTable = ({
                   updateMealHandler(e, el.date, el.id, index, "breakfast")
                 }
                 type={
-                  el.breakfast &&
+                  item.type === "number" &&
+                  item.borderIndex === index &&
+                  item.date === el.date &&
+                  item.mealName === "breakfast" &&
                   el.breakfast[index] &&
-                  el.breakfast[index][1] === "off"
-                    ? "text"
-                    : "number"
+                  el.breakfast[index][1] !== "off"
+                    ? "number"
+                    : "text"
                 }
                 value={
                   el.breakfast &&
@@ -86,10 +103,27 @@ const UserHomeTable = ({
           <tr>
             <td style={{ position: "relative" }}>
               <input
+                onMouseEnter={() => {
+                  setItem({
+                    ...item,
+                    type: 'number',
+                    borderIndex: index,
+                    date: el.date,
+                    mealName: "launch",
+                  });
+                }}
+                onMouseLeave={() => {
+                  setItem({});
+                }}
                 type={
-                  el.launch && el.launch[index] && el.launch[index][1] === "off"
-                    ? "text"
-                    : "number"
+                  item.type === "number" &&
+                  item.borderIndex === index &&
+                  item.date === el.date &&
+                  item.mealName === "launch" &&
+                  el.launch[index] &&
+                  el.launch[index][1] !== "off"
+                    ? "number"
+                    : "text"
                 }
                 style={{
                   color: "black",
@@ -361,6 +395,18 @@ const UserHomeTable = ({
           <tr>
             <td>
               <input
+                onMouseEnter={() => {
+                  setItem({
+                    ...item,
+                    type: 'number',
+                    borderIndex: index,
+                    date: el.date,
+                    mealName: "dinner",
+                  });
+                }}
+                onMouseLeave={() => {
+                  setItem({});
+                }}
                 style={{
                   color: "black",
                   background: "white",
@@ -377,9 +423,14 @@ const UserHomeTable = ({
                   updateMealHandler(e, el.date, el.id, index, "dinner")
                 }
                 type={
-                  el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
-                    ? "text"
-                    : "number"
+                  item.type === "number" &&
+                  item.borderIndex === index &&
+                  item.date === el.date &&
+                  item.mealName === "dinner" &&
+                  el.dinner[index] &&
+                  el.dinner[index][1] !== "off"
+                    ? "number"
+                    : "text"
                 }
                 value={
                   el.dinner && el.dinner[index] && el.dinner[index][1] === "off"

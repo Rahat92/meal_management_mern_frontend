@@ -51,7 +51,6 @@ const bikriApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        console.log(args);
         const month =
           args.month === 0
             ? "January"
@@ -80,7 +79,6 @@ const bikriApi = apiSlice.injectEndpoints({
             : "";
         try {
           const { data: updatedData } = await queryFulfilled;
-          console.log(updatedData);
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
@@ -89,7 +87,6 @@ const bikriApi = apiSlice.injectEndpoints({
                 const desireMeal = meals?.monthlyMeals?.find(
                   (item) => item.date === `${updatedData.meal.date}`
                 );
-                console.log(JSON.stringify(desireMeal));
                 desireMeal[args.mealName][args.mealIndex] = [
                   ...args[args.mealName][args.mealIndex],
                 ];
@@ -332,7 +329,6 @@ const bikriApi = apiSlice.injectEndpoints({
     getMonthlyStats: builder.query({
       query: () => {
         const month = new Date().getMonth();
-        console.log(month)
         const year = new Date().getFullYear();
         const day = new Date().getDate();
         return {
