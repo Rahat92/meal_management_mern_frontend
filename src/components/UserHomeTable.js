@@ -16,7 +16,7 @@ const UserHomeTable = ({
   screenWidth,
   moneyOption,
   item,
-  setItem
+  setItem,
 }) => {
   return (
     <>
@@ -28,7 +28,7 @@ const UserHomeTable = ({
                 onMouseEnter={() => {
                   setItem({
                     ...item,
-                    type: 'number',
+                    type: "number",
                     borderIndex: index,
                     date: el.date,
                     mealName: "breakfast",
@@ -40,7 +40,12 @@ const UserHomeTable = ({
                 style={{
                   color: "black",
                   background: "white",
-                  border: "1.5px solid black",
+                  border:
+                    el.breakfast &&
+                    el.breakfast[index] &&
+                    el.breakfast[index][1] !== "off"
+                      ? "1.5px solid black"
+                      : "1.5px solid red",
                   borderRadius: "5px",
                   width: "40px",
                   textAlign: "center",
@@ -106,7 +111,7 @@ const UserHomeTable = ({
                 onMouseEnter={() => {
                   setItem({
                     ...item,
-                    type: 'number',
+                    type: "number",
                     borderIndex: index,
                     date: el.date,
                     mealName: "launch",
@@ -128,7 +133,12 @@ const UserHomeTable = ({
                 style={{
                   color: "black",
                   background: "white",
-                  border: "1.5px solid black",
+                  border:
+                    el.launch &&
+                    el.launch[index] &&
+                    el.launch[index][1] !== "off"
+                      ? "1.5px solid black"
+                      : "1.5px solid red",
                   borderRadius: "5px",
                   width: "40px",
                   textAlign: "center",
@@ -207,15 +217,15 @@ const UserHomeTable = ({
                   breakfastArr[index] =
                     e.target.value === "off"
                       ? [0, "off", "admin"]
-                      : [0, "on", "admin"];
+                      : [.5, "on", "admin"];
                   launchArr[index] =
                     e.target.value === "off"
                       ? [0, "off", "admin"]
-                      : [0, "on", "admin"];
+                      : [1, "on", "admin"];
                   dinnerArr[index] =
                     e.target.value === "off"
                       ? [0, "off", "admin"]
-                      : [0, "on", "admin"];
+                      : [1, "on", "admin"];
 
                   const copyDesireItem = {
                     ...desireItem,
@@ -398,7 +408,7 @@ const UserHomeTable = ({
                 onMouseEnter={() => {
                   setItem({
                     ...item,
-                    type: 'number',
+                    type: "number",
                     borderIndex: index,
                     date: el.date,
                     mealName: "dinner",
@@ -410,7 +420,12 @@ const UserHomeTable = ({
                 style={{
                   color: "black",
                   background: "white",
-                  border: "1.5px solid black",
+                  border:
+                    el.dinner &&
+                    el.dinner[index] &&
+                    el.dinner[index][1] !== "off"
+                      ? "1.5px solid black"
+                      : "1.5px solid red",
                   borderRadius: "5px",
                   width: "40px",
                   textAlign: "center",

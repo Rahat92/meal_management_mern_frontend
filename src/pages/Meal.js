@@ -375,7 +375,7 @@ const Meal = () => {
       type === "checkbox" && e.target.value === "on"
         ? 0
         : e.target.value === "off"
-        ? 0
+        ? mealName==='breakfast'?0.5:1
         : e.target.value * 1;
     copySingleMeal[1] =
       type === "checkbox" ? (e.target.value === "on" ? "off" : "on") : "on";
@@ -956,7 +956,12 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
+                                    border:
+                                      el.breakfast &&
+                                      el.breakfast[index] &&
+                                      el.breakfast[index][1] !== "off"
+                                        ? "1.5px solid black"
+                                        : "1.5px solid red",
                                     borderRadius: "5px",
                                     width: "40px",
                                     textAlign: "center",
@@ -1022,7 +1027,12 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
+                                    border:
+                                      el.launch &&
+                                      el.launch[index] &&
+                                      el.launch[index][1] !== "off"
+                                        ? "1.5px solid black"
+                                        : "1.5px solid red",
                                     borderRadius: "5px",
                                     width: "40px",
                                     textAlign: "center",
@@ -1096,7 +1106,12 @@ const Meal = () => {
                                   style={{
                                     color: "black",
                                     background: "white",
-                                    border: "1.5px solid black",
+                                    border:
+                                      el.dinner &&
+                                      el.dinner[index] &&
+                                      el.dinner[index][1] !== "off"
+                                        ? "1.5px solid black"
+                                        : "1.5px solid red",
                                     borderRadius: "5px",
                                     width: "40px",
                                     textAlign: "center",
