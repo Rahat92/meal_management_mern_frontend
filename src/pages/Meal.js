@@ -91,12 +91,13 @@ const Meal = () => {
   const [signUp] = useSignUpMutation();
   const { data: users } = useGetUsersQuery();
   const [isSkipped, setIsSkipped] = useState(true);
-  const { data: monthlyMeals } = useGetMonthlyMealsQuery(
-    { getMonth, getYear },
-    {
-      skip: !isSkipped,
-    }
-  );
+  const { data: monthlyMeals, isLoading: isMealsLoading } =
+    useGetMonthlyMealsQuery(
+      { getMonth, getYear },
+      {
+        skip: !isSkipped,
+      }
+    );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
@@ -567,6 +568,8 @@ const Meal = () => {
               </table>
             </div>
           )}
+
+          {/* Border's Name */}
           <div
             ref={nameRef}
             onScroll={() => {
@@ -810,6 +813,26 @@ const Meal = () => {
       </div>
 
       {/* <div ref={tableBodyRef} style={{ marginLeft: "150px" }}> */}
+      <div
+        style={{
+          position: "fixed",
+          top: headHeight + 90 - 50 + "px",
+          bottom: "0",
+          left: "0",
+          right: "0",
+          zIndex: "1000",
+          color: "black",
+
+          display: !isMealsLoading ? "none" : "flex",
+          justifyContent: "center",
+          fontweight: "bold",
+          fontSize: "20px",
+        }}
+      >
+        <p style={{ marginTop: "10rem", opacity: ".7" }}>
+          Loading Meals, please wait...
+        </p>
+      </div>
       <table
         ref={tableBodyRef}
         style={{
