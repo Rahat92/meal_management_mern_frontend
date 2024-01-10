@@ -308,6 +308,7 @@ const Meal = () => {
       setPrevArrOfMeals(mealsArr);
     }
   }, [monthlyMeals?.monthlyMeals]);
+  // submain branch
   useEffect(() => {
     if (prevArrOfMeals?.length > 0) {
       const changedArr = arrOfMeals.filter((item, i) => {
