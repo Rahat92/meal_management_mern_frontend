@@ -30,14 +30,17 @@ const Meal = () => {
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
   const [item, setItem] = useState({});
+  const [mealStatus, setMealStatus] = useState({})
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
   const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
   const [headHeight, setHeadHeight] = useState(0);
   const [currentIndex, setCurrentIndex] = useState();
+  const [obj, setObj] = useState({});
   const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState();
   const [isChanged, setIsChanged] = useState(false);
+  const [sendRequest, setSendRequest] = useState(false);
   const [totalMeals, setTotalMeals] = useState([]);
   const [prevArrOfMeals, setPrevArrOfMeals] = useState([]);
   const [registeredUsers, setRegisteredUsers] = useState([]);
@@ -82,6 +85,7 @@ const Meal = () => {
   const [
     updateMyMealStatus,
     {
+      data: mealStatusData,
       isError: isMealStatusError,
       error: mealStatusError,
       isSuccess: mealStatusSuccess,
@@ -277,11 +281,23 @@ const Meal = () => {
     // updateMeal({data:needUpdateObj,id})
   }, [needUpdateObj]);
   useEffect(() => {
-    if (isSuccess) {
-      setIsChanged(false);
-      setUpdatedArrOfMeals([]);
+    if (mealStatusSuccess) {
+      console.log(mealStatusData)
+      const index = prevArrOfMeals.findIndex(item => item.id === mealStatusData?.meal?.id)
+      console.log(index)
+      console.log(obj)
+      const desireMeal = prevArrOfMeals[index]
+      const copyDesireMeal = { ...desireMeal }
+      const item = copyDesireMeal[obj.mealName]
+      const copyItem = [...item]
+      copyItem[obj.mealIndex] = [...mealStatusData?.meal[obj.mealName][obj.mealIndex]]
+      console.log(copyItem)
+      copyDesireMeal[obj.mealName] = copyItem
+      console.log(copyDesireMeal)
+      prevArrOfMeals[index] = copyDesireMeal
+      setPrevArrOfMeals([...prevArrOfMeals])
     }
-  }, [isSuccess]);
+  }, [mealStatusSuccess]);
   useEffect(() => {
     if (monthlyMeals?.monthlyMeals?.length > 0) {
       setRegisteredUsers([
@@ -331,6 +347,7 @@ const Meal = () => {
     }
   }, [prevArrOfMeals, arrOfMeals]);
 
+  console.log(updatedArrOfMeals)
   useEffect(() => {
     let totalBorderDeposite = 0;
     let totalBorderShop = 0;
@@ -375,7 +392,9 @@ const Meal = () => {
       type === "checkbox" && e.target.value === "on"
         ? 0
         : e.target.value === "off"
-        ? mealName==='breakfast'?0.5:1
+        ? mealName === "breakfast"
+          ? 0.5
+          : 1
         : e.target.value * 1;
     copySingleMeal[1] =
       type === "checkbox" ? (e.target.value === "on" ? "off" : "on") : "on";
@@ -448,7 +467,9 @@ const Meal = () => {
       setArrOfMeals([...prevArrOfMeals]);
       return;
     }
-    updateMyMealStatus({
+    setNeedUpdateObj(updatedDateObj);
+    setMealStatus({
+      ...mealStatus,
       id,
       [mealName]: updatedDateObj[mealName],
       mealName,
@@ -458,8 +479,15 @@ const Meal = () => {
       mealIndex,
       userIndex: registeredUsers.findIndex((item) => item._id === user._id),
     });
-    setNeedUpdateObj(updatedDateObj);
-  };
+  };  
+  useEffect(() => {
+    if (isChanged && sendRequest) {
+      setObj(mealStatus)
+      updateMyMealStatus(mealStatus);
+    }
+    return () => setSendRequest(false)
+  }, [isChanged,sendRequest])
+  console.log(sendRequest, isChanged)
   const saveUpdate = () => {
     updatedArrOfMeals.map((el) => {
       updateMeal({ data: el, id: el.id });
@@ -944,6 +972,17 @@ const Meal = () => {
                                     el.breakfast[index][2] === "user"
                                     // ||user?.role === "user"
                                   }
+                                  onFocus={() => {
+                                    setSendRequest(false);
+                                  }}
+                                  onBlur={() => {
+                                    setSendRequest(true);
+                                  }}
+                                  onKeyPress={() => {
+                                    if (window.event.keyCode === 13) {
+                                      setSendRequest(true);
+                                    }
+                                  }}
                                   onChange={(e) =>
                                     updateMealHandler(
                                       e,
@@ -1197,7 +1236,6 @@ const Meal = () => {
       <div
         ref={dateRef}
         onScroll={() => {
-          console.log(dateRef.current.scrollTop);
           window.scrollTo(window.pageXOffset, dateRef.current.scrollTop);
         }}
         style={{

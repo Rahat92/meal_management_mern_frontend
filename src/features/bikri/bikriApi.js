@@ -79,20 +79,23 @@ const bikriApi = apiSlice.injectEndpoints({
             : "";
         try {
           const { data: updatedData } = await queryFulfilled;
-          dispatch(
-            apiSlice.util.updateQueryData(
-              "getMonthlyMeals",
-              { getMonth: args.month, getYear: args.year },
-              (meals) => {
-                const desireMeal = meals?.monthlyMeals?.find(
-                  (item) => item.date === `${updatedData.meal.date}`
-                );
-                desireMeal[args.mealName][args.mealIndex] = [
-                  ...args[args.mealName][args.mealIndex],
-                ];
-              }
-            )
-          );
+          // dispatch(
+          //   apiSlice.util.updateQueryData(
+          //     "getMonthlyMeals",
+          //     { getMonth: args.month, getYear: args.year },
+          //     (meals) => {
+          //       const desireMeal = meals?.monthlyMeals?.find(
+          //         (item) => item.date === `${updatedData.meal.date}`
+          //       );
+          //       console.log(
+          //         JSON.stringify(desireMeal[args.mealName][args.mealIndex])
+          //       );
+          //       desireMeal[args.mealName][args.mealIndex] = [
+          //         ...args[args.mealName][args.mealIndex],
+          //       ];
+          //     }
+          //   )
+          // );
         } catch (err) {
           dispatch(
             apiSlice.util.updateQueryData(
@@ -384,14 +387,14 @@ const bikriApi = apiSlice.injectEndpoints({
       query: (body) => ({
         url: `/users/send-message`,
         method: "POST",
-        body:body
+        body: body,
       }),
     }),
     forgotPassword: builder.mutation({
       query: () => ({
         url: `/users/forgot-password`,
         method: "POST",
-        body: {email:'shamim@gmail.com'},
+        body: { email: "shamim@gmail.com" },
       }),
     }),
     logout: builder.mutation({
@@ -449,5 +452,5 @@ export const {
   useGetYearMonthQuery,
   useLogoutMutation,
   useSendSmsMutation,
-  useForgotPasswordMutation
+  useForgotPasswordMutation,
 } = bikriApi;
