@@ -175,7 +175,7 @@
   left: 200px;
   right: 0;
   top: 40px;
-  z-index: 1000;
+  /* z-index: 1000; */
   overflow-x: scroll;
 }
 

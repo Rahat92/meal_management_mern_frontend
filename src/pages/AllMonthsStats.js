@@ -493,7 +493,9 @@ const AllMonthsStats = () => {
                                 color: ele.border === user?.name ? "white" : "",
                               }}
                             >
-                              <td>
+                              <td style = {{ color:ele.totalMoney -
+                                      ele.totalMeal * el.mealRate -
+                                      el.overAllExtraShop / el.finalArr.length<0?'red':'black' }}>
                                 {isNaN(
                                   ele.totalMoney -
                                     ele.totalMeal * el.mealRate -
@@ -506,21 +508,6 @@ const AllMonthsStats = () => {
                                       el.overAllExtraShop / el.finalArr.length
                                     ).toFixed(2)}
                               </td>
-                              {/* <td>
-                                <button
-                                  onClick={() =>
-                                    sendSms({
-                                      restBalance: (
-                                        ele.totalMoney -
-                                        ele.totalMeal * el.mealRate -
-                                        el.overAllExtraShop / el.finalArr.length
-                                      ).toFixed(2),
-                                    })
-                                  }
-                                >
-                                  Send Sms
-                                </button>
-                              </td> */}
                             </tr>
                           );
                         })}

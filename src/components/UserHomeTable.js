@@ -201,9 +201,6 @@ const UserHomeTable = ({
                 }
                 type="checkbox"
                 onChange={(e) => {
-                  const breakfast = el["breakfast"][index];
-                  const launch = el["launch"][index];
-                  const dinner = el["dinner"][index];
                   const copyArrOfMeals = [...arrOfMeals];
 
                   const desireItemIndex = copyArrOfMeals.findIndex(
@@ -241,7 +238,7 @@ const UserHomeTable = ({
                     new Date() >
                     new Date(el.year, el.month, el.date.split(" ")[0] * 1, 6)
                   ) {
-                    mealError = "Previous day meal request time is over";
+                    mealError = user?.role === 'admin'?"Only Superadmin can update previous day's meals":"Full meal request time is over";
                   }
                   if (mealError) {
                     alert(mealError);
@@ -274,8 +271,16 @@ const UserHomeTable = ({
               }}
             >
               <input
-                type="number"
+                type="text"
                 onChange={(e) => {
+                  if (new Date() > new Date(el.year, el.month, el.date.split(' ')[0] * 1, 24)&&user?.role=='admin') { 
+                    alert("The date is passed. You can't update previous day's deposite");
+                    return;
+                  }
+                  if (user?.role === 'user') {
+                    alert("Only admin can update deposite");
+                    return;
+                   }
                   const desireMealIndex = arrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
@@ -292,7 +297,9 @@ const UserHomeTable = ({
                     ...copyDesireMeal,
                     money: copyMoneys,
                   };
+                  
                   setArrOfMeals([...arrOfMeals]);
+                  
                   updateMoney({
                     id: el.id,
                     year: el.year,
@@ -324,6 +331,14 @@ const UserHomeTable = ({
               <input
                 type="number"
                 onChange={(e) => {
+                  if (new Date() > new Date(el.year, el.month, el.date.split(' ')[0] * 1, 24)&&user?.role=='admin') { 
+                    alert("The date is passed. You can't update previous day's shop");
+                    return;
+                  }
+                  if (user?.role === 'user') { 
+                    alert("Only admin can update shop");
+                    return;
+                  }
                   const desireMealIndex = arrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
@@ -368,6 +383,14 @@ const UserHomeTable = ({
               <input
                 type="number"
                 onChange={(e) => {
+                  if (new Date() > new Date(el.year, el.month, el.date.split(' ')[0] * 1, 24)&&user?.role=='admin') { 
+                    alert("The date is passed. You can't update previous day's extra shop");
+                    return;
+                  }
+                  if (user?.role === 'user') {
+                    alert("Only admin can update extra shop");
+                    return;
+                  }
                   const desireMealIndex = arrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
