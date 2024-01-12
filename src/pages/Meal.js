@@ -44,7 +44,7 @@ const Meal = () => {
   const [needUpdateObj, setNeedUpdateObj] = useState({});
   const [updatedArrOfMeals, setUpdatedArrOfMeals] = useState([]);
   const [screenWidth, setScreenWidth] = useState(null);
-  const [moneyOption, setMoneyOption] = useState("Deposite");
+  const [moneyOption, setMoneyOption] = useState("");
   const [
     updateShopMoney,
     { data: shopMoney, isError: isShopMoneyError, error: shopMoneyError },
@@ -484,14 +484,21 @@ const Meal = () => {
     });
   }, [window.pageYOffset, window.pageXOffset]);
   useEffect(() => {
+    setMoneyOption("Deposite");
     setScreenWidth(window.screen.availWidth);
     window.addEventListener("resize", function () {
       setScreenWidth(window.screen.availWidth);
-      setMoneyOption("Deposite");
+      setMoneyOption((prev) => (prev === "" ? "Deposite" : prev));
+      if (window.screen.availWidth > 600) {
+        setMoneyOption("Deposite");
+      }
     });
   }, [window.screen]);
   useEffect(() => {
-    window.scrollTo(0, (todayDate - 1) * 100);
+    if (arrOfMeals?.length > 0) {
+      window.scrollTo(0, (todayDate - 1) * 100);
+      // window.scrollTo({ top: (todayDate - 1) * 100, behavior: "smooth" });
+    }
   }, [arrOfMeals?.length, currentUser]);
   return (
     <div>
@@ -692,8 +699,8 @@ const Meal = () => {
                                               }}
                                             >
                                               <option>Deposite</option>
-                                              <option>Meal Shop</option>
-                                              <option>Extra Shop</option>
+                                              <option>Shopping</option>
+                                              <option>Extra</option>
                                             </select>
                                           ) : (
                                             <p style={{ fontSize: "14px" }}>
@@ -711,9 +718,9 @@ const Meal = () => {
                                         >
                                           {moneyOption === "Deposite"
                                             ? borderTotalDeposite
-                                            : moneyOption === "Meal Shop"
+                                            : moneyOption === "Shopping"
                                             ? borderTotalShop
-                                            : moneyOption === "Extra Shop"
+                                            : moneyOption === "Extra"
                                             ? borderTotalExtraShop
                                             : ""}{" "}
                                           Tk

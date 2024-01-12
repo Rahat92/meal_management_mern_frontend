@@ -340,9 +340,7 @@ const UserHomeTable = ({
               style={{
                 width: "25%",
                 display:
-                  screenWidth < 600 && moneyOption !== "Meal Shop"
-                    ? "none"
-                    : "",
+                  screenWidth < 600 && moneyOption !== "Shopping" ? "none" : "",
               }}
             >
               <input
@@ -403,9 +401,7 @@ const UserHomeTable = ({
               style={{
                 width: "25%",
                 display:
-                  screenWidth < 600 && moneyOption !== "Extra Shop"
-                    ? "none"
-                    : "",
+                  screenWidth < 600 && moneyOption !== "Extra" ? "none" : "",
               }}
             >
               <input
