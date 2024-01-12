@@ -68,68 +68,84 @@ const NavBar = () => {
               right: "25px",
               transform: "translateY(-50%) rotate(180deg)",
               border: "20px solid transparent",
+
               borderTopColor: "#fff",
               display: showDropDown ? "" : "none",
               zIndex: "5000",
             }}
-          ></div>
-          <div
-            style={{
-              position: "absolute",
-              top: "120%",
-              left: "25px",
-              width: "80px",
-              justifyContent: "center",
-              zIndex: "3000",
-              boxShadow: "1px 5px 10px black",
-              display: showDropDown ? "" : "none",
-              borderRadius: "40%",
-              overflow: "hidden",
-              background: "green",
-              textAlign: "center",
-            }}
           >
-            <ul
-              style={{ background: "white", padding: ".3rem 0" }}
-              onClick={(e) => e.stopPropagation()}
+            <div
+              style={{
+                position: "relative",
+
+                width: "100%",
+                left: "0",
+                top: "11px",
+              }}
             >
-              <li
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
+              <div
                 style={{
-                  // padding: ".5rem 0 .5rem .5rem",
-                  background: "white",
-                  color: "black",
-                  cursor: "pointer",
+                  position: "absolute",
+                  bottom: "100%",
+                  right: "-40px",
+                  width: "80px",
+                  transform: "translateY(-50%) rotate(180deg)",
+                  justifyContent: "center",
+                  zIndex: "3000",
+                  display: showDropDown ? "" : "none",
+                  borderRadius: "40%",
+                  overflow: "hidden",
+                  background: "green",
+                  textAlign: "center",
+                  boxShadow: "0 5px 10px black",
                 }}
               >
-                Account
-              </li>
-              <li
-                style={{
-                  border: "1.2px solid violet",
-                  borderRadius: "5px",
-                  width: "55%",
-                  // marginLeft: ".5rem",
-                  margin: "0 auto",
-                }}
-              ></li>
-              <li
-                style={{
-                  // padding: ".5rem 0 .5rem .5rem",
-                  color: "black",
-                  cursor: "pointer",
-                  background: "white",
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  logout();
-                }}
-              >
-                Logout
-              </li>
-            </ul>
+                <ul
+                  style={{
+                    background: "white",
+                    padding: ".3rem 0",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <li
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    style={{
+                      // padding: ".5rem 0 .5rem .5rem",
+                      background: "white",
+                      color: "black",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Account
+                  </li>
+                  <li
+                    style={{
+                      border: "1.2px solid violet",
+                      borderRadius: "5px",
+                      width: "55%",
+                      // marginLeft: ".5rem",
+                      margin: "0 auto",
+                    }}
+                  ></li>
+                  <li
+                    style={{
+                      // padding: ".5rem 0 .5rem .5rem",
+                      color: "black",
+                      cursor: "pointer",
+                      background: "white",
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

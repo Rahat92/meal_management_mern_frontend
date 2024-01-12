@@ -31,14 +31,3 @@
   cursor: pointer;
   user-select: none;
 }
-
-.drowdownWrapper::after {
-  content: "";
-  position: absolute;
-  top: -10%;
-  right: 45px;
-  transform: translateY(-50%) rotate(180deg);
-
-  border: 20px solid transparent;
-  border-top-color: #fff;
-}
