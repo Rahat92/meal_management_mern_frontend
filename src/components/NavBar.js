@@ -65,23 +65,23 @@ const NavBar = () => {
             style={{
               position: "absolute",
               top: "75%",
-              right: "35px",
+              right: "25px",
               transform: "translateY(-50%) rotate(180deg)",
-
               border: "20px solid transparent",
               borderTopColor: "#fff",
               display: showDropDown ? "" : "none",
+              zIndex: "5000",
             }}
           ></div>
           <div
             style={{
               position: "absolute",
               top: "120%",
-              left: "8px",
-              width: "100%",
+              left: "25px",
+              width: "80px",
               justifyContent: "center",
               zIndex: "3000",
-              boxShadow: "0 0 5px black",
+              boxShadow: "1px 5px 10px black",
               display: showDropDown ? "" : "none",
               borderRadius: "40%",
               overflow: "hidden",

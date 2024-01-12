@@ -376,7 +376,9 @@ const Meal = () => {
       type === "checkbox" && e.target.value === "on"
         ? 0
         : e.target.value === "off"
-        ? mealName==='breakfast'?0.5:1
+        ? mealName === "breakfast"
+          ? 0.5
+          : 1
         : e.target.value * 1;
     copySingleMeal[1] =
       type === "checkbox" ? (e.target.value === "on" ? "off" : "on") : "on";
@@ -515,18 +517,11 @@ const Meal = () => {
           user={user}
           todayMonth={todayMonth}
           todayYear={todayYear}
+          isLoading={isLoading}
+          isChanged={isChanged}
         />
-        <div>
-          <button
-            style={{ color: isChanged ? "red" : "white" }}
-            disabled={!isChanged || isLoading}
-            onClick={saveUpdate}
-          >
-            Update
-          </button>
-        </div>
 
-        <button
+        {/* <button
           style={{
             display: user?.role !== "admin" ? "none" : "",
             color: "black",
@@ -534,7 +529,7 @@ const Meal = () => {
           onClick={() => createMeal(dates)}
         >
           Create Meal
-        </button>
+        </button> */}
         <div style={{ background: "" }}>
           {arrOfMeals?.length > 0 && (
             <div
@@ -691,6 +686,7 @@ const Meal = () => {
                                         >
                                           {screenWidth < 600 ? (
                                             <select
+                                              style={{ fontSize: "14px" }}
                                               onChange={(e) => {
                                                 setMoneyOption(e.target.value);
                                               }}
@@ -700,7 +696,9 @@ const Meal = () => {
                                               <option>Extra Shop</option>
                                             </select>
                                           ) : (
-                                            "Deposite"
+                                            <p style={{ fontSize: "14px" }}>
+                                              Deposite
+                                            </p>
                                           )}
                                         </p>
                                         <p
@@ -737,9 +735,10 @@ const Meal = () => {
                                             top: "-.2rem",
                                             width: "100%",
                                             textAlign: "center",
+                                            fontSize: "14px",
                                           }}
                                         >
-                                          Shop
+                                          Shopping
                                         </p>
                                         <p
                                           style={{
@@ -767,6 +766,7 @@ const Meal = () => {
                                             top: "-.2rem",
                                             width: "100%",
                                             textAlign: "center",
+                                            fontSize: "14px",
                                           }}
                                         >
                                           Extra Shop
@@ -956,7 +956,7 @@ const Meal = () => {
                                   }
                                   style={{
                                     color: "black",
-                                    background: "white",
+                                    // background: "white",
                                     border:
                                       el.breakfast &&
                                       el.breakfast[index] &&

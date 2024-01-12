@@ -29,6 +29,7 @@
   position: relative;
   gap: 2px;
   cursor: pointer;
+  user-select: none;
 }
 
 .drowdownWrapper::after {

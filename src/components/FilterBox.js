@@ -11,6 +11,9 @@ const FilterBox = ({
   user,
   todayMonth,
   todayYear,
+  isChanged,
+  saveUpdate,
+  isLoading,
 }) => {
   const [yearMonthArr, setYearMonthArr] = useState([]);
   useEffect(() => {
@@ -60,10 +63,15 @@ const FilterBox = ({
             {todayYear}
           </option>
           {yearMonth?.yearMonth
-            ?.filter((el) => `${el.month}+${el.year}` !== `${todayMonth}+${todayYear}`)
+            ?.filter(
+              (el) => `${el.month}+${el.year}` !== `${todayMonth}+${todayYear}`
+            )
             ?.map((el) => {
               return (
-                <option value={el.month + " " + el.year}>
+                <option
+                  style={{ padding: "10px" }}
+                  value={el.month + " " + el.year}
+                >
                   {el.month === 0
                     ? "January"
                     : el.month === 1
@@ -95,7 +103,7 @@ const FilterBox = ({
             })}
         </select>
       </form>
-      <form>
+      <form className={filterBoxStyle.filterName}>
         <select
           style={{ color: "black", borderRadius: "10px" }}
           onChange={(e) => {
@@ -125,6 +133,26 @@ const FilterBox = ({
               })}
         </select>
       </form>
+      <div
+        className={filterBoxStyle.saveBtn}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <button
+          style={{
+            color: "white",
+            visibility: isChanged ? "visible" : "hidden",
+            background: "none",
+            fontWeight: "400",
+          }}
+          disabled={!isChanged || isLoading}
+          onClick={saveUpdate}
+        >
+          Saving...
+        </button>
+      </div>
     </div>
   );
 };
