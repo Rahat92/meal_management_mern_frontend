@@ -29,6 +29,7 @@ const Meal = () => {
   const dateRef = useRef();
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
+  const [nowScroll, setNowScroll] = useState(false);
   const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
@@ -456,13 +457,14 @@ const Meal = () => {
   // useEffect(() => {
   //   signUp();
   // }, []);
-  useEffect(() => {
-    window.addEventListener("scroll", function () {
-      tableBodyRef?.current?.scrollTo(0, window.pageYOffset);
-      dateRef?.current?.scrollTo(0, window.pageYOffset);
-      nameRef?.current?.scrollTo(window.pageXOffset, 0);
-    });
-  }, [window.pageYOffset, window.pageXOffset]);
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", function () {
+  //     tableBodyRef?.current?.scrollTo(0, window.pageYOffset);
+  //     dateRef?.current?.scrollTo(0, window.pageYOffset);
+  //     nameRef?.current?.scrollTo(window.pageXOffset, 0);
+  //   });
+  // }, [window.pageYOffset, window.pageXOffset]);
   useEffect(() => {
     setMoneyOption("Deposite");
     setScreenWidth(window.screen.availWidth);
@@ -475,21 +477,26 @@ const Meal = () => {
     });
   }, [window.screen]);
   useEffect(() => {
+    let timer;
     if (arrOfMeals?.length > 0) {
       // window.scrollTo(0, (todayDate - 1) * 100);
       // window.scrollTo({ top: (todayDate - 1) * 100, scrollBehavior: "smooth" });
       dateRef?.current?.scrollTo({
         top: (todayDate - 1) * 100,
-        scrollBehavior: "smooth",
+        behavior: "smooth",
       });
       tableBodyRef?.current?.scrollTo({
         top: (todayDate - 1) * 100,
-        scrollBehavior: "smooth",
+        behavior: "smooth",
       });
+     timer =  setTimeout(() => {
+        setNowScroll(true);
+      }, (todayDate - 1) * 100);
     }
-  }, [arrOfMeals?.length, currentUser]);
+    // return () => clearTimeout(timer)
+  }, [arrOfMeals?.length]);
   return (
-    <div style={{ scrollBehavior: "smooth" }}>
+    <div>
       <div
         ref={headRef}
         style={{
@@ -499,7 +506,6 @@ const Meal = () => {
           left: "0",
           background: "gray",
           zIndex: "100",
-          scrollBehavior: "smooth",
         }}
       >
         <FilterBox
@@ -526,7 +532,7 @@ const Meal = () => {
         >
           Create Meal
         </button> */}
-        <div style={{ background: "", scrollBehavior: "smooth" }}>
+        <div style={{ background: "" }}>
           {arrOfMeals?.length > 0 && (
             <TableDateAndMealHeader
               currentUser={currentUser}
@@ -538,7 +544,12 @@ const Meal = () => {
           <div
             ref={nameRef}
             onScroll={() => {
-              window.scrollTo(nameRef.current.scrollLeft, window.pageYOffset);
+              if (nowScroll) {
+                tableBodyRef?.current?.scrollTo(
+                  nameRef.current.scrollLeft,
+                  tableBodyRef.current.scrollTop
+                );
+              }
             }}
             style={{
               position: "fixed",
@@ -549,8 +560,6 @@ const Meal = () => {
               height: "50px",
               overflowX: "scroll",
               width: currentUser !== "all" ? "" : "",
-              scrollBehavior: "smooth",
-              // display: "none",
             }}
           >
             <table
@@ -563,7 +572,7 @@ const Meal = () => {
                 background: "white",
                 borderBottom: "2px solid black",
                 borderRight: currentUser == "all" ? "2px solid black" : "",
-                scrollBehavior: "smooth",
+                // scrollBehavior: "smooth",
               }}
             >
               <thead>
@@ -599,7 +608,7 @@ const Meal = () => {
                               height: "100%",
                               width: currentUser !== "all" ? "100%" : "",
                               // background: 'red',
-                              scrollBehavior: "smooth",
+                              // scrollBehavior: "smooth",
                             }}
                           >
                             <tr
@@ -800,7 +809,7 @@ const Meal = () => {
           justifyContent: "center",
           fontweight: "bold",
           fontSize: "20px",
-          scrollBehavior: "smooth",
+          // scrollBehavior: "smooth",
           // display:'none'
         }}
       >
@@ -826,6 +835,9 @@ const Meal = () => {
         totalMeals={totalMeals}
         tableBodyRef={tableBodyRef}
         headHeight={headHeight}
+        dateRef={dateRef}
+        nowScroll={nowScroll}
+        nameRef={nameRef}
       />
       {/* </div> */}
       {/* fixed */}
@@ -836,6 +848,8 @@ const Meal = () => {
         arrOfMeals={arrOfMeals}
         currentDay={currentDay}
         todayDate={todayDate}
+        tableBodyRef={tableBodyRef}
+        nowScroll={nowScroll}
       />
     </div>
   );

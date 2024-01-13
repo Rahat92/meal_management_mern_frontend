@@ -7,14 +7,19 @@ const TableDateAndMealBody = ({
   arrOfMeals,
   currentDay,
   todayDate,
+  tableBodyRef,
+  nowScroll,
 }) => {
   return (
     <div
       ref={dateRef}
       onScroll={() => {
-        window.scrollTo(window.pageXOffset, dateRef.current.scrollTop, {
-          scrollBehavior: "smooth",
-        });
+        // window.scrollTo(window.pageXOffset, dateRef.current.scrollTop, {
+        //   scrollBehavior: "smooth",
+          // });
+          if (nowScroll) {
+              tableBodyRef?.current?.scrollTo(tableBodyRef?.current?.scrollLeft, dateRef?.current?.scrollTop);
+          }
       }}
       style={{
         position: "fixed",
@@ -25,7 +30,7 @@ const TableDateAndMealBody = ({
         overflowY: "scroll",
         overflowX: "hidden",
         // display: "none",
-        scrollBehavior: "smooth",
+        // scrollBehavior: "smooth",
       }}
     >
       <table

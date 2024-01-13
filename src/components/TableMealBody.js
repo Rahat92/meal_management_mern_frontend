@@ -19,9 +19,18 @@ const TableMealBody = ({
   totalMeals,
   tableBodyRef,
   headHeight,
+  dateRef,
+  nowScroll,
+  nameRef,
 }) => {
   return (
     <div
+      onScroll={() => {
+        if (nowScroll) {
+          dateRef?.current?.scrollTo(tableBodyRef?.current?.scrollLeft,tableBodyRef?.current?.scrollTop);
+          nameRef?.current?.scrollTo(tableBodyRef?.current?.scrollLeft,tableBodyRef?.current?.scrollTop);
+        }
+      }}
       ref={tableBodyRef}
       style={{
         position: "fixed",
@@ -30,7 +39,7 @@ const TableMealBody = ({
         bottom: "0",
         left: currentUser !== "all" ? "35%" : "150px",
         overflow: "scroll",
-        scrollBehavior: "smooth",
+        // scrollBehavior: "smooth",
       }}
     >
       <table
