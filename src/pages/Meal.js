@@ -489,7 +489,7 @@ const Meal = () => {
         top: (todayDate - 1) * 100,
         behavior: "smooth",
       });
-     timer =  setTimeout(() => {
+      timer = setTimeout(() => {
         setNowScroll(true);
       }, (todayDate - 1) * 100);
     }
@@ -506,6 +506,7 @@ const Meal = () => {
           left: "0",
           background: "gray",
           zIndex: "100",
+          // display: "none",
         }}
       >
         <FilterBox
@@ -537,6 +538,7 @@ const Meal = () => {
             <TableDateAndMealHeader
               currentUser={currentUser}
               headRef={headRef}
+              screenWidth={screenWidth}
             />
           )}
 
@@ -553,13 +555,19 @@ const Meal = () => {
             }}
             style={{
               position: "fixed",
-              left: currentUser !== "all" ? "35%" : "150px",
+              left:
+                currentUser !== "all"
+                  ? "35%"
+                  : screenWidth > 1000
+                  ? "23%"
+                  : "150px",
               top: headRef,
-              right: "0",
+              right: screenWidth > 1000 ? "11%" : "0",
               color: "black",
               height: "50px",
               overflowX: "scroll",
               width: currentUser !== "all" ? "" : "",
+              // display:'none'
             }}
           >
             <table
@@ -571,7 +579,8 @@ const Meal = () => {
                 height: "100%",
                 background: "white",
                 borderBottom: "2px solid black",
-                borderRight: currentUser == "all" ? "2px solid black" : "",
+                borderRight: currentUser == "all" ? "1px solid black" : "",
+                // display: "none",
                 // scrollBehavior: "smooth",
               }}
             >
@@ -850,6 +859,7 @@ const Meal = () => {
         todayDate={todayDate}
         tableBodyRef={tableBodyRef}
         nowScroll={nowScroll}
+        screenWidth={screenWidth}
       />
     </div>
   );

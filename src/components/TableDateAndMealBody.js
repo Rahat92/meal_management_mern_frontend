@@ -9,6 +9,7 @@ const TableDateAndMealBody = ({
   todayDate,
   tableBodyRef,
   nowScroll,
+  screenWidth,
 }) => {
   return (
     <div
@@ -16,19 +17,25 @@ const TableDateAndMealBody = ({
       onScroll={() => {
         // window.scrollTo(window.pageXOffset, dateRef.current.scrollTop, {
         //   scrollBehavior: "smooth",
-          // });
-          if (nowScroll) {
-              tableBodyRef?.current?.scrollTo(tableBodyRef?.current?.scrollLeft, dateRef?.current?.scrollTop);
-          }
+        // });
+        if (nowScroll) {
+          tableBodyRef?.current?.scrollTo(
+            tableBodyRef?.current?.scrollLeft,
+            dateRef?.current?.scrollTop
+          );
+        }
       }}
       style={{
         position: "fixed",
-        width: currentUser !== "all" ? "35%" : "150px",
+        width:
+          currentUser !== "all" ? "24%" : screenWidth > 1000 ? "12%" : "150px",
         top: headHeight + 90 + "px",
         bottom: "0",
         background: "white",
         overflowY: "scroll",
         overflowX: "hidden",
+        // background:"red",
+        left: screenWidth > 1000 ? "11%" : "0",
         // display: "none",
         // scrollBehavior: "smooth",
       }}
@@ -61,7 +68,7 @@ const TableDateAndMealBody = ({
                     border: "2px solid white",
                     borderLeft: "0",
                     borderTop: "0",
-                    borderRight: "2px solid black",
+                    borderRight: currentUser === "all" ? "2px solid black" : "",
                     borderBottom: "2px solid green",
                     width: "100%",
                   }}
@@ -79,7 +86,6 @@ const TableDateAndMealBody = ({
                   </td>
                   <td
                     style={{
-                      background: "",
                       height: "100px",
                       color: "black",
                     }}

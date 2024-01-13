@@ -27,19 +27,27 @@ const TableMealBody = ({
     <div
       onScroll={() => {
         if (nowScroll) {
-          dateRef?.current?.scrollTo(tableBodyRef?.current?.scrollLeft,tableBodyRef?.current?.scrollTop);
-          nameRef?.current?.scrollTo(tableBodyRef?.current?.scrollLeft,tableBodyRef?.current?.scrollTop);
+          dateRef?.current?.scrollTo(
+            tableBodyRef?.current?.scrollLeft,
+            tableBodyRef?.current?.scrollTop
+          );
+          nameRef?.current?.scrollTo(
+            tableBodyRef?.current?.scrollLeft,
+            tableBodyRef?.current?.scrollTop
+          );
         }
       }}
       ref={tableBodyRef}
       style={{
         position: "fixed",
         top: headHeight + 90 + "px",
-        right: "0",
+        right: screenWidth > 1000 ? "11%" : "0",
         bottom: "0",
-        left: currentUser !== "all" ? "35%" : "150px",
+        left:
+          currentUser !== "all" ? "35%" : screenWidth > 1000 ? "23%" : "150px",
         overflow: "scroll",
         // scrollBehavior: "smooth",
+        // outline: "2px solid black",
       }}
     >
       <table
@@ -52,7 +60,7 @@ const TableMealBody = ({
 
           // marginTop: headHeight + 90 + "px",
           // marginLeft: currentUser !== "all" ? "35%" : "150px",
-          borderRight: currentUser === "all" ? "2px solid black" : "",
+          borderRight: currentUser === "all" ? "1px solid black" : "",
           borderLeft: "1px solid blue",
           borderTop: "1px solid blue",
           scrollBehavior: "smooth",

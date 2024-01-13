@@ -1,12 +1,14 @@
 import React from "react";
 
-const TableDateAndMealHeader = ({ currentUser, headRef }) => {
+const TableDateAndMealHeader = ({ currentUser, headRef, screenWidth }) => {
   return (
     <div
       style={{
-        width: currentUser !== "all" ? "35%" : "150px",
+        width:
+          currentUser !== "all" ? "24%" : screenWidth > 1000 ? "12%" : "150px",
         position: "fixed",
         top: headRef,
+        left: screenWidth > 1000 ? "11%" : "0",
         height: "50px",
         background: "white",
         color: "black",
@@ -16,7 +18,7 @@ const TableDateAndMealHeader = ({ currentUser, headRef }) => {
       <table style={{ width: "100%", height: "100%" }}>
         <tr
           style={{
-            borderRight: "2px solid black",
+            borderRight: currentUser === "all" ? "2px solid black" : "",
             width: "100%",
           }}
         >
