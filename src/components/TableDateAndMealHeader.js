@@ -13,6 +13,7 @@ const TableDateAndMealHeader = ({ currentUser, headRef, screenWidth }) => {
         background: "white",
         color: "black",
         borderBottom: "2px solid black",
+        borderLeft: "2px solid black",
       }}
     >
       <table style={{ width: "100%", height: "100%" }}>

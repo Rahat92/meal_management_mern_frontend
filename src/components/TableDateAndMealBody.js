@@ -38,6 +38,7 @@ const TableDateAndMealBody = ({
         left: screenWidth > 1000 ? "11%" : "0",
         // display: "none",
         // scrollBehavior: "smooth",
+        borderLeft: "2px solid black",
       }}
     >
       <table
