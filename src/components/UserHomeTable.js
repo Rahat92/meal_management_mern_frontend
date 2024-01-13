@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./UserHomeTable.module.css";
+import { useUpdateExtraShopMoneyMutation, useUpdateMoneyMutation, useUpdateShopMoneyMutation } from "../features/bikri/bikriApi";
 const UserHomeTable = ({
   el,
   index,
@@ -9,15 +10,107 @@ const UserHomeTable = ({
   updatePersonFullMeal,
   registeredUsers,
   user,
-  updateMoney,
-  updateShopMoney,
   prevArrOfMeals,
-  updateExtraShopMoney,
   screenWidth,
   moneyOption,
   item,
   setItem,
 }) => {
+
+  const [
+    updateMoney,
+    { data: money, isSuccess:isDepositeUpdateSuccess, isError: isUpdateMoneyError, error: updateMoneyError },
+  ] = useUpdateMoneyMutation();
+  const [
+    updateShopMoney,
+    { data: shopMoney, isSuccess: isShopMoneyUpdateSuccess, isError: isShopMoneyError, error: shopMoneyError },
+  ] = useUpdateShopMoneyMutation();
+  const [
+    updateExtraShopMoney,
+    {
+      data: extraShopMoney,
+      isSuccess: isExtraShopMoneyUpdateSuccess,
+      isError: isShopExtraMoneyError,
+      error: extraShopMoneyError,
+    },
+  ] = useUpdateExtraShopMoneyMutation();
+
+  const [deposite, setDeposite] = useState({});
+  const [shopping, setShopping] = useState({});
+  const [extraShopping, setExtraShopping] = useState({});
+  useEffect(() => {
+    if (isUpdateMoneyError) {
+      alert(updateMoneyError?.data.message);
+    }
+    if(isDepositeUpdateSuccess){
+      alert("Deposite updated successfully")
+    }
+  }, [isUpdateMoneyError, isDepositeUpdateSuccess]);
+  useEffect(() => {
+    if (isShopMoneyError) {
+      alert(shopMoneyError?.data?.message);
+    }
+    if (isShopMoneyUpdateSuccess) { 
+      alert("Shopping updated successfully")
+    } 
+  }, [isShopMoneyError, isShopMoneyUpdateSuccess]);
+
+  useEffect(() => {
+    if (isShopExtraMoneyError) {
+      alert(extraShopMoneyError?.data?.message);
+    }
+    if (isExtraShopMoneyUpdateSuccess) {
+      alert("Extra shopping updated successfully")
+    }
+   }, [isShopExtraMoneyError, isExtraShopMoneyUpdateSuccess]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (deposite?.id) {
+        updateMoney({
+          id: deposite.id,
+          year: deposite.year,
+          month: deposite.month,
+          borderIndex: deposite.borderIndex,
+          money: deposite.money,
+        });
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [deposite]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (shopping?.id) {
+        updateShopMoney({
+          id: shopping.id,
+          year: shopping.year,
+          month: shopping.month,
+          borderIndex: shopping.borderIndex,
+          shop: shopping.shop,
+        });
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [shopping]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (extraShopping?.id) {
+        updateExtraShopMoney({
+          id: extraShopping.id,
+          year: extraShopping.year,
+          month: extraShopping.month,
+          borderIndex: extraShopping.borderIndex,
+          extraShop: extraShopping.extraShop,
+        });
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [extraShopping]);
   return (
     <>
       <td className={style.userHomeTableTd}>
@@ -317,7 +410,7 @@ const UserHomeTable = ({
 
                   setArrOfMeals([...arrOfMeals]);
 
-                  updateMoney({
+                  setDeposite({
                     id: el.id,
                     year: el.year,
                     month: el.month,
@@ -378,7 +471,8 @@ const UserHomeTable = ({
                     shop: copyshops,
                   };
                   setArrOfMeals([...arrOfMeals]);
-                  updateShopMoney({
+
+                  setShopping({
                     id: el.id,
                     month: el.month,
                     year: el.year,
@@ -439,7 +533,7 @@ const UserHomeTable = ({
                     extraShop: copyExtraShops,
                   };
                   setArrOfMeals([...arrOfMeals]);
-                  updateExtraShopMoney({
+                  setExtraShopping({
                     id: el.id,
                     month: el.month,
                     year: el.year,
