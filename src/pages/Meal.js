@@ -562,7 +562,7 @@ const Meal = () => {
                   ? "23%"
                   : "150px",
               top: headRef,
-              right: screenWidth > 1000 ? "11%" : "0",
+              right: screenWidth > 1000 ? "18%" : "0",
               color: "black",
               height: "50px",
               overflowX: "scroll",
@@ -783,7 +783,7 @@ const Meal = () => {
                         </td>
                       );
                     })}
-                  {arrOfMeals?.length > 0 && (
+                  {/* {arrOfMeals?.length > 0 && (
                     <th
                       style={{
                         // width: currentUser !== "all" && "150px",
@@ -795,10 +795,49 @@ const Meal = () => {
                     >
                       Total Meal
                     </th>
-                  )}
+                  )} */}
                 </tr>
               </thead>
             </table>
+            <div
+              style={{
+                position: "fixed",
+                right: "11%",
+                top: headHeight + 90 - 50 + "px",
+                // borderBottom: "5px solid black",
+                height: "50px",
+                bottom: "0",
+                // background: "red",
+                width: "7%",
+                zIndex: "100000",
+                borderRight: "1px solid black",
+                borderLeft: "1px solid black",
+                // display: "none",
+              }}
+            >
+              <table
+                style={{
+                  borderBottom: "2px solid black",
+                  width: "100%",
+                  height: "50px",
+                }}
+              >
+                <tr>
+                  {arrOfMeals?.length > 0 && (
+                    <th
+                      style={{
+                        // width: currentUser !== "all" && "150px",
+                        // minWidth: currentUser !== "all" && "150px",
+                        // borderRight: "2px solid black",
+                        display: currentUser !== "all" ? "none" : "",
+                      }}
+                    >
+                      Total Meal
+                    </th>
+                  )}
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>

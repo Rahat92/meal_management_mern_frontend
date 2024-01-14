@@ -41,7 +41,7 @@ const TableMealBody = ({
       style={{
         position: "fixed",
         top: headHeight + 90 + "px",
-        right: screenWidth > 1000 ? "11%" : "0",
+        right: screenWidth > 1000 ? "18%" : "0",
         bottom: "0",
         left:
           currentUser !== "all" ? "35%" : screenWidth > 1000 ? "23%" : "150px",
@@ -366,7 +366,7 @@ const TableMealBody = ({
                       );
                     }
                   })}
-                  <td
+                  {/* <td
                     style={{
                       display: currentUser !== "all" ? "none" : "",
                     }}
@@ -401,12 +401,103 @@ const TableMealBody = ({
                         </td>
                       </tr>
                     </table>
-                  </td>
+                  </td> */}
+                  {/* fixed total meal count div */}
                 </tr>
               );
             })}
         </tbody>
       </table>
+      <div
+        style={{
+          position: "fixed",
+          width: "7%",
+          right: "11%",
+          top: headHeight + 90 + "px",
+          bottom: "0",
+          background: "white",
+          overflow: "scroll",
+          textAlign: "center",
+          zIndex: "10000",
+          // borderBottom: "1px solid black",
+          borderRight: "1px solid black",
+          borderLeft: "1px solid black",
+          // background:'red'
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+            // borderTop: "1px solid blue",
+            borderTop: "1px solid black",
+          }}
+        >
+          {arrOfMeals
+            .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
+            .filter((item) => {
+              if (1 === 0) {
+                if (item.date === `${currentDay} December 2023`) {
+                  return true;
+                }
+              } else {
+                if (item.date) {
+                  return true;
+                }
+              }
+            })
+            ?.map((el, i) => {
+              return (
+                <tr
+                  style={{
+                    // border: "2px solid green",
+                    // borderLeft: "0",
+                    borderTop: "1px solid blue",
+                    borderBottom: "2px solid green",
+                    height: "100px",
+                  }}
+                >
+                  <td
+                    style={{
+                      display: currentUser !== "all" ? "none" : "",
+                    }}
+                  >
+                    <table
+                      style={{
+                        color: "black",
+                        // width: "148px",
+                        width: "100%",
+                        // height: "100px",
+                        // borderBottom: "2px solid green",
+                      }}
+                    >
+                      <tr>
+                        <td style={{ textAlign: "center" }}>
+                          {totalMeals.length > 0 &&
+                            totalMeals.find((item) => item.date === el.date)
+                              ?.totalBreakfast}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style={{ textAlign: "center" }}>
+                          {totalMeals.length > 0 &&
+                            totalMeals.find((item) => item.date === el.date)
+                              ?.totalLaunch}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style={{ textAlign: "center" }}>
+                          {totalMeals.length > 0 &&
+                            totalMeals.find((item) => item.date === el.date)
+                              ?.totalDinner}
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              );
+            })}
+        </table>
+      </div>
     </div>
   );
 };
