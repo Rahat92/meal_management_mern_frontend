@@ -562,7 +562,12 @@ const Meal = () => {
                   ? "23%"
                   : "150px",
               top: headRef,
-              right: screenWidth > 1000 ? "18%" : "0",
+              right:
+                screenWidth > 1000
+                  ? currentUser === "all"
+                    ? "18%"
+                    : "11%"
+                  : "0",
               color: "black",
               height: "50px",
               overflowX: "scroll",
@@ -575,7 +580,7 @@ const Meal = () => {
                 width:
                   currentUser !== "all"
                     ? "100%"
-                    : registeredUsers?.length * 150 + 151 + "px",
+                    : registeredUsers?.length * 150 + 0.5 + "px",
                 height: "100%",
                 background: "white",
                 borderBottom: "2px solid black",
@@ -588,6 +593,7 @@ const Meal = () => {
                 <tr
                   style={{
                     height: "100%",
+                    width: "100%",
                   }}
                 >
                   {registeredUsers
@@ -615,7 +621,7 @@ const Meal = () => {
                           <table
                             style={{
                               height: "100%",
-                              width: currentUser !== "all" ? "100%" : "",
+                              width: currentUser !== "all" ? "100%" : "100%",
                               // background: 'red',
                               // scrollBehavior: "smooth",
                             }}
@@ -799,45 +805,51 @@ const Meal = () => {
                 </tr>
               </thead>
             </table>
-            <div
-              style={{
-                position: "fixed",
-                right: "11%",
-                top: headHeight + 90 - 50 + "px",
-                // borderBottom: "5px solid black",
-                height: "50px",
-                bottom: "0",
-                // background: "red",
-                width: "7%",
-                zIndex: "100000",
-                borderRight: "1px solid black",
-                borderLeft: "1px solid black",
-                // display: "none",
-              }}
-            >
-              <table
+            {arrOfMeals?.length > 0 && (
+              <div
                 style={{
-                  borderBottom: "2px solid black",
-                  width: "100%",
+                  position: "fixed",
+                  right: "11%",
+                  top: headHeight + 90 - 50 + "px",
+                  // borderBottom: "5px solid black",
                   height: "50px",
+                  bottom: "0",
+                  // background: "red",
+                  width: "7%",
+                  zIndex: "100000",
+                  // borderRight: "1px solid black",
+                  borderLeft: "1px solid black",
+                  // boxShadow: "3px 0 6px -3px #888",
+
+                  boxShadow: "1px 0 4px -2px black",
+
+                  display: currentUser !== "all" ? "none" : "",
                 }}
               >
-                <tr>
-                  {arrOfMeals?.length > 0 && (
-                    <th
-                      style={{
-                        // width: currentUser !== "all" && "150px",
-                        // minWidth: currentUser !== "all" && "150px",
-                        // borderRight: "2px solid black",
-                        display: currentUser !== "all" ? "none" : "",
-                      }}
-                    >
-                      Total Meal
-                    </th>
-                  )}
-                </tr>
-              </table>
-            </div>
+                <table
+                  style={{
+                    borderBottom: "2px solid black",
+                    width: "100%",
+                    height: "50px",
+                  }}
+                >
+                  <tr>
+                    {arrOfMeals?.length > 0 && (
+                      <th
+                        style={{
+                          // width: currentUser !== "all" && "150px",
+                          // minWidth: currentUser !== "all" && "150px",
+                          // borderRight: "2px solid black",
+                          display: currentUser !== "all" ? "none" : "",
+                        }}
+                      >
+                        Total Meal
+                      </th>
+                    )}
+                  </tr>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -886,20 +898,23 @@ const Meal = () => {
         dateRef={dateRef}
         nowScroll={nowScroll}
         nameRef={nameRef}
+        todayDate={todayDate}
       />
       {/* </div> */}
       {/* fixed */}
-      <TableDateAndMealBody
-        dateRef={dateRef}
-        currentUser={currentUser}
-        headHeight={headHeight}
-        arrOfMeals={arrOfMeals}
-        currentDay={currentDay}
-        todayDate={todayDate}
-        tableBodyRef={tableBodyRef}
-        nowScroll={nowScroll}
-        screenWidth={screenWidth}
-      />
+      {arrOfMeals?.length > 0 && (
+        <TableDateAndMealBody
+          dateRef={dateRef}
+          currentUser={currentUser}
+          headHeight={headHeight}
+          arrOfMeals={arrOfMeals}
+          currentDay={currentDay}
+          todayDate={todayDate}
+          tableBodyRef={tableBodyRef}
+          nowScroll={nowScroll}
+          screenWidth={screenWidth}
+        />
+      )}
     </div>
   );
 };

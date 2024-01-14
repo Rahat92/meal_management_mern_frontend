@@ -28,7 +28,13 @@ const TableDateAndMealBody = ({
       style={{
         position: "fixed",
         width:
-          currentUser !== "all" ? "24%" : screenWidth > 1000 ? "12%" : "150px",
+          currentUser !== "all"
+            ? screenWidth > 1000
+              ? "24%"
+              : "35%"
+            : screenWidth > 1000
+            ? "12%"
+            : "150px",
         top: headHeight + 90 + "px",
         bottom: "0",
         background: "white",
@@ -38,7 +44,8 @@ const TableDateAndMealBody = ({
         left: screenWidth > 1000 ? "11%" : "0",
         // display: "none",
         // scrollBehavior: "smooth",
-        borderLeft: "2px solid black",
+        // borderLeft: "2px solid black",
+        boxShadow: "-1px 0 4px -2px black",
       }}
     >
       <table

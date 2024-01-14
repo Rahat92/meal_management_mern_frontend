@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import UserHomeTable from "./UserHomeTable";
+import { useSelector } from "react-redux";
+import { setTotalMealBodyRef } from "../features/refSlice";
 
 const TableMealBody = ({
   arrOfMeals,
@@ -22,12 +24,28 @@ const TableMealBody = ({
   dateRef,
   nowScroll,
   nameRef,
+  todayDate,
 }) => {
+  const totalMealBodyRef = useRef();
+  // const { totalMealBodyRef: totalMealRefBody } = useSelector(state => state.totalMealBodyRef)
+  // console.log(totalMealRefBody)
+  useEffect(() => {
+    if (arrOfMeals?.length > 0) {
+      totalMealBodyRef?.current?.scrollTo({
+        top: (todayDate - 1) * 100,
+        behavior: "smooth",
+      });
+    }
+  }, [arrOfMeals?.length]);
   return (
     <div
       onScroll={() => {
         if (nowScroll) {
           dateRef?.current?.scrollTo(
+            tableBodyRef?.current?.scrollLeft,
+            tableBodyRef?.current?.scrollTop
+          );
+          totalMealBodyRef?.current?.scrollTo(
             tableBodyRef?.current?.scrollLeft,
             tableBodyRef?.current?.scrollTop
           );
@@ -41,13 +59,17 @@ const TableMealBody = ({
       style={{
         position: "fixed",
         top: headHeight + 90 + "px",
-        right: screenWidth > 1000 ? "18%" : "0",
+        right:
+          screenWidth > 1000 ? (currentUser === "all" ? "18%" : "11%") : "0",
         bottom: "0",
         left:
           currentUser !== "all" ? "35%" : screenWidth > 1000 ? "23%" : "150px",
         overflow: "scroll",
+        // display:'none'
         // scrollBehavior: "smooth",
         // outline: "2px solid black",
+        boxShadow: "1px 0 4px -2px black",
+
       }}
     >
       <table
@@ -56,7 +78,7 @@ const TableMealBody = ({
           width:
             currentUser !== "all"
               ? "100%"
-              : registeredUsers?.length * 150 + 151 + "px",
+              : registeredUsers?.length * 150 + 0.5 + "px",
 
           // marginTop: headHeight + 90 + "px",
           // marginLeft: currentUser !== "all" ? "35%" : "150px",
@@ -64,9 +86,15 @@ const TableMealBody = ({
           borderLeft: "1px solid blue",
           borderTop: "1px solid blue",
           scrollBehavior: "smooth",
+          // borderRight: "1px solid black",
         }}
       >
-        <tbody style={{ scrollBehavior: "smooth" }}>
+        <tbody
+          style={{
+            scrollBehavior: "smooth",
+            // boxShadow: "1px 0 4px -2px black",
+          }}
+        >
           {arrOfMeals
             .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
             .filter((item) => {
@@ -131,14 +159,7 @@ const TableMealBody = ({
                                 borderBottom: "1px solid white",
                               }}
                             >
-                              <td
-                                style={
-                                  {
-                                    // padding: "1px 0",
-                                    // paddingTop: "6px",
-                                  }
-                                }
-                              >
+                              <td>
                                 <input
                                   onMouseEnter={() => {
                                     setItem({
@@ -408,96 +429,110 @@ const TableMealBody = ({
             })}
         </tbody>
       </table>
-      <div
-        style={{
-          position: "fixed",
-          width: "7%",
-          right: "11%",
-          top: headHeight + 90 + "px",
-          bottom: "0",
-          background: "white",
-          overflow: "scroll",
-          textAlign: "center",
-          zIndex: "10000",
-          // borderBottom: "1px solid black",
-          borderRight: "1px solid black",
-          borderLeft: "1px solid black",
-          // background:'red'
-        }}
-      >
-        <table
+      {arrOfMeals?.length > 0 && (
+        <div
+          ref={totalMealBodyRef}
+          onScroll={() => {
+            if (nowScroll) {
+              tableBodyRef?.current?.scrollTo(
+                tableBodyRef?.current?.scrollLeft,
+                totalMealBodyRef?.current?.scrollTop
+              );
+            }
+          }}
           style={{
-            width: "100%",
-            // borderTop: "1px solid blue",
-            borderTop: "1px solid black",
+            position: "fixed",
+            width: "7%",
+            right: "11%",
+            top: headHeight + 90 + "px",
+            bottom: "0",
+            background: "white",
+            overflow: "scroll",
+            textAlign: "center",
+            zIndex: "10000",
+            // borderRight: "1px solid black",
+            borderLeft: "1px solid black",
+            boxShadow: "1px 0 4px -2px black",
+            display: currentUser !== "all" ? "none" : "",
           }}
         >
-          {arrOfMeals
-            .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
-            .filter((item) => {
-              if (1 === 0) {
-                if (item.date === `${currentDay} December 2023`) {
-                  return true;
+          <table
+            style={{
+              width: "100%",
+              // borderTop: "1px solid blue",
+
+              borderTop: "1px solid black",
+            }}
+          >
+            {arrOfMeals
+              .sort((a, b) => a.date.split(" ")[0] - b.date.split(" ")[0])
+              .filter((item) => {
+                if (1 === 0) {
+                  if (item.date === `${currentDay} December 2023`) {
+                    return true;
+                  }
+                } else {
+                  if (item.date) {
+                    return true;
+                  }
                 }
-              } else {
-                if (item.date) {
-                  return true;
-                }
-              }
-            })
-            ?.map((el, i) => {
-              return (
-                <tr
-                  style={{
-                    // border: "2px solid green",
-                    // borderLeft: "0",
-                    borderTop: "1px solid blue",
-                    borderBottom: "2px solid green",
-                    height: "100px",
-                  }}
-                >
-                  <td
+              })
+              ?.map((el, i) => {
+                return (
+                  <tr
                     style={{
-                      display: currentUser !== "all" ? "none" : "",
+                      // border: "2px solid green",
+                      // borderLeft: "0",
+                      borderTop: "1px solid blue",
+                      borderBottom: "2px solid green",
+                      height: "100px",
                     }}
                   >
-                    <table
+                    <td
                       style={{
-                        color: "black",
-                        // width: "148px",
-                        width: "100%",
-                        // height: "100px",
-                        // borderBottom: "2px solid green",
+                        display: currentUser !== "all" ? "none" : "",
+                        height: "100px",
                       }}
                     >
-                      <tr>
-                        <td style={{ textAlign: "center" }}>
-                          {totalMeals.length > 0 &&
-                            totalMeals.find((item) => item.date === el.date)
-                              ?.totalBreakfast}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style={{ textAlign: "center" }}>
-                          {totalMeals.length > 0 &&
-                            totalMeals.find((item) => item.date === el.date)
-                              ?.totalLaunch}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style={{ textAlign: "center" }}>
-                          {totalMeals.length > 0 &&
-                            totalMeals.find((item) => item.date === el.date)
-                              ?.totalDinner}
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              );
-            })}
-        </table>
-      </div>
+                      <table
+                        style={{
+                          color: "black",
+                          // width: "148px",
+                          width: "100%",
+                          height: "100%",
+                          // height: "100px",
+                          // borderBottom: "2px solid green",
+                        }}
+                      >
+                        <tr>
+                          <td style={{ textAlign: "center" }}>
+                            {totalMeals.length > 0 &&
+                              totalMeals.find((item) => item.date === el.date)
+                                ?.totalBreakfast}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style={{ textAlign: "center" }}>
+                            {totalMeals.length > 0 &&
+                              totalMeals.find((item) => item.date === el.date)
+                                ?.totalLaunch}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style={{ textAlign: "center" }}>
+                            {totalMeals.length > 0 &&
+                              totalMeals.find((item) => item.date === el.date)
+                                ?.totalDinner}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                );
+              })}
+          </table>
+        </div>
+      )}
     </div>
   );
 };

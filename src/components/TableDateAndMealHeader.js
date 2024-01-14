@@ -5,7 +5,13 @@ const TableDateAndMealHeader = ({ currentUser, headRef, screenWidth }) => {
     <div
       style={{
         width:
-          currentUser !== "all" ? "24%" : screenWidth > 1000 ? "12%" : "150px",
+          currentUser !== "all"
+            ? screenWidth > 1000
+              ? "24%"
+              : "35%"
+            : screenWidth > 1000
+            ? "12%"
+            : "150px",
         position: "fixed",
         top: headRef,
         left: screenWidth > 1000 ? "11%" : "0",
@@ -13,7 +19,9 @@ const TableDateAndMealHeader = ({ currentUser, headRef, screenWidth }) => {
         background: "white",
         color: "black",
         borderBottom: "2px solid black",
-        borderLeft: "2px solid black",
+        boxShadow: "-1px 0 4px -2px black",
+
+        // borderLeft: "2px solid black",
       }}
     >
       <table style={{ width: "100%", height: "100%" }}>
