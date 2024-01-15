@@ -453,7 +453,8 @@ const TableMealBody = ({
             // borderRight: "1px solid black",
             borderLeft: "1px solid black",
             boxShadow: "1px 0 4px -2px black",
-            display: currentUser !== "all" ? "none" : "",
+            // display: currentUser !== "all" ? "none" : "",
+            visibility: currentUser !== "all" ? "hidden" : "",
           }}
         >
           <table

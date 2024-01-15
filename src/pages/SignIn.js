@@ -13,7 +13,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const [login, { isSuccess }] = useLoginMutation();
+  const [login, { isSuccess, isError, error }] = useLoginMutation();
   useEffect(() => {
     if (isSuccess) {
       navigate("/meals");
@@ -22,6 +22,11 @@ const SignIn = () => {
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
+  useEffect(() => {
+    if (isError) {
+      alert(error?.data?.message)
+    }
+  }, [isError])
   return (
     <div className={style.tableWrapper}>
       <div className={style.wrapper}>
