@@ -22,6 +22,7 @@ import FilterBox from "../components/FilterBox";
 import TableDateAndMealHeader from "../components/TableDateAndMealHeader";
 import TableMealBody from "../components/TableMealBody";
 import TableDateAndMealBody from "../components/TableDateAndMealBody";
+import UserHomeTableHeadContent from "../components/UserHomeTableHeadContent";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -567,11 +568,15 @@ const Meal = () => {
                   ? currentUser === "all"
                     ? "18%"
                     : "11%"
+                  : currentUser === "all"
+                  ? "15%"
                   : "0",
               color: "black",
               height: "50px",
               overflowX: "scroll",
               width: currentUser !== "all" ? "" : "",
+              // boxShadow: "1px 1px 2px black",
+
               // display:'none'
             }}
           >
@@ -585,8 +590,6 @@ const Meal = () => {
                 background: "white",
                 borderBottom: "2px solid black",
                 borderRight: currentUser == "all" ? "1px solid black" : "",
-                // display: "none",
-                // scrollBehavior: "smooth",
               }}
             >
               <thead>
@@ -643,143 +646,14 @@ const Meal = () => {
                                   ? `Total Deposite: ${borderTotalDeposite}`
                                   : el.name} */}
                                 {currentUser !== "all" ? (
-                                  <table
-                                    style={{
-                                      width: "100%",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    <tr>
-                                      <td
-                                        style={{
-                                          width: "25%",
-                                        }}
-                                      >
-                                        <span
-                                          style={{
-                                            display: "inline-block",
-                                            marginLeft: "-1.4rem",
-                                          }}
-                                        >
-                                          Meal
-                                        </span>
-                                      </td>
-                                      {/* <td>jsj</td> */}
-                                      <td
-                                        style={{
-                                          width: "25%",
-                                          position: "relative",
-                                          fontSize: "12px",
-                                        }}
-                                      >
-                                        <p
-                                          style={{
-                                            position: "absolute",
-                                            top: "-.2rem",
-                                            width: "100%",
-                                            textAlign: "center",
-                                          }}
-                                        >
-                                          {screenWidth < 600 ? (
-                                            <select
-                                              style={{ fontSize: "14px" }}
-                                              onChange={(e) => {
-                                                setMoneyOption(e.target.value);
-                                              }}
-                                            >
-                                              <option>Deposite</option>
-                                              <option>Shopping</option>
-                                              <option>Extra</option>
-                                            </select>
-                                          ) : (
-                                            <p style={{ fontSize: "14px" }}>
-                                              Deposite
-                                            </p>
-                                          )}
-                                        </p>
-                                        <p
-                                          style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            textAlign: "center",
-                                            marginTop: "3px",
-                                          }}
-                                        >
-                                          {moneyOption === "Deposite"
-                                            ? borderTotalDeposite
-                                            : moneyOption === "Shopping"
-                                            ? borderTotalShop
-                                            : moneyOption === "Extra"
-                                            ? borderTotalExtraShop
-                                            : ""}{" "}
-                                          Tk
-                                        </p>
-                                      </td>
-
-                                      <td
-                                        style={{
-                                          width: "25%",
-                                          position: "relative",
-                                          fontSize: "12px",
-                                          display:
-                                            screenWidth < 600 ? "none" : "",
-                                        }}
-                                      >
-                                        <p
-                                          style={{
-                                            position: "absolute",
-                                            top: "-.2rem",
-                                            width: "100%",
-                                            textAlign: "center",
-                                            fontSize: "14px",
-                                          }}
-                                        >
-                                          Shopping
-                                        </p>
-                                        <p
-                                          style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            textAlign: "center",
-                                            marginTop: "3px",
-                                          }}
-                                        >
-                                          {borderTotalShop} Tk
-                                        </p>
-                                      </td>
-                                      <td
-                                        style={{
-                                          width: "25%",
-                                          position: "relative",
-                                          fontSize: "12px",
-                                          display:
-                                            screenWidth < 600 ? "none" : "",
-                                        }}
-                                      >
-                                        <p
-                                          style={{
-                                            position: "absolute",
-                                            top: "-.2rem",
-                                            width: "100%",
-                                            textAlign: "center",
-                                            fontSize: "14px",
-                                          }}
-                                        >
-                                          Extra Shop
-                                        </p>
-                                        <p
-                                          style={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            textAlign: "center",
-                                            marginTop: "3px",
-                                          }}
-                                        >
-                                          {borderTotalExtraShop} Tk
-                                        </p>
-                                      </td>
-                                    </tr>
-                                  </table>
+                                  <UserHomeTableHeadContent
+                                    screenWidth={screenWidth}
+                                    setMoneyOption={setMoneyOption}
+                                    moneyOption={moneyOption}
+                                    borderTotalDeposite={borderTotalDeposite}
+                                    borderTotalShop={borderTotalShop}
+                                    borderTotalExtraShop={borderTotalExtraShop}
+                                  />
                                 ) : (
                                   el.name
                                 )}
@@ -789,19 +663,6 @@ const Meal = () => {
                         </td>
                       );
                     })}
-                  {/* {arrOfMeals?.length > 0 && (
-                    <th
-                      style={{
-                        // width: currentUser !== "all" && "150px",
-                        // minWidth: currentUser !== "all" && "150px",
-                        width: "150px",
-                        // borderRight: "2px solid black",
-                        display: currentUser !== "all" ? "none" : "",
-                      }}
-                    >
-                      Total Meal
-                    </th>
-                  )} */}
                 </tr>
               </thead>
             </table>
@@ -809,13 +670,13 @@ const Meal = () => {
               <div
                 style={{
                   position: "fixed",
-                  right: "11%",
+                  right: screenWidth > 1000 ? "11%" : "0",
                   top: headHeight + 90 - 50 + "px",
                   // borderBottom: "5px solid black",
                   height: "50px",
                   bottom: "0",
                   // background: "red",
-                  width: "7%",
+                  width: screenWidth > 1000 ? "7%" : "15%",
                   zIndex: "100000",
                   // borderRight: "1px solid black",
                   borderLeft: "1px solid black",
@@ -854,7 +715,6 @@ const Meal = () => {
         </div>
       </div>
 
-      {/* <div ref={tableBodyRef} style={{ marginLeft: "150px" }}> */}
       <div
         style={{
           position: "fixed",

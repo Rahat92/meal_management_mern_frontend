@@ -60,21 +60,21 @@ const TableMealBody = ({
         position: "fixed",
         top: headHeight + 90 + "px",
         right:
-          screenWidth > 1000 ? (currentUser === "all" ? "18%" : "11%") : "0",
+          screenWidth > 1000
+            ? currentUser === "all"
+              ? "18%"
+              : "11%"
+            : currentUser === "all"
+            ? "15%"
+            : "0",
         bottom: "0",
         left:
           currentUser !== "all" ? "35%" : screenWidth > 1000 ? "23%" : "150px",
         overflow: "scroll",
-        // display:'none'
-        // scrollBehavior: "smooth",
-        // outline: "2px solid black",
-        boxShadow: "1px 0 4px -2px black",
-
       }}
     >
       <table
         style={{
-          // width: currentUser !== "all" ? "226px" : "1200px",
           width:
             currentUser !== "all"
               ? "100%"
@@ -442,8 +442,8 @@ const TableMealBody = ({
           }}
           style={{
             position: "fixed",
-            width: "7%",
-            right: "11%",
+            width: screenWidth > 1000 ? "7%" : "15%",
+            right: screenWidth > 1000 ? "11%" : "0",
             top: headHeight + 90 + "px",
             bottom: "0",
             background: "white",

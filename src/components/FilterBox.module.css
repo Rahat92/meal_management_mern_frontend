@@ -1,5 +1,6 @@
 .wrapper {
   width: 100%;
+  margin-left: 11%;
   height: 100%;
   display: flex;
   position: relative;
@@ -9,10 +10,11 @@
   padding: 10px 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .wrapper {
     justify-content: space-between;
     padding: "0 10px";
+    margin-left: 0;
   }
 }
 .wrapper .filterDate {

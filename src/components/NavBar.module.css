@@ -10,6 +10,12 @@
 
 .wrapper {
   display: flex;
+  margin: 0 5%;
+}
+@media only screen and (max-width:1000px){
+  .wrapper{
+    margin: 0 2%;
+  }
 }
 .wrapper .brand {
   display: flex;
