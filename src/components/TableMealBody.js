@@ -37,6 +37,9 @@ const TableMealBody = ({
       });
     }
   }, [arrOfMeals?.length]);
+  if (arrOfMeals?.length === 0) {
+    return;
+  }
   return (
     <div
       onScroll={() => {
@@ -71,6 +74,9 @@ const TableMealBody = ({
         left:
           currentUser !== "all" ? "35%" : screenWidth > 1000 ? "23%" : "150px",
         overflow: "scroll",
+        // display:'none'
+        boxShadow: "1px 0 4px -2px black",
+        background: "white",
       }}
     >
       <table

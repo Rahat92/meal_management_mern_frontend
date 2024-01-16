@@ -12,6 +12,7 @@ import SignUp from "./pages/SignUp";
 import NavBar from "./components/NavBar";
 import AuthRoute from "./components/AuthRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   console.log(pathname);
@@ -30,6 +31,7 @@ const App = () => {
         {pathname !== "/" && pathname && <NavBar />}
         <Routes>
           <Route path="/signup" element={<SignUp />} />
+          <Route path = '/admin-dashboard' element = {<AdminDashboard />}/>
           <Route path="/all-month-stats" element={<AllMonthsStats />} />
           <Route path="/test" element={<Test />} />
           <Route element={<AuthRoute />}>

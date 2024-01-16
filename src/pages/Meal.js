@@ -575,8 +575,8 @@ const Meal = () => {
               height: "50px",
               overflowX: "scroll",
               width: currentUser !== "all" ? "" : "",
-              // boxShadow: "1px 1px 2px black",
-
+              boxShadow: "1px 0 4px -2px black",
+              display: arrOfMeals?.length === 0 ? "none" : "",
               // display:'none'
             }}
           >
@@ -590,6 +590,7 @@ const Meal = () => {
                 background: "white",
                 borderBottom: "2px solid black",
                 borderRight: currentUser == "all" ? "1px solid black" : "",
+                // display:'none'
               }}
             >
               <thead>
@@ -678,10 +679,8 @@ const Meal = () => {
                   // background: "red",
                   width: screenWidth > 1000 ? "7%" : "15%",
                   zIndex: "100000",
-                  // borderRight: "1px solid black",
                   borderLeft: "1px solid black",
-                  // boxShadow: "3px 0 6px -3px #888",
-
+                  background: "white",
                   boxShadow: "1px 0 4px -2px black",
 
                   display: currentUser !== "all" ? "none" : "",

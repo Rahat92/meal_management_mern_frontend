@@ -80,7 +80,7 @@ const NavBar = () => {
 
                 width: "100%",
                 left: "0",
-                top: "11px",
+                top: "23px",
               }}
             >
               <div
@@ -120,7 +120,7 @@ const NavBar = () => {
                   >
                     Account
                   </li>
-                  <li
+                  {/* <li
                     style={{
                       border: "1.2px solid violet",
                       borderRadius: "5px",
@@ -128,7 +128,20 @@ const NavBar = () => {
                       // marginLeft: ".5rem",
                       margin: "0 auto",
                     }}
-                  ></li>
+                  ></li> */}
+                  <li
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    style={{
+                      // padding: ".5rem 0 .5rem .5rem",
+                      background: "white",
+                      color: "black",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Link to = "/admin-dashboard">Dashboard</Link>
+                  </li>
                   <li
                     style={{
                       // padding: ".5rem 0 .5rem .5rem",
