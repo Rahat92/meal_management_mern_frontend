@@ -59,7 +59,7 @@ const NavBar = () => {
           >
             {user?.name.slice(0, 2).toUpperCase()}
           </div>
-          <div style={{ padding: "0 .2rem" }}>{user?.name}</div>
+          <div style={{ padding: "0 .2rem" }}>{user?.name.split(" ")[0]}</div>
           <FontAwesomeIcon style={{ fontSize: "1.2rem" }} icon={faAngleDown} />
           <div
             style={{
@@ -140,7 +140,7 @@ const NavBar = () => {
                       cursor: "pointer",
                     }}
                   >
-                    <Link to = "/admin-dashboard">Dashboard</Link>
+                    <Link to="/admin-dashboard">Dashboard</Link>
                   </li>
                   <li
                     style={{

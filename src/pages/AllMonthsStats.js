@@ -14,6 +14,7 @@ const AllMonthsStats = () => {
   const { data: getMonthlyMealStats } = useGetMonthlyStatsQuery();
   const [sendSms] = useSendSmsMutation();
   const dateNameRef = useRef();
+  const mainBodyRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
   const dispatch = useDispatch();
@@ -114,7 +115,7 @@ const AllMonthsStats = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{}}>
       <div className={style.fixedMonthAndName}>
         <table>
           <tr>
@@ -130,14 +131,17 @@ const AllMonthsStats = () => {
         </table>
       </div>
       <div
-        onScroll={() => {
-          window.scrollTo(headRef.current.scrollLeft, window.pageYOffset)
-        }}
         ref={headRef}
+        onScroll={() => {
+          mainBodyRef?.current?.scrollTo(
+            headRef?.current?.scrollLeft,
+            mainBodyRef?.current?.scrollTop
+          );
+        }}
         className={style.customTableHeaderWrapper}
       >
         <table className={style.infoTable}>
-          <tbody>
+          <tbody className={style.calculationBody}>
             <tr>
               <td className={style.breakfast}>
                 <table>
@@ -179,6 +183,7 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
+              <td className={style.mealRate}>Meal Rate</td>
               <td className={style.totalExtraShop}>
                 <table>
                   <tr>
@@ -189,9 +194,13 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
+              <td className={style.overAllShop}>
+                Overall
+                <br /> Shop
+              </td>
               {/* <td className={style.overAllShop}>Overall Shop</td> */}
               {/* Meal Rate start */}
-              <td className={style.mealRate}>Meal Rate</td>
+
               {/* Meal Rate end */}
               {/* total deposite person */}
               <td className={style.totalDeposite}>
@@ -201,8 +210,9 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
-              {/* total deposite person */}
+              {/* total deposite person end */}
 
+              <td className={style.totalBalance}>Overall Deposite</td>
               <td className={style.borderConsume}>
                 <table>
                   <tr>
@@ -220,11 +230,7 @@ const AllMonthsStats = () => {
                   </tr>
                 </table>
               </td>
-              <td className={style.totalBalance}>Overall Deposite</td>
-              <td className={style.overAllShop}>
-                Overall
-                <br /> Shop
-              </td>
+
               <td className={style.headingRemainingBalance}>
                 Remaining
                 <br /> Balance
@@ -234,11 +240,30 @@ const AllMonthsStats = () => {
           </tbody>
         </table>
       </div>
-      {console.log(mealStatMonthly)}
-      <div className={style.tableWrapper}>
+      <div
+        ref={mainBodyRef}
+        onScroll={() => {
+          // dateNameRef?.current?.scrollTo(mainBodyRef?.current?.scrollLeft, mainBodyRef?.current?.scrollTop);
+          headRef?.current?.scrollTo(
+            mainBodyRef?.current?.scrollLeft,
+            dateNameRef?.current?.scrollTop
+          );
+          dateNameRef?.current?.scrollTo(0, mainBodyRef?.current?.scrollTop);
+        }}
+        className={style.tableWrapper}
+      >
         <table className={style.infoTable + " " + style.infoTableBody}>
-          <tbody ref={bodyRef}>
-            <div ref={dateNameRef} className={style.bodyMonthAndName}>
+          <tbody>
+            <div
+              ref={dateNameRef}
+              onScroll={() => {
+                mainBodyRef?.current?.scrollTo(
+                  mainBodyRef?.current?.scrollLeft,
+                  dateNameRef?.current?.scrollTop
+                );
+              }}
+              className={style.bodyMonthAndName}
+            >
               {mealStatMonthly &&
                 mealStatMonthly
                   ?.sort(
@@ -247,16 +272,22 @@ const AllMonthsStats = () => {
                   ?.sort(
                     (a, b) => b.month.split(" ")[1] - a.month.split(" ")[1]
                   )
+                  ?.filter((item) => item.month === "0 2024")
                   ?.map((el) => {
-                    console.log(el);
                     return (
                       <table>
-                        <tr>
-                          <td className={style.month}>
-                            <div
+                        <tr style={{ marginTop: "1rem" }}>
+                          <td
+                            className={style.month}
+                            style={{ display: "block", height: "300px" }}
+                          >
+                            <p
                               style={{
                                 // transform: "rotate(-50deg)",
                                 fontWeight: "700",
+                                position: "sticky",
+                                top: "50%",
+                                transform: "translateY(-50%)",
                               }}
                             >
                               {el.month.split(" ")[0] === "0"
@@ -286,7 +317,7 @@ const AllMonthsStats = () => {
                                 : ""}{" "}
                               <br />
                               {el.month.split(" ")[1]}
-                            </div>
+                            </p>
                           </td>
                           <td className={style.border}>
                             <table>
@@ -314,215 +345,298 @@ const AllMonthsStats = () => {
                   })}
             </div>
             {mealStatMonthly &&
-              mealStatMonthly.map((el) => {
-                return (
-                  <tr>
-                    <td className={style.breakfast}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td style={{ textAlign: "center" }}>
-                                {el.breakfast}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    <td className={style.launch}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>{el.launch}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    <td className={style.dinner}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>{el.dinner}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    <td className={style.totalMeal}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>{el.totalMeal}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    {/* Overall Meal */}
-                    <td className={style.overAllMeal}>{el.totalMeal}</td>
-                    {/* Total Shop */}
-                    <td className={style.totalShop}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>{el.totalShop}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    {/* total Extra Shop */}
-                    <td className={style.totalExtraShop}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>{el.totalExtraShop}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
+              mealStatMonthly
+                ?.filter((item) => item.month === "0 2024")
+                ?.map((el) => {
+                  return (
+                    <tr className={style.calculationBody}>
+                      <td className={style.breakfast}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td style={{ textAlign: "center" }}>
+                                  {el.breakfast}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td className={style.launch}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>{el.launch}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td className={style.dinner}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>{el.dinner}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td className={style.totalMeal}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>{el.totalMeal}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      {/* Overall Meal */}
+                      <td
+                        className={style.overAllMeal}
+                        style={{ display: "block", height: "100%" }}
+                      >
+                        <p
+                          style={{
+                            position: "sticky",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          {el.totalMeal}
+                        </p>
+                      </td>
+                      {/* Total Shop */}
+                      <td className={style.totalShop}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>{el.totalShop}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td
+                        className={style.mealRate}
+                        style={{ display: "block", height: "100%" }}
+                      >
+                        <p
+                          style={{
+                            position: "sticky",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          {isNaN(el.mealRate.toFixed(2))
+                            ? 0
+                            : el.mealRate.toFixed(2)}
+                        </p>
+                      </td>
 
-                    {/* Overall Shop */}
-                    {/* <td className={style.overAllShop}>
+                      {/* total Extra Shop */}
+                      <td className={style.totalExtraShop}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>{el.totalExtraShop}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td
+                        className={style.overAllShop}
+                        style={{ display: "block", height: "100%" }}
+                      >
+                        <p
+                          style={{
+                            position: "sticky",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          {el.overAllShop + el.overAllExtraShop}
+                        </p>
+                      </td>
+
+                      {/* Overall Shop */}
+                      {/* <td className={style.overAllShop}>
                       {el.overAllShop + el.overAllExtraShop}
                     </td> */}
-                    {/* Meal Rate */}
-                    <td className={style.mealRate}>
-                      {isNaN(el.mealRate.toFixed(2))
-                        ? 0
-                        : el.mealRate.toFixed(2)}
-                    </td>
-                    <td className={style.totalDeposite}>
-                      <table>
-                        {el.finalArr?.map((el) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  el.border === user?.name ? "green" : "",
-                                color: el.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>{el.totalMoney}</td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    <td className={style.borderConsume}>
-                      <table>
-                        {el.finalArr?.map((ele) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  ele.border === user?.name ? "green" : "",
-                                color: ele.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td>
-                                {isNaN(
-                                  (
-                                    ele.totalMeal * el.mealRate +
-                                    el.overAllExtraShop / el.finalArr.length
-                                  ).toFixed(2)
-                                )
-                                  ? 0
-                                  : (
+                      {/* Meal Rate */}
+                      <td className={style.totalDeposite}>
+                        <table>
+                          {el.finalArr?.map((el) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    el.border === user?.name ? "green" : "",
+                                  color:
+                                    el.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>{el.totalMoney}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td
+                        className={style.totalBalance}
+                        style={{ display: "block", height: "100%" }}
+                      >
+                        <p
+                          style={{
+                            position: "sticky",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          {el.overAllMoney}
+                        </p>
+                      </td>
+                      <td className={style.borderConsume}>
+                        <table>
+                          {el.finalArr?.map((ele) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    ele.border === user?.name ? "green" : "",
+                                  color:
+                                    ele.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td>
+                                  {isNaN(
+                                    (
                                       ele.totalMeal * el.mealRate +
                                       el.overAllExtraShop / el.finalArr.length
-                                    ).toFixed(2)}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    <td className={style.restBalance}>
-                      <table>
-                        {el.finalArr?.map((ele) => {
-                          return (
-                            <tr
-                              style={{
-                                background:
-                                  ele.border === user?.name ? "green" : "",
-                                color: ele.border === user?.name ? "white" : "",
-                              }}
-                            >
-                              <td style = {{ color:ele.totalMoney -
-                                      ele.totalMeal * el.mealRate -
-                                      el.overAllExtraShop / el.finalArr.length<0?'red':'black' }}>
-                                {isNaN(
-                                  ele.totalMoney -
-                                    ele.totalMeal * el.mealRate -
-                                    el.overAllExtraShop / el.finalArr.length
-                                )
-                                  ? 0
-                                  : (
+                                    ).toFixed(2)
+                                  )
+                                    ? 0
+                                    : (
+                                        ele.totalMeal * el.mealRate +
+                                        el.overAllExtraShop / el.finalArr.length
+                                      ).toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+                      <td className={style.restBalance}>
+                        <table>
+                          {el.finalArr?.map((ele) => {
+                            return (
+                              <tr
+                                style={{
+                                  background:
+                                    ele.border === user?.name ? "green" : "",
+                                  color:
+                                    ele.border === user?.name ? "white" : "",
+                                }}
+                              >
+                                <td
+                                  style={{
+                                    color:
                                       ele.totalMoney -
+                                        ele.totalMeal * el.mealRate -
+                                        el.overAllExtraShop /
+                                          el.finalArr.length <
+                                      0
+                                        ? "red"
+                                        : "black",
+                                  }}
+                                >
+                                  {isNaN(
+                                    ele.totalMoney -
                                       ele.totalMeal * el.mealRate -
                                       el.overAllExtraShop / el.finalArr.length
-                                    ).toFixed(2)}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </td>
-                    <td className={style.totalBalance}>{el.overAllMoney}</td>
-                    <td className={style.overAllShop}>
-                      {el.overAllShop + el.overAllExtraShop}
-                    </td>
-                    <td className={style.remainingBalance}>
-                      {el.overAllMoney - el.overAllShop - el.overAllExtraShop}
-                    </td>
-                  </tr>
-                );
-              })}
+                                  )
+                                    ? 0
+                                    : (
+                                        ele.totalMoney -
+                                        ele.totalMeal * el.mealRate -
+                                        el.overAllExtraShop / el.finalArr.length
+                                      ).toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </td>
+
+                      <td
+                        className={style.remainingBalance}
+                        style={{ display: "block", height: "100%" }}
+                      >
+                        <p
+                          style={{
+                            position: "sticky",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          {el.overAllMoney -
+                            el.overAllShop -
+                            el.overAllExtraShop}
+                        </p>
+                      </td>
+                    </tr>
+                  );
+                })}
           </tbody>
         </table>
       </div>

@@ -1,12 +1,32 @@
 .tableWrapper {
-  width: 1940px;
+  position: fixed;
+  top: 150px;
+  /* width: 1941px; */
+  /* display: none; */
   overflow-x: scroll;
-  margin-top: 90px;
-  margin-left: 200px;
+  left: 26%;
+  right: 11%;
+  bottom: 0;
+  background: red;
   font-weight: 600;
+  height: 200px;
+  overflow: scroll;
+  /* display: none; */
+  border-bottom-right-radius: 10px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .tableWrapper {
+    left: 150px;
+    right: 0;
+  }
+}
+.tableWrapper table {
+  width: 1941px;
+  /* background: red; */
 }
 .infoTable {
-  width: "100%";
+  /* position:fixed */
   color: black;
   height: 40px;
   font-weight: 600;
@@ -16,6 +36,7 @@
 .infoTableBody tbody tr table tr {
   height: 50px;
   text-align: center;
+  /* display: none; */
 }
 
 .infoTable tbody tr .month {
@@ -128,9 +149,9 @@
 
 .fixedMonthAndName {
   position: fixed;
-  left: 0;
-  width: 200px;
-  top: 40px;
+  left: 11%;
+  width: 15%;
+  top: 100px;
   background: white;
   color: black;
   height: 50px;
@@ -138,6 +159,14 @@
   border-bottom: 2px solid;
   text-align: center;
   font-weight: 600;
+  z-index: 1000;
+  border-top-left-radius: 10px;
+}
+@media only screen and (max-width: 1000px) {
+  .fixedMonthAndName {
+    width: 150px;
+    left: 0;
+  }
 }
 
 .fixedMonthAndName .border {
@@ -156,15 +185,25 @@
 }
 .bodyMonthAndName {
   position: fixed;
-  left: 0;
-  top: 90px;
-  width: 200px;
+  width: 15%;
+  /* display: none; */
+  left: 11%;
+  height: 200px;
+  bottom: 0;
+  top: 150px;
   font-weight: 600;
   /* bottom: 0; */
   overflow: scroll;
   /* border-right: 2px solid; */
   /* border-bottom: 2px solid black; */
   background: white;
+  border-bottom-left-radius: 10px;
+}
+@media only screen and (max-width: 1000px) {
+  .bodyMonthAndName {
+    width: 150px;
+    left: 0;
+  }
 }
 .bodyMonthAndName .border {
   width: 100px;
@@ -172,13 +211,32 @@
 }
 .customTableHeaderWrapper {
   position: fixed;
-  left: 200px;
+  /* left: 200px; */
   right: 0;
-  top: 40px;
+  top: 100px;
+  left: 26%;
+  right: 11%;
+  /* display: none; */
+  border-top-right-radius: 10px;
   /* z-index: 1000; */
-  overflow-x: scroll;
+  overflow: scroll;
 }
 
+@media only screen and (max-width: 1000px) {
+  .customTableHeaderWrapper {
+    left: 150px;
+    right: 0;
+  }
+}
 .customTableHeaderWrapper .infoTable {
-  width: 1940px;
+  width: 1941px;
+  /* background: red; */
+}
+
+.calculationBody {
+  background: white;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+  /* display: none; */
+  border-bottom-right-radius: 10px;
+  /* overflow: hidden; */
 }
