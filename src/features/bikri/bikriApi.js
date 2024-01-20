@@ -248,7 +248,6 @@ const bikriApi = apiSlice.injectEndpoints({
             )
           );
         } catch (err) {
-          console.log("shop error");
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",

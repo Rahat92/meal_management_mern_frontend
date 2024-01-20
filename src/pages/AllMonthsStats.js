@@ -113,532 +113,562 @@ const AllMonthsStats = () => {
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
-
+  console.log(mealStatMonthly);
   return (
-    <div style={{}}>
-      <div className={style.fixedMonthAndName}>
-        <table>
-          <tr>
-            <td className={style.month}>Month</td>
-            <td className={style.border}>
-              <table>
+    <div>
+      <div className="mx-[11%] mt-[25%] md:mt-[8%] bg-green-500">
+        <h1>Meal Summary</h1>
+        <div className="mt-3 w-full relative overflow-auto border">
+          <div className="flex w-full sticky top-0 h-10 right-0 z-50 shadow-lg">
+            <div className="sticky w-[250px] h-10 bg-red-500 top-0 left-0 shrink-0">
+              <table className="w-full h-full">
                 <tr>
+                  <td className="w-[120px] bg-orange-500">Date</td>
                   <td>Name</td>
                 </tr>
               </table>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div
-        ref={headRef}
-        onScroll={() => {
-          mainBodyRef?.current?.scrollTo(
-            headRef?.current?.scrollLeft,
-            mainBodyRef?.current?.scrollTop
-          );
-        }}
-        className={style.customTableHeaderWrapper}
-      >
-        <table className={style.infoTable}>
-          <tbody className={style.calculationBody}>
-            <tr>
-              <td className={style.breakfast}>
-                <table>
-                  <tr>
-                    <td style={{ textAlign: "center" }}>Breakfast</td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.launch}>
-                <table>
-                  <tr>
-                    <td>Launch</td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.dinner}>
-                <table>
-                  <tr>
-                    <td>Dinner</td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.totalMeal}>
-                <table>
-                  <tr>
-                    <td>Total Meal</td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.overAllMeal}>
-                Overall
-                <br /> Meal
-              </td>
-
-              <td className={style.totalShop}>
-                <table>
-                  <tr>
-                    <td>Total Shop</td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.mealRate}>Meal Rate</td>
-              <td className={style.totalExtraShop}>
-                <table>
-                  <tr>
-                    <td>
-                      Total Extra
-                      <br /> Shop
-                    </td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.overAllShop}>
-                Overall
-                <br /> Shop
-              </td>
-              {/* <td className={style.overAllShop}>Overall Shop</td> */}
-              {/* Meal Rate start */}
-
-              {/* Meal Rate end */}
-              {/* total deposite person */}
-              <td className={style.totalDeposite}>
-                <table>
-                  <tr>
-                    <td>Total Deposite</td>
-                  </tr>
-                </table>
-              </td>
-              {/* total deposite person end */}
-
-              <td className={style.totalBalance}>Overall Deposite</td>
-              <td className={style.borderConsume}>
-                <table>
-                  <tr>
-                    <td>Border Consume</td>
-                  </tr>
-                </table>
-              </td>
-              <td className={style.restBalance}>
-                <table>
-                  <tr>
-                    <td>
-                      Border remaining
-                      <br /> Balance
-                    </td>
-                  </tr>
-                </table>
-              </td>
-
-              <td className={style.headingRemainingBalance}>
-                Remaining
-                <br /> Balance
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div
-        ref={mainBodyRef}
-        onScroll={() => {
-          // dateNameRef?.current?.scrollTo(mainBodyRef?.current?.scrollLeft, mainBodyRef?.current?.scrollTop);
-          headRef?.current?.scrollTo(
-            mainBodyRef?.current?.scrollLeft,
-            dateNameRef?.current?.scrollTop
-          );
-          dateNameRef?.current?.scrollTo(0, mainBodyRef?.current?.scrollTop);
-        }}
-        className={style.tableWrapper}
-      >
-        <table className={style.infoTable + " " + style.infoTableBody}>
-          <tbody>
-            <div
-              ref={dateNameRef}
-              onScroll={() => {
-                mainBodyRef?.current?.scrollTo(
-                  mainBodyRef?.current?.scrollLeft,
-                  dateNameRef?.current?.scrollTop
-                );
-              }}
-              className={style.bodyMonthAndName}
-            >
-              {mealStatMonthly &&
-                mealStatMonthly
-                  ?.sort(
-                    (a, b) => b.month.split(" ")[0] - a.month.split(" ")[0]
-                  )
-                  ?.sort(
-                    (a, b) => b.month.split(" ")[1] - a.month.split(" ")[1]
-                  )
-                  ?.filter((item) => item.month === "0 2024")
-                  ?.map((el) => {
-                    return (
-                      <table>
-                        <tr style={{ marginTop: "1rem" }}>
-                          <td
-                            className={style.month}
-                            style={{ display: "block", height: "300px" }}
-                          >
-                            <p
-                              style={{
-                                // transform: "rotate(-50deg)",
-                                fontWeight: "700",
-                                position: "sticky",
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                              }}
-                            >
-                              {el.month.split(" ")[0] === "0"
-                                ? "January"
-                                : el.month.split(" ")[0] === "1"
-                                ? "February"
-                                : el.month.split(" ")[0] === "2"
-                                ? "March"
-                                : el.month.split(" ")[0] === "3"
-                                ? "April"
-                                : el.month.split(" ")[0] === "4"
-                                ? "May"
-                                : el.month.split(" ")[0] === "5"
-                                ? "June"
-                                : el.month.split(" ")[0] === "6"
-                                ? "July"
-                                : el.month.split(" ")[0] === "7"
-                                ? "August"
-                                : el.month.split(" ")[0] === "8"
-                                ? "September"
-                                : el.month.split(" ")[0] === "9"
-                                ? "Octobor"
-                                : el.month.split(" ")[0] === "10"
-                                ? "November"
-                                : el.month.split(" ")[0] === "11"
-                                ? "December"
-                                : ""}{" "}
-                              <br />
-                              {el.month.split(" ")[1]}
-                            </p>
-                          </td>
-                          <td className={style.border}>
-                            <table>
-                              {el.finalArr?.map((el) => {
-                                return (
-                                  <tr
-                                    style={{
-                                      background:
-                                        el.border === user?.name
-                                          ? "rgba(100, 255,200,.8)"
-                                          : "",
-                                      color:
-                                        el.border === user?.name ? "black" : "",
-                                    }}
-                                  >
-                                    <td>{el.border}</td>
-                                  </tr>
-                                );
-                              })}
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                    );
-                  })}
             </div>
-            {mealStatMonthly &&
-              mealStatMonthly
-                ?.filter((item) => item.month === "0 2024")
-                ?.map((el) => {
-                  return (
-                    <tr className={style.calculationBody}>
-                      <td className={style.breakfast}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td style={{ textAlign: "center" }}>
-                                  {el.breakfast}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td className={style.launch}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>{el.launch}</td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td className={style.dinner}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>{el.dinner}</td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td className={style.totalMeal}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>{el.totalMeal}</td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      {/* Overall Meal */}
-                      <td
-                        className={style.overAllMeal}
-                        style={{ display: "block", height: "100%" }}
-                      >
-                        <p
-                          style={{
-                            position: "sticky",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          {el.totalMeal}
-                        </p>
-                      </td>
-                      {/* Total Shop */}
-                      <td className={style.totalShop}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>{el.totalShop}</td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td
-                        className={style.mealRate}
-                        style={{ display: "block", height: "100%" }}
-                      >
-                        <p
-                          style={{
-                            position: "sticky",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          {isNaN(el.mealRate.toFixed(2))
-                            ? 0
-                            : el.mealRate.toFixed(2)}
-                        </p>
-                      </td>
 
-                      {/* total Extra Shop */}
-                      <td className={style.totalExtraShop}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>{el.totalExtraShop}</td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td
-                        className={style.overAllShop}
-                        style={{ display: "block", height: "100%" }}
-                      >
-                        <p
-                          style={{
-                            position: "sticky",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          {el.overAllShop + el.overAllExtraShop}
-                        </p>
-                      </td>
+            <div className="absolute right-0 h-10 bg-yellow-500 left-[250px] top-0 overflow-auto">
+              <table className="h-full w-[1600px]">
+                <tr>
+                  <td className="bg-green-100 w-[100px] text-blue-500">
+                    Breakfast
+                  </td>
+                  <td className="bg-red-500 w-[100px]">Launch</td>
+                  <td className="w-[100px] bg-green-300">Dinner</td>
+                  <td className="w-[100px] bg-red-200">Total&nbsp;Meal</td>
+                  <td className="w-[100px] bg-red-400">Overall&nbsp;Meal</td>
+                  <td className="w-[100px] bg-red-500">Shopping</td>
+                  <td className="w-[100px] bg-red-300">Meal&nbsp;Rate</td>
+                  <td className="w-[150px] bg-red-400">Extra&nbsp;Shopping</td>
+                  <td className="w-[150px] bg-red-300">
+                    Overall&nbsp;Shopping
+                  </td>
+                  <td className="w-[100px] bg-red-400">Deposite</td>
+                  <td className="w-[100px] bg-red-200">Consume</td>
+                  <td className="w-[150px] bg-red-400">
+                    Remainging&nbsp;Balance
+                  </td>
+                  <td className="w-[150px] bg-red-300">
+                    Overall&nbsp;Deposite
+                  </td>
+                  <td className=""></td>
+                  <td className="w-[100px] bg-red-400">Rest&nbsp;Balance</td>
+                </tr>
+              </table>
+            </div>
+          </div>
 
-                      {/* Overall Shop */}
-                      {/* <td className={style.overAllShop}>
-                      {el.overAllShop + el.overAllExtraShop}
-                    </td> */}
-                      {/* Meal Rate */}
-                      <td className={style.totalDeposite}>
-                        <table>
-                          {el.finalArr?.map((el) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    el.border === user?.name ? "green" : "",
-                                  color:
-                                    el.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>{el.totalMoney}</td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td
-                        className={style.totalBalance}
-                        style={{ display: "block", height: "100%" }}
-                      >
-                        <p
-                          style={{
-                            position: "sticky",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          {el.overAllMoney}
-                        </p>
-                      </td>
-                      <td className={style.borderConsume}>
-                        <table>
-                          {el.finalArr?.map((ele) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    ele.border === user?.name ? "green" : "",
-                                  color:
-                                    ele.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td>
-                                  {isNaN(
-                                    (
-                                      ele.totalMeal * el.mealRate +
-                                      el.overAllExtraShop / el.finalArr.length
-                                    ).toFixed(2)
-                                  )
-                                    ? 0
-                                    : (
-                                        ele.totalMeal * el.mealRate +
-                                        el.overAllExtraShop / el.finalArr.length
-                                      ).toFixed(2)}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
-                      <td className={style.restBalance}>
-                        <table>
-                          {el.finalArr?.map((ele) => {
-                            return (
-                              <tr
-                                style={{
-                                  background:
-                                    ele.border === user?.name ? "green" : "",
-                                  color:
-                                    ele.border === user?.name ? "white" : "",
-                                }}
-                              >
-                                <td
-                                  style={{
-                                    color:
-                                      ele.totalMoney -
-                                        ele.totalMeal * el.mealRate -
-                                        el.overAllExtraShop /
-                                          el.finalArr.length <
-                                      0
-                                        ? "red"
-                                        : "black",
-                                  }}
-                                >
-                                  {isNaN(
-                                    ele.totalMoney -
-                                      ele.totalMeal * el.mealRate -
-                                      el.overAllExtraShop / el.finalArr.length
-                                  )
-                                    ? 0
-                                    : (
-                                        ele.totalMoney -
-                                        ele.totalMeal * el.mealRate -
-                                        el.overAllExtraShop / el.finalArr.length
-                                      ).toFixed(2)}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </table>
-                      </td>
+          <div className="bg-gray-300 flex h-[200px] relative shadow-sm">
+            <div className="w-[250px] bg-orange-500 h-full overflow-auto shrink-0 z-10">
+              <table className="">
+                <tr>
+                  <td className="w-[120px] bg-blue-500 block sticky top-[50%] translate-y-[-50%]">
+                    january 2024
+                  </td>
+                  <td className="bg-red-500 w-full">
+                    {/* Name */}
+                    <table>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                      <tr>
+                        <td>Kamrul</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
 
-                      <td
-                        className={style.remainingBalance}
-                        style={{ display: "block", height: "100%" }}
-                      >
-                        <p
-                          style={{
-                            position: "sticky",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          {el.overAllMoney -
-                            el.overAllShop -
-                            el.overAllExtraShop}
-                        </p>
-                      </td>
-                    </tr>
-                  );
-                })}
-          </tbody>
-        </table>
+            <div className="absolute h-full right-0 left-[250px] bg-yellow-500 overflow-auto">
+              <table className="w-[1600px]">
+                <tr>
+                  <td className="bg-green-100 w-[100px]">
+                    <table>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                      <tr>
+                        <td>.5</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="bg-red-500 w-[100px]">
+                    <table>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[100px] bg-green-300">
+                    <table>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[100px] bg-red-200">
+                    <table>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                      <tr>
+                        <td>75</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[100px] bg-red-400 block sticky top-[50%] transform: translate-y-[-50%]">
+                    Overall Meal
+                  </td>
+
+                  <td className="w-[100px] bg-red-500">
+                    <table>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[100px] bg-red-300 block sticky top-[50%] transform: translate-y-[-50%]">
+                    Meal Rate
+                  </td>
+
+                  <td className="w-[150px] bg-red-400">
+                    <table>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                      <tr>
+                        <td>100</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[150px] bg-red-300 block sticky top-[50%] transform: translate-y-[-50%]">
+                    20000
+                  </td>
+
+                  <td className="w-[100px] bg-red-400">
+                    <table>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[100px] bg-red-200">
+                    <table>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>3000</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[150px] bg-red-400">
+                    <table>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>0</td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td className="w-[150px] bg-red-300 block sticky top-[50%] transform: translate-y-[-50%]">
+                    20000
+                  </td>
+
+                  <td></td>
+                  <td className="w-[100px] bg-red-400 block sticky top-[50%] transform: translate-y-[-50%]">
+                    0
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
