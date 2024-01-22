@@ -28,7 +28,7 @@ const NavBar = () => {
     };
   }, [showDropDown]);
   return (
-    <div className={style.navbarWrapper}>
+    <div className={`${style.navbarWrapper} font-sans`}>
       <div className={style.wrapper}>
         <div className={style.brand}>
           <Link to="/meals">Home</Link>

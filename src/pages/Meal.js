@@ -497,7 +497,7 @@ const Meal = () => {
     // return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
   return (
-    <div>
+    <div className="font-san">
       <div
         ref={headRef}
         style={{
