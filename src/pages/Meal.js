@@ -23,6 +23,7 @@ import TableDateAndMealHeader from "../components/TableDateAndMealHeader";
 import TableMealBody from "../components/TableMealBody";
 import TableDateAndMealBody from "../components/TableDateAndMealBody";
 import UserHomeTableHeadContent from "../components/UserHomeTableHeadContent";
+import LoaderComponent from "../components/LoaderComponent";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -497,7 +498,7 @@ const Meal = () => {
     // return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
   return (
-    <div className="font-san">
+    <div className="font-sans">
       <div
         ref={headRef}
         style={{
@@ -733,7 +734,7 @@ const Meal = () => {
         }}
       >
         <p style={{ marginTop: "10rem", opacity: ".7" }}>
-          Loading Meals, please wait...
+          <LoaderComponent />
         </p>
       </div>
 
