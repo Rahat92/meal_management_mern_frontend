@@ -326,10 +326,7 @@ const bikriApi = apiSlice.injectEndpoints({
       },
     }),
     getMonthlyStats: builder.query({
-      query: () => {
-        const month = new Date().getMonth();
-        const year = new Date().getFullYear();
-        const day = new Date().getDate();
+      query: ({year, month, day}) => {
         return {
           url: `/meal/monthly-borders-stats/${year}/${month}/${day}`,
           headers: {

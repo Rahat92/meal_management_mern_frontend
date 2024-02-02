@@ -1,3 +1,6 @@
+body {
+  font-family: sans-serif;
+}
 .tableWrapper {
   position: fixed;
   top: 150px;
