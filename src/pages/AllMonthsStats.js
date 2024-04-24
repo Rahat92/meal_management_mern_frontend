@@ -4,6 +4,7 @@ import {
   useGetYearMonthQuery,
   useSendSmsMutation,
 } from "../features/bikri/bikriApi";
+import LoaderComponent from "../components/LoaderComponent";
 import { useEffect } from "react";
 import { useState } from "react";
 import style from "./AllMonthsStats.module.css";
@@ -18,7 +19,7 @@ const AllMonthsStats = () => {
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const [display, setDisplay] = useState(false);
   const [nowScroll, setNowScroll] = useState(false);
-  const { data: getMonthlyMealStats } = useGetMonthlyStatsQuery({
+  const { data: getMonthlyMealStats, isLoading } = useGetMonthlyStatsQuery({
     year: 2024,
     month: 0,
     day: 2,
@@ -142,21 +143,23 @@ const AllMonthsStats = () => {
       const borderIndex = mealStatMonthly[0]?.finalArr.findIndex(
         (item) => item.border === user?.name
       );
-      console.log(borderIndex);
       mainBodyRef?.current?.scrollTo({
         top: borderIndex * 40,
         behavior: "smooth",
       });
-      dateNameRef?.current?.scrollTo({
-        top: borderIndex * 40,
-        behavior: "smooth",
-      });
+      // dateNameRef?.current?.scrollTo({
+      //   top: borderIndex * 40,
+      //   behavior: "smooth",
+      // });
       setTimeout(() => {
         setNowScroll(true);
       }, 1000);
     }
   }, [mealStatMonthly, user]);
   console.log(mealStatMonthly);
+  if (isLoading) {
+    return <LoaderComponent />;
+  }
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
       <div className="z-[10000] mb-[1rem] align-self-start  w-full md:w-[60%] relative top-[-110px] md:top-0">
@@ -268,7 +271,10 @@ const AllMonthsStats = () => {
           </ul>
         </div>{" "}
       </div>
-      <div className="border shadow-lg w-full md:w-[60%] h-[250px] overflow-auto relative top-[-120px] md:top-0">
+      <div
+        ref={mainBodyRef}
+        className="border shadow-lg w-full md:w-[60%] h-[250px] overflow-auto relative top-[-120px] md:top-0"
+      >
         <table className="w-[1800px] bg-blue-500">
           <thead className="sticky top-0 shadow-md bg-blue-500 z-[100] h-[40px]">
             <tr className="">

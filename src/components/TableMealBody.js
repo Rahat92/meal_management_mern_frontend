@@ -25,6 +25,7 @@ const TableMealBody = ({
   nowScroll,
   nameRef,
   todayDate,
+  borderTotalDeposite
 }) => {
   const totalMealBodyRef = useRef();
   // const { totalMealBodyRef: totalMealRefBody } = useSelector(state => state.totalMealBodyRef)
@@ -140,6 +141,8 @@ const TableMealBody = ({
                           moneyOption={moneyOption}
                           item={item}
                           setItem={setItem}
+                          borderTotalDeposite={borderTotalDeposite}
+                          currentUser = {currentUser}
                         />
                       );
                     } else if (currentUser === "all") {

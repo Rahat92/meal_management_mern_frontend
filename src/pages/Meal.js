@@ -103,7 +103,7 @@ const Meal = () => {
   }, [yearMonth?.yearMonth]);
 
   let monthLength = 0;
-  let month = 1;
+  let month = 2;
   let year = 2024;
   const currentDay = new Date().getDate();
   switch (month) {
@@ -190,6 +190,7 @@ const Meal = () => {
     }
     return desireMonthString;
   };
+
   useEffect(() => {
     if (isMealStatusError) {
       alert(mealStatusError?.data?.message);
@@ -759,6 +760,7 @@ const Meal = () => {
         nowScroll={nowScroll}
         nameRef={nameRef}
         todayDate={todayDate}
+        borderTotalDeposite={borderTotalDeposite}
       />
       {/* </div> */}
       {/* fixed */}

@@ -15,8 +15,10 @@ const UserHomeTable = ({
   moneyOption,
   item,
   setItem,
+  currentUser,
+  borderTotalDeposite
 }) => {
-
+  console.log(registeredUsers[index])
   const [
     updateMoney,
     { data: money, isSuccess:isDepositeUpdateSuccess, isError: isUpdateMoneyError, error: updateMoneyError },
@@ -44,6 +46,9 @@ const UserHomeTable = ({
     }
     if(isDepositeUpdateSuccess){
       alert("Deposite updated successfully")
+      console.log(deposite.money)
+      console.log(money)
+      fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Hello ${registeredUsers[index].name} vai.You are Currently Deposite ${deposite.money} Tk. Your Total Deposite is ${borderTotalDeposite} Tk. Rahat, From Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
   }, [isUpdateMoneyError, isDepositeUpdateSuccess]);
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React from "react";
-import './index.css';
+import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Meal from "./pages/Meal";
 import AllMonthsStats from "./pages/AllMonthsStats";
@@ -15,6 +15,7 @@ import AuthRoute from "./components/AuthRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import MealSheets from "./pages/MealSheets";
+import Conversation from "./pages/Conversations";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   console.log(pathname);
@@ -33,9 +34,11 @@ const App = () => {
         {pathname !== "/" && pathname && <NavBar />}
         <Routes>
           <Route path="/signup" element={<SignUp />} />
-          <Route path = '/admin-dashboard' element = {<AdminDashboard />}/>
-          <Route path = '/meal-sheets' element = {<MealSheets />}/>
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/meal-sheets" element={<MealSheets />} />
           <Route path="/all-month-stats" element={<AllMonthsStats />} />
+          <Route path="/conversations" element={<Conversation />} />
+
           <Route path="/test" element={<Test />} />
           <Route element={<AuthRoute />}>
             <Route path="/" element={<SignIn />} />
