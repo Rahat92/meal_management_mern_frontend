@@ -48,7 +48,7 @@ const UserHomeTable = ({
       alert("Deposite updated successfully")
       console.log(deposite.money)
       console.log(money)
-      fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Hello ${registeredUsers[index].name} vai.You are Currently Deposite ${deposite.money} Tk. Your Total Deposite is ${borderTotalDeposite} Tk. Rahat, From Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
+      fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
   }, [isUpdateMoneyError, isDepositeUpdateSuccess]);
   useEffect(() => {
@@ -57,6 +57,8 @@ const UserHomeTable = ({
     }
     if (isShopMoneyUpdateSuccess) { 
       alert("Shopping updated successfully")
+      // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
+      fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name}, you've done shopping worth ${shopping.shop} taka is added successfully. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     } 
   }, [isShopMoneyError, isShopMoneyUpdateSuccess]);
 

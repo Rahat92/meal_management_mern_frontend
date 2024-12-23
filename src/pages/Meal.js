@@ -24,6 +24,7 @@ import TableMealBody from "../components/TableMealBody";
 import TableDateAndMealBody from "../components/TableDateAndMealBody";
 import UserHomeTableHeadContent from "../components/UserHomeTableHeadContent";
 import LoaderComponent from "../components/LoaderComponent";
+import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -57,10 +58,6 @@ const Meal = () => {
   const [getMonth, setGetMonth] = useState(todayMonth);
   const [getYear, setGetYear] = useState(todayYear);
 
-  // const [
-  //   updateMoney,
-  //   { data: money, isError: isUpdateMoneyError, error: updateMoneyError },
-  // ] = useUpdateMoneyMutation();
   const [
     updatePersonFullMeal,
     {
@@ -101,51 +98,11 @@ const Meal = () => {
     //   setIsSkipped(true);
     // }
   }, [yearMonth?.yearMonth]);
-
-  let monthLength = 0;
-  let month = 2;
   let year = 2024;
+  let month = 8;
   const currentDay = new Date().getDate();
-  switch (month) {
-    case 0:
-      monthLength = 31;
-      break;
-    case 1:
-      monthLength = 29;
-      break;
-    case 2:
-      monthLength = 31;
-      break;
-    case 3:
-      monthLength = 30;
-      break;
-    case 4:
-      monthLength = 31;
-      break;
-    case 5:
-      monthLength = 30;
-      break;
-    case 6:
-      monthLength = 31; //july
-      break;
-    case 7:
-      monthLength = 31; //august
-      break;
-    case 8:
-      monthLength = 30;
-      break;
-    case 9:
-      monthLength = 31; //octobar
-      break;
-    case 10:
-      monthLength = 30;
-      break;
-    case 11:
-      monthLength = 31;
-      break;
-    default:
-      monthLength = 5;
-  }
+  const monthLength = getCurrentMonthLength(month, year)
+  
   const getMonthString = (desireMonth) => {
     let desireMonthString = 0;
     switch (desireMonth) {
@@ -298,11 +255,11 @@ const Meal = () => {
       const changedArr = arrOfMeals.filter((item, i) => {
         if (
           JSON.stringify(item.breakfast) !==
-            JSON.stringify(prevArrOfMeals[i].breakfast) ||
+          JSON.stringify(prevArrOfMeals[i].breakfast) ||
           JSON.stringify(item.launch) !==
-            JSON.stringify(prevArrOfMeals[i].launch) ||
+          JSON.stringify(prevArrOfMeals[i].launch) ||
           JSON.stringify(item.dinner) !==
-            JSON.stringify(prevArrOfMeals[i].dinner)
+          JSON.stringify(prevArrOfMeals[i].dinner)
         ) {
           return true;
         }
@@ -360,10 +317,10 @@ const Meal = () => {
       type === "checkbox" && e.target.value === "on"
         ? 0
         : e.target.value === "off"
-        ? mealName === "breakfast"
-          ? 0.5
-          : 1
-        : e.target.value * 1;
+          ? mealName === "breakfast"
+            ? 0.5
+            : 1
+          : e.target.value * 1;
     copySingleMeal[1] =
       type === "checkbox" ? (e.target.value === "on" ? "off" : "on") : "on";
     copyMealArr[mealIndex] = copySingleMeal;
@@ -378,12 +335,12 @@ const Meal = () => {
       user?.role === "user" &&
       mealName === "breakfast" &&
       new Date() >
-        new Date(
-          updatedDateObj.year,
-          updatedDateObj.month,
-          updatedDateObj.date.split(" ")[0],
-          6
-        )
+      new Date(
+        updatedDateObj.year,
+        updatedDateObj.month,
+        updatedDateObj.date.split(" ")[0],
+        6
+      )
     ) {
       mealError = "You can't change previous Meal";
     }
@@ -391,12 +348,12 @@ const Meal = () => {
       user?.role === "user" &&
       mealName === "launch" &&
       new Date() >
-        new Date(
-          updatedDateObj.year,
-          updatedDateObj.month,
-          updatedDateObj.date.split(" ")[0],
-          10
-        )
+      new Date(
+        updatedDateObj.year,
+        updatedDateObj.month,
+        updatedDateObj.date.split(" ")[0],
+        10
+      )
     ) {
       mealError = "You can't change previous Meal";
     }
@@ -404,12 +361,12 @@ const Meal = () => {
       user?.role === "user" &&
       mealName === "dinner" &&
       new Date() >
-        new Date(
-          updatedDateObj.year,
-          updatedDateObj.month,
-          updatedDateObj.date.split(" ")[0],
-          18
-        )
+      new Date(
+        updatedDateObj.year,
+        updatedDateObj.month,
+        updatedDateObj.date.split(" ")[0],
+        18
+      )
     ) {
       mealError = "You can't change previous Meal";
     }
@@ -419,12 +376,12 @@ const Meal = () => {
         mealName === "launch" ||
         mealName === "dinner") &&
       new Date() >
-        new Date(
-          updatedDateObj.year,
-          updatedDateObj.month,
-          updatedDateObj.date.split(" ")[0],
-          24
-        )
+      new Date(
+        updatedDateObj.year,
+        updatedDateObj.month,
+        updatedDateObj.date.split(" ")[0],
+        24
+      )
     ) {
       mealError = "Admin can't change previous days Meal";
     }
@@ -562,8 +519,8 @@ const Meal = () => {
                 currentUser !== "all"
                   ? "35%"
                   : screenWidth > 1000
-                  ? "23%"
-                  : "150px",
+                    ? "23%"
+                    : "150px",
               top: headRef,
               right:
                 screenWidth > 1000
@@ -571,8 +528,8 @@ const Meal = () => {
                     ? "18%"
                     : "11%"
                   : currentUser === "all"
-                  ? "15%"
-                  : "0",
+                    ? "15%"
+                    : "0",
               color: "black",
               height: "50px",
               overflowX: "scroll",

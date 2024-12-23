@@ -21,9 +21,10 @@ const AllMonthsStats = () => {
   const [nowScroll, setNowScroll] = useState(false);
   const { data: getMonthlyMealStats, isLoading } = useGetMonthlyStatsQuery({
     year: 2024,
-    month: 0,
-    day: 2,
+    month: 4,
+    day: new Date().getDate(),
   });
+  console.log()
   const { data: yearMonth } = useGetYearMonthQuery();
   const [yearMonthArr, setYearMonthArr] = useState([]);
   const [sendSms] = useSendSmsMutation();
@@ -162,7 +163,7 @@ const AllMonthsStats = () => {
   }
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
-      <div className="z-[10000] mb-[1rem] align-self-start  w-full md:w-[60%] relative top-[-110px] md:top-0">
+      <div className="z-[10000] mb-[1rem] align-self-start  w-full md:w-[70%] relative top-[-110px] md:top-0">
         <button
           onClick={() => setDisplay(!display)}
           id="dropdownDividerButton"
@@ -273,19 +274,19 @@ const AllMonthsStats = () => {
       </div>
       <div
         ref={mainBodyRef}
-        className="border shadow-lg w-full md:w-[60%] h-[250px] overflow-auto relative top-[-120px] md:top-0"
+        className="border shadow-lg w-full md:w-[70%] h-[250px] overflow-auto relative top-[-120px] md:top-0"
       >
-        <table className="w-[1800px] bg-blue-500">
-          <thead className="sticky top-0 shadow-md bg-blue-500 z-[100] h-[40px]">
+        <table className="w-[1800px] bg-white text-black">
+          <thead className="sticky top-0 shadow-md bg-white z-[100] h-[40px]">
             <tr className="">
-              <th className="sticky left-0 top-0 bg-orange-500 border-r-2">
+              <th className="sticky left-0 top-0 bg-white border-r-2">
                 <table className="w-full h-[40px]">
                   <tr className="h-[40px]">
                     <th className="w-[80px] h-full">Date</th>
                     <th className="h-[40px] text-center">
                       <table className="w-full">
                         <tr>
-                          <th className="border-l-2 h-[40px] text-center">
+                          <th className="border-l-2 h-[40px] text-center border-r-2">
                             Name
                           </th>
                         </tr>
@@ -315,12 +316,12 @@ const AllMonthsStats = () => {
             ? mealStatMonthly
                 ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
                 ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
-                ?.filter((item) => item.month === "0 2024")
+                ?.filter((item) => item.month === "4 2024")
                 ?.map((el) => {
                   return (
                     <tbody>
                       <tr>
-                        <th className="sticky left-0 bg-orange-500 z-50 shadow-md border-r-2">
+                        <th className="sticky left-0 bg-white z-50 shadow-md border-r-2">
                           <table className="w-full">
                             <tr>
                               <th
@@ -355,7 +356,7 @@ const AllMonthsStats = () => {
                                 <br />
                                 {el.month.split(" ")[1]}
                               </th>
-                              <th className="w-full border-l-2">
+                              <th className="w-full border-l-2 border-r-2">
                                 <table className="w-full">
                                   {el.finalArr.map((item) => {
                                     return (

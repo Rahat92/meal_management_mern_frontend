@@ -33,7 +33,7 @@ const Conversation = () => {
   const [createMessage, {}] = useCreateMessageMutation();
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
+    socket.current = io("ws://192.168.0.104:5000");
     socket.current.on("getMessage", (data) => {
       setSocketMessage({
         sender: data.sender,
