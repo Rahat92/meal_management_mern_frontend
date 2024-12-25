@@ -196,7 +196,7 @@ const Meal = () => {
     }
     setDates([...days]);
   }, [users?.borders]);
-
+  console.log(user)
   useEffect(() => {
     if (user && user.role !== "admin" && user && user.role !== "superadmin") {
       setCurrentUser(user.name + " " + user._id);
@@ -455,10 +455,11 @@ const Meal = () => {
     }
     // return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
+  console.log(process.env.REACT_APP_API_URL)
+
   return (
     <>
-
-      <div className="font-sans hidden">
+      <div className="font-sans">
         <div
           ref={headRef}
           style={{
@@ -739,7 +740,7 @@ const Meal = () => {
       </div>
 
       {/* Redesigned mealsheet */}
-      <div className="max-w-[800px] min-h-[500px] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
+      <div className="hidden max-w-[800px] min-h-[500px] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
         <table className="absolute left-0 right-0 top-0 bottom-0 w-full">
           <thead className="border-b shadow-xl">
             <tr>
