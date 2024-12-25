@@ -459,7 +459,7 @@ const Meal = () => {
 
   return (
     <>
-      <div className="font-sans">
+      <div className="font-sans hidden">
         <div
           ref={headRef}
           style={{
