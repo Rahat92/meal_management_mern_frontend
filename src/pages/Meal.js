@@ -102,7 +102,7 @@ const Meal = () => {
   let month = 8;
   const currentDay = new Date().getDate();
   const monthLength = getCurrentMonthLength(month, year)
-  
+
   const getMonthString = (desireMonth) => {
     let desireMonthString = 0;
     switch (desireMonth) {
@@ -456,35 +456,37 @@ const Meal = () => {
     // return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
   return (
-    <div className="font-sans">
-      <div
-        ref={headRef}
-        style={{
-          position: "fixed",
-          top: "40px",
-          right: "0",
-          left: "0",
-          background: "gray",
-          zIndex: "100",
-          // display: "none",
-        }}
-      >
-        <FilterBox
-          setGetYear={setGetYear}
-          setGetMonth={setGetMonth}
-          style={style}
-          yearMonth={yearMonth}
-          registeredUsers={registeredUsers}
-          setCurrentIndex={setCurrentIndex}
-          setCurrentUser={setCurrentUser}
-          user={user}
-          todayMonth={todayMonth}
-          todayYear={todayYear}
-          isLoading={isLoading}
-          isChanged={isChanged}
-        />
+    <>
 
-        {/* <button
+      <div className="font-sans hidden">
+        <div
+          ref={headRef}
+          style={{
+            position: "fixed",
+            top: "40px",
+            right: "0",
+            left: "0",
+            background: "gray",
+            zIndex: "100",
+            // display: "none",
+          }}
+        >
+          <FilterBox
+            setGetYear={setGetYear}
+            setGetMonth={setGetMonth}
+            style={style}
+            yearMonth={yearMonth}
+            registeredUsers={registeredUsers}
+            setCurrentIndex={setCurrentIndex}
+            setCurrentUser={setCurrentUser}
+            user={user}
+            todayMonth={todayMonth}
+            todayYear={todayYear}
+            isLoading={isLoading}
+            isChanged={isChanged}
+          />
+
+          {/* <button
           style={{
             display: user?.role !== "admin" ? "none" : "",
             color: "black",
@@ -493,248 +495,307 @@ const Meal = () => {
         >
           Create Meal
         </button> */}
-        <div style={{ background: "" }}>
-          {arrOfMeals?.length > 0 && (
-            <TableDateAndMealHeader
-              currentUser={currentUser}
-              headRef={headRef}
-              screenWidth={screenWidth}
-            />
-          )}
+          <div style={{ background: "" }}>
+            {arrOfMeals?.length > 0 && (
+              <TableDateAndMealHeader
+                currentUser={currentUser}
+                headRef={headRef}
+                screenWidth={screenWidth}
+              />
+            )}
 
-          {/* Border's Name */}
-          <div
-            ref={nameRef}
-            onScroll={() => {
-              if (nowScroll) {
-                tableBodyRef?.current?.scrollTo(
-                  nameRef.current.scrollLeft,
-                  tableBodyRef.current.scrollTop
-                );
-              }
-            }}
-            style={{
-              position: "fixed",
-              left:
-                currentUser !== "all"
-                  ? "35%"
-                  : screenWidth > 1000
-                    ? "23%"
-                    : "150px",
-              top: headRef,
-              right:
-                screenWidth > 1000
-                  ? currentUser === "all"
-                    ? "18%"
-                    : "11%"
-                  : currentUser === "all"
-                    ? "15%"
-                    : "0",
-              color: "black",
-              height: "50px",
-              overflowX: "scroll",
-              width: currentUser !== "all" ? "" : "",
-              boxShadow: "1px 0 4px -2px black",
-              display: arrOfMeals?.length === 0 ? "none" : "",
-              // display:'none'
-            }}
-          >
-            <table
+            {/* Border's Name */}
+            <div
+              ref={nameRef}
+              onScroll={() => {
+                if (nowScroll) {
+                  tableBodyRef?.current?.scrollTo(
+                    nameRef.current.scrollLeft,
+                    tableBodyRef.current.scrollTop
+                  );
+                }
+              }}
               style={{
-                width:
+                position: "fixed",
+                left:
                   currentUser !== "all"
-                    ? "100%"
-                    : registeredUsers?.length * 150 + 0.5 + "px",
-                height: "100%",
-                background: "white",
-                borderBottom: "2px solid black",
-                borderRight: currentUser == "all" ? "1px solid black" : "",
+                    ? "35%"
+                    : screenWidth > 1000
+                      ? "23%"
+                      : "150px",
+                top: headRef,
+                right:
+                  screenWidth > 1000
+                    ? currentUser === "all"
+                      ? "18%"
+                      : "11%"
+                    : currentUser === "all"
+                      ? "15%"
+                      : "0",
+                color: "black",
+                height: "50px",
+                overflowX: "scroll",
+                width: currentUser !== "all" ? "" : "",
+                boxShadow: "1px 0 4px -2px black",
+                display: arrOfMeals?.length === 0 ? "none" : "",
                 // display:'none'
               }}
             >
-              <thead>
-                <tr
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                  }}
-                >
-                  {registeredUsers
-                    ?.filter((el) => {
-                      if (currentUser !== "all") {
-                        if (el._id === currentUser?.split(" ")[1]) {
-                          return true;
-                        }
-                      } else {
-                        return true;
-                      }
-                    })
-                    ?.map((el) => {
-                      return (
-                        // Start Here
-                        <td
-                          style={{
-                            width: currentUser !== "all" ? "100%" : "150px",
-                            borderRight:
-                              currentUser == "all" ? "2px solid green" : "",
-                            textAlign: "center",
-                            borderLeft: "1px solid blue",
-                          }}
-                        >
-                          <table
-                            style={{
-                              height: "100%",
-                              width: currentUser !== "all" ? "100%" : "100%",
-                              // background: 'red',
-                              // scrollBehavior: "smooth",
-                            }}
-                          >
-                            <tr
-                              style={{
-                                // borderBottom: "1px solid red",
-                                width: "100%",
-                                height: "100%",
-                              }}
-                            >
-                              <th
-                                style={{
-                                  width:
-                                    currentUser !== "all" ? "65%" : "150px",
-                                }}
-                              >
-                                {/* {currentUser !== "all"
-                                  ? `Total Deposite: ${borderTotalDeposite}`
-                                  : el.name} */}
-                                {currentUser !== "all" ? (
-                                  <UserHomeTableHeadContent
-                                    screenWidth={screenWidth}
-                                    setMoneyOption={setMoneyOption}
-                                    moneyOption={moneyOption}
-                                    borderTotalDeposite={borderTotalDeposite}
-                                    borderTotalShop={borderTotalShop}
-                                    borderTotalExtraShop={borderTotalExtraShop}
-                                  />
-                                ) : (
-                                  el.name
-                                )}
-                              </th>
-                            </tr>
-                          </table>
-                        </td>
-                      );
-                    })}
-                </tr>
-              </thead>
-            </table>
-            {arrOfMeals?.length > 0 && (
-              <div
+              <table
                 style={{
-                  position: "fixed",
-                  right: screenWidth > 1000 ? "11%" : "0",
-                  top: headHeight + 90 - 50 + "px",
-                  // borderBottom: "5px solid black",
-                  height: "50px",
-                  bottom: "0",
-                  // background: "red",
-                  width: screenWidth > 1000 ? "7%" : "15%",
-                  zIndex: "100000",
-                  borderLeft: "1px solid black",
+                  width:
+                    currentUser !== "all"
+                      ? "100%"
+                      : registeredUsers?.length * 150 + 0.5 + "px",
+                  height: "100%",
                   background: "white",
-                  boxShadow: "1px 0 4px -2px black",
-
-                  display: currentUser !== "all" ? "none" : "",
+                  borderBottom: "2px solid black",
+                  borderRight: currentUser == "all" ? "1px solid black" : "",
+                  // display:'none'
                 }}
               >
-                <table
+                <thead>
+                  <tr
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                    }}
+                  >
+                    {registeredUsers
+                      ?.filter((el) => {
+                        if (currentUser !== "all") {
+                          if (el._id === currentUser?.split(" ")[1]) {
+                            return true;
+                          }
+                        } else {
+                          return true;
+                        }
+                      })
+                      ?.map((el) => {
+                        return (
+                          // Start Here
+                          <td
+                            style={{
+                              width: currentUser !== "all" ? "100%" : "150px",
+                              borderRight:
+                                currentUser == "all" ? "2px solid green" : "",
+                              textAlign: "center",
+                              borderLeft: "1px solid blue",
+                            }}
+                          >
+                            <table
+                              style={{
+                                height: "100%",
+                                width: currentUser !== "all" ? "100%" : "100%",
+                                // background: 'red',
+                                // scrollBehavior: "smooth",
+                              }}
+                            >
+                              <tr
+                                style={{
+                                  // borderBottom: "1px solid red",
+                                  width: "100%",
+                                  height: "100%",
+                                }}
+                              >
+                                <th
+                                  style={{
+                                    width:
+                                      currentUser !== "all" ? "65%" : "150px",
+                                  }}
+                                >
+                                  {/* {currentUser !== "all"
+                                  ? `Total Deposite: ${borderTotalDeposite}`
+                                  : el.name} */}
+                                  {currentUser !== "all" ? (
+                                    <UserHomeTableHeadContent
+                                      screenWidth={screenWidth}
+                                      setMoneyOption={setMoneyOption}
+                                      moneyOption={moneyOption}
+                                      borderTotalDeposite={borderTotalDeposite}
+                                      borderTotalShop={borderTotalShop}
+                                      borderTotalExtraShop={borderTotalExtraShop}
+                                    />
+                                  ) : (
+                                    el.name
+                                  )}
+                                </th>
+                              </tr>
+                            </table>
+                          </td>
+                        );
+                      })}
+                  </tr>
+                </thead>
+              </table>
+              {arrOfMeals?.length > 0 && (
+                <div
                   style={{
-                    borderBottom: "2px solid black",
-                    width: "100%",
+                    position: "fixed",
+                    right: screenWidth > 1000 ? "11%" : "0",
+                    top: headHeight + 90 - 50 + "px",
+                    // borderBottom: "5px solid black",
                     height: "50px",
+                    bottom: "0",
+                    // background: "red",
+                    width: screenWidth > 1000 ? "7%" : "15%",
+                    zIndex: "100000",
+                    borderLeft: "1px solid black",
+                    background: "white",
+                    boxShadow: "1px 0 4px -2px black",
+
+                    display: currentUser !== "all" ? "none" : "",
                   }}
                 >
-                  <tr>
-                    {arrOfMeals?.length > 0 && (
-                      <th
-                        style={{
-                          // width: currentUser !== "all" && "150px",
-                          // minWidth: currentUser !== "all" && "150px",
-                          // borderRight: "2px solid black",
-                          display: currentUser !== "all" ? "none" : "",
-                        }}
-                      >
-                        Total Meal
-                      </th>
-                    )}
-                  </tr>
-                </table>
-              </div>
-            )}
+                  <table
+                    style={{
+                      borderBottom: "2px solid black",
+                      width: "100%",
+                      height: "50px",
+                    }}
+                  >
+                    <tr>
+                      {arrOfMeals?.length > 0 && (
+                        <th
+                          style={{
+                            // width: currentUser !== "all" && "150px",
+                            // minWidth: currentUser !== "all" && "150px",
+                            // borderRight: "2px solid black",
+                            display: currentUser !== "all" ? "none" : "",
+                          }}
+                        >
+                          Total Meal
+                        </th>
+                      )}
+                    </tr>
+                  </table>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        style={{
-          position: "fixed",
-          top: headHeight + 90 - 50 + "px",
-          bottom: "0",
-          left: "0",
-          right: "0",
-          zIndex: "1000",
-          color: "black",
+        <div
+          style={{
+            position: "fixed",
+            top: headHeight + 90 - 50 + "px",
+            bottom: "0",
+            left: "0",
+            right: "0",
+            zIndex: "1000",
+            color: "black",
 
-          display: !isMealsLoading ? "none" : "flex",
-          justifyContent: "center",
-          fontweight: "bold",
-          fontSize: "20px",
-          // scrollBehavior: "smooth",
-          // display:'none'
-        }}
-      >
-        <p style={{ marginTop: "10rem", opacity: ".7" }}>
-          <LoaderComponent />
-        </p>
-      </div>
+            display: !isMealsLoading ? "none" : "flex",
+            justifyContent: "center",
+            fontweight: "bold",
+            fontSize: "20px",
+            // scrollBehavior: "smooth",
+            // display:'none'
+          }}
+        >
+          <p style={{ marginTop: "10rem", opacity: ".7" }}>
+            <LoaderComponent />
+          </p>
+        </div>
 
-      <TableMealBody
-        arrOfMeals={arrOfMeals}
-        currentDay={currentDay}
-        registeredUsers={registeredUsers}
-        currentUser={currentUser}
-        setArrOfMeals={setArrOfMeals}
-        updateMealHandler={updateMealHandler}
-        updatePersonFullMeal={updatePersonFullMeal}
-        user={user}
-        prevArrOfMeals={prevArrOfMeals}
-        screenWidth={screenWidth}
-        moneyOption={moneyOption}
-        item={item}
-        setItem={setItem}
-        totalMeals={totalMeals}
-        tableBodyRef={tableBodyRef}
-        headHeight={headHeight}
-        dateRef={dateRef}
-        nowScroll={nowScroll}
-        nameRef={nameRef}
-        todayDate={todayDate}
-        borderTotalDeposite={borderTotalDeposite}
-      />
-      {/* </div> */}
-      {/* fixed */}
-      {arrOfMeals?.length > 0 && (
-        <TableDateAndMealBody
-          dateRef={dateRef}
-          currentUser={currentUser}
-          headHeight={headHeight}
+        <TableMealBody
           arrOfMeals={arrOfMeals}
           currentDay={currentDay}
-          todayDate={todayDate}
-          tableBodyRef={tableBodyRef}
-          nowScroll={nowScroll}
+          registeredUsers={registeredUsers}
+          currentUser={currentUser}
+          setArrOfMeals={setArrOfMeals}
+          updateMealHandler={updateMealHandler}
+          updatePersonFullMeal={updatePersonFullMeal}
+          user={user}
+          prevArrOfMeals={prevArrOfMeals}
           screenWidth={screenWidth}
+          moneyOption={moneyOption}
+          item={item}
+          setItem={setItem}
+          totalMeals={totalMeals}
+          tableBodyRef={tableBodyRef}
+          headHeight={headHeight}
+          dateRef={dateRef}
+          nowScroll={nowScroll}
+          nameRef={nameRef}
+          todayDate={todayDate}
+          borderTotalDeposite={borderTotalDeposite}
         />
-      )}
-    </div>
+        {/* </div> */}
+        {/* fixed */}
+        {arrOfMeals?.length > 0 && (
+          <TableDateAndMealBody
+            dateRef={dateRef}
+            currentUser={currentUser}
+            headHeight={headHeight}
+            arrOfMeals={arrOfMeals}
+            currentDay={currentDay}
+            todayDate={todayDate}
+            tableBodyRef={tableBodyRef}
+            nowScroll={nowScroll}
+            screenWidth={screenWidth}
+          />
+        )}
+      </div>
+
+      {/* Redesigned mealsheet */}
+      <div className="max-w-[800px] min-h-[500px] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
+        <table className="absolute left-0 right-0 top-0 bottom-0 w-full">
+          <thead className="border-b shadow-xl">
+            <tr>
+              <td className="min-w-[100px] bg-white text-black sticky left-0 top-0 z-10">Date</td>
+              <td className="min-w-[100px] sticky top-0 left-[100px] bg-white text-black z-10">Type</td>
+              
+              {['Kamrul', 'Hasan', 'Rahat', 'Rokon'].map((el, i) => {
+                return (
+                  <td className="min-w-[200px] sticky top-0 bg-white text-black">{el}</td>
+                )
+              })}
+              <td className="min-w-[100px] sticky right-0 top-0 bg-white text-black z-10">Total Meal</td>
+            </tr>
+          </thead>
+
+          <tbody>
+            {
+              new Array(30).fill(5).map((el, i) => {
+                return (
+                  <tr className="border-b">
+                    <td className="bg-white text-black sticky left-0 z-9">12-{i > 8 ? '' : '0'}{i + 1}-2024</td>
+                    <td className="bg-white text-black sticky left-[100px] z-9">
+                      <table>
+                        {['Breakfast', 'Launch', 'Dinner'].map((el, i) => {
+                          return (
+                            <tr><td>{el}</td></tr>
+                          )
+                        })}
+                      </table>
+                    </td>
+                    {new Array(4).fill(0).map((el, i) => {
+                      return (
+                        <td>
+                          <table>
+                            <tr><td>.5</td></tr>
+                            <tr><td>1</td></tr>
+                            <tr><td>1</td></tr>
+                          </table>
+                        </td>
+                      )
+                    })}
+                    <td className="bg-white text-black z-9 sticky right-0">
+                      <table>
+                        <tr><td>100</td></tr>
+                        <tr><td>100</td></tr>
+                        <tr><td>100</td></tr>
+                      </table>
+                    </td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
