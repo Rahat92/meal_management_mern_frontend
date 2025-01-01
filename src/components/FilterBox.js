@@ -23,6 +23,7 @@ const FilterBox = ({
       setYearMonthArr(arr);
     }
   }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
+  console.log(yearMonth)
   return (
     <div className={filterBoxStyle.wrapper}>
       <form className={filterBoxStyle.filterDate}>
@@ -40,7 +41,7 @@ const FilterBox = ({
               : todayMonth === 1
               ? "February"
               : todayMonth === 2
-              ? "Merch"
+              ? "March"
               : todayMonth === 3
               ? "April"
               : todayMonth === 4
@@ -62,6 +63,7 @@ const FilterBox = ({
               : ""}{" "}
             {todayYear}
           </option>
+
           {yearMonth?.yearMonth
             ?.filter(
               (el) => `${el.month}+${el.year}` !== `${todayMonth}+${todayYear}`
@@ -77,7 +79,7 @@ const FilterBox = ({
                     : el.month === 1
                     ? "February"
                     : el.month === 2
-                    ? "Merch"
+                    ? "March"
                     : el.month === 3
                     ? "April"
                     : el.month === 4

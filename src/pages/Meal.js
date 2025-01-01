@@ -99,7 +99,7 @@ const Meal = () => {
     // }
   }, [yearMonth?.yearMonth]);
   let year = 2024;
-  let month = 8;
+  let month = 11;
   const currentDay = new Date().getDate();
   const monthLength = getCurrentMonthLength(month, year)
 
@@ -455,7 +455,7 @@ const Meal = () => {
     }
     // return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
-  console.log(process.env.REACT_APP_API_URL)
+  console.log(registeredUsers)
 
   return (
     <>
@@ -488,14 +488,14 @@ const Meal = () => {
           />
 
           {/* <button
-          style={{
-            display: user?.role !== "admin" ? "none" : "",
-            color: "black",
-          }}
-          onClick={() => createMeal(dates)}
-        >
-          Create Meal
-        </button> */}
+            style={{
+              display: user?.role !== "admin" ? "none" : "",
+              color: "black",
+            }}
+            onClick={() => createMeal(dates)}
+          >
+            Create Meal
+          </button> */}
           <div style={{ background: "" }}>
             {arrOfMeals?.length > 0 && (
               <TableDateAndMealHeader
@@ -581,7 +581,6 @@ const Meal = () => {
                               borderRight:
                                 currentUser == "all" ? "2px solid green" : "",
                               textAlign: "center",
-                              borderLeft: "1px solid blue",
                             }}
                           >
                             <table
@@ -641,7 +640,6 @@ const Meal = () => {
                     // background: "red",
                     width: screenWidth > 1000 ? "7%" : "15%",
                     zIndex: "100000",
-                    borderLeft: "1px solid black",
                     background: "white",
                     boxShadow: "1px 0 4px -2px black",
 
@@ -740,30 +738,121 @@ const Meal = () => {
       </div>
 
       {/* Redesigned mealsheet */}
-      <div className="hidden max-w-[800px] min-h-[500px] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
+      <div className="max-w-[800px] h-[80vh] max-h-[80vh] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
         <table className="absolute left-0 right-0 top-0 bottom-0 w-full">
-          <thead className="border-b shadow-xl">
-            <tr>
-              <td className="min-w-[100px] bg-white text-black sticky left-0 top-0 z-10">Date</td>
-              <td className="min-w-[100px] sticky top-0 left-[100px] bg-white text-black z-10">Type</td>
-              
-              {['Kamrul', 'Hasan', 'Rahat', 'Rokon'].map((el, i) => {
+          <thead className="sticky top-0 z-[100000]">
+            <tr className="h-[50px]">
+              <td style={{textAlign:'center'}} className="min-w-[50px] bg-white text-black sticky left-0 ">Date</td>
+              <td className="w-1 bg-red-500  sticky left-[50px]">&nbsp;</td>
+              <td style={{ textAlign:'center'}} className="min-w-[100px] sticky left-[54px] bg-white text-black ">Type</td>
+              <td className="w-1 bg-red-500 sticky left-[154px]">&nbsp;</td>
+              {/* Messs borders */}
+              {/* {registeredUsers?.length > 0 && registeredUsers.map((el, i) => {
                 return (
-                  <td className="min-w-[200px] sticky top-0 bg-white text-black">{el}</td>
+                  <td className="min-w-[200px] sticky top-0 bg-white text-black">{el.name}</td>
+                )
+              })} */}
+
+              {registeredUsers
+                ?.filter((el) => {
+                  if (currentUser !== "all") {
+                    if (el._id === currentUser?.split(" ")[1]) {
+                      return true;
+                    }
+                  } else {
+                    return true;
+                  }
+                })
+                ?.map((el) => {
+                  return (
+                    // Start Here
+                    <td
+                      style={{
+                        width: currentUser !== "all" ? "100%" : "150px",
+                        borderRight:
+                          currentUser == "all" ? "2px solid green" : "",
+                        textAlign: "center",
+                      }}
+                      className="min-w-[200px] bg-white text-black"
+                    >
+                      <table
+                        style={{
+                          height: "100%",
+                          width: currentUser !== "all" ? "100%" : "100%",
+                          // background: 'red',
+                          // scrollBehavior: "smooth",
+                        }}
+                      >
+                        <tr
+                          style={{
+                            // borderBottom: "1px solid red",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        >
+                          <th
+                            style={{
+                              width:
+                                currentUser !== "all" ? "65%" : "150px",
+                            }}
+                          >
+                            {/* {currentUser !== "all"
+                                  ? `Total Deposite: ${borderTotalDeposite}`
+                                  : el.name} */}
+                            {currentUser !== "all" ? (
+                              <UserHomeTableHeadContent
+                                screenWidth={screenWidth}
+                                setMoneyOption={setMoneyOption}
+                                moneyOption={moneyOption}
+                                borderTotalDeposite={borderTotalDeposite}
+                                borderTotalShop={borderTotalShop}
+                                borderTotalExtraShop={borderTotalExtraShop}
+                              />
+                            ) : (
+                              el.name
+                            )}
+                          </th>
+                        </tr>
+                      </table>
+                    </td>
+                  );
+                })}
+              <td className="min-w-[100px] sticky right-0 bg-white text-black text-center font-bold">Total Meal</td>
+            </tr>
+            <tr className="h-1 bg-green-700">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style={{borderRight:'2px solid green'}}></td>
+              {registeredUsers?.length>0&&registeredUsers.map(el => {
+                return (
+                  <td style={{borderRight:'2px solid green'}}></td>
                 )
               })}
-              <td className="min-w-[100px] sticky right-0 top-0 bg-white text-black z-10">Total Meal</td>
             </tr>
           </thead>
-
-          <tbody>
+          <tbody className="w-full">
             {
-              new Array(30).fill(5).map((el, i) => {
+              arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
                 return (
-                  <tr className="border-b">
-                    <td className="bg-white text-black sticky left-0 z-9">12-{i > 8 ? '' : '0'}{i + 1}-2024</td>
-                    <td className="bg-white text-black sticky left-[100px] z-9">
-                      <table>
+                  <tr className="h-[100px] border-b-2 border-green-700">
+                    {/* <td className="bg-white text-black sticky left-0 z-9">{el.date}</td> */}
+                    <td
+                      className="w-full bg-white text-black sticky left-0"
+                      style={{
+                        // width: "50px",
+                        textAlign: "center",
+                        background:
+                          el.date.split(" ")[0] == todayDate ? "red" : "",
+                      }}
+                    >
+                      {el.date?.split(" ")[0]}
+                    </td>
+                    <td className="w-1 bg-red-500 sticky left-[50px]">&nbsp;</td>
+
+                    <td style={{textAlign:'center'}} className="w-full bg-white text-black sticky left-[54px]">
+                      <table className="w-full">
                         {['Breakfast', 'Launch', 'Dinner'].map((el, i) => {
                           return (
                             <tr><td>{el}</td></tr>
@@ -771,19 +860,260 @@ const Meal = () => {
                         })}
                       </table>
                     </td>
-                    {new Array(4).fill(0).map((el, i) => {
+                    <td className="bg-red-500 sticky left-[154px]">&nbsp;</td>
+
+                    {new Array(registeredUsers?.length).fill(0).map((elem, index) => {
                       return (
-                        <td>
-                          <table>
-                            <tr><td>.5</td></tr>
-                            <tr><td>1</td></tr>
-                            <tr><td>1</td></tr>
+                        <td
+                          style={{
+                            width: "150px",
+                            textAlign: "center",
+                            borderRight: "2px solid green",
+                            // background:
+                            //   el.date.split(" ")[0] == todayDate ? "red" : "",
+                          }}
+                        >
+                          <table
+                            style={{
+                              width: "100%",
+                              height: "86px",
+                            }}
+                          >
+                            <tr
+                              style={{
+                                borderBottom: "1px solid white",
+                              }}
+                            >
+                              <td>
+                                <input
+                                  onMouseEnter={() => {
+                                    setItem({
+                                      ...item,
+                                      type: "number",
+                                      borderIndex: index,
+                                      date: el.date,
+                                      mealName: "breakfast",
+                                    });
+                                  }}
+                                  onMouseLeave={() => {
+                                    setItem("text");
+                                  }}
+                                  disabled={
+                                    (el.breakfast &&
+                                      el.breakfast[index] &&
+                                      el.breakfast[index][1] === "off") ||
+                                    el.breakfast[index][2] === "user"
+                                    // ||user?.role === "user"
+                                  }
+                                  onChange={(e) =>
+                                    updateMealHandler(
+                                      e,
+                                      el.date,
+                                      el.id,
+                                      index,
+                                      "breakfast"
+                                    )
+                                  }
+                                  style={{
+                                    color: "black",
+                                    // background: "white",
+                                    border:
+                                      el.breakfast &&
+                                        el.breakfast[index] &&
+                                        el.breakfast[index][1] !== "off"
+                                        ? "1.5px solid black"
+                                        : "1.5px solid red",
+                                    borderRadius: "5px",
+                                    width: "40px",
+                                    textAlign: "center",
+                                  }}
+                                  type={
+                                    item.type === "number" &&
+                                      item.borderIndex === index &&
+                                      item.date === el.date &&
+                                      item.mealName === "breakfast" &&
+                                      el.breakfast[index] &&
+                                      el.breakfast[index][1] !== "off"
+                                      ? "number"
+                                      : "text"
+                                  }
+                                  value={
+                                    el.breakfast &&
+                                      el.breakfast[index] &&
+                                      el.breakfast[index][1] === "off"
+                                      ? "off"
+                                      : el.breakfast &&
+                                        el.breakfast[index] &&
+                                        el.breakfast[index][0] === 0
+                                        ? ""
+                                        : el.breakfast &&
+                                        el.breakfast[index] &&
+                                        el.breakfast[index][0]
+                                  }
+                                />
+                              </td>
+                            </tr>
+                            {/* All User Launch */}
+                            <tr style={{ borderBottom: "1px solid white" }}>
+                              <td>
+                                <input
+                                  onMouseEnter={() => {
+                                    setItem({
+                                      ...item,
+                                      type: "number",
+                                      borderIndex: index,
+                                      date: el.date,
+                                      mealName: "launch",
+                                    });
+                                  }}
+                                  onMouseLeave={() => {
+                                    setItem("text");
+                                  }}
+                                  disabled={
+                                    (el.launch &&
+                                      el.launch[index] &&
+                                      el.launch[index][1] === "off") ||
+                                    el.launch[index][2] === "user"
+                                    // ||user?.role === "user"
+                                  }
+                                  onChange={(e) =>
+                                    updateMealHandler(
+                                      e,
+                                      el.date,
+                                      el.id,
+                                      index,
+                                      "launch"
+                                    )
+                                  }
+                                  style={{
+                                    color: "black",
+                                    background: "white",
+                                    border:
+                                      el.launch &&
+                                        el.launch[index] &&
+                                        el.launch[index][1] !== "off"
+                                        ? "1.5px solid black"
+                                        : "1.5px solid red",
+                                    borderRadius: "5px",
+                                    width: "40px",
+                                    textAlign: "center",
+                                  }}
+                                  type={
+                                    item.type === "number" &&
+                                      item.borderIndex === index &&
+                                      item.date === el.date &&
+                                      item.mealName === "launch" &&
+                                      el.launch[index] &&
+                                      el.launch[index][1] !== "off"
+                                      ? "number"
+                                      : "text"
+                                  }
+                                  value={
+                                    el.launch &&
+                                      el.launch[index] &&
+                                      el.launch[index][1] === "off"
+                                      ? "off"
+                                      : el.launch &&
+                                        el.launch[index] &&
+                                        el.launch[index][0] === 0
+                                        ? ""
+                                        : el.launch &&
+                                        el.launch[index] &&
+                                        el.launch[index][0]
+                                  }
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td
+                                style={
+                                  {
+                                    // padding: "1px 0",
+                                    // paddingBottom: "6px",
+                                  }
+                                }
+                              >
+                                <input
+                                  onMouseEnter={() => {
+                                    setItem({
+                                      ...item,
+                                      type: "number",
+                                      borderIndex: index,
+                                      date: el.date,
+                                      mealName: "dinner",
+                                    });
+                                  }}
+                                  onMouseLeave={() => {
+                                    setItem("text");
+                                  }}
+                                  disabled={
+                                    (el.dinner &&
+                                      el.dinner[index] &&
+                                      el.dinner[index][1] === "off") ||
+                                    el.dinner[index][2] === "user"
+                                    // ||user?.role === "user"
+                                    // ? true
+                                    // : false
+                                  }
+                                  onChange={(e) =>
+                                    updateMealHandler(
+                                      e,
+                                      el.date,
+                                      el.id,
+                                      index,
+                                      "dinner"
+                                    )
+                                  }
+                                  style={{
+                                    color: "black",
+                                    background: "white",
+                                    border:
+                                      el.dinner &&
+                                        el.dinner[index] &&
+                                        el.dinner[index][1] !== "off"
+                                        ? "1.5px solid black"
+                                        : "1.5px solid red",
+                                    borderRadius: "5px",
+                                    width: "40px",
+                                    textAlign: "center",
+                                  }}
+                                  type={
+                                    // (el.dinner &&
+                                    //   el.dinner[index] &&
+                                    //   el.dinner[index][1] === "off") ||
+                                    item.type === "number" &&
+                                      item.borderIndex === index &&
+                                      item.date === el.date &&
+                                      item.mealName === "dinner" &&
+                                      el.dinner &&
+                                      el.dinner[index] &&
+                                      el.dinner[index][1] !== "off"
+                                      ? "number"
+                                      : "text"
+                                  }
+                                  value={
+                                    el.dinner &&
+                                      el.dinner[index] &&
+                                      el.dinner[index][1] === "off"
+                                      ? "off"
+                                      : el.dinner &&
+                                        el.dinner[index] &&
+                                        el.dinner[index][0] === 0
+                                        ? ""
+                                        : el.dinner &&
+                                        el.dinner[index] &&
+                                        el.dinner[index][0]
+                                  }
+                                />
+                              </td>
+                            </tr>
                           </table>
                         </td>
+
                       )
                     })}
-                    <td className="bg-white text-black z-9 sticky right-0">
-                      <table>
+                    <td className="bg-white text-black sticky right-0 text-center font-bold">
+                      <table className="w-full text-center">
                         <tr><td>100</td></tr>
                         <tr><td>100</td></tr>
                         <tr><td>100</td></tr>

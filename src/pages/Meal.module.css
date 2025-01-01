@@ -16,3 +16,6 @@ body {
 .selectMonthYear {
   color: black;
 }
+table{
+  border:none;
+}

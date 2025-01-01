@@ -6,16 +6,24 @@ import { readableDate } from "../utils/readableDate";
 import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 
 const AddSheetModal = ({ showModal, setShowModal }) => {
+  const [selectedMonth, setSelectedMonth] = useState()
   const [createMeal, {isLoading, isError, error, isSuccess}] = useCreateMealMutation()
+  
+  useEffect(() => {
+    if(isSuccess){
+      alert('Successfully Create Sheet')
+    }
+  }, [isSuccess])
+
   const { data: users } = useGetUsersQuery();
-  let year = 2024;
+  let year = process.env.REACT_APP_CURRENT_YEAR;
   let month = 8;
   const [dates, setDates] = useState([]);
-  const monthLength = getCurrentMonthLength(4, 2024);
+  const monthLength = getCurrentMonthLength(selectedMonth, 2024);
   useEffect(() => {
     let days = [];
     for (let i = 1; i <= monthLength; i++) {
-      const time = readableDate(new Date(year, month, i));
+      const time = readableDate(new Date(year, selectedMonth, i));
       const readableYear = time.year;
       const readableMonth = time.month;
       const readableDay = time.day;
@@ -23,7 +31,7 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
         date: `${readableDay} ${readableMonth} ${readableYear}`,
       });
     }
-    // setDates(days);
+    setDates(days);
     let borderIds = [];
     if (users?.borders?.length > 0) {
       users.borders.map((el) => {
@@ -33,15 +41,15 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
         return {
           date: el.date,
           day: el.date.split(" ")[0],
-          month,
+          month:selectedMonth,
           year,
           mealManager: "6570001d7e42deb0b24b9657",
         };
       });
     }
     setDates([...days]);
-  }, [users?.borders]);
-
+  }, [users?.borders, selectedMonth]);
+  console.log(selectedMonth)
   return createPortal(
     <div className="relative w-full h-screen bg-green-500 flex flex-col justify-center items-center z-50 gap-[2rem] font-sans">
       <div
@@ -53,24 +61,27 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
       <h1 className="text-3xl mt-[-100px]">Create Meal Sheet</h1>
       <div className="rounded-md p-4 bg-green-200 text-black flex flex-col md:flex-row justify-center gap-[2rem] items-center">
         <form className="text-2xl">
-          <select>
-            <option>January</option>
-            <option>February</option>
-            <option>Merch</option>
-            <option>April</option>
-            <option>May</option>
-            <option>June</option>
-            <option>July</option>
-            <option>August</option>
-            <option>September</option>
-            <option>October</option>
-            <option>November</option>
-            <option>December</option>
+          <select onChange={(e) => {
+            setSelectedMonth(e.target.value)
+          }}>
+            <option value={0}>January</option>
+            <option value={1}>February</option>
+            <option value={2}>Merch</option>
+            <option value={3}>April</option>
+            <option value={4}>May</option>
+            <option value={5}>June</option>
+            <option value={6}>July</option>
+            <option value={7}>August</option>
+            <option value={8}>September</option>
+            <option value={9}>October</option>
+            <option value={10}>November</option>
+            <option value={11}>December</option>
           </select>
         </form>
-        <h1 className="md:text-2xl text-3xl font-bold">2024</h1>
+        <h1 className="md:text-2xl text-3xl font-bold">{process.env.REACT_APP_CURRENT_YEAR}</h1>
         <button onClick={() => {
           createMeal(dates)
+          // console.log(dates)
         }} className="btn border border-blue-500 bg-red-500 text-white text-xl">
           Create
         </button>
