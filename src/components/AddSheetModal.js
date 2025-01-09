@@ -19,7 +19,7 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
   let year = process.env.REACT_APP_CURRENT_YEAR;
   let month = 8;
   const [dates, setDates] = useState([]);
-  const monthLength = getCurrentMonthLength(selectedMonth, 2024);
+  const monthLength = getCurrentMonthLength(selectedMonth, year);
   useEffect(() => {
     let days = [];
     for (let i = 1; i <= monthLength; i++) {

@@ -17,7 +17,7 @@ const SignIn = () => {
   const [login, { isSuccess, isLoading, isError, error }] = useLoginMutation();
   useEffect(() => {
     if (isSuccess) {
-      navigate("/lef");
+      navigate("/meals");
     }
   }, [isSuccess]);
   useEffect(() => {

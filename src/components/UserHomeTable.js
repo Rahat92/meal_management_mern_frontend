@@ -128,7 +128,7 @@ const UserHomeTable = ({
                 onMouseEnter={() => {
                   setItem({
                     ...item,
-                    type: "number",
+                    type: "text",
                     borderIndex: index,
                     date: el.date,
                     mealName: "breakfast",
@@ -211,7 +211,7 @@ const UserHomeTable = ({
                 onMouseEnter={() => {
                   setItem({
                     ...item,
-                    type: "number",
+                    type: "text",
                     borderIndex: index,
                     date: el.date,
                     mealName: "launch",
@@ -567,7 +567,7 @@ const UserHomeTable = ({
                 onMouseEnter={() => {
                   setItem({
                     ...item,
-                    type: "number",
+                    type: "text",
                     borderIndex: index,
                     date: el.date,
                     mealName: "dinner",

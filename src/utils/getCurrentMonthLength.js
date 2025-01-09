@@ -38,7 +38,7 @@ export default (month, year) => {
         monthLength = 31;
         break;
       default:
-        monthLength = 30;
+        monthLength = 31;
     }
     return monthLength
   }

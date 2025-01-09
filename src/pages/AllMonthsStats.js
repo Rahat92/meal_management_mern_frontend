@@ -11,6 +11,7 @@ import style from "./AllMonthsStats.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { locationPathChanged } from "../features/locationPath";
 import { Link } from "react-router-dom";
+import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 const AllMonthsStats = () => {
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
@@ -19,12 +20,14 @@ const AllMonthsStats = () => {
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const [display, setDisplay] = useState(false);
   const [nowScroll, setNowScroll] = useState(false);
+  const [year, setYear] = useState(new Date().getFullYear())
+  const [month, setMonth] = useState(new Date().getMonth())
+  const [day, setDay] = useState(new Date().getDate())
   const { data: getMonthlyMealStats, isLoading } = useGetMonthlyStatsQuery({
-    year: 2024,
-    month: 4,
-    day: new Date().getDate(),
+    year: year,
+    month: month,
+    day: day,
   });
-  console.log()
   const { data: yearMonth } = useGetYearMonthQuery();
   const [yearMonthArr, setYearMonthArr] = useState([]);
   const [sendSms] = useSendSmsMutation();
@@ -33,6 +36,7 @@ const AllMonthsStats = () => {
   const mainBodyRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
+  
   const dispatch = useDispatch();
   // useEffect(() => {
   //   sendSms()
@@ -75,7 +79,8 @@ const AllMonthsStats = () => {
         let arrEle = [];
         let finalArr = [];
         border.map((el, elIndex) => {
-          const index = arrEle.findIndex((item) => item.border === el.name);
+          console.log('element ', el, arrEle)
+          const index = arrEle.findIndex((item) => item.id === el._id);
           if (index !== -1) {
             const obj = arrEle[index];
             arrEle[index] = {
@@ -89,6 +94,7 @@ const AllMonthsStats = () => {
             };
           } else {
             arrEle.push({
+              id: el._id,
               border: el.name,
               breakfast: breakfasts[i][elIndex][0],
               launch: launchs[i][elIndex][0],
@@ -157,70 +163,84 @@ const AllMonthsStats = () => {
       }, 1000);
     }
   }, [mealStatMonthly, user]);
-  console.log(mealStatMonthly);
+
+  const months = ['January', 'February', 'Merch', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  const date = new Date();
+  const currentMonth = date.toLocaleDateString('en-US', { month: 'long' });
   if (isLoading) {
     return <LoaderComponent />;
   }
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
       <div className="z-[10000] mb-[1rem] align-self-start  w-full md:w-[70%] relative top-[-110px] md:top-0">
-        <button
-          onClick={() => setDisplay(!display)}
-          id="dropdownDividerButton"
-          data-dropdown-toggle="dropdownDivider"
-          className="text-white bg-blue-700 hover:
-          bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button"
-        >
-          Select Month{" "}
-          <svg
-            className="w-2.5 h-2.5 ms-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
-          </svg>
-        </button>
+        <div className="flex gap-[15px]">
+          <div>
+            <form class="max-w-[150px] mx-auto">
+              <select onChange={(e) => {
+                setYear(e.target.value)
+              }} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                {years.map((el, i) => {
+                  return <option selected={el === new Date().getFullYear() ? true : false}>{el}</option>
+                })}
+              </select>
+            </form>
+          </div>
+          <div>
+            <form class="max-w-[150px] mx-auto">
+              <select  onChange = {(e) => {
+                setMonth(e.target.value)
+              }} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                {months.map((el, i) => {
+                  return <option value={i} selected={currentMonth === el ? true : false}>{el}</option>
+                })}
+              </select>
+            </form>
+          </div>
+          <div>
+            <form class="max-w-[150px] mx-auto">
+              <select onChange={(e) => {
+                setDay(e.target.value)
+              }} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                {new Array(getCurrentMonthLength(0)).fill('0').map((el, i) => {
+                  return <option selected={new Date().getDate() === i + 1 ? true : false}>{i + 1}</option>
+                })}
+              </select>
+            </form>
+          </div>
+        </div>
+
         <div
           id="dropdownInformation"
-          className={`z-10 ${
-            display ? "block" : "hidden"
-          } bg-white divide-y absolute divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+          className={`z-10 ${display ? "block" : "hidden"
+            } bg-white divide-y absolute divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
         >
           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
             {todayMonth === 0
               ? "January"
               : todayMonth === 1
-              ? "February"
-              : todayMonth === 2
-              ? "Merch"
-              : todayMonth === 3
-              ? "April"
-              : todayMonth === 4
-              ? "May"
-              : todayMonth === 5
-              ? "June"
-              : todayMonth === 6
-              ? "July"
-              : todayMonth === 7
-              ? "August"
-              : todayMonth === 8
-              ? "September"
-              : todayMonth === 9
-              ? "October"
-              : todayMonth === 10
-              ? "November"
-              : todayMonth === 11
-              ? "December"
-              : ""}{" "}
+                ? "February"
+                : todayMonth === 2
+                  ? "Merch"
+                  : todayMonth === 3
+                    ? "April"
+                    : todayMonth === 4
+                      ? "May"
+                      : todayMonth === 5
+                        ? "June"
+                        : todayMonth === 6
+                          ? "July"
+                          : todayMonth === 7
+                            ? "August"
+                            : todayMonth === 8
+                              ? "September"
+                              : todayMonth === 9
+                                ? "October"
+                                : todayMonth === 10
+                                  ? "November"
+                                  : todayMonth === 11
+                                    ? "December"
+                                    : ""}{" "}
             {todayYear}
           </div>
           <ul
@@ -242,28 +262,28 @@ const AllMonthsStats = () => {
                       {el.month === 0
                         ? "January"
                         : el.month === 1
-                        ? "February"
-                        : el.month === 2
-                        ? "Merch"
-                        : el.month === 3
-                        ? "April"
-                        : el.month === 4
-                        ? "May"
-                        : el.month === 5
-                        ? "June"
-                        : el.month === 6
-                        ? "July"
-                        : el.month === 7
-                        ? "August"
-                        : el.month === 8
-                        ? "September"
-                        : el.month === 9
-                        ? "October"
-                        : el.month === 10
-                        ? "November"
-                        : el.month === 11
-                        ? "December"
-                        : ""}{" "}
+                          ? "February"
+                          : el.month === 2
+                            ? "Merch"
+                            : el.month === 3
+                              ? "April"
+                              : el.month === 4
+                                ? "May"
+                                : el.month === 5
+                                  ? "June"
+                                  : el.month === 6
+                                    ? "July"
+                                    : el.month === 7
+                                      ? "August"
+                                      : el.month === 8
+                                        ? "September"
+                                        : el.month === 9
+                                          ? "October"
+                                          : el.month === 10
+                                            ? "November"
+                                            : el.month === 11
+                                              ? "December"
+                                              : ""}{" "}
                       {el.year}
                     </Link>
                   </li>
@@ -314,213 +334,213 @@ const AllMonthsStats = () => {
           </thead>
           {mealStatMonthly?.length > 0
             ? mealStatMonthly
-                ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
-                ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
-                ?.filter((item) => item.month === "4 2024")
-                ?.map((el) => {
-                  return (
-                    <tbody>
-                      <tr>
-                        <th className="sticky left-0 bg-white z-50 shadow-md border-r-2">
-                          <table className="w-full">
-                            <tr>
-                              <th
-                                className="sticky top-[50%] transform block w-[80px]"
-                                style={{ backfaceVisibility: "hidden" }}
-                              >
-                                {el.month.split(" ")[0] === "0"
-                                  ? "January"
-                                  : el.month.split(" ")[0] === "1"
+              ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
+              ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
+              ?.filter((item) => item.month === "0 2025")
+              ?.map((el) => {
+                return (
+                  <tbody>
+                    <tr>
+                      <th className="sticky left-0 bg-white z-50 shadow-md border-r-2">
+                        <table className="w-full">
+                          <tr>
+                            <th
+                              className="sticky top-[50%] transform block w-[80px]"
+                              style={{ backfaceVisibility: "hidden" }}
+                            >
+                              {el.month.split(" ")[0] === "0"
+                                ? "January"
+                                : el.month.split(" ")[0] === "1"
                                   ? "February"
                                   : el.month.split(" ")[0] === "2"
-                                  ? "March"
-                                  : el.month.split(" ")[0] === "3"
-                                  ? "April"
-                                  : el.month.split(" ")[0] === "4"
-                                  ? "May"
-                                  : el.month.split(" ")[0] === "5"
-                                  ? "June"
-                                  : el.month.split(" ")[0] === "6"
-                                  ? "July"
-                                  : el.month.split(" ")[0] === "7"
-                                  ? "August"
-                                  : el.month.split(" ")[0] === "8"
-                                  ? "September"
-                                  : el.month.split(" ")[0] === "9"
-                                  ? "Octobor"
-                                  : el.month.split(" ")[0] === "10"
-                                  ? "November"
-                                  : el.month.split(" ")[0] === "11"
-                                  ? "December"
-                                  : ""}{" "}
-                                <br />
-                                {el.month.split(" ")[1]}
-                              </th>
-                              <th className="w-full border-l-2 border-r-2">
-                                <table className="w-full">
-                                  {el.finalArr.map((item) => {
-                                    return (
-                                      <tr>
-                                        <td className="py-2">{item.border}</td>
-                                      </tr>
-                                    );
-                                  })}
-                                </table>
-                              </th>
-                            </tr>
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">{item.breakfast}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">{item.launch}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">{item.dinner}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">{item.totalMeal}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.totalMeal}
-                        </th>
-                        <th className="border-l-2 border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">{item.totalShop}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {isNaN(el.mealRate.toFixed(2))
-                            ? 0
-                            : el.mealRate.toFixed(2)}
-                        </th>
-                        <th className="border-r-2 border-l-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">
-                                    {item.totalExtraShop}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.overAllShop + el.overAllExtraShop}
-                        </th>
-                        <th className="border-r-2 border-l-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">{item.totalMoney}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">
-                                    {isNaN(
-                                      (
-                                        item.totalMeal * el.mealRate +
-                                        el.overAllExtraShop / el.finalArr.length
-                                      ).toFixed(2)
-                                    )
-                                      ? 0
-                                      : (
-                                          item.totalMeal * el.mealRate +
-                                          el.overAllExtraShop /
-                                            el.finalArr.length
-                                        ).toFixed(2)}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr>
-                                  <td className="py-2">
-                                    {isNaN(
+                                    ? "March"
+                                    : el.month.split(" ")[0] === "3"
+                                      ? "April"
+                                      : el.month.split(" ")[0] === "4"
+                                        ? "May"
+                                        : el.month.split(" ")[0] === "5"
+                                          ? "June"
+                                          : el.month.split(" ")[0] === "6"
+                                            ? "July"
+                                            : el.month.split(" ")[0] === "7"
+                                              ? "August"
+                                              : el.month.split(" ")[0] === "8"
+                                                ? "September"
+                                                : el.month.split(" ")[0] === "9"
+                                                  ? "Octobor"
+                                                  : el.month.split(" ")[0] === "10"
+                                                    ? "November"
+                                                    : el.month.split(" ")[0] === "11"
+                                                      ? "December"
+                                                      : ""}{" "}
+                              <br />
+                              {el.month.split(" ")[1]}
+                            </th>
+                            <th className="w-full border-l-2 border-r-2">
+                              <table className="w-full">
+                                {el.finalArr.map((item) => {
+                                  return (
+                                    <tr>
+                                      <td className="py-2">{item.border}</td>
+                                    </tr>
+                                  );
+                                })}
+                              </table>
+                            </th>
+                          </tr>
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">{item.breakfast}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">{item.launch}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">{item.dinner}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">{item.totalMeal}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {el.totalMeal}
+                      </th>
+                      <th className="border-l-2 border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">{item.totalShop}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {isNaN(el.mealRate.toFixed(2))
+                          ? 0
+                          : el.mealRate.toFixed(2)}
+                      </th>
+                      <th className="border-r-2 border-l-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">
+                                  {item.totalExtraShop}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {el.overAllShop + el.overAllExtraShop}
+                      </th>
+                      <th className="border-r-2 border-l-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">{item.totalMoney}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">
+                                  {isNaN(
+                                    (
+                                      item.totalMeal * el.mealRate +
+                                      el.overAllExtraShop / el.finalArr.length
+                                    ).toFixed(2)
+                                  )
+                                    ? 0
+                                    : (
+                                      item.totalMeal * el.mealRate +
+                                      el.overAllExtraShop /
+                                      el.finalArr.length
+                                    ).toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {el.finalArr.map((item) => {
+                            return (
+                              <tr>
+                                <td className="py-2">
+                                  {isNaN(
+                                    item.totalMoney -
+                                    item.totalMeal * el.mealRate -
+                                    el.overAllExtraShop / el.finalArr.length
+                                  )
+                                    ? 0
+                                    : (
                                       item.totalMoney -
-                                        item.totalMeal * el.mealRate -
-                                        el.overAllExtraShop / el.finalArr.length
-                                    )
-                                      ? 0
-                                      : (
-                                          item.totalMoney -
-                                          item.totalMeal * el.mealRate -
-                                          el.overAllExtraShop /
-                                            el.finalArr.length
-                                        ).toFixed(2)}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.overAllMoney}
-                        </th>
-                        <th className="border-l-2"></th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.overAllMoney -
-                            el.overAllShop -
-                            el.overAllExtraShop}
-                        </th>
-                      </tr>
-                    </tbody>
-                  );
-                })
+                                      item.totalMeal * el.mealRate -
+                                      el.overAllExtraShop /
+                                      el.finalArr.length
+                                    ).toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {el.overAllMoney}
+                      </th>
+                      <th className="border-l-2"></th>
+                      <th className="block sticky top-[50%] transform">
+                        {el.overAllMoney -
+                          el.overAllShop -
+                          el.overAllExtraShop}
+                      </th>
+                    </tr>
+                  </tbody>
+                );
+              })
             : null}
         </table>
       </div>

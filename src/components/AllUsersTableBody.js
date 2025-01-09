@@ -33,7 +33,7 @@ const AllUsersTableBody = ({
                                 onMouseEnter={() => {
                                     setItem({
                                         ...item,
-                                        type: "number",
+                                        type: "text",
                                         borderIndex: index,
                                         date: el.date,
                                         mealName: "breakfast",
@@ -104,7 +104,7 @@ const AllUsersTableBody = ({
                                 onMouseEnter={() => {
                                     setItem({
                                         ...item,
-                                        type: "number",
+                                        type: "text",
                                         borderIndex: index,
                                         date: el.date,
                                         mealName: "launch",
@@ -181,7 +181,7 @@ const AllUsersTableBody = ({
                                 onMouseEnter={() => {
                                     setItem({
                                         ...item,
-                                        type: "number",
+                                        type: "text",
                                         borderIndex: index,
                                         date: el.date,
                                         mealName: "dinner",

@@ -63,7 +63,7 @@ const SignUp = () => {
                   <input
                     onChange={formHandler}
                     type="password"
-                    name="confirmPassword"
+                    name="passwordConfirm"
                   />
                 </td>
               </tr>

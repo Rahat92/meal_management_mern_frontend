@@ -459,7 +459,7 @@ const Meal = () => {
 
   return (
     <>
-      <div className="font-sans hidden">
+      <div className="font-sans">
         <div
           ref={headRef}
           style={{
@@ -494,7 +494,8 @@ const Meal = () => {
             }}
             onClick={() => createMeal(dates)}
           >
-            Create Meal
+            
+          
           </button> */}
           <div style={{ background: "" }}>
             {arrOfMeals?.length > 0 && (
@@ -738,7 +739,7 @@ const Meal = () => {
       </div>
 
       {/* Redesigned mealsheet */}
-      <div className="max-w-[800px] h-[80vh] max-h-[80vh] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
+      <div className="hidden max-w-[800px] h-[80vh] max-h-[80vh] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
         <table className="absolute left-0 right-0 top-0 bottom-0 w-full">
           <thead className="sticky top-0 z-[100000]">
             <tr className="h-[50px]">
@@ -889,7 +890,7 @@ const Meal = () => {
                                   onMouseEnter={() => {
                                     setItem({
                                       ...item,
-                                      type: "number",
+                                      type: "text",
                                       borderIndex: index,
                                       date: el.date,
                                       mealName: "breakfast",
@@ -934,7 +935,7 @@ const Meal = () => {
                                       item.mealName === "breakfast" &&
                                       el.breakfast[index] &&
                                       el.breakfast[index][1] !== "off"
-                                      ? "number"
+                                      ? "text"
                                       : "text"
                                   }
                                   value={
@@ -960,7 +961,7 @@ const Meal = () => {
                                   onMouseEnter={() => {
                                     setItem({
                                       ...item,
-                                      type: "number",
+                                      type: "text",
                                       borderIndex: index,
                                       date: el.date,
                                       mealName: "launch",
@@ -1005,7 +1006,7 @@ const Meal = () => {
                                       item.mealName === "launch" &&
                                       el.launch[index] &&
                                       el.launch[index][1] !== "off"
-                                      ? "number"
+                                      ? "text"
                                       : "text"
                                   }
                                   value={
@@ -1037,7 +1038,7 @@ const Meal = () => {
                                   onMouseEnter={() => {
                                     setItem({
                                       ...item,
-                                      type: "number",
+                                      type: "text",
                                       borderIndex: index,
                                       date: el.date,
                                       mealName: "dinner",
@@ -1088,7 +1089,7 @@ const Meal = () => {
                                       el.dinner &&
                                       el.dinner[index] &&
                                       el.dinner[index][1] !== "off"
-                                      ? "number"
+                                      ? "text"
                                       : "text"
                                   }
                                   value={
