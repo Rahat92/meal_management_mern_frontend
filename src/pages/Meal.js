@@ -459,7 +459,7 @@ const Meal = () => {
 
   return (
     <>
-      <div className="font-sans">
+      <div className="font-sans hidden">
         <div
           ref={headRef}
           style={{
@@ -468,7 +468,6 @@ const Meal = () => {
             right: "0",
             left: "0",
             background: "gray",
-            zIndex: "100",
             // display: "none",
           }}
         >
@@ -640,7 +639,6 @@ const Meal = () => {
                     bottom: "0",
                     // background: "red",
                     width: screenWidth > 1000 ? "7%" : "15%",
-                    zIndex: "100000",
                     background: "white",
                     boxShadow: "1px 0 4px -2px black",
 
@@ -682,7 +680,6 @@ const Meal = () => {
             bottom: "0",
             left: "0",
             right: "0",
-            zIndex: "1000",
             color: "black",
 
             display: !isMealsLoading ? "none" : "flex",
@@ -739,20 +736,14 @@ const Meal = () => {
       </div>
 
       {/* Redesigned mealsheet */}
-      <div className="hidden max-w-[800px] h-[80vh] max-h-[80vh] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
+      <div className="max-w-[800px] h-[80vh] max-h-[80vh] rounded-lg bg-white text-black m-auto mt-[50px] relative overflow-x-scroll">
         <table className="absolute left-0 right-0 top-0 bottom-0 w-full">
-          <thead className="sticky top-0 z-[100000]">
+          <thead className="sticky top-0 z-10">
             <tr className="h-[50px]">
-              <td style={{textAlign:'center'}} className="min-w-[50px] bg-white text-black sticky left-0 ">Date</td>
-              <td className="w-1 bg-red-500  sticky left-[50px]">&nbsp;</td>
-              <td style={{ textAlign:'center'}} className="min-w-[100px] sticky left-[54px] bg-white text-black ">Type</td>
-              <td className="w-1 bg-red-500 sticky left-[154px]">&nbsp;</td>
-              {/* Messs borders */}
-              {/* {registeredUsers?.length > 0 && registeredUsers.map((el, i) => {
-                return (
-                  <td className="min-w-[200px] sticky top-0 bg-white text-black">{el.name}</td>
-                )
-              })} */}
+              <td style={{ textAlign: 'center' }} className="min-w-[50px] bg-white text-black sticky left-0 ">Date</td>
+              <td className="w-1 sticky left-[50px] bg-black">&nbsp;</td>
+              <td style={{ textAlign: 'center' }} className="min-w-[100px] sticky left-[54px] bg-white text-black ">Type</td>
+              <td className="w-1 sticky left-[154px] bg-black">&nbsp;</td>
 
               {registeredUsers
                 ?.filter((el) => {
@@ -770,8 +761,6 @@ const Meal = () => {
                     <td
                       style={{
                         width: currentUser !== "all" ? "100%" : "150px",
-                        borderRight:
-                          currentUser == "all" ? "2px solid green" : "",
                         textAlign: "center",
                       }}
                       className="min-w-[200px] bg-white text-black"
@@ -818,27 +807,30 @@ const Meal = () => {
                     </td>
                   );
                 })}
+              <td className="w-1 sticky right-[100px] bg-black">&nbsp;</td>
               <td className="min-w-[100px] sticky right-0 bg-white text-black text-center font-bold">Total Meal</td>
             </tr>
-            <tr className="h-1 bg-green-700">
+
+            <tr className="h-1 bg-black">
+              <td></td>
+              <td className="sticky left-[50px]"></td>
+              <td className=""></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td style={{borderRight:'2px solid green'}}></td>
-              {registeredUsers?.length>0&&registeredUsers.map(el => {
+              {registeredUsers?.length > 0 && registeredUsers.map(el => {
                 return (
-                  <td style={{borderRight:'2px solid green'}}></td>
+                  <td></td>
                 )
               })}
+              <td className="w-1 sticky right-[100px] bg-black"></td>
             </tr>
           </thead>
           <tbody className="w-full">
             {
               arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
                 return (
-                  <tr className="h-[100px] border-b-2 border-green-700">
-                    {/* <td className="bg-white text-black sticky left-0 z-9">{el.date}</td> */}
+                  <tr className="h-[100px]">
+                    {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                     <td
                       className="w-full bg-white text-black sticky left-0"
                       style={{
@@ -850,9 +842,9 @@ const Meal = () => {
                     >
                       {el.date?.split(" ")[0]}
                     </td>
-                    <td className="w-1 bg-red-500 sticky left-[50px]">&nbsp;</td>
+                    <td className="w-1 bg-black sticky left-[50px]">&nbsp;</td>
 
-                    <td style={{textAlign:'center'}} className="w-full bg-white text-black sticky left-[54px]">
+                    <td style={{ textAlign: 'center' }} className="w-full bg-white text-black sticky left-[54px]">
                       <table className="w-full">
                         {['Breakfast', 'Launch', 'Dinner'].map((el, i) => {
                           return (
@@ -861,15 +853,15 @@ const Meal = () => {
                         })}
                       </table>
                     </td>
-                    <td className="bg-red-500 sticky left-[154px]">&nbsp;</td>
+                    <td className="bg-black sticky left-[154px]"></td>
 
                     {new Array(registeredUsers?.length).fill(0).map((elem, index) => {
                       return (
                         <td
+                          className=""
                           style={{
                             width: "150px",
                             textAlign: "center",
-                            borderRight: "2px solid green",
                             // background:
                             //   el.date.split(" ")[0] == todayDate ? "red" : "",
                           }}
@@ -882,7 +874,7 @@ const Meal = () => {
                           >
                             <tr
                               style={{
-                                borderBottom: "1px solid white",
+
                               }}
                             >
                               <td>
@@ -955,7 +947,7 @@ const Meal = () => {
                               </td>
                             </tr>
                             {/* All User Launch */}
-                            <tr style={{ borderBottom: "1px solid white" }}>
+                            <tr style={{}}>
                               <td>
                                 <input
                                   onMouseEnter={() => {
@@ -1110,9 +1102,9 @@ const Meal = () => {
                             </tr>
                           </table>
                         </td>
-
                       )
                     })}
+                    <td className="w-1 sticky right-[100px] bg-black">&nbsp;</td>
                     <td className="bg-white text-black sticky right-0 text-center font-bold">
                       <table className="w-full text-center">
                         <tr><td>100</td></tr>
