@@ -15,6 +15,13 @@ const bikriApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+    deleteYearMonth:builder.mutation({
+      query: (yearMonth) => ({
+        url: `/year-month/${yearMonth._id}`,
+        method: 'DELETE',
+        body:yearMonth
+      })
+    }),
     getMonthlyMeals: builder.query({
       query: ({ getMonth, getYear }) => ({
         url: `/meal/${getMonth}/${getYear}`,
@@ -445,5 +452,6 @@ export const {
   useGetYearMonthQuery,
   useLogoutMutation,
   useSendSmsMutation,
-  useForgotPasswordMutation
+  useForgotPasswordMutation,
+  useDeleteYearMonthMutation
 } = bikriApi;

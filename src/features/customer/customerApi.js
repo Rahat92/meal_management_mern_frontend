@@ -1,5 +1,6 @@
 import { apiSlice } from "../apis/apiSlice";
 
+
 const customerApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCustomer: builder.query({

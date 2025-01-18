@@ -2,29 +2,32 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { locationPathChanged } from "../features/locationPath";
 import style from "./MealSheets.module.css";
-import { useGetYearMonthQuery } from "../features/bikri/bikriApi";
+import { useDeleteYearMonthMutation, useGetYearMonthQuery } from "../features/bikri/bikriApi";
 import AddSheetModal from "../components/AddSheetModal";
-import { IoMdClose } from "react-icons/io";
 
-import { createPortal } from "react-dom";
 import { Button } from "../components/TailwindStyledComponent/Button";
-// import { Title, Wrapper } from "../components/StyledComponent/Button";
 const MealSheets = () => {
   const { data: yearMonths } = useGetYearMonthQuery();
+  const [deleteYearMonth, {isSuccess}] = useDeleteYearMonthMutation()
   const dispatch = useDispatch();
   const [showModal, setShowModal] = React.useState(false);
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
 
+  useEffect(() => {
+    if(isSuccess){
+      alert('Successfully Delete A month!')
+    }
+  }, [isSuccess])
   return (
     <div className={`${style.mealSheets} z-[-100]`}>
       <div>
-        
-          <Button $primary={true} onClick={() => setShowModal(true)}>
-            Add Sheet
-          </Button>
-        
+
+        <Button $primary={true} onClick={() => setShowModal(true)}>
+          Add Sheet
+        </Button>
+
       </div>
       <h1>Meal Sheets</h1>
       {showModal && <AddSheetModal showModal={showModal} setShowModal={setShowModal} />}
@@ -73,7 +76,12 @@ const MealSheets = () => {
               </td>
               <td>
                 <button
-                  onClick={() => console.log(yearMonth)}
+                  onClick={() => {
+                    const isConfirm = window.confirm('Are you sure you want to delete a month completely?')
+                    if(isConfirm){
+                      deleteYearMonth(yearMonth)
+                    }
+                  }}
                   className={style.btn}
                 >
                   Delete

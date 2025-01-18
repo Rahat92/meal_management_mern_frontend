@@ -6,7 +6,7 @@ import { readableDate } from "../utils/readableDate";
 import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 
 const AddSheetModal = ({ showModal, setShowModal }) => {
-  const [selectedMonth, setSelectedMonth] = useState()
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
   const [createMeal, {isLoading, isError, error, isSuccess}] = useCreateMealMutation()
   
   useEffect(() => {
@@ -17,7 +17,6 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
 
   const { data: users } = useGetUsersQuery();
   let year = process.env.REACT_APP_CURRENT_YEAR;
-  let month = 8;
   const [dates, setDates] = useState([]);
   const monthLength = getCurrentMonthLength(selectedMonth, year);
   useEffect(() => {
@@ -50,6 +49,7 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
     setDates([...days]);
   }, [users?.borders, selectedMonth]);
   console.log(selectedMonth)
+  console.log(new Date().getMonth())
   return createPortal(
     <div className="relative w-full h-screen bg-green-500 flex flex-col justify-center items-center z-50 gap-[2rem] font-sans">
       <div
@@ -61,7 +61,7 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
       <h1 className="text-3xl mt-[-100px]">Create Meal Sheet</h1>
       <div className="rounded-md p-4 bg-green-200 text-black flex flex-col md:flex-row justify-center gap-[2rem] items-center">
         <form className="text-2xl">
-          <select onChange={(e) => {
+          <select value={selectedMonth} onChange={(e) => {
             setSelectedMonth(e.target.value)
           }}>
             <option value={0}>January</option>
