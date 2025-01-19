@@ -835,7 +835,7 @@ const Meal = () => {
             {
               arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
                 return (
-                  <tr className="h-[100px] border-b-2 border-black">
+                  <tr className={`h-[100px] ${i!==arrOfMeals.length-1&&'border-b-2'} border-black`}>
                     {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                     <td
                       className="w-full bg-white text-black sticky left-0"
@@ -865,7 +865,7 @@ const Meal = () => {
                       return (
                         <>
                           <td
-                            className=""
+                            className={``}
                             style={{
                               width: "150px",
                               textAlign: "center",
