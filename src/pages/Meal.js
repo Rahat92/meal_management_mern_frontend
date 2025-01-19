@@ -744,6 +744,7 @@ const Meal = () => {
               <td className="w-1 sticky left-[50px] bg-black">&nbsp;</td>
               <td style={{ textAlign: 'center' }} className="min-w-[100px] sticky left-[54px] bg-white text-black ">Type</td>
               <td className="w-1 sticky left-[154px] bg-black">&nbsp;</td>
+              <td className="w-1 bg-black">&nbsp;</td>
 
               {registeredUsers
                 ?.filter((el) => {
@@ -818,6 +819,7 @@ const Meal = () => {
               <td></td>
               <td className="sticky left-[50px]"></td>
               <td className=""></td>
+              <td className=""></td>
               <td></td>
               <td></td>
               {registeredUsers?.length > 0 && registeredUsers.map(el => {
@@ -830,12 +832,30 @@ const Meal = () => {
               })}
               <td className="w-1 sticky right-[100px] bg-black"></td>
             </tr>
+
           </thead>
           <tbody className="w-full">
+            <tr className="h-1 bg-black">
+              <td></td>
+              <td className="sticky left-[50px]"></td>
+              <td className=""></td>
+              <td className=""></td>
+              <td></td>
+              <td></td>
+              {registeredUsers?.length > 0 && registeredUsers.map(el => {
+                return (
+                  <>
+                    <td></td>
+                    <td className="w-1 bg-black"></td>
+                  </>
+                )
+              })}
+              <td className="w-1 sticky right-[100px] bg-black"></td>
+            </tr>
             {
               arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
                 return (
-                  <tr className={`h-[100px] ${i!==arrOfMeals.length-1&&'border-b-2'} border-black`}>
+                  <tr className={`h-[100px] ${i !== arrOfMeals.length - 1 && 'border-b-2'} border-black`}>
                     {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                     <td
                       className="w-full bg-white text-black sticky left-0"
@@ -860,6 +880,7 @@ const Meal = () => {
                       </table>
                     </td>
                     <td className="bg-black sticky left-[154px]"></td>
+                    <td className="bg-black"></td>
 
                     {new Array(registeredUsers?.length).fill(0).map((elem, index) => {
                       return (
@@ -1109,7 +1130,7 @@ const Meal = () => {
                               </tr>
                             </table>
                           </td>
-                          <td className = "w-1 bg-black">&nbsp;</td>
+                          <td className="w-1 bg-black">&nbsp;</td>
                         </>
                       )
                     })}
