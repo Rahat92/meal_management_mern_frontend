@@ -87,6 +87,7 @@ const Meal = () => {
         skip: !isSkipped,
       }
     );
+    console.log(monthlyMeals)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
@@ -743,8 +744,8 @@ const Meal = () => {
               <td style={{ textAlign: 'center' }} className="min-w-[50px] bg-white text-black sticky left-0 ">Date</td>
               <td className="w-1 sticky left-[50px] bg-black">&nbsp;</td>
               <td style={{ textAlign: 'center' }} className="min-w-[100px] sticky left-[54px] bg-white text-black ">Type</td>
-              <td className="w-1 sticky left-[154px] bg-black">&nbsp;</td>
-              <td className="w-1 bg-black">&nbsp;</td>
+              <td className={`${currentUser === 'all'?'':'hidden'} w-1 sticky left-[154px] bg-black`}>&nbsp;</td>
+              <td className={`${currentUser === 'all'?'':'hidden'} w-1 bg-black`}>&nbsp;</td>
 
               {registeredUsers
                 ?.filter((el) => {
@@ -811,12 +812,12 @@ const Meal = () => {
                     </>
                   );
                 })}
-              <td className="w-1 sticky right-[100px] bg-black">&nbsp;</td>
-              <td className="min-w-[100px] sticky right-0 bg-white text-black text-center font-bold">Total Meal</td>
+              <td className={`${currentUser === 'all'?'':'hidden'} w-1 sticky right-[100px] bg-black`}>&nbsp;</td>
+              <td className={`${currentUser==='all'?'':'hidden'} min-w-[100px] sticky right-0 bg-white text-black text-center font-bold`}>Total Meal</td>
             </tr>
 
             <tr className="h-1 bg-black">
-              <td></td>
+              <td className=""></td>
               <td className="sticky left-[50px]"></td>
               <td className=""></td>
               <td className=""></td>
@@ -830,15 +831,16 @@ const Meal = () => {
                   </>
                 )
               })}
-              <td className="w-1 sticky right-[100px] bg-black"></td>
+              <td className="w-1 sticky right-[100px] bg-black z-[-100]"></td>
             </tr>
 
           </thead>
+
           <tbody className="w-full">
-            <tr className="h-1 bg-black">
+            <tr className={`h-1 bg-black`}>
               <td></td>
               <td className="sticky left-[50px]"></td>
-              <td className=""></td>
+              <td className={""}></td>
               <td className=""></td>
               <td></td>
               <td></td>
@@ -850,7 +852,8 @@ const Meal = () => {
                   </>
                 )
               })}
-              <td className="w-1 sticky right-[100px] bg-black"></td>
+              {/* problem */}
+              <td className="w-1 sticky right-[100px] bg-black z-[-100]"></td>
             </tr>
             {
               arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
@@ -879,14 +882,14 @@ const Meal = () => {
                         })}
                       </table>
                     </td>
-                    <td className="bg-black sticky left-[154px]"></td>
+                    <td className={`${currentUser == 'all'?'':'hidden'} bg-black sticky left-[154px]`}></td>
                     <td className="bg-black"></td>
 
                     {new Array(registeredUsers?.length).fill(0).map((elem, index) => {
                       return (
                         <>
                           <td
-                            className={``}
+                            className={`${currentUser === 'all'?'':'hidden'}`}
                             style={{
                               width: "150px",
                               textAlign: "center",
@@ -900,6 +903,7 @@ const Meal = () => {
                                 height: "86px",
                               }}
                             >
+                              {/* breakfast */}
                               <tr
                                 style={{
 
@@ -1045,6 +1049,7 @@ const Meal = () => {
                                   />
                                 </td>
                               </tr>
+                              {/* input field */}
                               <tr>
                                 <td
                                   style={
@@ -1130,16 +1135,28 @@ const Meal = () => {
                               </tr>
                             </table>
                           </td>
-                          <td className="w-1 bg-black">&nbsp;</td>
+                          <td className={`${currentUser === 'all'?'':'hidden'} w-1 bg-black`}>&nbsp;</td>
                         </>
                       )
                     })}
-                    <td className="w-1 sticky right-[100px] bg-black">&nbsp;</td>
-                    <td className="bg-white text-black sticky right-0 text-center font-bold">
+                    <td className={`${currentUser==='all'?'':'hidden'} w-1 sticky right-[100px] bg-black`}>&nbsp;</td>
+                    <td className={`${currentUser=='all'?'':'hidden'} bg-white text-black sticky right-0 text-center font-bold`}>
                       <table className="w-full text-center">
-                        <tr><td>100</td></tr>
-                        <tr><td>100</td></tr>
-                        <tr><td>100</td></tr>
+                        <tr>
+                          <td style={{ textAlign: "center" }}>
+                            {totalMeals.length>0 && totalMeals.find((item) => item.date === el.date)?.totalBreakfast}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style={{ textAlign: "center" }}>
+                            {totalMeals.length>0 && totalMeals.find((item) => item.date === el.date)?.totalLaunch}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style={{ textAlign: "center" }}>
+                            {totalMeals.length>0 && totalMeals.find((item) => item.date === el.date)?.totalDinner}
+                          </td>
+                        </tr>
                       </table>
                     </td>
                   </tr>

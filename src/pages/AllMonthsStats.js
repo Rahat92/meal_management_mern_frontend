@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import {
+  useGetMonthlyMealsQuery,
   useGetMonthlyStatsQuery,
   useGetYearMonthQuery,
   useSendSmsMutation,
@@ -28,6 +29,16 @@ const AllMonthsStats = () => {
     month: month,
     day: day,
   });
+
+  const { data: monthlyMeals, isLoading: isMealsLoading } =
+    useGetMonthlyMealsQuery(
+      { getMonth: 2, getYear: 2025 },
+      // {
+      //   skip: !isSkipped,
+      // }
+    );
+  const currentBorders = monthlyMeals&&monthlyMeals.monthlyMeals[0].border;
+
   const { data: yearMonth } = useGetYearMonthQuery();
   const [yearMonthArr, setYearMonthArr] = useState([]);
   const [sendSms] = useSendSmsMutation();
@@ -36,7 +47,7 @@ const AllMonthsStats = () => {
   const mainBodyRef = useRef();
   const bodyRef = useRef();
   const headRef = useRef();
-  
+
   const dispatch = useDispatch();
   // useEffect(() => {
   //   sendSms()
@@ -61,9 +72,10 @@ const AllMonthsStats = () => {
       let shops = [];
       let extraShops = [];
       getMonthlyMealStats.monthlyMeals.map((el) => {
+        console.log('haha ', el)
         months.push(el._id);
         mealInfo.push([]);
-        borders.push(el.border);
+        borders.push(el.border.map(itm => currentBorders&&currentBorders.find(item => item._id === itm)));
         breakfasts.push(el.breakfast);
         launchs.push(el.launch);
         dinners.push(el.dinner);
@@ -74,13 +86,13 @@ const AllMonthsStats = () => {
           month: el._id?.month,
         };
       });
-
+      console.log(borders)
       borders.map((border, i) => {
         let arrEle = [];
         let finalArr = [];
         border.map((el, elIndex) => {
           console.log('element ', el, arrEle)
-          const index = arrEle.findIndex((item) => item.id === el._id);
+          const index = arrEle.findIndex((item) => item.id === el?._id);
           if (index !== -1) {
             const obj = arrEle[index];
             arrEle[index] = {
@@ -94,8 +106,8 @@ const AllMonthsStats = () => {
             };
           } else {
             arrEle.push({
-              id: el._id,
-              border: el.name,
+              id: el?._id,
+              border: el?.name,
               breakfast: breakfasts[i][elIndex][0],
               launch: launchs[i][elIndex][0],
               dinner: dinners[i][elIndex][0],
@@ -131,7 +143,7 @@ const AllMonthsStats = () => {
       });
       setMealStatMonthly(mealInfo);
     }
-  }, [getMonthlyMealStats?.monthlyMeals]);
+  }, [getMonthlyMealStats?.monthlyMeals, currentBorders]);
   useEffect(() => {
     window.addEventListener("scroll", function () {
       bodyRef?.current?.scrollTo(0, window.pageYOffset);
@@ -144,7 +156,6 @@ const AllMonthsStats = () => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
 
-  console.log(mainBodyRef?.current);
   useEffect(() => {
     if (mealStatMonthly?.length > 0) {
       const borderIndex = mealStatMonthly[0]?.finalArr.findIndex(
@@ -164,7 +175,7 @@ const AllMonthsStats = () => {
     }
   }, [mealStatMonthly, user]);
 
-  const months = ['January', 'February', 'Merch', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
   const date = new Date();
   const currentMonth = date.toLocaleDateString('en-US', { month: 'long' });
@@ -188,7 +199,7 @@ const AllMonthsStats = () => {
           </div>
           <div>
             <form class="max-w-[150px] mx-auto">
-              <select  onChange = {(e) => {
+              <select onChange={(e) => {
                 setMonth(e.target.value)
               }} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 {months.map((el, i) => {
@@ -336,8 +347,9 @@ const AllMonthsStats = () => {
             ? mealStatMonthly
               ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
               ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
-              ?.filter((item) => item.month === "0 2025")
+              ?.filter((item) => item.month === "2 2025")
               ?.map((el) => {
+                console.log('ele1', el)
                 return (
                   <tbody>
                     <tr>
