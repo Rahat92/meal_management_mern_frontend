@@ -23,9 +23,8 @@ const FilterBox = ({
       setYearMonthArr(arr);
     }
   }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
-  console.log(yearMonth)
   return (
-    <div className={filterBoxStyle.wrapper}>
+    <div className={`${filterBoxStyle.wrapper} mt-[50px] overflow-hidden`}>
       <form className={filterBoxStyle.filterDate}>
         <select
           style={{ borderRadius: "10px" }}
