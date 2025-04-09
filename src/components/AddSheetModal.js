@@ -66,7 +66,7 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
           }}>
             <option value={0}>January</option>
             <option value={1}>February</option>
-            <option value={2}>Merch</option>
+            <option value={2}>March</option>
             <option value={3}>April</option>
             <option value={4}>May</option>
             <option value={5}>June</option>

@@ -232,7 +232,7 @@ const AllMonthsStats = () => {
               : todayMonth === 1
                 ? "February"
                 : todayMonth === 2
-                  ? "Merch"
+                  ? "March"
                   : todayMonth === 3
                     ? "April"
                     : todayMonth === 4
@@ -275,7 +275,7 @@ const AllMonthsStats = () => {
                         : el.month === 1
                           ? "February"
                           : el.month === 2
-                            ? "Merch"
+                            ? "March"
                             : el.month === 3
                               ? "April"
                               : el.month === 4
