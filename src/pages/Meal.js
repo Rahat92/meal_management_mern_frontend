@@ -887,8 +887,8 @@ const Meal = () => {
         isLoading={isLoading}
         isChanged={isChanged}
       />
-      <div className="max-w-[900px] h-[80vh] max-h-[80vh] rounded-lg bg-white text-black m-auto mt-[10vh] mb-8 relative overflow-x-scroll">
-        <table className="absolute left-0 right-0 top-0 bottom-0 w-full">
+      <div className="max-w-[100%] w-[800px] max-h-[80vh] rounded-lg text-black m-auto overflow-x-scroll">
+        <table className="">
           {/* table header */}
           <TableHeader
             currentUser={currentUser}
@@ -939,14 +939,13 @@ const Meal = () => {
                     >
                       {el.date?.split(" ")[0]}  {/* Date body */}
                     </td>
-                    <td className="w-1 bg-black sticky left-[50px]">&nbsp;</td> {/* date body vertical border */}
-
-                    <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[150px]' : 'w-[200px]'}  text-black sticky left-[54px] border-black border-b-[3px]`}>
-                      <table className="w-full text-center ">
+                    <td className="w-1 bg-red-500  sticky left-[50px]"></td> {/*date body vertical border*/}
+                    <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black sticky left-[54.39px] border-black`}> {/* meal name body width */}
+                      <table className="w-full text-center ml-1">
                         {['breakfast', 'launch', 'dinner'].map((meal, i) => {
                           return (
                             <tr>
-                              <td className="text-right">{meal}&nbsp;&nbsp;
+                              <td className="text-left">{meal}&nbsp;
                                 {/* <select>
                                   <option></option>
                                   <option></option>
@@ -954,9 +953,6 @@ const Meal = () => {
                                 <div className="inline-block relative">
                                   <div className="cursor-pointer" onClick={() => {
                                     setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date, mealName: meal })
-                                    // console.log(registeredUsers)
-                                    // console.log(currentUser)
-                                    console.log(selectMeal)
                                   }}>*</div>
                                   <div>
                                     {
@@ -977,7 +973,7 @@ const Meal = () => {
                         })}
                       </table>
                     </td>
-                    <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-black sticky left-[154px]`}></td> {/* Type body vertical right border element */}
+                    <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-black sticky left-[134.39px]`}></td> {/* Type body vertical right border element */}
                     <td className={`${currentUser === 'all' ? '' : 'hidden'} bg-black`}></td> {/* first body vertical indicator */}
 
                     {/* <TableMealBody
@@ -1007,10 +1003,10 @@ const Meal = () => {
                     <AllUser
                       registeredUsers={registeredUsers}
                       currentUser={currentUser}
-                      el = {el}
-                      item = {item}
+                      el={el}
+                      item={item}
                       setItem={setItem}
-                      updateMealHandler = {updateMealHandler}
+                      updateMealHandler={updateMealHandler}
                     />
 
                     {/* For customer */}

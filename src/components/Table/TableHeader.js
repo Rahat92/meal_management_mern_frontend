@@ -6,10 +6,10 @@ const TableHeader = ({currentUser, registeredUsers, screenWidth, setMoneyOption,
         <>
             <thead className="sticky top-0 z-10">
                 <tr className="h-[50px]">
-                    <td style={{ textAlign: 'center' }} className={`${currentUser === 'all' ? 'min-w-[50px]' : 'min-w-[50px]'} bg-white text-black sticky left-0 z-[100]`}>Date</td>
-                    <td className="w-1 sticky left-[50px] bg-black">&nbsp;</td>
-                    <td style={{ textAlign: 'center' }} className="min-w-[100px] sticky left-[54px] bg-white text-black ">Type</td>
-                    <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky left-[154px] bg-black`}>&nbsp;</td>
+                    <td style={{ textAlign: 'center' }} className={`${currentUser === 'all' ? 'min-w-[50px]' : 'min-w-[50px]'} bg-white text-black sticky left-0 z-[100] m-0 p-0`}>Date</td>
+                    <td className="w-1 sticky left-[50px] h-full bg-red-500">&nbsp;</td>
+                    <td style={{ textAlign: 'center' }} className="min-w-[80px] sticky left-[54.39px] bg-white text-black ">Type</td>
+                    <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky left-[134.39px] bg-black`}>&nbsp;</td>
                     <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 bg-black`}>&nbsp;</td> {/* head name first vertical indicator */}
 
                     {registeredUsers

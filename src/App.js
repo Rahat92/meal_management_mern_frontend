@@ -25,11 +25,10 @@ const App = () => {
     dispatch(
       userLoggedIn({ accessToken: localAuth?.token, user: localAuth?.user })
     );
-    // dispatch(locationPathChanged(window.location.pathname))
   }, []);
 
   return (
-    <div>
+    <div className="font-sans">
       <Router>
         {pathname !== "/" && pathname && <NavBar />}
         <Routes>
