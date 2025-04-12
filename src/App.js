@@ -35,8 +35,8 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/meal-sheets" element={<MealSheets />} />
-          <Route path="/all-month-stats" element={<AllMonthsStats />} />
           <Route path="/conversations" element={<Conversation />} />
+          <Route path="/all-month-stats" element={<AllMonthsStats />} />
 
           <Route path="/test" element={<Test />} />
           <Route element={<AuthRoute />}>

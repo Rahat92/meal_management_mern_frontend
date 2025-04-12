@@ -196,7 +196,10 @@ export default function Example() {
         <div className="relative flex h-[10vh] items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}
-            <DisclosureButton onClick={() => setHideNav(prev => !prev)} className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
+            <DisclosureButton onClick={(e) => {
+              e.stopPropagation()
+              setHideNav(prev => !prev)
+            }} className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
               <span className="absolute -inset-0.5" />
               {/* <span className="sr-only">Open main menu</span> */}
               <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
@@ -279,7 +282,7 @@ export default function Example() {
                   logout();
                 }}>
                   <a
-
+                
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Sign out
@@ -291,11 +294,14 @@ export default function Example() {
         </div>
       </div>
 
-      <DisclosurePanel className="sm:hidden">
-        <div className={`space-y-1 px-2 pt-2 pb-3 absolute z-[110000000000] ${hideNav ? 'hidden' : 'flex'} flex-col bg-gray-800 w-full`}>
+      <div className="sm:hidden">
+        <div className={`space-y-1 px-2 pt-2 pb-3 absolute z-[110000000000] ${!hideNav ? 'flex flex-col' : 'hidden'} bg-gray-800 w-full`}>
           {navigation.map((item) => (
             <Link
-              onClick={() => setHideNav(true)}
+              onClick={(e) => {
+                e.stopPropagation()
+                setHideNav(true)
+              }}
               key={item.name}
               to={item.href}
               aria-current={item.current ? 'page' : undefined}
@@ -308,7 +314,7 @@ export default function Example() {
             </Link>
           ))}
         </div>
-      </DisclosurePanel>
+      </div>
     </Disclosure>
   )
 }
