@@ -29,7 +29,6 @@ const AllMonthsStats = () => {
     month: month,
     day: day,
   });
-
   const { data: monthlyMeals, isLoading: isMealsLoading } =
     useGetMonthlyMealsQuery(
       { getMonth: month, getYear: 2025 },
@@ -38,7 +37,6 @@ const AllMonthsStats = () => {
       // }
     );
   const currentBorders = monthlyMeals && monthlyMeals.monthlyMeals[0]&&monthlyMeals.monthlyMeals[0].border;
-  console.log(currentBorders, user)
 
   const { data: yearMonth } = useGetYearMonthQuery();
   const [yearMonthArr, setYearMonthArr] = useState([]);
@@ -56,11 +54,9 @@ const AllMonthsStats = () => {
   useEffect(() => {
     if (todayMonth && todayYear && yearMonth?.yearMonth?.length > 0) {
       const arr = yearMonth?.yearMonth?.filter((el) => el.month !== todayMonth);
-      console.log(arr);
       setYearMonthArr(arr);
     }
   }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
-  console.log(yearMonthArr);
   useEffect(() => {
     if (getMonthlyMealStats?.monthlyMeals?.length > 0) {
       let mealInfo = [];
@@ -73,7 +69,6 @@ const AllMonthsStats = () => {
       let shops = [];
       let extraShops = [];
       getMonthlyMealStats.monthlyMeals.map((el) => {
-        console.log('haha ', el)
         months.push(el._id);
         mealInfo.push([]);
         borders.push(el.border.map(itm => currentBorders && currentBorders.find(item => item._id === itm)));
@@ -91,7 +86,6 @@ const AllMonthsStats = () => {
         let arrEle = [];
         let finalArr = [];
         border.map((el, elIndex) => {
-          console.log('element ', el, arrEle)
           const index = arrEle.findIndex((item) => item.id === el?._id);
           if (index !== -1) {
             const obj = arrEle[index];
@@ -185,7 +179,7 @@ const AllMonthsStats = () => {
   }
   return (
     <div className="w-screen flex flex-col gap-8 justify-center mt-16 items-center">
-      <div className="z-[10000] align-self-start w-full md:w-[70%] relative flex flex-col">
+      <div className="z-[0] align-self-start w-full md:w-[70%] relative flex flex-col">
         <div className="flex gap-[15px]">
           <div>
             <form class="max-w-[150px] mx-auto">

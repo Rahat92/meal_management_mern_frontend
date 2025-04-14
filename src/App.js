@@ -18,12 +18,11 @@ import MealSheets from "./pages/MealSheets";
 import Conversation from "./pages/Conversations";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
-  console.log(pathname);
   const dispatch = useDispatch();
   useEffect(() => {
     const localAuth = JSON.parse(localStorage.getItem("auth"));
     dispatch(
-      userLoggedIn({ accessToken: localAuth?.token, user: localAuth?.user })
+      userLoggedIn({ accessToken: localAuth?.token || null, user: localAuth?.user || null })
     );
   }, []);
 
@@ -36,13 +35,13 @@ const App = () => {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/meal-sheets" element={<MealSheets />} />
           <Route path="/conversations" element={<Conversation />} />
-          <Route path="/all-month-stats" element={<AllMonthsStats />} />
 
           <Route path="/test" element={<Test />} />
           <Route element={<AuthRoute />}>
             <Route path="/" element={<SignIn />} />
           </Route>
           <Route element={<ProtectedRoute />}>
+            <Route path="/all-month-stats" element={<AllMonthsStats />} />
             <Route path="/meals" element={<Meal />} />
           </Route>
         </Routes>

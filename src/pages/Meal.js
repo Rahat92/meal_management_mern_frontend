@@ -211,7 +211,6 @@ const Meal = () => {
         skip: !isSkipped,
       }
     );
-  console.log(monthlyMeals)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
@@ -321,7 +320,6 @@ const Meal = () => {
     }
     setDates([...days]);
   }, [users?.borders]);
-  console.log(user)
   useEffect(() => {
     if (user && user.role !== "admin" && user && user.role !== "superadmin") {
       setCurrentUser(user.name + " " + user._id);
@@ -370,7 +368,7 @@ const Meal = () => {
           shop: el.shop,
           extraShop: el.extraShop,
         };
-      }).sort((a,b) => a.day-b.day);
+      }).sort((a, b) => a.day - b.day);
       setArrOfMeals(mealsArr);
       setPrevArrOfMeals(mealsArr);
     }
@@ -461,7 +459,6 @@ const Meal = () => {
     copyMealArr[mealIndex] = copySingleMeal;
 
     copyArrOfMeals[dateIndex] = { ...obj, [mealName]: copyMealArr };
-    console.log(copyArrOfMeals)
     setArrOfMeals([...copyArrOfMeals]);
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
@@ -554,12 +551,16 @@ const Meal = () => {
   // }, []);
 
   // useEffect(() => {
-  //   window.addEventListener("scroll", function () {
-  //     tableBodyRef?.current?.scrollTo(0, window.pageYOffset);
-  //     dateRef?.current?.scrollTo(0, window.pageYOffset);
-  //     nameRef?.current?.scrollTo(window.pageXOffset, 0);
-  //   });
-  // }, [window.pageYOffset, window.pageXOffset]);
+  //   // window.addEventListener("scroll", function () {
+  //   //   tableBodyRef?.current?.scrollTo(0, 500);
+  //   //   // dateRef?.current?.scrollTo(0, window.pageYOffset);
+  //   //   // nameRef?.current?.scrollTo(window.pageXOffset, 0);
+  //   // });
+  //   tableBodyRef?.current?.scrollTo({
+  //     top: 100,
+  //     behavior: "smooth",
+  //   })
+  // }, [arrOfMeals]);
   useEffect(() => {
     setMoneyOption("Deposite");
     setScreenWidth(window.screen.availWidth);
@@ -581,14 +582,14 @@ const Meal = () => {
         behavior: "smooth",
       });
       tableBodyRef?.current?.scrollTo({
-        top: (todayDate - 1) * 100,
+        top: (todayDate - 1) * 100+5,
         behavior: "smooth",
       });
       timer = setTimeout(() => {
         setNowScroll(true);
       }, (todayDate - 1) * 100);
     }
-    // return () => clearTimeout(timer)
+    return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
 
   return (
@@ -885,7 +886,7 @@ const Meal = () => {
         isChanged={isChanged}
       />
       {arrOfMeals?.length > 0 && (
-        <div className="max-w-[100%] w-[800px] max-h-[80vh] rounded-lg text-black m-auto overflow-x-scroll">
+        <div ref = {tableBodyRef} className="max-w-[100%] bg-red-500 w-[1000px] max-h-[80vh] rounded-lg text-black m-auto overflow-auto">
           <table className="">
             {/* table header */}
             <TableHeader
@@ -899,7 +900,7 @@ const Meal = () => {
               borderTotalExtraShop={borderTotalExtraShop}
             />
 
-            <tbody className="w-full">
+            <tbody className="w-full overscroll-auto">
               <tr className={`h-1 bg-gray-300`}>
                 {/* Table head bottom border start */}
                 <td></td>

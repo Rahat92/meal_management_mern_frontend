@@ -405,12 +405,11 @@ const bikriApi = apiSlice.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           localStorage.removeItem("auth");
           dispatch(
             userLoggedIn({
-              accessToken: undefined,
-              user: undefined,
+              accessToken: null,
+              user: null,
             })
           );
         } catch (err) {

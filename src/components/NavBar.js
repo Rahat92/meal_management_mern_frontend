@@ -185,8 +185,8 @@ function classNames(...classes) {
 export default function Example() {
   const [navigation, setNavigation] = useState([
     { name: 'Summary', href: '/all-month-stats', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    // { name: 'Projects', href: '#', current: false },
+    // { name: 'Calendar', href: '#', current: false },
   ])
   const [logout, { isSuccess }] = useLogoutMutation();
   const { user } = useSelector((state) => state.auth);
@@ -197,8 +197,8 @@ export default function Example() {
       setNavigation([
         { name: 'Dashboard', href: '/admin-dashboard', current: true },
         { name: 'Summary', href: '/all-month-stats', current: false },
-        { name: 'Projects', href: '#', current: false },
-        { name: 'Calendar', href: '#', current: false },
+        // { name: 'Projects', href: '#', current: false },
+        // { name: 'Calendar', href: '#', current: false },
       ])
     }
   }, [user])
@@ -274,22 +274,22 @@ export default function Example() {
                 transition
                 className="absolute right-0 z-[11] mt-2 w-48 origin-top-right rounded-md bg-white  py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
-                <MenuItem>
+                {/* <MenuItem>
                   <Link
                     to="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Your Profile
                   </Link>
-                </MenuItem>
-                <MenuItem>
+                </MenuItem> */}
+                {/* <MenuItem>
                   <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Settings
                   </a>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={(e) => {
                   e.stopPropagation();
                   logout();
