@@ -370,7 +370,7 @@ const Meal = () => {
           shop: el.shop,
           extraShop: el.extraShop,
         };
-      });
+      }).sort((a,b) => a.day-b.day);
       setArrOfMeals(mealsArr);
       setPrevArrOfMeals(mealsArr);
     }
