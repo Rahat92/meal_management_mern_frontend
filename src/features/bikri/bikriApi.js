@@ -398,7 +398,7 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "GET",
         headers: {
           authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
+            JSON.parse(localStorage.getItem("auth"))?.token
           }`,
         },
       }),
