@@ -38,6 +38,7 @@ const AllMonthsStats = () => {
       // }
     );
   const currentBorders = monthlyMeals && monthlyMeals.monthlyMeals[0]&&monthlyMeals.monthlyMeals[0].border;
+  console.log(currentBorders, user)
 
   const { data: yearMonth } = useGetYearMonthQuery();
   const [yearMonthArr, setYearMonthArr] = useState([]);
@@ -86,7 +87,6 @@ const AllMonthsStats = () => {
           month: el._id?.month,
         };
       });
-      console.log(borders)
       borders.map((border, i) => {
         let arrEle = [];
         let finalArr = [];
@@ -119,6 +119,7 @@ const AllMonthsStats = () => {
           finalArr = arrEle.map((el) => {
             return {
               border: el.border,
+              border_id: el.id,
               breakfast: el.breakfast,
               launch: el.launch,
               dinner: el.dinner,
@@ -350,10 +351,9 @@ const AllMonthsStats = () => {
                 ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
                 ?.filter((item) => item.month === `${month} 2025`)
                 ?.map((el) => {
-                  console.log('ele1', el)
                   return (
                     <tbody>
-                      <tr>
+                      <tr className={``}>
                         <th className="sticky left-0 bg-white z-50 shadow-md border-r-2">
                           <table className="w-full">
                             <tr>
@@ -393,8 +393,8 @@ const AllMonthsStats = () => {
                                 <table className="w-full">
                                   {el.finalArr.map((item) => {
                                     return (
-                                      <tr>
-                                        <td className="py-2">{item.border}</td>
+                                      <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                        <td className={`py-2`}>{item.border}</td>
                                       </tr>
                                     );
                                   })}
@@ -407,7 +407,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">{item.breakfast}</td>
                                 </tr>
                               );
@@ -418,8 +418,8 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
-                                  <td className="py-2">{item.launch}</td>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                  <td className={`py-2`}>{item.launch}</td>
                                 </tr>
                               );
                             })}
@@ -429,7 +429,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">{item.dinner}</td>
                                 </tr>
                               );
@@ -440,7 +440,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">{item.totalMeal}</td>
                                 </tr>
                               );
@@ -454,7 +454,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">{item.totalShop}</td>
                                 </tr>
                               );
@@ -470,7 +470,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">
                                     {item.totalExtraShop}
                                   </td>
@@ -486,7 +486,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">{item.totalMoney}</td>
                                 </tr>
                               );
@@ -497,7 +497,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">
                                     {isNaN(
                                       (
@@ -521,7 +521,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr>
+                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
                                   <td className="py-2">
                                     {isNaN(
                                       item.totalMoney -
