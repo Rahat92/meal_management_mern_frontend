@@ -173,23 +173,36 @@ import { BrowserRouter, Link } from 'react-router-dom';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useLogoutMutation } from '../features/bikri/bikriApi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const navigation = [
-  { name: 'Dashboard', href: '/admin-dashboard', current: true },
-  { name: 'Summary', href: '/all-month-stats', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Example() {
+  const [navigation, setNavigation] = useState([
+    { name: 'Summary', href: '/all-month-stats', current: false },
+    { name: 'Projects', href: '#', current: false },
+    { name: 'Calendar', href: '#', current: false },
+  ])
   const [logout, { isSuccess }] = useLogoutMutation();
+  const { user } = useSelector((state) => state.auth);
   const [hideNav, setHideNav] = useState('true')
-  console.log(hideNav)
+
+  useEffect(() => {
+    if (user && user.role === 'superadmin') {
+      setNavigation([
+        { name: 'Dashboard', href: '/admin-dashboard', current: true },
+        { name: 'Summary', href: '/all-month-stats', current: false },
+        { name: 'Projects', href: '#', current: false },
+        { name: 'Calendar', href: '#', current: false },
+      ])
+    }
+  }, [user])
+
   return (
     <Disclosure as="nav" className="bg-gray-800 z-[500000] h-[10vh]">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -282,7 +295,7 @@ export default function Example() {
                   logout();
                 }}>
                   <a
-                
+
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Sign out

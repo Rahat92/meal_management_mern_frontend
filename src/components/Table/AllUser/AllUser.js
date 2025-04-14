@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHandler}) => {
+const AllUser = ({ registeredUsers, currentUser, el, item, setItem, updateMealHandler }) => {
     return (
         <>
             {registeredUsers?.length > 0 && registeredUsers.map((elem, index) => {
@@ -19,12 +19,8 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                                     height: "86px",
                                 }}
                             >
-                                {/* breakfast */}
-                                <tr
-                                    style={{
-
-                                    }}
-                                >
+                                {/* breakfast input field */}
+                                <tr>
                                     <td className="bg-white" style={{ width: "25%" }}>
                                         <div className="">
                                             <input
@@ -96,7 +92,7 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                                         </div>
                                     </td>
                                 </tr>
-                                {/* All User Launch */}
+                                {/* Launch input field */}
                                 <tr style={{}}>
                                     <td>
                                         <input
@@ -169,16 +165,9 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                                     </td>
                                 </tr>
 
-                                {/* input field */}
+                                {/*dinner input field */}
                                 <tr>
-                                    <td
-                                        style={
-                                            {
-                                                // padding: "1px 0",
-                                                // paddingBottom: "6px",
-                                            }
-                                        }
-                                    >
+                                    <td>
                                         <input
                                             onMouseEnter={() => {
                                                 setItem({
@@ -197,9 +186,6 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                                                     el.dinner[index] &&
                                                     el.dinner[index][1] === "off") ||
                                                 el.dinner[index][2] === "user"
-                                                // ||user?.role === "user"
-                                                // ? true
-                                                // : false
                                             }
                                             onChange={(e) =>
                                                 updateMealHandler(
@@ -212,7 +198,6 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                                             }
                                             style={{
                                                 color: "black",
-                                                // background: "white",
                                                 border:
                                                     el.dinner &&
                                                         el.dinner[index] &&
@@ -224,9 +209,6 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                                                 textAlign: "center",
                                             }}
                                             type={
-                                                // (el.dinner &&
-                                                //   el.dinner[index] &&
-                                                //   el.dinner[index][1] === "off") ||
                                                 item.type === "number" &&
                                                     item.borderIndex === index &&
                                                     item.date === el.date &&
@@ -256,7 +238,7 @@ const AllUser = ({registeredUsers, currentUser, el, item, setItem, updateMealHan
                             </table>
                         </td>
                         {/* for customer */}
-                        <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 bg-black`}>&nbsp;</td> {/* Body meal vertical border element */}
+                        <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 bg-gray-300`}>&nbsp;</td> {/* Body meal vertical border element */}
                     </>
                 )
             })}

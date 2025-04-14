@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { readableDate } from "../utils/readableDate";
@@ -361,6 +360,7 @@ const Meal = () => {
         return {
           id: el._id,
           date: el.date,
+          day: el.day,
           month: el.month,
           year: el.year,
           breakfast: el.breakfast,
@@ -461,6 +461,7 @@ const Meal = () => {
     copyMealArr[mealIndex] = copySingleMeal;
 
     copyArrOfMeals[dateIndex] = { ...obj, [mealName]: copyMealArr };
+    console.log(copyArrOfMeals)
     setArrOfMeals([...copyArrOfMeals]);
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
@@ -641,14 +642,14 @@ const Meal = () => {
             {/* Border's Name */}
             <div
               ref={nameRef}
-              onScroll={() => {
-                if (nowScroll) {
-                  tableBodyRef?.current?.scrollTo(
-                    nameRef.current.scrollLeft,
-                    tableBodyRef.current.scrollTop
-                  );
-                }
-              }}
+              // onScroll={() => {
+              //   if (nowScroll) {
+              //     tableBodyRef?.current?.scrollTo(
+              //       nameRef.current.scrollLeft,
+              //       tableBodyRef.current.scrollTop
+              //     );
+              //   }
+              // }}
               style={{
                 position: "fixed",
                 left:
@@ -828,7 +829,7 @@ const Meal = () => {
           </p>
         </div>
 
-        <TableMealBody
+        {/* <TableMealBody
           arrOfMeals={arrOfMeals}
           currentDay={currentDay}
           registeredUsers={registeredUsers}
@@ -850,10 +851,10 @@ const Meal = () => {
           nameRef={nameRef}
           todayDate={todayDate}
           borderTotalDeposite={borderTotalDeposite}
-        />
+        /> */}
         {/* </div> */}
         {/* fixed */}
-        {arrOfMeals?.length > 0 && (
+        {/* {arrOfMeals?.length > 0 && (
           <TableDateAndMealBody
             dateRef={dateRef}
             currentUser={currentUser}
@@ -865,7 +866,7 @@ const Meal = () => {
             nowScroll={nowScroll}
             screenWidth={screenWidth}
           />
-        )}
+        )} */}
       </div>
 
       {/* Redesigned mealsheet */}
@@ -883,7 +884,7 @@ const Meal = () => {
         isLoading={isLoading}
         isChanged={isChanged}
       />
-      {arrOfMeals?.length > 0&&(
+      {arrOfMeals?.length > 0 && (
         <div className="max-w-[100%] w-[800px] max-h-[80vh] rounded-lg text-black m-auto overflow-x-scroll">
           <table className="">
             {/* table header */}
@@ -899,7 +900,7 @@ const Meal = () => {
             />
 
             <tbody className="w-full">
-              <tr className={`h-1 bg-black`}>
+              <tr className={`h-1 bg-gray-300`}>
                 {/* Table head bottom border start */}
                 <td></td>
                 {/* Table head bottom border end */}
@@ -912,19 +913,19 @@ const Meal = () => {
                   return (
                     <>
                       <td></td>
-                      <td className="w-1 bg-black"></td> {/* partial horizontal header border indicator */}
+                      <td className="w-1 bg-gray-300"></td> {/* partial horizontal header border indicator */}
                     </>
                   )
                 })}
                 {/* problem */}
-                <td className="w-1 sticky right-[100px] bg-black z-[-100]"></td>
+                <td className="w-1 sticky right-[100px] bg-gray-300 z-[-100]"></td>
               </tr>
 
               {/* table body rows */}
               {
                 arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
                   return (
-                    <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-8'} border-black-500`}> {/* Horizontal body meal border*/}
+                    <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
                       {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                       <td
                         className={`${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'} bg-white text-black sticky left-0 text-center`}
@@ -936,7 +937,7 @@ const Meal = () => {
                       >
                         {el.date?.split(" ")[0]}  {/* Date body */}
                       </td>
-                      <td className="w-1 bg-red-500  sticky left-[50px]"></td> {/*date body vertical border*/}
+                      <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                       <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black sticky left-[54.39px] border-black`}> {/* meal name body width */}
                         <table className="w-full text-center ml-1">
                           {['breakfast', 'launch', 'dinner'].map((meal, i) => {
@@ -970,8 +971,8 @@ const Meal = () => {
                           })}
                         </table>
                       </td>
-                      <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-black sticky left-[134.39px]`}></td> {/* Type body vertical right border element */}
-                      <td className={`${currentUser === 'all' ? '' : 'hidden'} bg-black`}></td> {/* first body vertical indicator */}
+                      <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-gray-300 sticky left-[134.39px]`}></td> {/* Type body vertical right border element */}
+                      <td className={`${currentUser === 'all' ? '' : 'hidden'} bg-gray-300`}></td> {/* first body vertical indicator */}
 
                       {/* <TableMealBody
                       arrOfMeals={arrOfMeals}
@@ -1369,7 +1370,7 @@ const Meal = () => {
                                       }}
                                     >
                                       <input
-                                        type="number"
+                                        type="text"
                                         onChange={(e) => {
                                           if (
                                             new Date() >
@@ -1431,7 +1432,7 @@ const Meal = () => {
                                       }}
                                     >
                                       <input
-                                        type="number"
+                                        type="text"
                                         onChange={(e) => {
                                           if (
                                             new Date() >
@@ -1571,7 +1572,7 @@ const Meal = () => {
                         }
 
                       })}
-                      <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[100px] bg-black`}>&nbsp;</td> {/* Total meal left border element */}
+                      <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[100px] bg-gray-300`}>&nbsp;</td> {/* Total meal left border element */}
 
                       {/* total meal calculation */}
                       <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-white text-black sticky right-0 font-bold`}>

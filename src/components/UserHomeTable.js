@@ -401,7 +401,6 @@ const UserHomeTable = ({
                   const desireMealIndex = arrOfMeals.findIndex(
                     (item) => item.id === el.id
                   );
-                  console.log(desireMealIndex);
                   const desireMeal = arrOfMeals[desireMealIndex];
                   const copyDesireMeal = { ...desireMeal };
                   // const moneys = desireMeal.money;
@@ -444,7 +443,7 @@ const UserHomeTable = ({
               }}
             >
               <input
-                type="number"
+                type="text"
                 onChange={(e) => {
                   if (
                     new Date() >
@@ -487,7 +486,7 @@ const UserHomeTable = ({
                     shop: e.target.value * 1,
                   });
                 }}
-                placeholder="Shopping"
+                placeholder="Sshopping"
                 value={el.shop[index] === 0 ? "" : el.shop[index]}
                 style={{
                   color: "black",
@@ -506,7 +505,7 @@ const UserHomeTable = ({
               }}
             >
               <input
-                type="number"
+                type="text"
                 onChange={(e) => {
                   if (
                     new Date() >
@@ -603,7 +602,7 @@ const UserHomeTable = ({
                   item.mealName === "dinner" &&
                   el.dinner[index] &&
                   el.dinner[index][1] !== "off"
-                    ? "number"
+                    ? "text"
                     : "text"
                 }
                 value={

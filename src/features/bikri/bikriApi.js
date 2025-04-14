@@ -44,6 +44,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
+      invalidatesTags: ['getMeals']
     }),
     updateMyMealStatus: builder.mutation({
       query: (data) => ({
@@ -56,7 +57,7 @@ const bikriApi = apiSlice.injectEndpoints({
           }`,
         },
       }),
-      invalidatesTags: ["getAllMonthStat"],
+      invalidatesTags: ["getAllMonthStat", "getMeals"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const month =
           args.month === 0
@@ -288,7 +289,6 @@ const bikriApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        console.log(args);
         try {
           const { data } = await queryFulfilled;
           console.log(data);
@@ -300,13 +300,8 @@ const bikriApi = apiSlice.injectEndpoints({
                 const desireMeal = meals?.monthlyMeals.find(
                   (item) => item.id === args.id
                 );
-                // desireMeal["shop"][args.borderIndex] = [
-                //   ...desireMeal["shop"],
-                // ][args.borderIndex];
-                // desireMeal["shop"] = [...desireMeal["shop"]];
                 desireMeal["extraShop"][args.borderIndex] =
                   data.meal.extraShop[args.borderIndex];
-                // desireMeal["shop"] = [...desireMeal["shop"]];
               }
             )
           );
