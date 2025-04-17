@@ -582,7 +582,7 @@ const Meal = () => {
         behavior: "smooth",
       });
       tableBodyRef?.current?.scrollTo({
-        top: (todayDate - 1) * 100+5,
+        top: (todayDate - 1) * 100 + 5,
         behavior: "smooth",
       });
       timer = setTimeout(() => {
@@ -886,7 +886,7 @@ const Meal = () => {
         isChanged={isChanged}
       />
       {arrOfMeals?.length > 0 && (
-        <div ref = {tableBodyRef} className="max-w-[100%] bg-red-500 w-[1000px] max-h-[80vh] rounded-lg text-black m-auto overflow-auto">
+        <div ref={tableBodyRef} className="max-w-[100%] bg-red-500 w-[1000px] max-h-[80vh] rounded-lg text-black m-auto overflow-auto">
           <table className="">
             {/* table header */}
             <TableHeader
@@ -1014,7 +1014,7 @@ const Meal = () => {
                           return (
                             <>
                               <td
-                                className={`${currentUser === 'all' ? 'hidden' : ''}`}
+                                className={`${currentUser === 'all' ? 'hidden' : ''} pl-5 `}
                                 style={{
                                   width: "50px",
                                   textAlign: "center",
@@ -1029,98 +1029,100 @@ const Meal = () => {
                                   {/* breakfast section start */}
                                   <tr>
                                     <td style={{ width: "25%" }}>
-                                      <input
-                                        onMouseEnter={() => {
-                                          setItem({
-                                            ...item,
-                                            type: "text",
-                                            borderIndex: index,
-                                            date: el.date,
-                                            mealName: "breakfast",
-                                          });
-                                        }}
-                                        onMouseLeave={() => {
-                                          setItem("text");
-                                        }}
-                                        disabled={
-                                          (el.breakfast &&
-                                            el.breakfast[index] &&
-                                            el.breakfast[index][1] === "off") ||
-                                          el.breakfast[index][2] === "user"
-                                          // ||user?.role === "user"
-                                        }
-                                        onChange={(e) =>
-                                          updateMealHandler(
-                                            e,
-                                            el.date,
-                                            el.id,
-                                            index,
-                                            "breakfast"
-                                          )
-                                        }
-                                        style={{
-                                          color: "black",
-                                          textAlign: 'center',
-                                          // background: "white",
-                                          border:
-                                            el.breakfast &&
+                                      <div className="flex justify-start">
+                                        <input
+                                          onMouseEnter={() => {
+                                            setItem({
+                                              ...item,
+                                              type: "text",
+                                              borderIndex: index,
+                                              date: el.date,
+                                              mealName: "breakfast",
+                                            });
+                                          }}
+                                          onMouseLeave={() => {
+                                            setItem("text");
+                                          }}
+                                          disabled={
+                                            (el.breakfast &&
+                                              el.breakfast[index] &&
+                                              el.breakfast[index][1] === "off") ||
+                                            el.breakfast[index][2] === "user"
+                                            // ||user?.role === "user"
+                                          }
+                                          onChange={(e) =>
+                                            updateMealHandler(
+                                              e,
+                                              el.date,
+                                              el.id,
+                                              index,
+                                              "breakfast"
+                                            )
+                                          }
+                                          style={{
+                                            color: "black",
+                                            textAlign: 'center',
+                                            // background: "white",
+                                            border:
+                                              el.breakfast &&
+                                                el.breakfast[index] &&
+                                                el.breakfast[index][1] !== "off"
+                                                ? "1.5px solid black"
+                                                : "1.5px solid red",
+                                            borderRadius: "5px",
+                                            width: "40px",
+                                            // textAlign: "center",
+                                            marginRight: ".5rem",
+                                          }}
+                                          type={
+                                            item.type === "number" &&
+                                              item.borderIndex === index &&
+                                              item.date === el.date &&
+                                              item.mealName === "breakfast" &&
                                               el.breakfast[index] &&
                                               el.breakfast[index][1] !== "off"
-                                              ? "1.5px solid black"
-                                              : "1.5px solid red",
-                                          borderRadius: "5px",
-                                          width: "40px",
-                                          // textAlign: "center",
-                                          marginRight: ".5rem",
-                                        }}
-                                        type={
-                                          item.type === "number" &&
-                                            item.borderIndex === index &&
-                                            item.date === el.date &&
-                                            item.mealName === "breakfast" &&
-                                            el.breakfast[index] &&
-                                            el.breakfast[index][1] !== "off"
-                                            ? "text"
-                                            : "text"
-                                        }
-                                        value={
-                                          el.breakfast &&
-                                            el.breakfast[index] &&
-                                            el.breakfast[index][1] === "off"
-                                            ? "off"
-                                            : el.breakfast &&
+                                              ? "text"
+                                              : "text"
+                                          }
+                                          value={
+                                            el.breakfast &&
                                               el.breakfast[index] &&
-                                              el.breakfast[index][0] === 0
-                                              ? ""
+                                              el.breakfast[index][1] === "off"
+                                              ? "off"
                                               : el.breakfast &&
-                                              el.breakfast[index] &&
-                                              el.breakfast[index][0]
-                                        }
-                                      />
-                                      {/* Breakfast checkbox */}
-                                      {1 === 1 && (
-                                        <>
-                                          {/* &nbsp;&nbsp; */}
-                                          <div className="inline-block relative ">
-                                            <input
-                                              className=""
-                                              type="checkbox"
-                                              value={el.breakfast[index][1]}
-                                              onChange={(e) =>
-                                                updateMealHandler(
-                                                  e,
-                                                  el.date,
-                                                  el.id,
-                                                  index,
-                                                  "breakfast",
-                                                  "checkbox"
-                                                )
-                                              }
-                                              checked={el.breakfast[index][1] === "on" ? true : false}
-                                            />
-                                          </div>
-                                        </>
-                                      )}
+                                                el.breakfast[index] &&
+                                                el.breakfast[index][0] === 0
+                                                ? ""
+                                                : el.breakfast &&
+                                                el.breakfast[index] &&
+                                                el.breakfast[index][0]
+                                          }
+                                        />
+                                        {/* Breakfast checkbox */}
+                                        {1 === 1 && (
+                                          <>
+                                            {/* &nbsp;&nbsp; */}
+                                            <div className="inline-block relative ">
+                                              <input
+                                                className=""
+                                                type="checkbox"
+                                                value={el.breakfast[index][1]}
+                                                onChange={(e) =>
+                                                  updateMealHandler(
+                                                    e,
+                                                    el.date,
+                                                    el.id,
+                                                    index,
+                                                    "breakfast",
+                                                    "checkbox"
+                                                  )
+                                                }
+                                                checked={el.breakfast[index][1] === "on" ? true : false}
+                                              />
+                                            </div>
+                                          </>
+                                        )}
+                                      </div>
                                     </td>
                                   </tr>
                                   {/* breakfast section end */}
@@ -1128,7 +1130,7 @@ const Meal = () => {
                                   {/* Customer Launch section start */}
                                   <tr style={{}}>
                                     <td style={{ width: '25%' }}>
-                                      <div className={`flex justify-center items-center ml-[17px] sm:ml-[21px]`}>
+                                      <div className={`flex justify-start items-center`}>
                                         <input
                                           onMouseEnter={() => {
                                             setItem({
@@ -1182,117 +1184,115 @@ const Meal = () => {
                                         />
                                         {/* {currentIndex === index && ( */}
 
-                                        <div className="inline-block relative">
-                                          <div className={`flex justify-center items-center gap-1 sm:gap-2`}>
-                                            {1 === 1 && (
-                                              <input
-                                                style={{
-                                                  paddingLeft: "1rem",
-                                                }}
-                                                type="checkbox"
-                                                onChange={(e) =>
-                                                  updateMealHandler(
-                                                    e,
-                                                    el.date,
-                                                    el.id,
-                                                    index,
-                                                    "launch",
-                                                    "checkbox"
-                                                  )
-                                                }
-                                                value={el.launch[index][1]}
-                                                checked={el.launch[index][1] === "on" ? true : false}
-                                              />
-                                            )}
+                                        <div className="flex justify-start gap-2">
+                                          {1 === 1 && (
                                             <input
                                               style={{
-                                                // position: "",
-                                                // top: "50%",
-                                                // left: "90%",
-                                                // transform: "translateY(-50%)",
+                                                paddingLeft: "1rem",
                                               }}
-                                              checked={
-                                                el["breakfast"][index][1] === "on" ||
+                                              type="checkbox"
+                                              onChange={(e) =>
+                                                updateMealHandler(
+                                                  e,
+                                                  el.date,
+                                                  el.id,
+                                                  index,
+                                                  "launch",
+                                                  "checkbox"
+                                                )
+                                              }
+                                              value={el.launch[index][1]}
+                                              checked={el.launch[index][1] === "on" ? true : false}
+                                            />
+                                          )}
+                                          <input
+                                            style={{
+                                              // position: "",
+                                              // top: "50%",
+                                              // left: "90%",
+                                              // transform: "translateY(-50%)",
+                                            }}
+                                            checked={
+                                              el["breakfast"][index][1] === "on" ||
+                                              el["launch"][index][1] === "on" ||
+                                              el["dinner"][index][1] === "on"
+                                            }
+                                            value={
+                                              el["breakfast"][index][1] === "on" ||
                                                 el["launch"][index][1] === "on" ||
                                                 el["dinner"][index][1] === "on"
+                                                ? "off"
+                                                : "on"
+                                            }
+                                            type="checkbox"
+                                            onChange={(e) => {
+                                              const copyArrOfMeals = [...arrOfMeals];
+
+                                              const desireItemIndex = copyArrOfMeals.findIndex(
+                                                (item) => item.id === el.id
+                                              );
+                                              const desireItem = copyArrOfMeals[desireItemIndex];
+                                              const breakfastArr = [...desireItem["breakfast"]];
+                                              const launchArr = [...desireItem["launch"]];
+                                              const dinnerArr = [...desireItem["dinner"]];
+
+                                              breakfastArr[index] =
+                                                e.target.value === "off"
+                                                  ? [0, "off", "admin"]
+                                                  : [0.5, "on", "admin"];
+                                              launchArr[index] =
+                                                e.target.value === "off"
+                                                  ? [0, "off", "admin"]
+                                                  : [1, "on", "admin"];
+                                              dinnerArr[index] =
+                                                e.target.value === "off"
+                                                  ? [0, "off", "admin"]
+                                                  : [1, "on", "admin"];
+
+                                              const copyDesireItem = {
+                                                ...desireItem,
+                                                breakfast: breakfastArr,
+                                                launch: launchArr,
+                                                dinner: dinnerArr,
+                                              };
+                                              copyArrOfMeals[desireItemIndex] = copyDesireItem;
+                                              console.log(el);
+                                              setArrOfMeals([...copyArrOfMeals]);
+                                              let mealError = "";
+                                              if (
+                                                new Date() >
+                                                new Date(
+                                                  el.year,
+                                                  el.month,
+                                                  el.date.split(" ")[0] * 1,
+                                                  6
+                                                ) &&
+                                                (user.role === "user" || user.role === "admin")
+                                              ) {
+                                                mealError = "Full meal request time is over";
                                               }
-                                              value={
-                                                el["breakfast"][index][1] === "on" ||
-                                                  el["launch"][index][1] === "on" ||
-                                                  el["dinner"][index][1] === "on"
-                                                  ? "off"
-                                                  : "on"
+                                              if (mealError) {
+                                                alert(mealError);
+                                                console.log(prevArrOfMeals);
+                                                // prevArrOfMeals[desireItemIndex] = { ...obj, [mealName]: mealArr };
+                                                setArrOfMeals([...prevArrOfMeals]);
+                                                return;
                                               }
-                                              type="checkbox"
-                                              onChange={(e) => {
-                                                const copyArrOfMeals = [...arrOfMeals];
-
-                                                const desireItemIndex = copyArrOfMeals.findIndex(
-                                                  (item) => item.id === el.id
-                                                );
-                                                const desireItem = copyArrOfMeals[desireItemIndex];
-                                                const breakfastArr = [...desireItem["breakfast"]];
-                                                const launchArr = [...desireItem["launch"]];
-                                                const dinnerArr = [...desireItem["dinner"]];
-
-                                                breakfastArr[index] =
-                                                  e.target.value === "off"
-                                                    ? [0, "off", "admin"]
-                                                    : [0.5, "on", "admin"];
-                                                launchArr[index] =
-                                                  e.target.value === "off"
-                                                    ? [0, "off", "admin"]
-                                                    : [1, "on", "admin"];
-                                                dinnerArr[index] =
-                                                  e.target.value === "off"
-                                                    ? [0, "off", "admin"]
-                                                    : [1, "on", "admin"];
-
-                                                const copyDesireItem = {
-                                                  ...desireItem,
-                                                  breakfast: breakfastArr,
-                                                  launch: launchArr,
-                                                  dinner: dinnerArr,
-                                                };
-                                                copyArrOfMeals[desireItemIndex] = copyDesireItem;
-                                                console.log(el);
-                                                setArrOfMeals([...copyArrOfMeals]);
-                                                let mealError = "";
-                                                if (
-                                                  new Date() >
-                                                  new Date(
-                                                    el.year,
-                                                    el.month,
-                                                    el.date.split(" ")[0] * 1,
-                                                    6
-                                                  ) &&
-                                                  (user.role === "user" || user.role === "admin")
-                                                ) {
-                                                  mealError = "Full meal request time is over";
-                                                }
-                                                if (mealError) {
-                                                  alert(mealError);
-                                                  console.log(prevArrOfMeals);
-                                                  // prevArrOfMeals[desireItemIndex] = { ...obj, [mealName]: mealArr };
-                                                  setArrOfMeals([...prevArrOfMeals]);
-                                                  return;
-                                                }
-                                                updatePersonFullMeal({
-                                                  id: el.id,
-                                                  personIndex: index,
-                                                  userIndex: registeredUsers.findIndex(
-                                                    (item) => item._id === user._id
-                                                  ),
-                                                  month: el.month,
-                                                  year: el.date.split(" ")[2] * 1,
-                                                  day: el.date.split(" ")[0] * 1,
-                                                  personBreakfast: breakfastArr[index],
-                                                  personLaunch: launchArr[index],
-                                                  personDinner: dinnerArr[index],
-                                                });
-                                              }}
-                                            />
-                                          </div>
+                                              updatePersonFullMeal({
+                                                id: el.id,
+                                                personIndex: index,
+                                                userIndex: registeredUsers.findIndex(
+                                                  (item) => item._id === user._id
+                                                ),
+                                                month: el.month,
+                                                year: el.date.split(" ")[2] * 1,
+                                                day: el.date.split(" ")[0] * 1,
+                                                personBreakfast: breakfastArr[index],
+                                                personLaunch: launchArr[index],
+                                                personDinner: dinnerArr[index],
+                                              });
+                                            }}
+                                          />
                                         </div>
                                       </div>
                                     </td>
@@ -1490,77 +1490,80 @@ const Meal = () => {
                                   {/* dinner section end */}
                                   <tr>
                                     <td>
-                                      <input
-                                        onMouseEnter={() => {
-                                          setItem({
-                                            ...item,
-                                            type: "text",
-                                            borderIndex: index,
-                                            date: el.date,
-                                            mealName: "dinner",
-                                          });
-                                        }}
-                                        onMouseLeave={() => {
-                                          setItem({});
-                                        }}
-                                        style={{
-                                          color: "black",
-                                          background: "white",
-                                          border:
-                                            el.dinner &&
+                                      <div className={`flex justify-start`}>
+                                        <input
+                                          onMouseEnter={() => {
+                                            setItem({
+                                              ...item,
+                                              type: "text",
+                                              borderIndex: index,
+                                              date: el.date,
+                                              mealName: "dinner",
+                                            });
+                                          }}
+                                          onMouseLeave={() => {
+                                            setItem({});
+                                          }}
+                                          style={{
+                                            color: "black",
+                                            background: "white",
+                                            border:
+                                              el.dinner &&
+                                                el.dinner[index] &&
+                                                el.dinner[index][1] !== "off"
+                                                ? "1.5px solid black"
+                                                : "1.5px solid red",
+                                            borderRadius: "5px",
+                                            width: "40px",
+                                            textAlign: "center",
+                                            marginRight: ".5rem",
+                                          }}
+                                          disabled={
+                                            el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
+                                          }
+                                          onChange={(e) =>
+                                            updateMealHandler(e, el.date, el.id, index, "dinner")
+                                          }
+                                          type={
+                                            item.type === "number" &&
+                                              item.borderIndex === index &&
+                                              item.date === el.date &&
+                                              item.mealName === "dinner" &&
                                               el.dinner[index] &&
                                               el.dinner[index][1] !== "off"
-                                              ? "1.5px solid black"
-                                              : "1.5px solid red",
-                                          borderRadius: "5px",
-                                          width: "40px",
-                                          textAlign: "center",
-                                          marginRight: ".5rem",
-                                        }}
-                                        disabled={
-                                          el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
-                                        }
-                                        onChange={(e) =>
-                                          updateMealHandler(e, el.date, el.id, index, "dinner")
-                                        }
-                                        type={
-                                          item.type === "number" &&
-                                            item.borderIndex === index &&
-                                            item.date === el.date &&
-                                            item.mealName === "dinner" &&
-                                            el.dinner[index] &&
-                                            el.dinner[index][1] !== "off"
-                                            ? "number"
-                                            : "text"
-                                        }
-                                        value={
-                                          el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
-                                            ? "off"
-                                            : el.dinner && el.dinner[index] && el.dinner[index][0] === 0
-                                              ? ""
-                                              : el.dinner && el.dinner[index] && el.dinner[index][0]
-                                        }
-                                      />
-                                      {/* {currentIndex === index && ( */}
-                                      {1 === 1 && (
-                                        <>
-                                          <input
-                                            value={el.dinner[index][1]}
-                                            onChange={(e) =>
-                                              updateMealHandler(
-                                                e,
-                                                el.date,
-                                                el.id,
-                                                index,
-                                                "dinner",
-                                                "checkbox"
-                                              )
-                                            }
-                                            type="checkbox"
-                                            checked={el.dinner[index][1] === "on" ? true : false}
-                                          />
-                                        </>
-                                      )}
+                                              ? "number"
+                                              : "text"
+                                          }
+                                          value={
+                                            el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
+                                              ? "off"
+                                              : el.dinner && el.dinner[index] && el.dinner[index][0] === 0
+                                                ? ""
+                                                : el.dinner && el.dinner[index] && el.dinner[index][0]
+                                          }
+                                        />
+                                        {/* {currentIndex === index && ( */}
+                                        {1 === 1 && (
+                                          <>
+                                            <input
+                                              value={el.dinner[index][1]}
+                                              onChange={(e) =>
+                                                updateMealHandler(
+                                                  e,
+                                                  el.date,
+                                                  el.id,
+                                                  index,
+                                                  "dinner",
+                                                  "checkbox"
+                                                )
+                                              }
+                                              type="checkbox"
+                                              checked={el.dinner[index][1] === "on" ? true : false}
+                                            />
+                                          </>
+                                        )}
+
+                                      </div>
                                     </td>
 
                                   </tr>

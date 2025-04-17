@@ -5,17 +5,16 @@ const UserHomeTableHeadContent = ({ screenWidth, setMoneyOption, moneyOption, bo
     <table
       style={{
         width: "100%",
-        textAlign: "center"
       }}
     >
       <tr>
         <td
-          className={`w-[30%] sm:w-[25%]`}
+          className={`w-[30%] sm:w-[25%]  text-left pl-5`}
         >
           <span
             style={{
               display: "inline-block",
-              marginLeft: "-1.4rem",
+              // marginLeft: "-1.4rem",
             }}
           >
             Meal
