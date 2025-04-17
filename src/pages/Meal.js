@@ -31,6 +31,7 @@ import { createPortal } from "react-dom";
 import FoodSelect from "../components/FoodSelect/FoodSelect";
 import TableHeader from "../components/Table/TableHeader";
 import AllUser from "../components/Table/AllUser/AllUser";
+import getDayName from "../utils/getDayName";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -936,7 +937,8 @@ const Meal = () => {
                             el.date.split(" ")[0] == todayDate ? "red" : "",
                         }}
                       >
-                        {el.date?.split(" ")[0]}  {/* Date body */}
+                        {/* {el.date?.split(" ")[0]}  Date body */}
+                        <span className={`${getDayName(getYear, getMonth+1, el.date.split(" ")[0]) === 'Friday'?'font-bold text-green-500 text-2xl':'font-semibold'}`}>{getDayName(getYear, getMonth+1, el.date.split(" ")[0]) === 'Friday'?'Fr':el.date?.split(" ")[0]}</span>
                       </td>
                       <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                       <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black sticky left-[54.39px] border-black`}> {/* meal name body width */}
