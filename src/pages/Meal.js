@@ -1045,13 +1045,14 @@ const Meal = () => {
                                           onMouseLeave={() => {
                                             setItem("text");
                                           }}
-                                          disabled={
-                                            (el.breakfast &&
-                                              el.breakfast[index] &&
-                                              el.breakfast[index][1] === "off") ||
-                                            el.breakfast[index][2] === "user"
-                                            // ||user?.role === "user"
-                                          }
+                                          // disabled={
+                                          //   (el.breakfast &&
+                                          //     el.breakfast[index] &&
+                                          //     el.breakfast[index][1] === "off") ||
+                                          //   el.breakfast[index][2] === "user"
+                                          //   // ||user?.role === "user"
+                                          // }
+                                          disabled = {true}
                                           onChange={(e) =>
                                             updateMealHandler(
                                               e,
@@ -1065,12 +1066,13 @@ const Meal = () => {
                                             color: "black",
                                             textAlign: 'center',
                                             // background: "white",
-                                            border:
-                                              el.breakfast &&
-                                                el.breakfast[index] &&
-                                                el.breakfast[index][1] !== "off"
-                                                ? "1.5px solid black"
-                                                : "1.5px solid red",
+                                            // border:
+                                            //   el.breakfast &&
+                                            //     el.breakfast[index] &&
+                                            //     el.breakfast[index][1] !== "off"
+                                            //     ? "1.5px solid black"
+                                            //     : "1.5px solid red",
+                                            border:'1.5px solid red',
                                             borderRadius: "5px",
                                             width: "40px",
                                             // textAlign: "center",
@@ -1086,19 +1088,20 @@ const Meal = () => {
                                               ? "text"
                                               : "text"
                                           }
-                                          value={
-                                            el.breakfast &&
-                                              el.breakfast[index] &&
-                                              el.breakfast[index][1] === "off"
-                                              ? "off"
-                                              : el.breakfast &&
-                                                el.breakfast[index] &&
-                                                el.breakfast[index][0] === 0
-                                                ? ""
-                                                : el.breakfast &&
-                                                el.breakfast[index] &&
-                                                el.breakfast[index][0]
-                                          }
+                                          // value={
+                                          //   el.breakfast &&
+                                          //     el.breakfast[index] &&
+                                          //     el.breakfast[index][1] === "off"
+                                          //     ? "off"
+                                          //     : el.breakfast &&
+                                          //       el.breakfast[index] &&
+                                          //       el.breakfast[index][0] === 0
+                                          //       ? ""
+                                          //       : el.breakfast &&
+                                          //       el.breakfast[index] &&
+                                          //       el.breakfast[index][0]
+                                          // }
+                                          value={'off'}
                                         />
                                         {/* Breakfast checkbox */}
                                         {1 === 1 && (
@@ -1106,6 +1109,7 @@ const Meal = () => {
                                             {/* &nbsp;&nbsp; */}
                                             <div className="inline-block relative ">
                                               <input
+                                                disabled
                                                 className=""
                                                 type="checkbox"
                                                 value={el.breakfast[index][1]}
@@ -1119,7 +1123,8 @@ const Meal = () => {
                                                     "checkbox"
                                                   )
                                                 }
-                                                checked={el.breakfast[index][1] === "on" ? true : false}
+                                                // checked={el.breakfast[index][1] === "on" ? true : false}
+                                                checked = {false}
                                               />
                                             </div>
                                           </>
