@@ -9,7 +9,9 @@ import {
   useGetUsersQuery,
   useGetYearMonthQuery,
   useSignUpMutation,
+  useUpdateDinnerMutation,
   useUpdateExtraShopMoneyMutation,
+  useUpdateLunchMutation,
   useUpdateMealMutation,
   useUpdateMoneyMutation,
   useUpdateMyMealStatusMutation,
@@ -65,6 +67,8 @@ const Meal = () => {
   const todayDate = new Date().getDate();
   const [createMeal, { data: meals }] = useCreateMealMutation();
   const { data: yearMonth } = useGetYearMonthQuery();
+  const [updateLunch, { isLoading: updateLunchLoading, isSuccess: updateLunchSuccess, isError: isUpdateLunchError, error: updateLunchError }] = useUpdateLunchMutation()
+  const [updateDinner, { isLoading: updateDinnerLoading, isSuccess: updateDinnerSuccess, isError: isUpdateDinnerError, error: updateDinnerError }] = useUpdateDinnerMutation()
   const [getMonth, setGetMonth] = useState(todayMonth);
   const [getYear, setGetYear] = useState(todayYear);
   const selectMealRef = useRef(null)
@@ -347,6 +351,27 @@ const Meal = () => {
       setUpdatedArrOfMeals([]);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (updateLunchLoading) {
+      setIsChanged(true)
+    }
+    if (updateLunchSuccess) {
+      setIsChanged(false)
+      setUpdatedArrOfMeals([]);
+    }
+  }, [updateLunchSuccess, updateLunchLoading])
+  useEffect(() => {
+    if (updateDinnerLoading) {
+      setIsChanged(true)
+    }
+    if (updateDinnerSuccess) {
+      setIsChanged(false)
+      setUpdatedArrOfMeals([]);
+    }
+  }, [updateDinnerSuccess, updateDinnerLoading])
+
+
   useEffect(() => {
     if (monthlyMeals?.monthlyMeals?.length > 0) {
       setRegisteredUsers([
@@ -392,8 +417,6 @@ const Meal = () => {
       setUpdatedArrOfMeals([...changedArr]);
       if (changedArr.length > 0) {
         setIsChanged(true);
-      } else {
-        setIsChanged(false);
       }
     }
   }, [prevArrOfMeals, arrOfMeals]);
@@ -525,16 +548,16 @@ const Meal = () => {
       setArrOfMeals([...prevArrOfMeals]);
       return;
     }
-    updateMyMealStatus({
-      id,
-      [mealName]: updatedDateObj[mealName],
-      mealName,
-      year: updatedDateObj.date.split(" ")[2] * 1,
-      month: getMonthString(updatedDateObj.date.split(" ")[1]),
-      day: updatedDateObj.date.split(" ")[0],
-      mealIndex,
-      userIndex: registeredUsers.findIndex((item) => item._id === user._id),
-    });
+    // updateMyMealStatus({
+    //   id,
+    //   [mealName]: updatedDateObj[mealName],
+    //   mealName,
+    //   year: updatedDateObj.date.split(" ")[2] * 1,
+    //   month: getMonthString(updatedDateObj.date.split(" ")[1]),
+    //   day: updatedDateObj.date.split(" ")[0],
+    //   mealIndex,
+    //   userIndex: registeredUsers.findIndex((item) => item._id === user._id),
+    // });
     setNeedUpdateObj(updatedDateObj);
   };
   const saveUpdate = () => {
@@ -938,7 +961,7 @@ const Meal = () => {
                         }}
                       >
                         {/* {el.date?.split(" ")[0]}  Date body */}
-                        <span className={`${getDayName(getYear, getMonth+1, el.date.split(" ")[0]) === 'Friday'?'font-bold text-green-500 text-2xl':'font-semibold'}`}>{getDayName(getYear, getMonth+1, el.date.split(" ")[0]) === 'Friday'?'Fr':el.date?.split(" ")[0]}</span>
+                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0]}</span>
                       </td>
                       <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                       <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black sticky left-[54.39px] border-black`}> {/* meal name body width */}
@@ -1052,7 +1075,7 @@ const Meal = () => {
                                           //   el.breakfast[index][2] === "user"
                                           //   // ||user?.role === "user"
                                           // }
-                                          disabled = {true}
+                                          disabled={true}
                                           onChange={(e) =>
                                             updateMealHandler(
                                               e,
@@ -1072,7 +1095,7 @@ const Meal = () => {
                                             //     el.breakfast[index][1] !== "off"
                                             //     ? "1.5px solid black"
                                             //     : "1.5px solid red",
-                                            border:'1.5px solid red',
+                                            border: '1.5px solid red',
                                             borderRadius: "5px",
                                             width: "40px",
                                             // textAlign: "center",
@@ -1124,7 +1147,7 @@ const Meal = () => {
                                                   )
                                                 }
                                                 // checked={el.breakfast[index][1] === "on" ? true : false}
-                                                checked = {false}
+                                                checked={false}
                                               />
                                             </div>
                                           </>
@@ -1178,8 +1201,16 @@ const Meal = () => {
                                           disabled={
                                             el.launch && el.launch[index] && el.launch[index][1] === "off"
                                           }
-                                          onChange={(e) =>
+                                          onChange={(e) => {
                                             updateMealHandler(e, el.date, el.id, index, "launch")
+                                            // updateLunch({id:el.id, borderIndex:index, })
+                                            const lunch = [...el.launch[index]]
+                                            lunch[0] = parseInt(e.target.value)
+                                            lunch[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
+                                            lunch[2] = user.role
+                                            console.log(lunch)
+                                            updateLunch({ id: el.id, borderIndex: index, lunch })
+                                          }
                                           }
                                           value={
                                             el.launch && el.launch[index] && el.launch[index][1] === "off"
@@ -1198,7 +1229,7 @@ const Meal = () => {
                                                 paddingLeft: "1rem",
                                               }}
                                               type="checkbox"
-                                              onChange={(e) =>
+                                              onChange={(e) => {
                                                 updateMealHandler(
                                                   e,
                                                   el.date,
@@ -1207,6 +1238,14 @@ const Meal = () => {
                                                   "launch",
                                                   "checkbox"
                                                 )
+                                                const lunch = [...el.launch[index]]
+                                                lunch[0] = e.target.value === 'off' ? 1 : 0
+                                                lunch[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                lunch[2] = user.role
+                                                console.log(lunch)
+                                                updateLunch({ id: el.id, borderIndex: index, lunch })
+                                              }
+
                                               }
                                               value={el.launch[index][1]}
                                               checked={el.launch[index][1] === "on" ? true : false}
@@ -1220,12 +1259,12 @@ const Meal = () => {
                                               // transform: "translateY(-50%)",
                                             }}
                                             checked={
-                                              el["breakfast"][index][1] === "on" ||
+                                              // el["breakfast"][index][1] === "on" ||
                                               el["launch"][index][1] === "on" ||
                                               el["dinner"][index][1] === "on"
                                             }
                                             value={
-                                              el["breakfast"][index][1] === "on" ||
+                                              // el["breakfast"][index][1] === "on" ||
                                                 el["launch"][index][1] === "on" ||
                                                 el["dinner"][index][1] === "on"
                                                 ? "off"
@@ -1285,19 +1324,30 @@ const Meal = () => {
                                                 setArrOfMeals([...prevArrOfMeals]);
                                                 return;
                                               }
-                                              updatePersonFullMeal({
-                                                id: el.id,
-                                                personIndex: index,
-                                                userIndex: registeredUsers.findIndex(
-                                                  (item) => item._id === user._id
-                                                ),
-                                                month: el.month,
-                                                year: el.date.split(" ")[2] * 1,
-                                                day: el.date.split(" ")[0] * 1,
-                                                personBreakfast: breakfastArr[index],
-                                                personLaunch: launchArr[index],
-                                                personDinner: dinnerArr[index],
-                                              });
+                                              // updatePersonFullMeal({
+                                              //   id: el.id,
+                                              //   personIndex: index,
+                                              //   userIndex: registeredUsers.findIndex(
+                                              //     (item) => item._id === user._id
+                                              //   ),
+                                              //   month: el.month,
+                                              //   year: el.date.split(" ")[2] * 1,
+                                              //   day: el.date.split(" ")[0] * 1,
+                                              //   personBreakfast: breakfastArr[index],
+                                              //   personLaunch: launchArr[index],
+                                              //   personDinner: dinnerArr[index],
+                                              // });
+                                              const lunch = [...el.launch[index]]
+                                              lunch[0] = e.target.value === 'on' ? 1 : 0
+                                              lunch[1] = e.target.value === 'on' ? 'on' : 'off'
+                                              lunch[2] = user.role
+                                              updateLunch({ id: el.id, borderIndex: index, lunch })
+                                              console.log(el.launch[index])
+                                              const dinner = [...el.dinner[index]]
+                                              dinner[0] = e.target.value === 'on' ? 1 : 0
+                                              dinner[1] = e.target.value === 'on' ? 'on' : 'off'
+                                              dinner[2] = user.role
+                                              updateDinner({ id: el.id, borderIndex: index, dinner })
                                             }}
                                           />
                                         </div>
@@ -1528,8 +1578,14 @@ const Meal = () => {
                                           disabled={
                                             el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
                                           }
-                                          onChange={(e) =>
+                                          onChange={(e) => {
                                             updateMealHandler(e, el.date, el.id, index, "dinner")
+                                            const dinner = [...el.dinner[index]]
+                                            dinner[0] = parseInt(e.target.value)
+                                            dinner[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
+                                            dinner[2] = user.role
+                                            updateDinner({ id: el.id, borderIndex: index, dinner })
+                                          }
                                           }
                                           type={
                                             item.type === "number" &&
@@ -1554,7 +1610,7 @@ const Meal = () => {
                                           <>
                                             <input
                                               value={el.dinner[index][1]}
-                                              onChange={(e) =>
+                                              onChange={(e) => {
                                                 updateMealHandler(
                                                   e,
                                                   el.date,
@@ -1563,6 +1619,12 @@ const Meal = () => {
                                                   "dinner",
                                                   "checkbox"
                                                 )
+                                                const dinner = [...el.dinner[index]]
+                                                dinner[0] = e.target.value === 'off' ? 1 : 0
+                                                dinner[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                dinner[2] = user.role
+                                                updateDinner({ id: el.id, borderIndex: index, dinner })
+                                              }
                                               }
                                               type="checkbox"
                                               checked={el.dinner[index][1] === "on" ? true : false}

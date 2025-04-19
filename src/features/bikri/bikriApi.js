@@ -9,26 +9,24 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
     }),
-    deleteYearMonth:builder.mutation({
+    deleteYearMonth: builder.mutation({
       query: (yearMonth) => ({
         url: `/year-month/${yearMonth._id}`,
         method: 'DELETE',
-        body:yearMonth
+        body: yearMonth
       })
     }),
     getMonthlyMeals: builder.query({
       query: ({ getMonth, getYear }) => ({
         url: `/meal/${getMonth}/${getYear}`,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
       providesTags: ["getMeals"],
@@ -39,9 +37,8 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
       invalidatesTags: ['getMeals']
@@ -52,9 +49,8 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
       invalidatesTags: ["getAllMonthStat", "getMeals"],
@@ -63,28 +59,28 @@ const bikriApi = apiSlice.injectEndpoints({
           args.month === 0
             ? "January"
             : args.month === 1
-            ? "February"
-            : args.month === 2
-            ? "March"
-            : args.month === 3
-            ? "April"
-            : args.month === 4
-            ? "May"
-            : args.month === 5
-            ? "June"
-            : args.month === 6
-            ? "July"
-            : args.month === 7
-            ? "August"
-            : args.month === 8
-            ? "September"
-            : args.month === 9
-            ? "Octobor"
-            : args.month === 10
-            ? "November"
-            : args.month === 11
-            ? "December"
-            : "";
+              ? "February"
+              : args.month === 2
+                ? "March"
+                : args.month === 3
+                  ? "April"
+                  : args.month === 4
+                    ? "May"
+                    : args.month === 5
+                      ? "June"
+                      : args.month === 6
+                        ? "July"
+                        : args.month === 7
+                          ? "August"
+                          : args.month === 8
+                            ? "September"
+                            : args.month === 9
+                              ? "Octobor"
+                              : args.month === 10
+                                ? "November"
+                                : args.month === 11
+                                  ? "December"
+                                  : "";
         try {
           const { data: updatedData } = await queryFulfilled;
           dispatch(
@@ -119,6 +115,28 @@ const bikriApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateLunch: builder.mutation({
+      query: (data) => ({
+        url: `/meal/update-lunch/${data.id}`,
+        method: "PATCH",
+        body: data
+      }),
+      // headers: {
+      //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+      //     }`,
+      // }
+    }),
+    updateDinner: builder.mutation({
+      query: (data) => ({
+        url: `/meal/update-dinner/${data.id}`,
+        method: "PATCH",
+        body: data
+      }),
+      // headers: {
+      //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+      //     }`,
+      // }
+    }),
 
     updatePersonFullMeal: builder.mutation({
       query: (data) => ({
@@ -126,9 +144,8 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
       invalidatesTags: ["getAllMonthStat"],
@@ -175,12 +192,11 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
-      invalidatesTags: ["getAllMonthStat"],
+      invalidatesTags: ["getAllMonthStat", 'getMeals'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         console.log(args);
         try {
@@ -226,9 +242,8 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
       invalidatesTags: ["getAllMonthStat"],
@@ -282,9 +297,8 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth")).token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
         },
       }),
       invalidatesTags: ["getAllMonthStat"],
@@ -328,13 +342,12 @@ const bikriApi = apiSlice.injectEndpoints({
       },
     }),
     getMonthlyStats: builder.query({
-      query: ({year, month, day}) => {
+      query: ({ year, month, day }) => {
         return {
           url: `/meal/monthly-borders-stats/${year}/${month}/${day}`,
           headers: {
-            authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("auth")).token
-            }`,
+            authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+              }`,
           },
         };
       },
@@ -382,14 +395,14 @@ const bikriApi = apiSlice.injectEndpoints({
       query: (body) => ({
         url: `/users/send-message`,
         method: "POST",
-        body:body
+        body: body
       }),
     }),
     forgotPassword: builder.mutation({
       query: () => ({
         url: `/users/forgot-password`,
         method: "POST",
-        body: {email:'shamim@gmail.com'},
+        body: { email: 'shamim@gmail.com' },
       }),
     }),
     logout: builder.mutation({
@@ -397,9 +410,8 @@ const bikriApi = apiSlice.injectEndpoints({
         url: `/users/logout`,
         method: "GET",
         headers: {
-          authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("auth"))?.token
-          }`,
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth"))?.token
+            }`,
         },
       }),
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -447,5 +459,7 @@ export const {
   useLogoutMutation,
   useSendSmsMutation,
   useForgotPasswordMutation,
-  useDeleteYearMonthMutation
+  useDeleteYearMonthMutation,
+  useUpdateLunchMutation,
+  useUpdateDinnerMutation
 } = bikriApi;
