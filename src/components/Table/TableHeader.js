@@ -8,9 +8,9 @@ const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption
             <thead className="sticky top-0 z-10">
                 <tr className="h-[50px]">
                     <td style={{ textAlign: 'center' }} className={`${currentUser === 'all' ? 'min-w-[50px]' : 'min-w-[50px]'} bg-white text-black sticky left-0 z-[100] m-0 p-0`}>Date</td>
-                    <td className="w-1 sticky left-[50px] h-full bg-gray-300">&nbsp;</td>
-                    <td style={{ textAlign: 'center' }} className="min-w-[80px] sticky left-[54.39px] bg-white text-black ">Type</td>
-                    <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky left-[134.39px] bg-gray-300`}>&nbsp;</td>
+                    <td className={`w-1 sticky left-[50px] h-full bg-gray-300`}>&nbsp;</td>
+                    <td style={{ textAlign: 'center' }} className={`min-w-[80px] md:sticky md:left-[54.39px] bg-white text-black`}>Type</td>
+                    <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 md:sticky md:left-[134.39px] bg-gray-300`}>&nbsp;</td>
                     <td className={`${currentUser === 'all' ? '' : 'hidden'} w-[2px] bg-gray-300`}>&nbsp;</td> {/* head name first vertical indicator */}
 
                     {registeredUsers
@@ -72,8 +72,8 @@ const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption
                                 </>
                             );
                         })}
-                    <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[100px] bg-gray-300`}>&nbsp;</td>
-                    <td className={`${currentUser === 'all' ? '' : 'hidden'} min-w-[100px] sticky right-0 bg-white text-black text-center font-bold`}>Total Meal</td>
+                    <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[50px] md:right-[100px] bg-gray-300`}>&nbsp;</td>
+                    <td className={`${currentUser === 'all' ? '' : 'hidden'} min-w-[50px] md:min-w-[100px] sticky right-0 bg-white text-black text-center font-bold`}>Total Meal</td>
                 </tr>
 
                 <tr className="h-1 bg-gray-300">

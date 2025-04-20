@@ -766,7 +766,7 @@ const Meal = () => {
                                   {/* {currentUser !== "all"
                                   ? `Total Deposite: ${borderTotalDeposite}`
                                   : el.name} */}
-                                  {currentUser !== "all" ? (
+                                  {/* {currentUser !== "all" ? (
                                     <UserHomeTableHeadContent
                                       screenWidth={screenWidth}
                                       setMoneyOption={setMoneyOption}
@@ -777,7 +777,7 @@ const Meal = () => {
                                     />
                                   ) : (
                                     el.name
-                                  )}
+                                  )} */}
                                 </th>
                               </tr>
                             </table>
@@ -964,18 +964,18 @@ const Meal = () => {
                         <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0]}</span>
                       </td>
                       <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
-                      <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black sticky left-[54.39px] border-black`}> {/* meal name body width */}
-                        <table className="w-full text-center ml-1">
+                      <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black md:sticky md:left-[54.39px] border-black h-[100px] pt-[5.5px]`}> {/* meal name body width */}
+                        <table className="w-full text-center ml-1 h-full">
                           {['breakfast', 'launch', 'dinner'].map((meal, i) => {
                             return (
                               <tr>
-                                <td className="text-left">{meal}&nbsp;
+                                <td className="text-left flex items-center">{meal}&nbsp;
                                   {/* <select>
                                   <option></option>
                                   <option></option>
                                 </select> */}
-                                  <div className="inline-block relative">
-                                    <div className="cursor-pointer" onClick={() => {
+                                  <div className="inline-block">
+                                    <div className={`cursor-pointer`} onClick={() => {
                                       setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date, mealName: meal })
                                     }}>*</div>
                                     <div>
@@ -997,7 +997,7 @@ const Meal = () => {
                           })}
                         </table>
                       </td>
-                      <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-gray-300 sticky left-[134.39px]`}></td> {/* Type body vertical right border element */}
+                      <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-gray-300 md:sticky md:left-[134.39px]`}></td> {/* Type body vertical right border element */}
                       <td className={`${currentUser === 'all' ? '' : 'hidden'} bg-gray-300`}></td> {/* first body vertical indicator */}
 
                       {/* <TableMealBody
@@ -1645,7 +1645,7 @@ const Meal = () => {
                         }
 
                       })}
-                      <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[100px] bg-gray-300`}>&nbsp;</td> {/* Total meal left border element */}
+                      <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[50px] md:right-[100px] bg-gray-300`}>&nbsp;</td> {/* Total meal left border element */}
 
                       {/* total meal calculation */}
                       <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-white text-black sticky right-0 font-bold`}>
