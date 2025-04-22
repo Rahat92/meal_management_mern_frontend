@@ -29,7 +29,7 @@ const SignIn = () => {
     }
   }, [isError]);
   return (
-    <div className="font-sans h-screen bg-red-500">
+    <div className="font-sans h-screen ">
       <section className="bg-gray-50 dark:bg-gray-900 h-full">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
           <Link

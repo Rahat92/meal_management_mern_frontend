@@ -45,6 +45,7 @@ const Meal = () => {
   const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
+  const [borderTotalMeal, setBorderTotalMeal] = useState(0);
   const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
   const [selectDate, setSelectDate] = useState(null)
   const [headHeight, setHeadHeight] = useState(0);
@@ -114,8 +115,6 @@ const Meal = () => {
     }
     if (isDepositeUpdateSuccess) {
       alert("Deposite updated successfully")
-      console.log(deposite.money)
-      console.log(money)
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
   }, [isUpdateMoneyError, isDepositeUpdateSuccess]);
@@ -154,6 +153,7 @@ const Meal = () => {
       clearTimeout(timer);
     };
   }, [deposite]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (shopping?.id) {
@@ -615,7 +615,14 @@ const Meal = () => {
     }
     return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
-
+  useEffect(() => {
+    if (currentIndex!==undefined) {
+      const totalBreakfast = arrOfMeals.filter((item) => item.day<=currentDay).reduce((f, c) => f + c['breakfast'][currentIndex][0], 0)
+      const totalLunch = arrOfMeals.filter((item) => item.day<=currentDay).reduce((f, c) => f + c['launch'][currentIndex][0], 0)
+      const totalDinner = arrOfMeals.filter((item) => item.day<=currentDay).reduce((f, c) => f + c['dinner'][currentIndex][0], 0)
+      setBorderTotalMeal(totalBreakfast+totalLunch+totalDinner)
+    }
+  }, [currentIndex, isChanged])
   return (
     <>
       <div className="font-sans hidden">
@@ -910,7 +917,7 @@ const Meal = () => {
         isChanged={isChanged}
       />
       {arrOfMeals?.length > 0 && (
-        <div ref={tableBodyRef} className="max-w-[100%] bg-red-500 w-[1000px] max-h-[80vh] rounded-lg text-black m-auto overflow-auto">
+        <div ref={tableBodyRef} className="max-w-[100%] w-[1000px] max-h-[80vh] rounded-lg text-black m-auto overflow-auto">
           <table className="">
             {/* table header */}
             <TableHeader
@@ -922,6 +929,7 @@ const Meal = () => {
               borderTotalDeposite={borderTotalDeposite}
               borderTotalShop={borderTotalShop}
               borderTotalExtraShop={borderTotalExtraShop}
+              borderTotalMeal = {borderTotalMeal}
             />
 
             <tbody className="w-full overscroll-auto">
@@ -953,15 +961,11 @@ const Meal = () => {
                     <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
                       {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                       <td
-                        className={`${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'} bg-white text-black sticky left-0 text-center`}
-                        style={{
-                          // width: "50px",
-                          background:
-                            el.date.split(" ")[0] == todayDate ? "red" : "",
-                        }}
+                        className={`${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.date.split(" ")[0] == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
+                        
                       >
                         {/* {el.date?.split(" ")[0]}  Date body */}
-                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0]}</span>
+                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay?<span className="text-[15px]">Today</span>:el.date?.split(" ")[0]}</span>
                       </td>
                       <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                       <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black md:sticky md:left-[54.39px] border-black h-[100px] pt-[5.5px]`}> {/* meal name body width */}
@@ -1208,7 +1212,6 @@ const Meal = () => {
                                             lunch[0] = parseInt(e.target.value)
                                             lunch[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
                                             lunch[2] = user.role
-                                            console.log(lunch)
                                             updateLunch({ id: el.id, borderIndex: index, lunch })
                                           }
                                           }
@@ -1242,7 +1245,6 @@ const Meal = () => {
                                                 lunch[0] = e.target.value === 'off' ? 1 : 0
                                                 lunch[1] = e.target.value === 'off' ? 'on' : 'off'
                                                 lunch[2] = user.role
-                                                console.log(lunch)
                                                 updateLunch({ id: el.id, borderIndex: index, lunch })
                                               }
 
@@ -1265,7 +1267,7 @@ const Meal = () => {
                                             }
                                             value={
                                               // el["breakfast"][index][1] === "on" ||
-                                                el["launch"][index][1] === "on" ||
+                                              el["launch"][index][1] === "on" ||
                                                 el["dinner"][index][1] === "on"
                                                 ? "off"
                                                 : "on"
@@ -1302,7 +1304,6 @@ const Meal = () => {
                                                 dinner: dinnerArr,
                                               };
                                               copyArrOfMeals[desireItemIndex] = copyDesireItem;
-                                              console.log(el);
                                               setArrOfMeals([...copyArrOfMeals]);
                                               let mealError = "";
                                               if (
@@ -1319,7 +1320,6 @@ const Meal = () => {
                                               }
                                               if (mealError) {
                                                 alert(mealError);
-                                                console.log(prevArrOfMeals);
                                                 // prevArrOfMeals[desireItemIndex] = { ...obj, [mealName]: mealArr };
                                                 setArrOfMeals([...prevArrOfMeals]);
                                                 return;
@@ -1342,7 +1342,6 @@ const Meal = () => {
                                               lunch[1] = e.target.value === 'on' ? 'on' : 'off'
                                               lunch[2] = user.role
                                               updateLunch({ id: el.id, borderIndex: index, lunch })
-                                              console.log(el.launch[index])
                                               const dinner = [...el.dinner[index]]
                                               dinner[0] = e.target.value === 'on' ? 1 : 0
                                               dinner[1] = e.target.value === 'on' ? 'on' : 'off'
@@ -1385,7 +1384,6 @@ const Meal = () => {
                                           const desireMealIndex = arrOfMeals.findIndex(
                                             (item) => item.id === el.id
                                           );
-                                          console.log(desireMealIndex);
                                           const desireMeal = arrOfMeals[desireMealIndex];
                                           const copyDesireMeal = { ...desireMeal };
                                           // const moneys = desireMeal.money;

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserHomeTableHeadContent = ({ screenWidth, setMoneyOption, moneyOption, borderTotalDeposite, borderTotalShop, borderTotalExtraShop }) => {
+const UserHomeTableHeadContent = ({ screenWidth,borderTotalMeal, setMoneyOption, moneyOption, borderTotalDeposite, borderTotalShop, borderTotalExtraShop }) => {
   return (
     <table
       style={{
@@ -17,7 +17,7 @@ const UserHomeTableHeadContent = ({ screenWidth, setMoneyOption, moneyOption, bo
               // marginLeft: "-1.4rem",
             }}
           >
-            Meal
+            Meal <span className='text-green-500'>({borderTotalMeal})</span>
           </span>
         </td>
         {/* <td>jsj</td> */}

@@ -74,7 +74,6 @@ const Conversation = () => {
     setMsg(e.target.value);
   };
 
-  console.log(msg);
 
   return (
     <div className="w-screen h-screen flex bg-green-400 relative">
@@ -99,7 +98,7 @@ const Conversation = () => {
           );
         })}
       </div>
-      <div className="flex flex-col relative w-full items-center h-full relative">
+      <div className="flex flex-col w-full items-center h-full relative">
         <div className="flex flex-col w-3/4 m-auto absolute top-0 h-[90%] bg-red-500 overflow-auto">
           {currentMessages?.map((el) => {
             return (

@@ -1,8 +1,7 @@
 import React from 'react'
 import UserHomeTableHeadContent from '../UserHomeTableHeadContent';
 
-const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption, moneyOption, borderTotalDeposite, borderTotalShop, borderTotalExtraShop }) => {
-    
+const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption, moneyOption, borderTotalDeposite, borderTotalShop, borderTotalExtraShop, borderTotalMeal }) => {
     return (
         <>
             <thead className="sticky top-0 z-10">
@@ -60,6 +59,7 @@ const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption
                                                             borderTotalDeposite={borderTotalDeposite}
                                                             borderTotalShop={borderTotalShop}
                                                             borderTotalExtraShop={borderTotalExtraShop}
+                                                            borderTotalMeal={borderTotalMeal}
                                                         />
                                                     ) : (
                                                         el.name
