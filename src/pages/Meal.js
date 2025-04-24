@@ -487,32 +487,32 @@ const Meal = () => {
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
     let mealError = "";
-    if (
-      user?.role === "user" &&
-      mealName === "breakfast" &&
-      new Date() >
-      new Date(
-        updatedDateObj.year,
-        updatedDateObj.month,
-        updatedDateObj.date.split(" ")[0],
-        6
-      )
-    ) {
-      mealError = "You can't change previous Meal";
-    }
-    if (
-      user?.role === "user" &&
-      mealName === "launch" &&
-      new Date() >
-      new Date(
-        updatedDateObj.year,
-        updatedDateObj.month,
-        updatedDateObj.date.split(" ")[0],
-        10
-      )
-    ) {
-      mealError = "You can't change previous Meal";
-    }
+    // if (
+    //   user?.role === "user" &&
+    //   mealName === "breakfast" &&
+    //   new Date() >
+    //   new Date(
+    //     updatedDateObj.year,
+    //     updatedDateObj.month,
+    //     updatedDateObj.date.split(" ")[0],
+    //     6
+    //   )
+    // ) {
+    //   mealError = "You can't change previous Meal";
+    // }
+    // if (
+    //   user?.role === "user" &&
+    //   mealName === "launch" &&
+    //   new Date() >
+    //   new Date(
+    //     updatedDateObj.year,
+    //     updatedDateObj.month,
+    //     updatedDateObj.date.split(" ")[0],
+    //     10
+    //   )
+    // ) {
+    //   mealError = "You can't change previous Meal";
+    // }
     if (
       user?.role === "user" &&
       mealName === "dinner" &&
@@ -558,7 +558,7 @@ const Meal = () => {
     //   mealIndex,
     //   userIndex: registeredUsers.findIndex((item) => item._id === user._id),
     // });
-    setNeedUpdateObj(updatedDateObj);
+    // setNeedUpdateObj(updatedDateObj);
   };
   const saveUpdate = () => {
     updatedArrOfMeals.map((el) => {
@@ -616,11 +616,11 @@ const Meal = () => {
     return () => clearTimeout(timer)
   }, [arrOfMeals?.length]);
   useEffect(() => {
-    if (currentIndex!==undefined) {
-      const totalBreakfast = arrOfMeals.filter((item) => item.day<=currentDay).reduce((f, c) => f + c['breakfast'][currentIndex][0], 0)
-      const totalLunch = arrOfMeals.filter((item) => item.day<=currentDay).reduce((f, c) => f + c['launch'][currentIndex][0], 0)
-      const totalDinner = arrOfMeals.filter((item) => item.day<=currentDay).reduce((f, c) => f + c['dinner'][currentIndex][0], 0)
-      setBorderTotalMeal(totalBreakfast+totalLunch+totalDinner)
+    if (currentIndex !== undefined) {
+      const totalBreakfast = arrOfMeals.filter((item) => item.day <= currentDay).reduce((f, c) => f + c['breakfast'][currentIndex][0], 0)
+      const totalLunch = arrOfMeals.filter((item) => item.day <= currentDay).reduce((f, c) => f + c['launch'][currentIndex][0], 0)
+      const totalDinner = arrOfMeals.filter((item) => item.day <= currentDay).reduce((f, c) => f + c['dinner'][currentIndex][0], 0)
+      setBorderTotalMeal(totalBreakfast + totalLunch + totalDinner)
     }
   }, [currentIndex, isChanged])
   return (
@@ -929,7 +929,7 @@ const Meal = () => {
               borderTotalDeposite={borderTotalDeposite}
               borderTotalShop={borderTotalShop}
               borderTotalExtraShop={borderTotalExtraShop}
-              borderTotalMeal = {borderTotalMeal}
+              borderTotalMeal={borderTotalMeal}
             />
 
             <tbody className="w-full overscroll-auto">
@@ -962,10 +962,10 @@ const Meal = () => {
                       {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                       <td
                         className={`${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.date.split(" ")[0] == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
-                        
+
                       >
                         {/* {el.date?.split(" ")[0]}  Date body */}
-                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay?<span className="text-[15px]">Today</span>:el.date?.split(" ")[0]}</span>
+                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay ? <span className="text-[15px]">Today</span> : el.date?.split(" ")[0]}</span>
                       </td>
                       <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                       <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black md:sticky md:left-[54.39px] border-black h-[100px] pt-[5.5px]`}> {/* meal name body width */}
@@ -1130,6 +1130,12 @@ const Meal = () => {
                                           // }
                                           value={'off'}
                                         />
+                                        {/* <select style={{marginRight:'.5rem', border: '1px solid black'}} defaultValue={'off'} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>off</option>
+                                        </select> */}
                                         {/* Breakfast checkbox */}
                                         {1 === 1 && (
                                           <>
@@ -1165,7 +1171,7 @@ const Meal = () => {
                                   <tr style={{}}>
                                     <td style={{ width: '25%' }}>
                                       <div className={`flex justify-start items-center`}>
-                                        <input
+                                        {/* <input
                                           onMouseEnter={() => {
                                             setItem({
                                               ...item,
@@ -1222,8 +1228,51 @@ const Meal = () => {
                                                 ? ""
                                                 : el.launch && el.launch[index] && el.launch[index][0]
                                           }
-                                        />
-                                        {/* {currentIndex === index && ( */}
+                                        /> */}
+                                        <select
+                                          value={el.launch[index][0]}
+                                          onChange={(e) => {
+                                            if (
+                                              user?.role === "user" &&
+                                              new Date() >
+                                              new Date(
+                                                el.year,
+                                                el.month,
+                                                el.date.split(" ")[0],
+                                                10
+                                              )
+                                            ) {
+                                              alert("You can't change previous Meal!")
+                                            } else {
+                                              updateMealHandler(e, el.date, el.id, index, "launch")
+                                              // updateLunch({id:el.id, borderIndex:index, })
+                                              const lunch = [...el.launch[index]]
+                                              lunch[0] = parseInt(e.target.value)
+                                              lunch[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
+                                              lunch[2] = user.role
+                                              updateLunch({ id: el.id, borderIndex: index, lunch })
+                                            }
+                                          }
+                                          }
+                                          disabled={
+                                            el.launch && el.launch[index] && el.launch[index][1] === "off"
+                                          }
+                                          onMouseEnter={() => {
+                                            setItem({
+                                              ...item,
+                                              type: "text",
+                                              borderIndex: index,
+                                              date: el.date,
+                                              mealName: "launch",
+                                            });
+                                          }}
+                                          onMouseLeave={() => {
+                                            setItem({});
+                                          }}
+                                          style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                          <option value={el.launch[index][0]}>{el.launch[index][0] == 0 ? 'off' : el.launch[index][0]}</option>
+                                          {[1, 2, 3, 0].filter(item => item != el.launch[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
+                                        </select>
 
                                         <div className="flex justify-start gap-2">
                                           {1 === 1 && (
@@ -1233,19 +1282,48 @@ const Meal = () => {
                                               }}
                                               type="checkbox"
                                               onChange={(e) => {
-                                                updateMealHandler(
-                                                  e,
-                                                  el.date,
-                                                  el.id,
-                                                  index,
-                                                  "launch",
-                                                  "checkbox"
-                                                )
-                                                const lunch = [...el.launch[index]]
-                                                lunch[0] = e.target.value === 'off' ? 1 : 0
-                                                lunch[1] = e.target.value === 'off' ? 'on' : 'off'
-                                                lunch[2] = user.role
-                                                updateLunch({ id: el.id, borderIndex: index, lunch })
+
+                                                if (
+                                                  user?.role === "user" &&
+                                                  new Date() >
+                                                  new Date(
+                                                    el.year,
+                                                    el.month,
+                                                    el.date.split(" ")[0],
+                                                    10
+                                                  )
+                                                ) {
+                                                  alert("You can't change previous Meal!")
+                                                } else {
+                                                  updateMealHandler(
+                                                    e,
+                                                    el.date,
+                                                    el.id,
+                                                    index,
+                                                    "launch",
+                                                    "checkbox"
+                                                  )
+                                                  const lunch = [...el.launch[index]]
+                                                  lunch[0] = e.target.value === 'off' ? 1 : 0
+                                                  lunch[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                  lunch[2] = user.role
+                                                  updateLunch({ id: el.id, borderIndex: index, lunch })
+                                                }
+
+
+                                                // updateMealHandler(
+                                                //   e,
+                                                //   el.date,
+                                                //   el.id,
+                                                //   index,
+                                                //   "launch",
+                                                //   "checkbox"
+                                                // )
+                                                // const lunch = [...el.launch[index]]
+                                                // lunch[0] = e.target.value === 'off' ? 1 : 0
+                                                // lunch[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                // lunch[2] = user.role
+                                                // updateLunch({ id: el.id, borderIndex: index, lunch })
                                               }
 
                                               }
@@ -1546,7 +1624,7 @@ const Meal = () => {
                                   <tr>
                                     <td>
                                       <div className={`flex justify-start`}>
-                                        <input
+                                        {/* <input
                                           onMouseEnter={() => {
                                             setItem({
                                               ...item,
@@ -1602,7 +1680,56 @@ const Meal = () => {
                                                 ? ""
                                                 : el.dinner && el.dinner[index] && el.dinner[index][0]
                                           }
-                                        />
+                                        /> */}
+                                        <select
+                                          value={el.dinner[index][0]}
+                                          onChange={(e) => {
+                                            if (
+                                              user?.role === "user" &&
+                                              new Date() >
+                                              new Date(
+                                                el.year,
+                                                el.month,
+                                                el.date.split(" ")[0],
+                                                6
+                                              )
+                                            ) {
+                                              alert("You can't change previous Meal!")
+                                            } else {
+                                              updateMealHandler(e, el.date, el.id, index, "dinner")
+                                              // updateLunch({id:el.id, borderIndex:index, })
+                                              const dinner = [...el.dinner[index]]
+                                              dinner[0] = parseInt(e.target.value)
+                                              dinner[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
+                                              dinner[2] = user.role
+                                              updateDinner({ id: el.id, borderIndex: index, dinner })
+                                            }
+                                          }
+                                          }
+                                          disabled={
+                                            el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
+                                          }
+                                          onMouseEnter={() => {
+                                            setItem({
+                                              ...item,
+                                              type: "text",
+                                              borderIndex: index,
+                                              date: el.date,
+                                              mealName: "dinner",
+                                            });
+                                          }}
+                                          onMouseLeave={() => {
+                                            setItem({});
+                                          }}
+                                          style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                          <option value={el.dinner[index][0]}>{el.dinner[index][0] == 0 ? 'off' : el.dinner[index][0]}</option>
+                                          {console.log(el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
+                                            ? "off"
+                                            : el.dinner && el.dinner[index] && el.dinner[index][0] === 0
+                                              ? ""
+                                              : el.dinner && el.dinner[index] && el.dinner[index][0])}
+                                          {[1, 2, 3, 0].filter(item => item != el.dinner[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
+                                        </select>
                                         {/* {currentIndex === index && ( */}
                                         {1 === 1 && (
                                           <>
@@ -1635,9 +1762,10 @@ const Meal = () => {
 
                                   </tr>
                                 </table>
-                              </td>
+                              </td >
                               {/* for customer */}
-                              <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 bg-green-500`}>&nbsp;</td>
+                              <td td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 bg-green-500`
+                              }>& nbsp;</td>
                             </>
                           )
                         }
@@ -1670,8 +1798,8 @@ const Meal = () => {
                 })
               }
             </tbody>
-          </table>
-        </div>
+          </table >
+        </div >
       )}
     </>
   );
