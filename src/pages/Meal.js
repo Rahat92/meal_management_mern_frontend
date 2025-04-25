@@ -513,19 +513,19 @@ const Meal = () => {
     // ) {
     //   mealError = "You can't change previous Meal";
     // }
-    if (
-      user?.role === "user" &&
-      mealName === "dinner" &&
-      new Date() >
-      new Date(
-        updatedDateObj.year,
-        updatedDateObj.month,
-        updatedDateObj.date.split(" ")[0],
-        18
-      )
-    ) {
-      mealError = "You can't change previous Meal";
-    }
+    // if (
+    //   user?.role === "user" &&
+    //   mealName === "dinner" &&
+    //   new Date() >
+    //   new Date(
+    //     updatedDateObj.year,
+    //     updatedDateObj.month,
+    //     updatedDateObj.date.split(" ")[0],
+    //     18
+    //   )
+    // ) {
+    //   mealError = "You can't change previous Meal";
+    // }
     if (
       user?.role === "admin" &&
       (mealName === "breakfast" ||
@@ -1691,10 +1691,10 @@ const Meal = () => {
                                                 el.year,
                                                 el.month,
                                                 el.date.split(" ")[0],
-                                                6
+                                                18
                                               )
                                             ) {
-                                              alert("You can't change previous Meal!")
+                                              alert("You can't change previous Meall!")
                                             } else {
                                               updateMealHandler(e, el.date, el.id, index, "dinner")
                                               // updateLunch({id:el.id, borderIndex:index, })
@@ -1723,11 +1723,6 @@ const Meal = () => {
                                           }}
                                           style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
                                           <option value={el.dinner[index][0]}>{el.dinner[index][0] == 0 ? 'off' : el.dinner[index][0]}</option>
-                                          {console.log(el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
-                                            ? "off"
-                                            : el.dinner && el.dinner[index] && el.dinner[index][0] === 0
-                                              ? ""
-                                              : el.dinner && el.dinner[index] && el.dinner[index][0])}
                                           {[1, 2, 3, 0].filter(item => item != el.dinner[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
                                         </select>
                                         {/* {currentIndex === index && ( */}
@@ -1735,22 +1730,52 @@ const Meal = () => {
                                           <>
                                             <input
                                               value={el.dinner[index][1]}
+                                              // onChange={(e) => {
+                                              //   updateMealHandler(
+                                              //     e,
+                                              //     el.date,
+                                              //     el.id,
+                                              //     index,
+                                              //     "dinner",
+                                              //     "checkbox"
+                                              //   )
+                                              //   const dinner = [...el.dinner[index]]
+                                              //   dinner[0] = e.target.value === 'off' ? 1 : 0
+                                              //   dinner[1] = e.target.value === 'off' ? 'on' : 'off'
+                                              //   dinner[2] = user.role
+                                              //   updateDinner({ id: el.id, borderIndex: index, dinner })
+                                              // }
+                                              // }
                                               onChange={(e) => {
-                                                updateMealHandler(
-                                                  e,
-                                                  el.date,
-                                                  el.id,
-                                                  index,
-                                                  "dinner",
-                                                  "checkbox"
-                                                )
-                                                const dinner = [...el.dinner[index]]
-                                                dinner[0] = e.target.value === 'off' ? 1 : 0
-                                                dinner[1] = e.target.value === 'off' ? 'on' : 'off'
-                                                dinner[2] = user.role
-                                                updateDinner({ id: el.id, borderIndex: index, dinner })
+                                                if (
+                                                  user?.role === "user" &&
+                                                  new Date() >
+                                                  new Date(
+                                                    el.year,
+                                                    el.month,
+                                                    el.date.split(" ")[0],
+                                                    18
+                                                  )
+                                                ) {
+                                                  alert("You can't change previous Meall!")
+                                                } else {
+                                                  updateMealHandler(
+                                                    e,
+                                                    el.date,
+                                                    el.id,
+                                                    index,
+                                                    "dinner",
+                                                    "checkbox"
+                                                  )
+                                                  const dinner = [...el.dinner[index]]
+                                                  dinner[0] = e.target.value === 'off' ? 1 : 0
+                                                  dinner[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                  dinner[2] = user.role
+                                                  updateDinner({ id: el.id, borderIndex: index, dinner })
+                                                }
                                               }
                                               }
+
                                               type="checkbox"
                                               checked={el.dinner[index][1] === "on" ? true : false}
                                             />
