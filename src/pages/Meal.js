@@ -965,7 +965,7 @@ const Meal = () => {
 
                       >
                         {/* {el.date?.split(" ")[0]}  Date body */}
-                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-green-500 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay ? <span className="text-[15px]">Today</span> : el.date?.split(" ")[0]}</span>
+                        <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-gray-800 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay ? <span className="text-[15px]">Today</span> : el.date?.split(" ")[0]}</span>
                       </td>
                       <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                       <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black md:sticky md:left-[54.39px] border-black h-[100px] pt-[5.5px]`}> {/* meal name body width */}
