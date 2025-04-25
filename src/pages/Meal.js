@@ -961,9 +961,13 @@ const Meal = () => {
                     <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
                       {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                       <td
-                        className={`${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.date.split(" ")[0] == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
-
+                        onClick={() => {
+                          setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
+                        }}
+                        className={`cursor-default ${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.date.split(" ")[0] == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
                       >
+                        {createPortal(<FoodSelect selectMeal={selectMeal} el={el} />, document.querySelector('#food'))}
+                        
                         {/* {el.date?.split(" ")[0]}  Date body */}
                         <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-gray-800 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay ? <span className="text-[15px]">Today</span> : el.date?.split(" ")[0]}</span>
                       </td>
@@ -980,7 +984,7 @@ const Meal = () => {
                                 </select> */}
                                   <div className="inline-block">
                                     <div className={`cursor-pointer`} onClick={() => {
-                                      setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date, mealName: meal })
+                                      setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
                                     }}>*</div>
                                     <div>
                                       {
@@ -1365,7 +1369,7 @@ const Meal = () => {
                                               breakfastArr[index] =
                                                 e.target.value === "off"
                                                   ? [0, "off", "admin"]
-                                                  : [0.5, "on", "admin"];
+                                                  : [0, "on", "admin"];
                                               launchArr[index] =
                                                 e.target.value === "off"
                                                   ? [0, "off", "admin"]
