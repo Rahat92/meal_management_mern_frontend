@@ -983,15 +983,13 @@ const Meal = () => {
                                   <option></option>
                                 </select> */}
                                   <div className="inline-block">
-                                    <div className={`cursor-pointer`} onClick={() => {
-                                      setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
-                                    }}>*</div>
-                                    <div>
+                                    <div className={`cursor-pointer`} >*</div>
+                                    {/* <div>
                                       {
                                         // createPortal(<h1 className={``}>{user?.name}, {el.date}, {meal}, {registeredUsers.findIndex(item => item._id === user?._id)} </h1>, document.querySelector('#food'))
                                         createPortal(<FoodSelect selectMeal={selectMeal} el={el} meal={meal} />, document.querySelector('#food'))
                                       }
-                                    </div>
+                                    </div> */}
                                     {/* <div className={`absolute h-[100px] w-[150px] bg-red-500 top-[15px] left-0 z-[1000] border ${selectMeal.setMeal&&selectMeal.mealName === meal&&selectMeal.date === el.date&&Object.keys(el).includes(meal)?'':'hidden'}`}>
                                     <select ref = {selectMealRef}>
                                       <option>Meat</option> 
@@ -1039,6 +1037,10 @@ const Meal = () => {
                         item={item}
                         setItem={setItem}
                         updateMealHandler={updateMealHandler}
+                        updateLunch = {updateLunch}
+                        user = {user}
+                        currentIndex = {currentIndex}
+                        updateDinner = {updateDinner}
                       />
 
                       {/* For customer */}
