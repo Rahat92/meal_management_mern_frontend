@@ -19,6 +19,8 @@ const AllMonthsStats = () => {
   const todayDate = new Date().getDate();
   const { user } = useSelector((state) => state.auth);
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
+  const [selectBorder, setSelectBorder] = useState()
+  console.log(selectBorder)
   const [display, setDisplay] = useState(false);
   const [nowScroll, setNowScroll] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear())
@@ -386,12 +388,14 @@ const AllMonthsStats = () => {
                         <th className="sticky left-[-2px] bg-white z-50 shadow-md border-r-2">
                           <table className="w-full">
                             <tr>
-
                               <th className="w-full border-l-2 border-r-2">
                                 <table className="w-full">
                                   {el.finalArr.map((item) => {
                                     return (
-                                      <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                      <tr onClick={() => {
+                                        setSelectBorder(item.border_id)
+                                        console.log(selectBorder)
+                                      }} className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                         <td className={`py-2`}>{item.border}</td>
                                       </tr>
                                     );
@@ -405,7 +409,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.breakfast}</td>
                                 </tr>
                               );
@@ -416,7 +420,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className={`py-2`}>{item.launch}</td>
                                 </tr>
                               );
@@ -427,7 +431,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.dinner}</td>
                                 </tr>
                               );
@@ -438,7 +442,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.totalMeal}</td>
                                 </tr>
                               );
@@ -452,7 +456,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.totalShop}</td>
                                 </tr>
                               );
@@ -468,7 +472,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">
                                     {item.totalExtraShop}
                                   </td>
@@ -484,7 +488,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.totalMoney}</td>
                                 </tr>
                               );
@@ -495,7 +499,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">
                                     {isNaN(
                                       (
@@ -519,7 +523,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">
                                     {isNaN(
                                       item.totalMoney -
