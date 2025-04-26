@@ -36,7 +36,7 @@ const AllMonthsStats = () => {
       //   skip: !isSkipped,
       // }
     );
-  const currentBorders = monthlyMeals && monthlyMeals.monthlyMeals[0]&&monthlyMeals.monthlyMeals[0].border;
+  const currentBorders = monthlyMeals && monthlyMeals.monthlyMeals[0] && monthlyMeals.monthlyMeals[0].border;
 
   const { data: yearMonth } = useGetYearMonthQuery();
   const [yearMonthArr, setYearMonthArr] = useState([]);
@@ -178,6 +178,7 @@ const AllMonthsStats = () => {
   }
   return (
     <div className="w-screen flex flex-col gap-8 justify-center mt-16 items-center">
+      {/* Form start here */}
       <div className="z-[0] align-self-start w-full md:w-[70%] relative flex flex-col">
         <div className="flex gap-[15px]">
           <div>
@@ -214,6 +215,7 @@ const AllMonthsStats = () => {
             </form>
           </div>
         </div>
+        {/* Form end here */}
 
         <div
           id="dropdownInformation"
@@ -297,18 +299,19 @@ const AllMonthsStats = () => {
           </ul>
         </div>{" "}
       </div>
-      {currentBorders?.length > 0 && mealStatMonthly?.length>0 && (
+      {currentBorders?.length > 0 && mealStatMonthly?.length > 0 && (
         <div
           ref={mainBodyRef}
-          className="border shadow-lg w-full md:w-[70%] h-[250px] overflow-auto relative"
+          className="border shadow-lg w-full md:w-[70%] h-[300px] overflow-auto relative"
         >
           <table className="w-[1800px] bg-white text-black">
             <thead className="sticky top-0 shadow-md bg-white z-[100] h-[40px]">
               <tr className="">
-                <th className="sticky left-0 top-0 bg-white border-r-2">
+                <th className="w-[80px] h-full">Date</th>
+                <th className="sticky left-[-2px] top-0 bg-white border-r-2">
                   <table className="w-full h-[40px]">
                     <tr className="h-[40px]">
-                      <th className="w-[80px] h-full">Date</th>
+
                       <th className="h-[40px] text-center">
                         <table className="w-full">
                           <tr>
@@ -338,6 +341,7 @@ const AllMonthsStats = () => {
                 <th>Rest&nbsp;Balance</th>
               </tr>
             </thead>
+
             {mealStatMonthly?.length > 0
               ? mealStatMonthly
                 ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
@@ -347,46 +351,47 @@ const AllMonthsStats = () => {
                   return (
                     <tbody>
                       <tr className={``}>
-                        <th className="sticky left-0 bg-white z-50 shadow-md border-r-2">
+                        <th
+                          className="sticky top-[50%] transform block w-[80px]"
+                          style={{ backfaceVisibility: "hidden" }}
+                        >
+                          {el.month.split(" ")[0] === "0"
+                            ? "January"
+                            : el.month.split(" ")[0] === "1"
+                              ? "February"
+                              : el.month.split(" ")[0] === "2"
+                                ? "March"
+                                : el.month.split(" ")[0] === "3"
+                                  ? "April"
+                                  : el.month.split(" ")[0] === "4"
+                                    ? "May"
+                                    : el.month.split(" ")[0] === "5"
+                                      ? "June"
+                                      : el.month.split(" ")[0] === "6"
+                                        ? "July"
+                                        : el.month.split(" ")[0] === "7"
+                                          ? "August"
+                                          : el.month.split(" ")[0] === "8"
+                                            ? "September"
+                                            : el.month.split(" ")[0] === "9"
+                                              ? "Octobor"
+                                              : el.month.split(" ")[0] === "10"
+                                                ? "November"
+                                                : el.month.split(" ")[0] === "11"
+                                                  ? "December"
+                                                  : ""}{" "}
+                          <br />
+                          {el.month.split(" ")[1]}
+                        </th>
+                        <th className="sticky left-[-2px] bg-white z-50 shadow-md border-r-2">
                           <table className="w-full">
                             <tr>
-                              <th
-                                className="sticky top-[50%] transform block w-[80px]"
-                                style={{ backfaceVisibility: "hidden" }}
-                              >
-                                {el.month.split(" ")[0] === "0"
-                                  ? "January"
-                                  : el.month.split(" ")[0] === "1"
-                                    ? "February"
-                                    : el.month.split(" ")[0] === "2"
-                                      ? "March"
-                                      : el.month.split(" ")[0] === "3"
-                                        ? "April"
-                                        : el.month.split(" ")[0] === "4"
-                                          ? "May"
-                                          : el.month.split(" ")[0] === "5"
-                                            ? "June"
-                                            : el.month.split(" ")[0] === "6"
-                                              ? "July"
-                                              : el.month.split(" ")[0] === "7"
-                                                ? "August"
-                                                : el.month.split(" ")[0] === "8"
-                                                  ? "September"
-                                                  : el.month.split(" ")[0] === "9"
-                                                    ? "Octobor"
-                                                    : el.month.split(" ")[0] === "10"
-                                                      ? "November"
-                                                      : el.month.split(" ")[0] === "11"
-                                                        ? "December"
-                                                        : ""}{" "}
-                                <br />
-                                {el.month.split(" ")[1]}
-                              </th>
+
                               <th className="w-full border-l-2 border-r-2">
                                 <table className="w-full">
                                   {el.finalArr.map((item) => {
                                     return (
-                                      <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                      <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                         <td className={`py-2`}>{item.border}</td>
                                       </tr>
                                     );
@@ -400,7 +405,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.breakfast}</td>
                                 </tr>
                               );
@@ -411,7 +416,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className={`py-2`}>{item.launch}</td>
                                 </tr>
                               );
@@ -422,7 +427,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.dinner}</td>
                                 </tr>
                               );
@@ -433,7 +438,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.totalMeal}</td>
                                 </tr>
                               );
@@ -447,14 +452,14 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.totalShop}</td>
                                 </tr>
                               );
                             })}
                           </table>
                         </th>
-                        <th className="block sticky top-[50%] transform">
+                        <th className="block sticky top-[50%] transform bg-red-500 text-gray-800 font-bold text-3xl rounded px-2">
                           {isNaN(el.mealRate.toFixed(2))
                             ? 0
                             : el.mealRate.toFixed(2)}
@@ -463,7 +468,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">
                                     {item.totalExtraShop}
                                   </td>
@@ -479,7 +484,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">{item.totalMoney}</td>
                                 </tr>
                               );
@@ -490,7 +495,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">
                                     {isNaN(
                                       (
@@ -514,7 +519,7 @@ const AllMonthsStats = () => {
                           <table className="w-full">
                             {el.finalArr.map((item) => {
                               return (
-                                <tr className={`${item.border_id === user?._id?'bg-green-500 text-white':''}`}>
+                                <tr className={`${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                   <td className="py-2">
                                     {isNaN(
                                       item.totalMoney -
