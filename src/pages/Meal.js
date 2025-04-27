@@ -917,7 +917,7 @@ const Meal = () => {
         isChanged={isChanged}
       />
       {arrOfMeals?.length > 0 && (
-        <div ref={tableBodyRef} className="max-w-[100%] w-[1000px] max-h-[80vh] rounded-lg text-black m-auto overflow-auto">
+        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto">
           <table className="">
             {/* table header */}
             <TableHeader

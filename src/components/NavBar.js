@@ -1,174 +1,3 @@
-// import React, { useEffect, useRef, useState } from "react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-// import style from "./NavBar.module.css";
-// import { Link, useNavigate } from "react-router-dom";
-// import { useLogoutMutation } from "../features/bikri/bikriApi";
-// import { useSelector } from "react-redux";
-// const NavBar = () => {
-//   const dropdownBox = useRef();
-//   const [logout, { isSuccess }] = useLogoutMutation();
-//   const [showDropDown, setShowDropDown] = useState(false);
-//   const navigate = useNavigate();
-//   const { user } = useSelector((state) => state.auth);
-//   useEffect(() => {
-//     if (isSuccess) {
-//       navigate("/");
-//     }
-//   }, [isSuccess]);
-//   useEffect(() => {
-//     const handleClick = (e) => {
-//       if (!dropdownBox.current.contains(e.target)) {
-//         setShowDropDown(false);
-//       }
-//     };
-//     document.addEventListener("click", handleClick);
-//     return () => {
-//       document.removeEventListener("click", handleClick);
-//     };
-//   }, [showDropDown]);
-//   return (
-//     <div className={`${style.navbarWrapper} font-sans`}>
-//       <div className={style.wrapper}>
-//         <div className={style.brand}>
-//           <Link to="/meals">Home</Link>
-//         </div>
-//         <div className={style.brand}>
-//           <Link to="/all-month-stats">Summery</Link>
-//         </div>
-//         <div
-//           ref={dropdownBox}
-//           onClick={(e) => {
-//             setShowDropDown((prev) => !prev);
-//           }}
-//           className={style.btnDiv}
-//         >
-//           <div
-//             style={{
-//               width: "25px",
-//               height: "25px",
-//               background: "violet",
-//               borderRadius: "50%",
-//               fontSize: "13px",
-//               color: "black",
-//               display: "flex",
-//               justifyContent: "center",
-//               alignItems: "center",
-//               zIndex: "3000",
-//             }}
-//           >
-//             {user?.name.slice(0, 2).toUpperCase()}
-//           </div>
-//           <div style={{ padding: "0 .2rem" }}>{user?.name.split(" ")[0]}</div>
-//           <FontAwesomeIcon style={{ fontSize: "1.2rem" }} icon={faAngleDown} />
-//           <div
-//             style={{
-//               position: "absolute",
-//               top: "75%",
-//               right: "25px",
-//               transform: "translateY(-50%) rotate(180deg)",
-//               border: "20px solid transparent",
-
-//               borderTopColor: "#fff",
-//               display: showDropDown ? "" : "none",
-//               zIndex: "5000",
-//             }}
-//           >
-//             <div
-//               style={{
-//                 position: "relative",
-
-//                 width: "100%",
-//                 left: "0",
-//                 top: "23px",
-//               }}
-//             >
-//               <div
-//                 style={{
-//                   position: "absolute",
-//                   bottom: "100%",
-//                   right: "-40px",
-//                   width: "80px",
-//                   transform: "translateY(-50%) rotate(180deg)",
-//                   justifyContent: "center",
-//                   zIndex: "3000",
-//                   display: showDropDown ? "" : "none",
-//                   borderRadius: "40%",
-//                   overflow: "hidden",
-//                   background: "green",
-//                   textAlign: "center",
-//                   boxShadow: "0 5px 10px black",
-//                 }}
-//               >
-//                 <ul
-//                   style={{
-//                     background: "white",
-//                     padding: ".3rem 0",
-//                   }}
-//                   onClick={(e) => e.stopPropagation()}
-//                 >
-//                   <li
-//                     onClick={(e) => {
-//                       e.stopPropagation();
-//                     }}
-//                     style={{
-//                       // padding: ".5rem 0 .5rem .5rem",
-//                       background: "white",
-//                       color: "black",
-//                       cursor: "pointer",
-//                     }}
-//                   >
-//                     Account
-//                   </li>
-//                   {/* <li
-//                     style={{
-//                       border: "1.2px solid violet",
-//                       borderRadius: "5px",
-//                       width: "55%",
-//                       // marginLeft: ".5rem",
-//                       margin: "0 auto",
-//                     }}
-//                   ></li> */}
-//                   <li
-//                     onClick={(e) => {
-//                       e.stopPropagation();
-//                     }}
-//                     style={{
-//                       // padding: ".5rem 0 .5rem .5rem",
-//                       background: "white",
-//                       color: "black",
-//                       cursor: "pointer",
-//                     }}
-//                   >
-//                     <Link to="/admin-dashboard">Dashboard</Link>
-//                   </li>
-//                   <li
-//                     style={{
-//                       // padding: ".5rem 0 .5rem .5rem",
-//                       color: "black",
-//                       cursor: "pointer",
-//                       background: "white",
-//                     }}
-//                     onClick={(e) => {
-//                       e.stopPropagation();
-//                       logout();
-//                     }}
-//                   >
-//                     Logout
-//                   </li>
-//                 </ul>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default NavBar;
-
-
 import { BrowserRouter, Link } from 'react-router-dom';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -185,8 +14,6 @@ function classNames(...classes) {
 export default function Example() {
   const [navigation, setNavigation] = useState([
     { name: 'Summary', href: '/all-month-stats', current: false },
-    // { name: 'Projects', href: '#', current: false },
-    // { name: 'Calendar', href: '#', current: false },
   ])
   const [logout, { isSuccess }] = useLogoutMutation();
   const { user } = useSelector((state) => state.auth);
@@ -197,15 +24,13 @@ export default function Example() {
       setNavigation([
         { name: 'Dashboard', href: '/admin-dashboard', current: true },
         { name: 'Summary', href: '/all-month-stats', current: false },
-        // { name: 'Projects', href: '#', current: false },
-        // { name: 'Calendar', href: '#', current: false },
       ])
     }
   }, [user])
 
   return (
     <Disclosure as="nav" className="bg-gray-800 z-[500000] h-[10vh]">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-screen-2xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-[10vh] items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}

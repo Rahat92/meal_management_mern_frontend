@@ -179,9 +179,9 @@ const AllMonthsStats = () => {
     return <LoaderComponent />;
   }
   return (
-    <div className="w-screen flex flex-col gap-8 justify-center mt-16 items-center">
+    <div className="max-w-[1200px] m-auto flex flex-col gap-8 justify-center mt-16 items-center">
       {/* Form start here */}
-      <div className="z-[0] align-self-start w-full md:w-[70%] relative flex flex-col">
+      <div className="z-[0] align-self-start w-full md:w-full relative flex flex-col">
         <div className="flex gap-[15px]">
           <div>
             <form class="max-w-[150px] mx-auto">
@@ -304,7 +304,7 @@ const AllMonthsStats = () => {
       {currentBorders?.length > 0 && mealStatMonthly?.length > 0 && (
         <div
           ref={mainBodyRef}
-          className="border shadow-lg w-full md:w-[70%] h-[300px] overflow-auto relative"
+          className="border shadow-lg w-full md:w-full h-[300px] overflow-auto relative"
         >
           <table className="w-[1800px] bg-white text-black">
             <thead className="sticky top-0 shadow-md bg-white z-[100] h-[40px]">

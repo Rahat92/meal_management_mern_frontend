@@ -24,7 +24,7 @@ const FilterBox = ({
     }
   }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
   return (
-    <div className={`max-w-full sm:max-w-[80%] m-auto flex justify-between items-center h-[10vh]`}>
+    <div className={`max-w-[1200px] mx-auto flex justify-between items-center h-[10vh]`}>
       <form className={filterBoxStyle.filterDate}>
         <select
           style={{ borderRadius: "10px" }}
