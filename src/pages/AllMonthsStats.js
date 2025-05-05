@@ -20,7 +20,6 @@ const AllMonthsStats = () => {
   const { user } = useSelector((state) => state.auth);
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const [selectBorder, setSelectBorder] = useState()
-  console.log(selectBorder)
   const [display, setDisplay] = useState(false);
   const [nowScroll, setNowScroll] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear())

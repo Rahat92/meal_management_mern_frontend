@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import MealSheets from "./pages/MealSheets";
 import Conversation from "./pages/Conversations";
+import CurrentStatus from "./pages/CurrentStatus";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const App = () => {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/current-status" element={<CurrentStatus />} />
           <Route path="/meal-sheets" element={<MealSheets />} />
           <Route path="/conversations" element={<Conversation />} />
 

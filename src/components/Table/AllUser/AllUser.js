@@ -170,10 +170,10 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                             }
                                         /> */}
                                         <select
-                                            
+
                                             value={el.launch[index][0]}
                                             onChange={(e) => {
-                                                if (user.role!=='superadmin' && index !== loggedInUserIndex) {
+                                                if (user.role !== 'superadmin' && index !== loggedInUserIndex) {
                                                     alert(`You don't have permissions to modify other meals.`)
                                                     return
                                                 }
@@ -189,6 +189,17 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     )
                                                 ) {
                                                     alert("You can't change previous Meal!")
+                                                } else if (
+                                                    user?.role === "admin" &&
+                                                    new Date() >
+                                                    new Date(
+                                                        el.year,
+                                                        el.month,
+                                                        el.date.split(" ")[0],
+                                                        24
+                                                    )
+                                                ) {
+                                                    alert("Admin can't change previous days Meal")
                                                 } else {
                                                     updateMealHandler(e, el.date, el.id, index, "launch")
                                                     // updateLunch({id:el.id, borderIndex:index, })
@@ -293,7 +304,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                         <select
                                             value={el.dinner[index][0]}
                                             onChange={(e) => {
-                                                if (user.role!=='superadmin'&&index !== loggedInUserIndex) {
+                                                if (user.role !== 'superadmin' && index !== loggedInUserIndex) {
                                                     alert(`You don't have permissions to modify other meals.`)
                                                     return
                                                 }
@@ -308,6 +319,17 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     )
                                                 ) {
                                                     alert("You can't change previous Meall!")
+                                                } else if (
+                                                    user?.role === "admin" &&
+                                                    new Date() >
+                                                    new Date(
+                                                        el.year,
+                                                        el.month,
+                                                        el.date.split(" ")[0],
+                                                        24
+                                                    )
+                                                ) {
+                                                    alert("Admin can't change previous days Meal")
                                                 } else {
                                                     updateMealHandler(e, el.date, el.id, index, "dinner")
                                                     // updateLunch({id:el.id, borderIndex:index, })

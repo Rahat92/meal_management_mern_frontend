@@ -114,7 +114,8 @@ const FilterBox = ({
               );
               setCurrentIndex(index);
             }
-            setCurrentUser(e.target.value);
+            setCurrentUser(e.target.value)
+            ;
           }}
         >
           {user?.role !== "admin" && user?.role !== "superadmin" && (

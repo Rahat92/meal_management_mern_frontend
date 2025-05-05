@@ -962,12 +962,12 @@ const Meal = () => {
                       {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                       <td
                         onClick={() => {
-                          setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
+                          if (currentUser.split(' ')[1] === user._id) {
+                            setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
+                          }
                         }}
                         className={`cursor-default ${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.date.split(" ")[0] == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
                       >
-                        {createPortal(<FoodSelect selectMeal={selectMeal} el={el} />, document.querySelector('#food'))}
-                        
                         {/* {el.date?.split(" ")[0]}  Date body */}
                         <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-gray-800 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay ? <span className="text-[15px]">Today</span> : el.date?.split(" ")[0]}</span>
                       </td>
@@ -1037,10 +1037,10 @@ const Meal = () => {
                         item={item}
                         setItem={setItem}
                         updateMealHandler={updateMealHandler}
-                        updateLunch = {updateLunch}
-                        user = {user}
-                        currentIndex = {currentIndex}
-                        updateDinner = {updateDinner}
+                        updateLunch={updateLunch}
+                        user={user}
+                        currentIndex={currentIndex}
+                        updateDinner={updateDinner}
                       />
 
                       {/* For customer */}
@@ -1238,6 +1238,8 @@ const Meal = () => {
                                         <select
                                           value={el.launch[index][0]}
                                           onChange={(e) => {
+
+
                                             if (
                                               user?.role === "user" &&
                                               new Date() >
@@ -1249,6 +1251,17 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meal!")
+                                            } else if (
+                                              user?.role === "admin" &&
+                                              new Date() >
+                                              new Date(
+                                                el.year,
+                                                el.month,
+                                                el.date.split(" ")[0],
+                                                24
+                                              )
+                                            ) {
+                                              alert("Admin can't change previous days Meal")
                                             } else {
                                               updateMealHandler(e, el.date, el.id, index, "launch")
                                               // updateLunch({id:el.id, borderIndex:index, })
@@ -1300,6 +1313,17 @@ const Meal = () => {
                                                   )
                                                 ) {
                                                   alert("You can't change previous Meal!")
+                                                } else if (
+                                                  user?.role === "admin" &&
+                                                  new Date() >
+                                                  new Date(
+                                                    el.year,
+                                                    el.month,
+                                                    el.date.split(" ")[0],
+                                                    24
+                                                  )
+                                                ) {
+                                                  alert("Admin can't change previous days Meal")
                                                 } else {
                                                   updateMealHandler(
                                                     e,
@@ -1701,6 +1725,17 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meall!")
+                                            } else if (
+                                              user?.role === "admin" &&
+                                              new Date() >
+                                              new Date(
+                                                el.year,
+                                                el.month,
+                                                el.date.split(" ")[0],
+                                                24
+                                              )
+                                            ) {
+                                              alert("Admin can't change previous days Meal")
                                             } else {
                                               updateMealHandler(e, el.date, el.id, index, "dinner")
                                               // updateLunch({id:el.id, borderIndex:index, })
@@ -1764,6 +1799,17 @@ const Meal = () => {
                                                   )
                                                 ) {
                                                   alert("You can't change previous Meall!")
+                                                } else if (
+                                                  user?.role === "admin" &&
+                                                  new Date() >
+                                                  new Date(
+                                                    el.year,
+                                                    el.month,
+                                                    el.date.split(" ")[0],
+                                                    24
+                                                  )
+                                                ) {
+                                                  alert("Admin can't change previous days Meal")
                                                 } else {
                                                   updateMealHandler(
                                                     e,
@@ -1832,6 +1878,7 @@ const Meal = () => {
           </table >
         </div >
       )}
+      {createPortal(<FoodSelect selectMeal={selectMeal} user={user} currentUser={currentUser} currentIndex={currentIndex} setSelectMeal={setSelectMeal} />, document.querySelector('#food'))}
     </>
   );
 };

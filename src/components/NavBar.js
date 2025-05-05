@@ -20,7 +20,7 @@ export default function Example() {
   const [hideNav, setHideNav] = useState('true')
 
   useEffect(() => {
-    if (user && user.role === 'superadmin') {
+    if (user && (user.role === 'superadmin' || user.role === 'admin')) {
       setNavigation([
         { name: 'Dashboard', href: '/admin-dashboard', current: true },
         { name: 'Summary', href: '/all-month-stats', current: false },
