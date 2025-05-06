@@ -526,21 +526,21 @@ const Meal = () => {
     // ) {
     //   mealError = "You can't change previous Meal";
     // }
-    if (
-      user?.role === "admin" &&
-      (mealName === "breakfast" ||
-        mealName === "launch" ||
-        mealName === "dinner") &&
-      new Date() >
-      new Date(
-        updatedDateObj.year,
-        updatedDateObj.month,
-        updatedDateObj.date.split(" ")[0],
-        24
-      )
-    ) {
-      mealError = "Admin can't change previous days Meal";
-    }
+    // if (
+    //   user?.role === "admin" &&
+    //   (mealName === "breakfast" ||
+    //     mealName === "launch" ||
+    //     mealName === "dinner") &&
+    //   new Date() >
+    //   new Date(
+    //     updatedDateObj.year,
+    //     updatedDateObj.month,
+    //     updatedDateObj.date.split(" ")[0],
+    //     24
+    //   )
+    // ) {
+    //   mealError = "Admin can't change previous days Meal";
+    // }
 
     if (mealError) {
       alert(mealError);
@@ -1251,18 +1251,20 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meal!")
-                                            } else if (
-                                              user?.role === "admin" &&
-                                              new Date() >
-                                              new Date(
-                                                el.year,
-                                                el.month,
-                                                el.date.split(" ")[0],
-                                                24
-                                              )
-                                            ) {
-                                              alert("Admin can't change previous days Meal")
-                                            } else {
+                                            } 
+                                            // else if (
+                                            //   user?.role === "admin" &&
+                                            //   new Date() >
+                                            //   new Date(
+                                            //     el.year,
+                                            //     el.month,
+                                            //     el.date.split(" ")[0],
+                                            //     24
+                                            //   )
+                                            // ) {
+                                            //   alert("Admin can't change previous days Meal")
+                                            // } 
+                                            else {
                                               updateMealHandler(e, el.date, el.id, index, "launch")
                                               // updateLunch({id:el.id, borderIndex:index, })
                                               const lunch = [...el.launch[index]]
@@ -1313,18 +1315,20 @@ const Meal = () => {
                                                   )
                                                 ) {
                                                   alert("You can't change previous Meal!")
-                                                } else if (
-                                                  user?.role === "admin" &&
-                                                  new Date() >
-                                                  new Date(
-                                                    el.year,
-                                                    el.month,
-                                                    el.date.split(" ")[0],
-                                                    24
-                                                  )
-                                                ) {
-                                                  alert("Admin can't change previous days Meal")
-                                                } else {
+                                                } 
+                                                // else if (
+                                                //   user?.role === "admin" &&
+                                                //   new Date() >
+                                                //   new Date(
+                                                //     el.year,
+                                                //     el.month,
+                                                //     el.date.split(" ")[0],
+                                                //     24
+                                                //   )
+                                                // ) {
+                                                //   alert("Admin can't change previous days Meal")
+                                                // } 
+                                                else {
                                                   updateMealHandler(
                                                     e,
                                                     el.date,
@@ -1470,21 +1474,21 @@ const Meal = () => {
                                       <input
                                         type="text"
                                         onChange={(e) => {
-                                          if (
-                                            new Date() >
-                                            new Date(
-                                              el.year,
-                                              el.month,
-                                              el.date.split(" ")[0] * 1,
-                                              24
-                                            ) &&
-                                            user?.role == "admin"
-                                          ) {
-                                            alert(
-                                              "The date is passed. You can't update previous day's deposite"
-                                            );
-                                            return;
-                                          }
+                                          // if (
+                                          //   new Date() >
+                                          //   new Date(
+                                          //     el.year,
+                                          //     el.month,
+                                          //     el.date.split(" ")[0] * 1,
+                                          //     24
+                                          //   ) &&
+                                          //   user?.role == "admin"
+                                          // ) {
+                                          //   alert(
+                                          //     "The date is passed. You can't update previous day's deposite"
+                                          //   );
+                                          //   return;
+                                          // }
                                           if (user?.role === "user") {
                                             alert("Only admin can update deposite");
                                             return;
@@ -1725,18 +1729,20 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meall!")
-                                            } else if (
-                                              user?.role === "admin" &&
-                                              new Date() >
-                                              new Date(
-                                                el.year,
-                                                el.month,
-                                                el.date.split(" ")[0],
-                                                24
-                                              )
-                                            ) {
-                                              alert("Admin can't change previous days Meal")
-                                            } else {
+                                            } 
+                                            // else if (
+                                            //   user?.role === "admin" &&
+                                            //   new Date() >
+                                            //   new Date(
+                                            //     el.year,
+                                            //     el.month,
+                                            //     el.date.split(" ")[0],
+                                            //     24
+                                            //   )
+                                            // ) {
+                                            //   alert("Admin can't change previous days Meal")
+                                            // } 
+                                            else {
                                               updateMealHandler(e, el.date, el.id, index, "dinner")
                                               // updateLunch({id:el.id, borderIndex:index, })
                                               const dinner = [...el.dinner[index]]
@@ -1799,18 +1805,20 @@ const Meal = () => {
                                                   )
                                                 ) {
                                                   alert("You can't change previous Meall!")
-                                                } else if (
-                                                  user?.role === "admin" &&
-                                                  new Date() >
-                                                  new Date(
-                                                    el.year,
-                                                    el.month,
-                                                    el.date.split(" ")[0],
-                                                    24
-                                                  )
-                                                ) {
-                                                  alert("Admin can't change previous days Meal")
-                                                } else {
+                                                }
+                                                //  else if (
+                                                //   user?.role === "admin" &&
+                                                //   new Date() >
+                                                //   new Date(
+                                                //     el.year,
+                                                //     el.month,
+                                                //     el.date.split(" ")[0],
+                                                //     24
+                                                //   )
+                                                // ) {
+                                                //   alert("Admin can't change previous days Meal")
+                                                // } 
+                                                else {
                                                   updateMealHandler(
                                                     e,
                                                     el.date,
