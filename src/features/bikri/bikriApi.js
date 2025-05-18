@@ -115,6 +115,17 @@ const bikriApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateBreakfast: builder.mutation({
+      query: (data) => ({
+        url: `/meal/update-breakfast/${data.id}`,
+        method: "PATCH",
+        body: data
+      }),
+      // headers: {
+      //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+      //     }`,
+      // }
+    }),
     updateLunch: builder.mutation({
       query: (data) => ({
         url: `/meal/update-lunch/${data.id}`,
@@ -480,5 +491,6 @@ export const {
   useDeleteYearMonthMutation,
   useUpdateLunchMutation,
   useUpdateDinnerMutation,
-  useUpdateLunchMenuMutation
+  useUpdateLunchMenuMutation,
+  useUpdateBreakfastMutation
 } = bikriApi;

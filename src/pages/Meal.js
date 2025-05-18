@@ -9,6 +9,7 @@ import {
   useGetUsersQuery,
   useGetYearMonthQuery,
   useSignUpMutation,
+  useUpdateBreakfastMutation,
   useUpdateDinnerMutation,
   useUpdateExtraShopMoneyMutation,
   useUpdateLunchMutation,
@@ -36,6 +37,8 @@ import AllUser from "../components/Table/AllUser/AllUser";
 import getDayName from "../utils/getDayName";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
+  console.log(user?.manager?.morningMealCount)
+
   const headRef = useRef();
   const tableBodyRef = useRef();
   const dateRef = useRef();
@@ -70,6 +73,7 @@ const Meal = () => {
   const { data: yearMonth } = useGetYearMonthQuery();
   const [updateLunch, { isLoading: updateLunchLoading, isSuccess: updateLunchSuccess, isError: isUpdateLunchError, error: updateLunchError }] = useUpdateLunchMutation()
   const [updateDinner, { isLoading: updateDinnerLoading, isSuccess: updateDinnerSuccess, isError: isUpdateDinnerError, error: updateDinnerError }] = useUpdateDinnerMutation()
+  const [updateBreakfast, {isSuccess:updateBreakfastSuccess, isLoading:updateBreakfastLoading }] = useUpdateBreakfastMutation()
   const [getMonth, setGetMonth] = useState(todayMonth);
   const [getYear, setGetYear] = useState(todayYear);
   const selectMealRef = useRef(null)
@@ -365,11 +369,18 @@ const Meal = () => {
     if (updateDinnerLoading) {
       setIsChanged(true)
     }
+    if (updateBreakfastLoading) {
+      setIsChanged(true)
+    }
     if (updateDinnerSuccess) {
       setIsChanged(false)
       setUpdatedArrOfMeals([]);
     }
-  }, [updateDinnerSuccess, updateDinnerLoading])
+    if (updateBreakfastSuccess) {
+      setIsChanged(false)
+      setUpdatedArrOfMeals([]);
+    }
+  }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
 
 
   useEffect(() => {
@@ -473,7 +484,7 @@ const Meal = () => {
         ? 0
         : e.target.value === "off"
           ? mealName === "breakfast"
-            ? 0.5
+            ? user?.manager?.morningMealCount || user?.morningMealCount
             : 1
           : e.target.value * 1;
 
@@ -1065,7 +1076,7 @@ const Meal = () => {
                                   <tr>
                                     <td style={{ width: "25%" }}>
                                       <div className="flex justify-start">
-                                        <input
+                                        {/* <input
                                           onMouseEnter={() => {
                                             setItem({
                                               ...item,
@@ -1135,7 +1146,68 @@ const Meal = () => {
                                           //       el.breakfast[index][0]
                                           // }
                                           value={'off'}
-                                        />
+                                        /> */}
+                                        
+                                        {/* breakfast section start */}
+                                        <select
+                                          value={el.breakfast[index][0]}
+                                          onChange={(e) => {
+                                            if (
+                                              user?.role === "user" &&
+                                              new Date() >
+                                              new Date(
+                                                el.year,
+                                                el.month,
+                                                el.date.split(" ")[0],
+                                                10
+                                              )
+                                            ) {
+                                              alert("You can't change previous Meal!")
+                                            } 
+                                            // else if (
+                                            //   user?.role === "admin" &&
+                                            //   new Date() >
+                                            //   new Date(
+                                            //     el.year,
+                                            //     el.month,
+                                            //     el.date.split(" ")[0],
+                                            //     24
+                                            //   )
+                                            // ) {
+                                            //   alert("Admin can't change previous days Meal")
+                                            // } 
+                                            else {
+                                              updateMealHandler(e, el.date, el.id, index, "breakfast")
+                                              // updateLunch({id:el.id, borderIndex:index, })
+                                              const breakfast = [...el.breakfast[index]]
+                                              breakfast[0] = parseInt(e.target.value)
+                                              breakfast[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
+                                              breakfast[2] = user.role
+                                              updateBreakfast({ id: el.id, borderIndex: index, breakfast })
+                                            }
+                                          }
+                                          }
+                                          disabled={
+                                            // el.breakfast && el.breakfast[index] && el.breakfast[index][1] === "off"
+                                            user?.manager?.morningMealCount === 0 || user?.morningMealCount === 0 || el.breakfast[index][1] == 'off'
+                                          }
+                                          onMouseEnter={() => {
+                                            setItem({
+                                              ...item,
+                                              type: "text",
+                                              borderIndex: index,
+                                              date: el.date,
+                                              mealName: "breakfast",
+                                            });
+                                          }}
+                                          onMouseLeave={() => {
+                                            setItem({});
+                                          }}
+                                          style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                          <option value={el.breakfast[index][0]}>{el.breakfast[index][0] == 0 ? 'off' : el.breakfast[index][0]}</option>
+                                          {[1, 2, 3, 0].filter(item =>item != el.breakfast[index][0]
+                                          ).map(el => <option value={el}>{el == 0? 'off' : el}</option>)}
+                                        </select>
                                         {/* <select style={{marginRight:'.5rem', border: '1px solid black'}} defaultValue={'off'} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
                                           <option>1</option>
                                           <option>2</option>
@@ -1147,7 +1219,7 @@ const Meal = () => {
                                           <>
                                             {/* &nbsp;&nbsp; */}
                                             <div className="inline-block relative ">
-                                              <input
+                                              {/* <input
                                                 disabled
                                                 className=""
                                                 type="checkbox"
@@ -1164,7 +1236,76 @@ const Meal = () => {
                                                 }
                                                 // checked={el.breakfast[index][1] === "on" ? true : false}
                                                 checked={false}
-                                              />
+                                              /> */}
+
+<input
+                                              style={{
+                                                paddingLeft: "1rem",
+                                              }}
+                                              type="checkbox"
+                                              onChange={(e) => {
+
+                                                if (
+                                                  user?.role === "user" &&
+                                                  new Date() >
+                                                  new Date(
+                                                    el.year,
+                                                    el.month,
+                                                    el.date.split(" ")[0],
+                                                    10
+                                                  )
+                                                ) {
+                                                  alert("You can't change previous Meal!")
+                                                } 
+                                                // else if (
+                                                //   user?.role === "admin" &&
+                                                //   new Date() >
+                                                //   new Date(
+                                                //     el.year,
+                                                //     el.month,
+                                                //     el.date.split(" ")[0],
+                                                //     24
+                                                //   )
+                                                // ) {
+                                                //   alert("Admin can't change previous days Meal")
+                                                // } 
+                                                else {
+                                                  updateMealHandler(
+                                                    e,
+                                                    el.date,
+                                                    el.id,
+                                                    index,
+                                                    "breakfast",
+                                                    "checkbox"
+                                                  )
+                                                  const breakfast = [...el.breakfast[index]]
+                                                  breakfast[0] = e.target.value === 'off' ? (user?.manager?.morningMealCount|| user?.morningMealCount) : 0
+                                                  breakfast[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                  breakfast[2] = user.role
+                                                  updateBreakfast({ id: el.id, borderIndex: index, breakfast })
+                                                }
+
+
+                                                // updateMealHandler(
+                                                //   e,
+                                                //   el.date,
+                                                //   el.id,
+                                                //   index,
+                                                //   "breakfast",
+                                                //   "checkbox"
+                                                // )
+                                                // const lunch = [...el.breakfast[index]]
+                                                // lunch[0] = e.target.value === 'off' ? 1 : 0
+                                                // lunch[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                // lunch[2] = user.role
+                                                // updateLunch({ id: el.id, borderIndex: index, breakfast })
+                                              }
+
+                                              }
+                                              value={el.breakfast[index][1]}
+                                              checked={el.breakfast[index][1] === "on" ? true : false}
+                                            />
+
                                             </div>
                                           </>
                                         )}
@@ -1540,21 +1681,21 @@ const Meal = () => {
                                       <input
                                         type="text"
                                         onChange={(e) => {
-                                          if (
-                                            new Date() >
-                                            new Date(
-                                              el.year,
-                                              el.month,
-                                              el.date.split(" ")[0] * 1,
-                                              24
-                                            ) &&
-                                            user?.role == "admin"
-                                          ) {
-                                            alert(
-                                              "The date is passed. You can't update previous day's shop"
-                                            );
-                                            return;
-                                          }
+                                          // if (
+                                          //   new Date() >
+                                          //   new Date(
+                                          //     el.year,
+                                          //     el.month,
+                                          //     el.date.split(" ")[0] * 1,
+                                          //     24
+                                          //   ) &&
+                                          //   user?.role == "admin"
+                                          // ) {
+                                          //   alert(
+                                          //     "The date is passed. You can't update previous day's shop"
+                                          //   );
+                                          //   return;
+                                          // }
                                           if (user?.role === "user") {
                                             alert("Only admin can update shop");
                                             return;

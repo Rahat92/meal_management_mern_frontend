@@ -444,21 +444,21 @@ const UserHomeTable = ({
               <input
                 type="text"
                 onChange={(e) => {
-                  if (
-                    new Date() >
-                      new Date(
-                        el.year,
-                        el.month,
-                        el.date.split(" ")[0] * 1,
-                        24
-                      ) &&
-                    user?.role == "admin"
-                  ) {
-                    alert(
-                      "The date is passed. You can't update previous day's shop"
-                    );
-                    return;
-                  }
+                  // if (
+                  //   new Date() >
+                  //     new Date(
+                  //       el.year,
+                  //       el.month,
+                  //       el.date.split(" ")[0] * 1,
+                  //       24
+                  //     ) &&
+                  //   user?.role == "admin"
+                  // ) {
+                  //   alert(
+                  //     "The date is passed. You can't update previous day's shop"
+                  //   );
+                  //   return;
+                  // }
                   if (user?.role === "user") {
                     alert("Only admin can update shop");
                     return;

@@ -170,7 +170,6 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                             }
                                         /> */}
                                         <select
-
                                             value={el.launch[index][0]}
                                             onChange={(e) => {
                                                 // if (user.role !== 'superadmin' && index !== loggedInUserIndex) {
