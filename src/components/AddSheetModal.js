@@ -48,12 +48,10 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
     }
     setDates([...days]);
   }, [users?.borders, selectedMonth]);
-  console.log(selectedMonth)
-  console.log(new Date().getMonth())
   return createPortal(
-    <div className="relative w-full h-screen bg-green-500 flex flex-col justify-center items-center z-50 gap-[2rem] font-sans">
+    <div className="fixed top-0 w-full h-screen bg-green-500 bg-opacity-[.9] flex flex-col justify-center items-center z-50 gap-[2rem] font-sans">
       <div
-        className="absolute top-[50px] right-[50px] text-3xl cursor-pointer"
+        className="absolute top-[20px] md:top-[50px] right-[20px] md:right-[50px] text-3xl cursor-pointer"
         onClick={() => setShowModal(false)}
       >
         <IoMdClose />

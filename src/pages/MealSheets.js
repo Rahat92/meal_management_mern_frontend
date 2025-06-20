@@ -21,29 +21,22 @@ const MealSheets = () => {
     }
   }, [isSuccess])
   return (
-    <div className={`${style.mealSheets} z-[-100]`}>
-      <div>
-
-        <Button $primary={true} onClick={() => setShowModal(true)}>
+    <div className={`${style.mealSheets} z-[-100] mt-8 p-3 flex flex-col justify-center items-center`}>
+      <div className="max-w-[150px] text-center">
+        <Button className="md:mt-10" $primary={true} onClick={() => setShowModal(true)}>
           Add Sheet
         </Button>
-
       </div>
-      <h1>Meal Sheets</h1>
+      <h1 className="z-10 my-3">Meal Sheets</h1>
       {showModal && <AddSheetModal showModal={showModal} setShowModal={setShowModal} />}
-      <div className={`${style.tableWrapper}`}>
-        <div
-          className={style.tableHeder}
-          style={{ position: "sticky", background: "red", top: "0" }}
-        >
-          <table>
+      <div className={`${style.tableWrapper} top-[0] border-2`}>
+        <table>
+          <thead className="bg-green-500 font-bold">
             <tr>
               <td>Month</td>
               <td>Action</td>
             </tr>
-          </table>
-        </div>
-        <table>
+          </thead>
           {yearMonths?.yearMonth?.map((yearMonth) => (
             <tr>
               <td>
