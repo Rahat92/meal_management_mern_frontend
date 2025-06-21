@@ -393,6 +393,12 @@ const bikriApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getManagers: builder.query({
+      query: () => ({
+        url: `/users/managers`,
+        method:'GET'
+      })
+    }),
     login: builder.mutation({
       query: (data) => ({
         url: `/users/login`,
@@ -492,5 +498,6 @@ export const {
   useUpdateLunchMutation,
   useUpdateDinnerMutation,
   useUpdateLunchMenuMutation,
-  useUpdateBreakfastMutation
+  useUpdateBreakfastMutation,
+  useGetManagersQuery
 } = bikriApi;

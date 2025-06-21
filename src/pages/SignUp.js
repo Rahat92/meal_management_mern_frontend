@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import style from "./SignUp.module.css";
-import { useForgotPasswordMutation, useSignUpMutation } from "../features/bikri/bikriApi";
+import { useForgotPasswordMutation, useGetManagersQuery, useSignUpMutation } from "../features/bikri/bikriApi";
 const SignUp = () => {
+  const {data:managers} = useGetManagersQuery()
+  console.log(managers)
   const [signUp, { isSuccess, isError, error, isLoading }] =
     useSignUpMutation();
   const [forgotPassword] = useForgotPasswordMutation();
@@ -65,6 +67,25 @@ const SignUp = () => {
                     type="password"
                     name="passwordConfirm"
                   />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Choose Manager &nbsp;
+                </td>
+                <td>
+                  <select onChange={formHandler} name="manager">
+                    <option value="">Select Manager</option>
+                    {managers?.data?.managers?.map((manager) => (
+                      <option key={manager._id} value={manager._id}>
+                        {manager.name}
+                      </option>
+                    ))}
+                  </select>
+                  <br />
+                  <span className="text-xs text-red-500">
+                    * You can only choose a manager that is already created.
+                  </span>
                 </td>
               </tr>
               <tr>

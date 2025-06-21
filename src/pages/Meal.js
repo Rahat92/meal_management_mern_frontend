@@ -21,14 +21,8 @@ import {
 } from "../features/bikri/bikriApi";
 import { useDispatch, useSelector } from "react-redux";
 import style from "./Meal.module.css";
-import UserHomeTable from "../components/UserHomeTable";
 import { locationPathChanged } from "../features/locationPath";
 import FilterBox from "../components/FilterBox";
-import TableDateAndMealHeader from "../components/TableDateAndMealHeader";
-import TableMealBody from "../components/TableMealBody";
-import TableDateAndMealBody from "../components/TableDateAndMealBody";
-import UserHomeTableHeadContent from "../components/UserHomeTableHeadContent";
-import LoaderComponent from "../components/LoaderComponent";
 import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 import { createPortal } from "react-dom";
 import FoodSelect from "../components/FoodSelect/FoodSelect";
@@ -37,8 +31,6 @@ import AllUser from "../components/Table/AllUser/AllUser";
 import getDayName from "../utils/getDayName";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
-  console.log(user?.manager?.morningMealCount)
-
   const headRef = useRef();
   const tableBodyRef = useRef();
   const dateRef = useRef();
@@ -69,11 +61,10 @@ const Meal = () => {
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
   const todayDate = new Date().getDate();
-  const [createMeal, { data: meals }] = useCreateMealMutation();
   const { data: yearMonth } = useGetYearMonthQuery();
   const [updateLunch, { isLoading: updateLunchLoading, isSuccess: updateLunchSuccess, isError: isUpdateLunchError, error: updateLunchError }] = useUpdateLunchMutation()
   const [updateDinner, { isLoading: updateDinnerLoading, isSuccess: updateDinnerSuccess, isError: isUpdateDinnerError, error: updateDinnerError }] = useUpdateDinnerMutation()
-  const [updateBreakfast, {isSuccess:updateBreakfastSuccess, isLoading:updateBreakfastLoading }] = useUpdateBreakfastMutation()
+  const [updateBreakfast, { isSuccess: updateBreakfastSuccess, isLoading: updateBreakfastLoading }] = useUpdateBreakfastMutation()
   const [getMonth, setGetMonth] = useState(todayMonth);
   const [getYear, setGetYear] = useState(todayYear);
   const selectMealRef = useRef(null)
@@ -225,17 +216,11 @@ const Meal = () => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
   useEffect(() => {
-    // if (yearMonth?.yearMonth?.length > 0) {
-    //   setGetMonth(yearMonth?.yearMonth[0].month * 1);
-    //   setGetYear(yearMonth?.yearMonth[0].year * 1);
-    //   setIsSkipped(true);
-    // }
   }, [yearMonth?.yearMonth]);
   let year = 2024;
   let month = 11;
   const currentDay = new Date().getDate();
   const monthLength = getCurrentMonthLength(month, year)
-
   const getMonthString = (desireMonth) => {
     let desireMonthString = 0;
     switch (desireMonth) {
@@ -287,11 +272,6 @@ const Meal = () => {
     }
   }, [isMealStatusError]);
 
-  // useEffect(() => {
-  //   if (isUpdateMoneyError) {
-  //     alert(updateMoneyError?.data?.message)
-  //   }
-  // }, [isUpdateMoneyError])
   useEffect(() => {
     if (fullMealUpdateError) {
       alert(fullMealError?.data?.message);
@@ -498,60 +478,6 @@ const Meal = () => {
     // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
     let mealError = "";
-    // if (
-    //   user?.role === "user" &&
-    //   mealName === "breakfast" &&
-    //   new Date() >
-    //   new Date(
-    //     updatedDateObj.year,
-    //     updatedDateObj.month,
-    //     updatedDateObj.date.split(" ")[0],
-    //     6
-    //   )
-    // ) {
-    //   mealError = "You can't change previous Meal";
-    // }
-    // if (
-    //   user?.role === "user" &&
-    //   mealName === "launch" &&
-    //   new Date() >
-    //   new Date(
-    //     updatedDateObj.year,
-    //     updatedDateObj.month,
-    //     updatedDateObj.date.split(" ")[0],
-    //     10
-    //   )
-    // ) {
-    //   mealError = "You can't change previous Meal";
-    // }
-    // if (
-    //   user?.role === "user" &&
-    //   mealName === "dinner" &&
-    //   new Date() >
-    //   new Date(
-    //     updatedDateObj.year,
-    //     updatedDateObj.month,
-    //     updatedDateObj.date.split(" ")[0],
-    //     18
-    //   )
-    // ) {
-    //   mealError = "You can't change previous Meal";
-    // }
-    // if (
-    //   user?.role === "admin" &&
-    //   (mealName === "breakfast" ||
-    //     mealName === "launch" ||
-    //     mealName === "dinner") &&
-    //   new Date() >
-    //   new Date(
-    //     updatedDateObj.year,
-    //     updatedDateObj.month,
-    //     updatedDateObj.date.split(" ")[0],
-    //     24
-    //   )
-    // ) {
-    //   mealError = "Admin can't change previous days Meal";
-    // }
 
     if (mealError) {
       alert(mealError);
@@ -559,17 +485,6 @@ const Meal = () => {
       setArrOfMeals([...prevArrOfMeals]);
       return;
     }
-    // updateMyMealStatus({
-    //   id,
-    //   [mealName]: updatedDateObj[mealName],
-    //   mealName,
-    //   year: updatedDateObj.date.split(" ")[2] * 1,
-    //   month: getMonthString(updatedDateObj.date.split(" ")[1]),
-    //   day: updatedDateObj.date.split(" ")[0],
-    //   mealIndex,
-    //   userIndex: registeredUsers.findIndex((item) => item._id === user._id),
-    // });
-    // setNeedUpdateObj(updatedDateObj);
   };
   const saveUpdate = () => {
     updatedArrOfMeals.map((el) => {
@@ -581,21 +496,7 @@ const Meal = () => {
       setHeadHeight(headRef.current.offsetHeight);
     }
   }, [headRef?.current]);
-  // useEffect(() => {
-  //   signUp();
-  // }, []);
 
-  // useEffect(() => {
-  //   // window.addEventListener("scroll", function () {
-  //   //   tableBodyRef?.current?.scrollTo(0, 500);
-  //   //   // dateRef?.current?.scrollTo(0, window.pageYOffset);
-  //   //   // nameRef?.current?.scrollTo(window.pageXOffset, 0);
-  //   // });
-  //   tableBodyRef?.current?.scrollTo({
-  //     top: 100,
-  //     behavior: "smooth",
-  //   })
-  // }, [arrOfMeals]);
   useEffect(() => {
     setMoneyOption("Deposite");
     setScreenWidth(window.screen.availWidth);
@@ -610,8 +511,6 @@ const Meal = () => {
   useEffect(() => {
     let timer;
     if (arrOfMeals?.length > 0) {
-      // window.scrollTo(0, (todayDate - 1) * 100);
-      // window.scrollTo({ top: (todayDate - 1) * 100, scrollBehavior: "smooth" });
       dateRef?.current?.scrollTo({
         top: (todayDate - 1) * 100,
         behavior: "smooth",
@@ -636,283 +535,6 @@ const Meal = () => {
   }, [currentIndex, isChanged])
   return (
     <>
-      <div className="font-sans hidden">
-        <div
-          ref={headRef}
-          style={{
-            position: "fixed",
-            top: "40px",
-            right: "0",
-            left: "0",
-            background: "gray",
-            // display: "none",
-          }}
-        >
-          <FilterBox
-            setGetYear={setGetYear}
-            setGetMonth={setGetMonth}
-            style={style}
-            yearMonth={yearMonth}
-            registeredUsers={registeredUsers}
-            setCurrentIndex={setCurrentIndex}
-            setCurrentUser={setCurrentUser}
-            user={user}
-            todayMonth={todayMonth}
-            todayYear={todayYear}
-            isLoading={isLoading}
-            isChanged={isChanged}
-          />
-
-          {/* <button
-            style={{
-              display: user?.role !== "admin" ? "none" : "",
-              color: "black",
-            }}
-            onClick={() => createMeal(dates)}
-          >
-            
-          
-          </button> */}
-          <div style={{ background: "" }}>
-            {arrOfMeals?.length > 0 && (
-              <TableDateAndMealHeader
-                currentUser={currentUser}
-                headRef={headRef}
-                screenWidth={screenWidth}
-              />
-            )}
-
-            {/* Border's Name */}
-            <div
-              ref={nameRef}
-              // onScroll={() => {
-              //   if (nowScroll) {
-              //     tableBodyRef?.current?.scrollTo(
-              //       nameRef.current.scrollLeft,
-              //       tableBodyRef.current.scrollTop
-              //     );
-              //   }
-              // }}
-              style={{
-                position: "fixed",
-                left:
-                  currentUser !== "all"
-                    ? "35%"
-                    : screenWidth > 1000
-                      ? "23%"
-                      : "150px",
-                top: headRef,
-                right:
-                  screenWidth > 1000
-                    ? currentUser === "all"
-                      ? "18%"
-                      : "11%"
-                    : currentUser === "all"
-                      ? "15%"
-                      : "0",
-                color: "black",
-                height: "50px",
-                overflowX: "scroll",
-                width: currentUser !== "all" ? "" : "",
-                boxShadow: "1px 0 4px -2px black",
-                display: arrOfMeals?.length === 0 ? "none" : "",
-                // display:'none'
-              }}
-            >
-              <table
-                style={{
-                  width:
-                    currentUser !== "all"
-                      ? "100%"
-                      : registeredUsers?.length * 150 + 0.5 + "px",
-                  height: "100%",
-                  background: "white",
-                  borderBottom: "2px solid black",
-                  borderRight: currentUser == "all" ? "1px solid black" : "",
-                  // display:'none'
-                }}
-              >
-                <thead>
-                  <tr
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  >
-                    {registeredUsers
-                      ?.filter((el) => {
-                        if (currentUser !== "all") {
-                          if (el._id === currentUser?.split(" ")[1]) {
-                            return true;
-                          }
-                        } else {
-                          return true;
-                        }
-                      })
-                      ?.map((el) => {
-                        return (
-                          // Start Here
-                          <td
-                            style={{
-                              width: currentUser !== "all" ? "100%" : "150px",
-                              borderRight:
-                                currentUser == "all" ? "2px solid green" : "",
-                              textAlign: "center",
-                            }}
-                          >
-                            <table
-                              style={{
-                                height: "100%",
-                                width: currentUser !== "all" ? "100%" : "100%",
-                                // background: 'red',
-                                // scrollBehavior: "smooth",
-                              }}
-                            >
-                              <tr
-                                style={{
-                                  // borderBottom: "1px solid red",
-                                  width: "100%",
-                                  height: "100%",
-                                }}
-                              >
-                                <th
-                                  style={{
-                                    width:
-                                      currentUser !== "all" ? "65%" : "150px",
-                                  }}
-                                >
-                                  {/* {currentUser !== "all"
-                                  ? `Total Deposite: ${borderTotalDeposite}`
-                                  : el.name} */}
-                                  {/* {currentUser !== "all" ? (
-                                    <UserHomeTableHeadContent
-                                      screenWidth={screenWidth}
-                                      setMoneyOption={setMoneyOption}
-                                      moneyOption={moneyOption}
-                                      borderTotalDeposite={borderTotalDeposite}
-                                      borderTotalShop={borderTotalShop}
-                                      borderTotalExtraShop={borderTotalExtraShop}
-                                    />
-                                  ) : (
-                                    el.name
-                                  )} */}
-                                </th>
-                              </tr>
-                            </table>
-                          </td>
-                        );
-                      })}
-                  </tr>
-                </thead>
-              </table>
-              {arrOfMeals?.length > 0 && (
-                <div
-                  style={{
-                    position: "fixed",
-                    right: screenWidth > 1000 ? "11%" : "0",
-                    top: headHeight + 90 - 50 + "px",
-                    // borderBottom: "5px solid black",
-                    height: "50px",
-                    bottom: "0",
-                    // background: "red",
-                    width: screenWidth > 1000 ? "7%" : "15%",
-                    background: "white",
-                    boxShadow: "1px 0 4px -2px black",
-
-                    display: currentUser !== "all" ? "none" : "",
-                  }}
-                >
-                  <table
-                    style={{
-                      borderBottom: "2px solid black",
-                      width: "100%",
-                      height: "50px",
-                    }}
-                  >
-                    <tr>
-                      {arrOfMeals?.length > 0 && (
-                        <th
-                          style={{
-                            // width: currentUser !== "all" && "150px",
-                            // minWidth: currentUser !== "all" && "150px",
-                            // borderRight: "2px solid black",
-                            display: currentUser !== "all" ? "none" : "",
-                          }}
-                        >
-                          Total Meal
-                        </th>
-                      )}
-                    </tr>
-                  </table>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div
-          style={{
-            position: "fixed",
-            top: headHeight + 90 - 50 + "px",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            color: "black",
-
-            display: !isMealsLoading ? "none" : "flex",
-            justifyContent: "center",
-            fontweight: "bold",
-            fontSize: "20px",
-            // scrollBehavior: "smooth",
-            // display:'none'
-          }}
-        >
-          <p style={{ marginTop: "10rem", opacity: ".7" }}>
-            <LoaderComponent />
-          </p>
-        </div>
-
-        {/* <TableMealBody
-          arrOfMeals={arrOfMeals}
-          currentDay={currentDay}
-          registeredUsers={registeredUsers}
-          currentUser={currentUser}
-          setArrOfMeals={setArrOfMeals}
-          updateMealHandler={updateMealHandler}
-          updatePersonFullMeal={updatePersonFullMeal}
-          user={user}
-          prevArrOfMeals={prevArrOfMeals}
-          screenWidth={screenWidth}
-          moneyOption={moneyOption}
-          item={item}
-          setItem={setItem}
-          totalMeals={totalMeals}
-          tableBodyRef={tableBodyRef}
-          headHeight={headHeight}
-          dateRef={dateRef}
-          nowScroll={nowScroll}
-          nameRef={nameRef}
-          todayDate={todayDate}
-          borderTotalDeposite={borderTotalDeposite}
-        /> */}
-        {/* </div> */}
-        {/* fixed */}
-        {/* {arrOfMeals?.length > 0 && (
-          <TableDateAndMealBody
-            dateRef={dateRef}
-            currentUser={currentUser}
-            headHeight={headHeight}
-            arrOfMeals={arrOfMeals}
-            currentDay={currentDay}
-            todayDate={todayDate}
-            tableBodyRef={tableBodyRef}
-            nowScroll={nowScroll}
-            screenWidth={screenWidth}
-          />
-        )} */}
-      </div>
-
-      {/* Redesigned mealsheet */}
       <FilterBox
         setGetYear={setGetYear}
         setGetMonth={setGetMonth}
@@ -927,7 +549,7 @@ const Meal = () => {
         isLoading={isLoading}
         isChanged={isChanged}
       />
-      {arrOfMeals?.length > 0 && (
+      {monthlyMeals?.monthlyMeals && monthlyMeals.monthlyMeals.length > 0 ? (
         <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto">
           <table className="">
             {/* table header */}
@@ -995,18 +617,6 @@ const Meal = () => {
                                 </select> */}
                                   <div className="inline-block">
                                     <div className={`cursor-pointer`} >*</div>
-                                    {/* <div>
-                                      {
-                                        // createPortal(<h1 className={``}>{user?.name}, {el.date}, {meal}, {registeredUsers.findIndex(item => item._id === user?._id)} </h1>, document.querySelector('#food'))
-                                        createPortal(<FoodSelect selectMeal={selectMeal} el={el} meal={meal} />, document.querySelector('#food'))
-                                      }
-                                    </div> */}
-                                    {/* <div className={`absolute h-[100px] w-[150px] bg-red-500 top-[15px] left-0 z-[1000] border ${selectMeal.setMeal&&selectMeal.mealName === meal&&selectMeal.date === el.date&&Object.keys(el).includes(meal)?'':'hidden'}`}>
-                                    <select ref = {selectMealRef}>
-                                      <option>Meat</option> 
-                                      <option>Fish</option>
-                                    </select>
-                                  </div> */}
                                   </div>
                                 </td>
                               </tr>
@@ -1017,29 +627,6 @@ const Meal = () => {
                       <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-gray-300 md:sticky md:left-[134.39px]`}></td> {/* Type body vertical right border element */}
                       <td className={`${currentUser === 'all' ? '' : 'hidden'} bg-gray-300`}></td> {/* first body vertical indicator */}
 
-                      {/* <TableMealBody
-                      arrOfMeals={arrOfMeals}
-                      currentDay={currentDay}
-                      registeredUsers={registeredUsers}
-                      currentUser={currentUser}
-                      setArrOfMeals={setArrOfMeals}
-                      updateMealHandler={updateMealHandler}
-                      updatePersonFullMeal={updatePersonFullMeal}
-                      user={user}
-                      prevArrOfMeals={prevArrOfMeals}
-                      screenWidth={screenWidth}
-                      moneyOption={moneyOption}
-                      item={item}
-                      setItem={setItem}
-                      totalMeals={totalMeals}
-                      tableBodyRef={tableBodyRef}
-                      headHeight={headHeight}
-                      dateRef={dateRef}
-                      nowScroll={nowScroll}
-                      nameRef={nameRef}
-                      todayDate={todayDate}
-                      borderTotalDeposite={borderTotalDeposite}
-                    /> */}
                       {/* For admin */}
                       <AllUser
                         registeredUsers={registeredUsers}
@@ -1076,78 +663,7 @@ const Meal = () => {
                                   <tr>
                                     <td style={{ width: "25%" }}>
                                       <div className="flex justify-start">
-                                        {/* <input
-                                          onMouseEnter={() => {
-                                            setItem({
-                                              ...item,
-                                              type: "text",
-                                              borderIndex: index,
-                                              date: el.date,
-                                              mealName: "breakfast",
-                                            });
-                                          }}
-                                          onMouseLeave={() => {
-                                            setItem("text");
-                                          }}
-                                          // disabled={
-                                          //   (el.breakfast &&
-                                          //     el.breakfast[index] &&
-                                          //     el.breakfast[index][1] === "off") ||
-                                          //   el.breakfast[index][2] === "user"
-                                          //   // ||user?.role === "user"
-                                          // }
-                                          disabled={true}
-                                          onChange={(e) =>
-                                            updateMealHandler(
-                                              e,
-                                              el.date,
-                                              el.id,
-                                              index,
-                                              "breakfast"
-                                            )
-                                          }
-                                          style={{
-                                            color: "black",
-                                            textAlign: 'center',
-                                            // background: "white",
-                                            // border:
-                                            //   el.breakfast &&
-                                            //     el.breakfast[index] &&
-                                            //     el.breakfast[index][1] !== "off"
-                                            //     ? "1.5px solid black"
-                                            //     : "1.5px solid red",
-                                            border: '1.5px solid red',
-                                            borderRadius: "5px",
-                                            width: "40px",
-                                            // textAlign: "center",
-                                            marginRight: ".5rem",
-                                          }}
-                                          type={
-                                            item.type === "number" &&
-                                              item.borderIndex === index &&
-                                              item.date === el.date &&
-                                              item.mealName === "breakfast" &&
-                                              el.breakfast[index] &&
-                                              el.breakfast[index][1] !== "off"
-                                              ? "text"
-                                              : "text"
-                                          }
-                                          // value={
-                                          //   el.breakfast &&
-                                          //     el.breakfast[index] &&
-                                          //     el.breakfast[index][1] === "off"
-                                          //     ? "off"
-                                          //     : el.breakfast &&
-                                          //       el.breakfast[index] &&
-                                          //       el.breakfast[index][0] === 0
-                                          //       ? ""
-                                          //       : el.breakfast &&
-                                          //       el.breakfast[index] &&
-                                          //       el.breakfast[index][0]
-                                          // }
-                                          value={'off'}
-                                        /> */}
-                                        
+
                                         {/* breakfast section start */}
                                         <select
                                           value={el.breakfast[index][0]}
@@ -1163,7 +679,7 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meal!")
-                                            } 
+                                            }
                                             // else if (
                                             //   user?.role === "admin" &&
                                             //   new Date() >
@@ -1205,8 +721,8 @@ const Meal = () => {
                                           }}
                                           style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
                                           <option value={el.breakfast[index][0]}>{el.breakfast[index][0] == 0 ? 'off' : el.breakfast[index][0]}</option>
-                                          {[1, 2, 3, 0].filter(item =>item != el.breakfast[index][0]
-                                          ).map(el => <option value={el}>{el == 0? 'off' : el}</option>)}
+                                          {[1, 2, 3, 0].filter(item => item != el.breakfast[index][0]
+                                          ).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
                                         </select>
                                         {/* <select style={{marginRight:'.5rem', border: '1px solid black'}} defaultValue={'off'} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
                                           <option>1</option>
@@ -1238,73 +754,73 @@ const Meal = () => {
                                                 checked={false}
                                               /> */}
 
-<input
-                                              style={{
-                                                paddingLeft: "1rem",
-                                              }}
-                                              type="checkbox"
-                                              onChange={(e) => {
+                                              <input
+                                                style={{
+                                                  paddingLeft: "1rem",
+                                                }}
+                                                type="checkbox"
+                                                onChange={(e) => {
 
-                                                if (
-                                                  user?.role === "user" &&
-                                                  new Date() >
-                                                  new Date(
-                                                    el.year,
-                                                    el.month,
-                                                    el.date.split(" ")[0],
-                                                    10
-                                                  )
-                                                ) {
-                                                  alert("You can't change previous Meal!")
-                                                } 
-                                                // else if (
-                                                //   user?.role === "admin" &&
-                                                //   new Date() >
-                                                //   new Date(
-                                                //     el.year,
-                                                //     el.month,
-                                                //     el.date.split(" ")[0],
-                                                //     24
-                                                //   )
-                                                // ) {
-                                                //   alert("Admin can't change previous days Meal")
-                                                // } 
-                                                else {
-                                                  updateMealHandler(
-                                                    e,
-                                                    el.date,
-                                                    el.id,
-                                                    index,
-                                                    "breakfast",
-                                                    "checkbox"
-                                                  )
-                                                  const breakfast = [...el.breakfast[index]]
-                                                  breakfast[0] = e.target.value === 'off' ? (user?.manager?.morningMealCount|| user?.morningMealCount) : 0
-                                                  breakfast[1] = e.target.value === 'off' ? 'on' : 'off'
-                                                  breakfast[2] = user.role
-                                                  updateBreakfast({ id: el.id, borderIndex: index, breakfast })
+                                                  if (
+                                                    user?.role === "user" &&
+                                                    new Date() >
+                                                    new Date(
+                                                      el.year,
+                                                      el.month,
+                                                      el.date.split(" ")[0],
+                                                      10
+                                                    )
+                                                  ) {
+                                                    alert("You can't change previous Meal!")
+                                                  }
+                                                  // else if (
+                                                  //   user?.role === "admin" &&
+                                                  //   new Date() >
+                                                  //   new Date(
+                                                  //     el.year,
+                                                  //     el.month,
+                                                  //     el.date.split(" ")[0],
+                                                  //     24
+                                                  //   )
+                                                  // ) {
+                                                  //   alert("Admin can't change previous days Meal")
+                                                  // } 
+                                                  else {
+                                                    updateMealHandler(
+                                                      e,
+                                                      el.date,
+                                                      el.id,
+                                                      index,
+                                                      "breakfast",
+                                                      "checkbox"
+                                                    )
+                                                    const breakfast = [...el.breakfast[index]]
+                                                    breakfast[0] = e.target.value === 'off' ? (user?.manager?.morningMealCount || user?.morningMealCount) : 0
+                                                    breakfast[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                    breakfast[2] = user.role
+                                                    updateBreakfast({ id: el.id, borderIndex: index, breakfast })
+                                                  }
+
+
+                                                  // updateMealHandler(
+                                                  //   e,
+                                                  //   el.date,
+                                                  //   el.id,
+                                                  //   index,
+                                                  //   "breakfast",
+                                                  //   "checkbox"
+                                                  // )
+                                                  // const lunch = [...el.breakfast[index]]
+                                                  // lunch[0] = e.target.value === 'off' ? 1 : 0
+                                                  // lunch[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                  // lunch[2] = user.role
+                                                  // updateLunch({ id: el.id, borderIndex: index, breakfast })
                                                 }
 
-
-                                                // updateMealHandler(
-                                                //   e,
-                                                //   el.date,
-                                                //   el.id,
-                                                //   index,
-                                                //   "breakfast",
-                                                //   "checkbox"
-                                                // )
-                                                // const lunch = [...el.breakfast[index]]
-                                                // lunch[0] = e.target.value === 'off' ? 1 : 0
-                                                // lunch[1] = e.target.value === 'off' ? 'on' : 'off'
-                                                // lunch[2] = user.role
-                                                // updateLunch({ id: el.id, borderIndex: index, breakfast })
-                                              }
-
-                                              }
-                                              value={el.breakfast[index][1]}
-                                              checked={el.breakfast[index][1] === "on" ? true : false}
-                                            />
+                                                }
+                                                value={el.breakfast[index][1]}
+                                                checked={el.breakfast[index][1] === "on" ? true : false}
+                                              />
 
                                             </div>
                                           </>
@@ -1392,7 +908,7 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meal!")
-                                            } 
+                                            }
                                             // else if (
                                             //   user?.role === "admin" &&
                                             //   new Date() >
@@ -1456,7 +972,7 @@ const Meal = () => {
                                                   )
                                                 ) {
                                                   alert("You can't change previous Meal!")
-                                                } 
+                                                }
                                                 // else if (
                                                 //   user?.role === "admin" &&
                                                 //   new Date() >
@@ -1870,7 +1386,7 @@ const Meal = () => {
                                               )
                                             ) {
                                               alert("You can't change previous Meall!")
-                                            } 
+                                            }
                                             // else if (
                                             //   user?.role === "admin" &&
                                             //   new Date() >
@@ -2026,6 +1542,18 @@ const Meal = () => {
             </tbody>
           </table >
         </div >
+      ) : isMealsLoading ? (
+        <div className="fixed top-0 z-[-10] left-0 right-0 justify-center items-center h-screen">
+          <div className="w-full h-full flex justify-center items-center">
+            <h1 className="text-2xl font-bold w-full text-center">Loading sheets</h1>
+          </div>
+        </div>
+      ) : (
+        <div className="fixed top-0 z-[-10] left-0 right-0 justify-center items-center h-screen">
+          <div className="w-full h-full flex justify-center items-center">
+            <h1 className="text-2xl font-bold w-full text-center">No Meal Sheets Found</h1>
+          </div>
+        </div>
       )}
       {createPortal(<FoodSelect selectMeal={selectMeal} user={user} currentUser={currentUser} currentIndex={currentIndex} setSelectMeal={setSelectMeal} />, document.querySelector('#food'))}
     </>
