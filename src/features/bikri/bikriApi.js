@@ -18,7 +18,11 @@ const bikriApi = apiSlice.injectEndpoints({
       query: (yearMonth) => ({
         url: `/year-month/${yearMonth._id}`,
         method: 'DELETE',
-        body: yearMonth
+        body: yearMonth,
+        headers: {
+          authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+            }`,
+        },
       })
     }),
     getMonthlyMeals: builder.query({
