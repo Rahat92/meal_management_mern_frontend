@@ -29,6 +29,7 @@ import FoodSelect from "../components/FoodSelect/FoodSelect";
 import TableHeader from "../components/Table/TableHeader";
 import AllUser from "../components/Table/AllUser/AllUser";
 import getDayName from "../utils/getDayName";
+import ShopModalPortal from "../components/Modal/ShopModal";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -44,6 +45,11 @@ const Meal = () => {
   const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
   const [selectDate, setSelectDate] = useState(null)
   const [headHeight, setHeadHeight] = useState(0);
+  const [focusOnShopField, setFocusOnShopField] = useState(false);
+  const [products, setProducts] = useState([
+    { itemName: "", quantity: "", price: "" },
+  ]);
+  console.log('products', products)
   const [currentIndex, setCurrentIndex] = useState();
   const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState();
@@ -68,7 +74,6 @@ const Meal = () => {
   const [getMonth, setGetMonth] = useState(todayMonth);
   const [getYear, setGetYear] = useState(todayYear);
   const selectMealRef = useRef(null)
-
   const [
     updateMoney,
     { data: money, isSuccess: isDepositeUpdateSuccess, isError: isUpdateMoneyError, error: updateMoneyError },
@@ -132,6 +137,7 @@ const Meal = () => {
       alert("Extra shopping updated successfully")
     }
   }, [isShopExtraMoneyError, isExtraShopMoneyUpdateSuccess]);
+  console.log('Hello world')
   useEffect(() => {
     const timer = setTimeout(() => {
       if (deposite?.id) {
@@ -221,50 +227,6 @@ const Meal = () => {
   let month = 11;
   const currentDay = new Date().getDate();
   const monthLength = getCurrentMonthLength(month, year)
-  const getMonthString = (desireMonth) => {
-    let desireMonthString = 0;
-    switch (desireMonth) {
-      case "January":
-        desireMonthString = 0;
-        break;
-      case "February":
-        desireMonthString = 1;
-        break;
-      case "March":
-        desireMonthString = 2;
-        break;
-      case "April":
-        desireMonthString = 3;
-        break;
-      case "May":
-        desireMonthString = 4;
-        break;
-      case "June":
-        desireMonthString = 5;
-        break;
-      case "July":
-        desireMonthString = 6;
-        break;
-      case "August":
-        desireMonthString = 7;
-        break;
-      case "September":
-        desireMonthString = 8;
-        break;
-      case "October":
-        desireMonthString = 9;
-        break;
-      case "November":
-        desireMonthString = 10;
-        break;
-      case "December":
-        desireMonthString = 11;
-        break;
-      default:
-        desireMonthString = undefined;
-    }
-    return desireMonthString;
-  };
 
   useEffect(() => {
     if (isMealStatusError) {
@@ -391,6 +353,7 @@ const Meal = () => {
     }
   }, [monthlyMeals?.monthlyMeals]);
   // submain branch
+  console.log(monthlyMeals?.monthlyMeals)
   useEffect(() => {
     if (prevArrOfMeals?.length > 0) {
       const changedArr = arrOfMeals.filter((item, i) => {
@@ -533,10 +496,135 @@ const Meal = () => {
       setBorderTotalMeal(totalBreakfast + totalLunch + totalDinner)
     }
   }, [currentIndex, isChanged])
+
+  const handleChange = (index, field, value) => {
+    const updated = [...products];
+    updated[index][field] = value;
+    setProducts(updated);
+  };
+
+  const addProduct = () => {
+    setProducts([...products, { itemName: "", quantity: "", price: "" }]);
+  };
+
+  const removeProduct = (index) => {
+    const updated = products.filter((_, i) => i !== index);
+    setProducts(updated);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(products); // send this to backend
+  };
+
   return (
     <>
+      {focusOnShopField && (
+        <ShopModalPortal>
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg w-[95%] max-w-lg max-h-[90vh] overflow-y-auto">
+
+              <h2 className="text-xl font-bold mb-4 text-black">Shop Details of ({currentUser.split(' ')[0]}) date</h2>
+
+              <form onSubmit={handleSubmit}>
+                {products.map((product, index) => (
+                  <div key={index} className="border p-4 mb-4 rounded-lg">
+
+                    <h3 className="font-semibold mb-2 text-black">
+                      Product {index + 1}
+                    </h3>
+
+                    {/* Item Name */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-bold mb-1 text-black">
+                        Item Name
+                      </label>
+                      <input
+                        type="text"
+                        value={product.itemName}
+                        onChange={(e) =>
+                          handleChange(index, "itemName", e.target.value)
+                        }
+                        className="border rounded w-full px-3 py-2 text-black"
+                      />
+                    </div>
+
+                    {/* Quantity */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-bold mb-1 text-black">
+                        Quantity
+                      </label>
+                      <input
+                        type="number"
+                        value={product.quantity}
+                        onChange={(e) =>
+                          handleChange(index, "quantity", e.target.value)
+                        }
+                        className="border rounded w-full px-3 py-2 text-black"
+                      />
+                    </div>
+
+                    {/* Price */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-bold mb-1 text-black">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        value={product.price}
+                        onChange={(e) =>
+                          handleChange(index, "price", e.target.value)
+                        }
+                        className="border rounded w-full px-3 py-2 text-black"
+                      />
+                    </div>
+
+                    {/* Remove */}
+                    {products.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeProduct(index)}
+                        className="text-red-500 text-sm"
+                      >
+                        Remove Product
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                {/* Actions */}
+                <div className="flex justify-between items-center">
+                  <button
+                    type="button"
+                    onClick={addProduct}
+                    className="bg-green-500 text-white px-4 py-2 rounded"
+                  >
+                    + Add More
+                  </button>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="submit"
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                    >
+                      Save All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFocusOnShopField(false)}
+                      className="bg-gray-500 text-white px-4 py-2 rounded"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </ShopModalPortal>
+      )}
       <FilterBox
-        setGetYear={setGetYear}
         setGetMonth={setGetMonth}
         style={style}
         yearMonth={yearMonth}
@@ -611,10 +699,6 @@ const Meal = () => {
                             return (
                               <tr>
                                 <td className="text-left flex items-center">{meal}&nbsp;
-                                  {/* <select>
-                                  <option></option>
-                                  <option></option>
-                                </select> */}
                                   <div className="inline-block">
                                     <div className={`cursor-pointer`} >*</div>
                                   </div>
@@ -680,18 +764,6 @@ const Meal = () => {
                                             ) {
                                               alert("You can't change previous Meal!")
                                             }
-                                            // else if (
-                                            //   user?.role === "admin" &&
-                                            //   new Date() >
-                                            //   new Date(
-                                            //     el.year,
-                                            //     el.month,
-                                            //     el.date.split(" ")[0],
-                                            //     24
-                                            //   )
-                                            // ) {
-                                            //   alert("Admin can't change previous days Meal")
-                                            // } 
                                             else {
                                               updateMealHandler(e, el.date, el.id, index, "breakfast")
                                               // updateLunch({id:el.id, borderIndex:index, })
@@ -724,35 +796,11 @@ const Meal = () => {
                                           {[1, 2, 3, 0].filter(item => item != el.breakfast[index][0]
                                           ).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
                                         </select>
-                                        {/* <select style={{marginRight:'.5rem', border: '1px solid black'}} defaultValue={'off'} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                          <option>1</option>
-                                          <option>2</option>
-                                          <option>3</option>
-                                          <option>off</option>
-                                        </select> */}
                                         {/* Breakfast checkbox */}
                                         {1 === 1 && (
                                           <>
                                             {/* &nbsp;&nbsp; */}
                                             <div className="inline-block relative ">
-                                              {/* <input
-                                                disabled
-                                                className=""
-                                                type="checkbox"
-                                                value={el.breakfast[index][1]}
-                                                onChange={(e) =>
-                                                  updateMealHandler(
-                                                    e,
-                                                    el.date,
-                                                    el.id,
-                                                    index,
-                                                    "breakfast",
-                                                    "checkbox"
-                                                  )
-                                                }
-                                                // checked={el.breakfast[index][1] === "on" ? true : false}
-                                                checked={false}
-                                              /> */}
 
                                               <input
                                                 style={{
@@ -773,18 +821,6 @@ const Meal = () => {
                                                   ) {
                                                     alert("You can't change previous Meal!")
                                                   }
-                                                  // else if (
-                                                  //   user?.role === "admin" &&
-                                                  //   new Date() >
-                                                  //   new Date(
-                                                  //     el.year,
-                                                  //     el.month,
-                                                  //     el.date.split(" ")[0],
-                                                  //     24
-                                                  //   )
-                                                  // ) {
-                                                  //   alert("Admin can't change previous days Meal")
-                                                  // } 
                                                   else {
                                                     updateMealHandler(
                                                       e,
@@ -802,19 +838,6 @@ const Meal = () => {
                                                   }
 
 
-                                                  // updateMealHandler(
-                                                  //   e,
-                                                  //   el.date,
-                                                  //   el.id,
-                                                  //   index,
-                                                  //   "breakfast",
-                                                  //   "checkbox"
-                                                  // )
-                                                  // const lunch = [...el.breakfast[index]]
-                                                  // lunch[0] = e.target.value === 'off' ? 1 : 0
-                                                  // lunch[1] = e.target.value === 'off' ? 'on' : 'off'
-                                                  // lunch[2] = user.role
-                                                  // updateLunch({ id: el.id, borderIndex: index, breakfast })
                                                 }
 
                                                 }
@@ -833,48 +856,23 @@ const Meal = () => {
                                   {/* Customer Launch section start */}
                                   <tr style={{}}>
                                     <td style={{ width: '25%' }}>
-                                      <div className={`flex justify-start items-center`}>
-                                        {/* <input
-                                          onMouseEnter={() => {
-                                            setItem({
-                                              ...item,
-                                              type: "text",
-                                              borderIndex: index,
-                                              date: el.date,
-                                              mealName: "launch",
-                                            });
-                                          }}
-                                          onMouseLeave={() => {
-                                            setItem({});
-                                          }}
-                                          type={
-                                            item.type === "number" &&
-                                              item.borderIndex === index &&
-                                              item.date === el.date &&
-                                              item.mealName === "launch" &&
-                                              el.launch[index] &&
-                                              el.launch[index][1] !== "off"
-                                              ? "number"
-                                              : "text"
+                                      <div className={`flex justify-start items-center`}>                                        <select
+                                        value={el.launch[index][0]}
+                                        onChange={(e) => {
+                                          if (
+                                            user?.role === "user" &&
+                                            new Date() >
+                                            new Date(
+                                              el.year,
+                                              el.month,
+                                              el.date.split(" ")[0],
+                                              10
+                                            )
+                                          ) {
+                                            alert("You can't change previous Meal!")
                                           }
-                                          style={{
-                                            color: "black",
-                                            background: "white",
-                                            border:
-                                              el.launch &&
-                                                el.launch[index] &&
-                                                el.launch[index][1] !== "off"
-                                                ? "1.5px solid black"
-                                                : "1.5px solid red",
-                                            borderRadius: "5px",
-                                            width: "40px",
-                                            textAlign: "center",
-                                            marginRight: ".5rem",
-                                          }}
-                                          disabled={
-                                            el.launch && el.launch[index] && el.launch[index][1] === "off"
-                                          }
-                                          onChange={(e) => {
+
+                                          else {
                                             updateMealHandler(e, el.date, el.id, index, "launch")
                                             // updateLunch({id:el.id, borderIndex:index, })
                                             const lunch = [...el.launch[index]]
@@ -883,74 +881,27 @@ const Meal = () => {
                                             lunch[2] = user.role
                                             updateLunch({ id: el.id, borderIndex: index, lunch })
                                           }
-                                          }
-                                          value={
-                                            el.launch && el.launch[index] && el.launch[index][1] === "off"
-                                              ? "off"
-                                              : el.launch && el.launch[index] && el.launch[index][0] === 0
-                                                ? ""
-                                                : el.launch && el.launch[index] && el.launch[index][0]
-                                          }
-                                        /> */}
-                                        <select
-                                          value={el.launch[index][0]}
-                                          onChange={(e) => {
-
-
-                                            if (
-                                              user?.role === "user" &&
-                                              new Date() >
-                                              new Date(
-                                                el.year,
-                                                el.month,
-                                                el.date.split(" ")[0],
-                                                10
-                                              )
-                                            ) {
-                                              alert("You can't change previous Meal!")
-                                            }
-                                            // else if (
-                                            //   user?.role === "admin" &&
-                                            //   new Date() >
-                                            //   new Date(
-                                            //     el.year,
-                                            //     el.month,
-                                            //     el.date.split(" ")[0],
-                                            //     24
-                                            //   )
-                                            // ) {
-                                            //   alert("Admin can't change previous days Meal")
-                                            // } 
-                                            else {
-                                              updateMealHandler(e, el.date, el.id, index, "launch")
-                                              // updateLunch({id:el.id, borderIndex:index, })
-                                              const lunch = [...el.launch[index]]
-                                              lunch[0] = parseInt(e.target.value)
-                                              lunch[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
-                                              lunch[2] = user.role
-                                              updateLunch({ id: el.id, borderIndex: index, lunch })
-                                            }
-                                          }
-                                          }
-                                          disabled={
-                                            el.launch && el.launch[index] && el.launch[index][1] === "off"
-                                          }
-                                          onMouseEnter={() => {
-                                            setItem({
-                                              ...item,
-                                              type: "text",
-                                              borderIndex: index,
-                                              date: el.date,
-                                              mealName: "launch",
-                                            });
-                                          }}
-                                          onMouseLeave={() => {
-                                            setItem({});
-                                          }}
-                                          style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                          <option value={el.launch[index][0]}>{el.launch[index][0] == 0 ? 'off' : el.launch[index][0]}</option>
-                                          {[1, 2, 3, 0].filter(item => item != el.launch[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
-                                        </select>
+                                        }
+                                        }
+                                        disabled={
+                                          el.launch && el.launch[index] && el.launch[index][1] === "off"
+                                        }
+                                        onMouseEnter={() => {
+                                          setItem({
+                                            ...item,
+                                            type: "text",
+                                            borderIndex: index,
+                                            date: el.date,
+                                            mealName: "launch",
+                                          });
+                                        }}
+                                        onMouseLeave={() => {
+                                          setItem({});
+                                        }}
+                                        style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                        <option value={el.launch[index][0]}>{el.launch[index][0] == 0 ? 'off' : el.launch[index][0]}</option>
+                                        {[1, 2, 3, 0].filter(item => item != el.launch[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
+                                      </select>
 
                                         <div className="flex justify-start gap-2">
                                           {1 === 1 && (
@@ -973,18 +924,6 @@ const Meal = () => {
                                                 ) {
                                                   alert("You can't change previous Meal!")
                                                 }
-                                                // else if (
-                                                //   user?.role === "admin" &&
-                                                //   new Date() >
-                                                //   new Date(
-                                                //     el.year,
-                                                //     el.month,
-                                                //     el.date.split(" ")[0],
-                                                //     24
-                                                //   )
-                                                // ) {
-                                                //   alert("Admin can't change previous days Meal")
-                                                // } 
                                                 else {
                                                   updateMealHandler(
                                                     e,
@@ -1002,19 +941,6 @@ const Meal = () => {
                                                 }
 
 
-                                                // updateMealHandler(
-                                                //   e,
-                                                //   el.date,
-                                                //   el.id,
-                                                //   index,
-                                                //   "launch",
-                                                //   "checkbox"
-                                                // )
-                                                // const lunch = [...el.launch[index]]
-                                                // lunch[0] = e.target.value === 'off' ? 1 : 0
-                                                // lunch[1] = e.target.value === 'off' ? 'on' : 'off'
-                                                // lunch[2] = user.role
-                                                // updateLunch({ id: el.id, borderIndex: index, lunch })
                                               }
 
                                               }
@@ -1023,12 +949,6 @@ const Meal = () => {
                                             />
                                           )}
                                           <input
-                                            style={{
-                                              // position: "",
-                                              // top: "50%",
-                                              // left: "90%",
-                                              // transform: "translateY(-50%)",
-                                            }}
                                             checked={
                                               // el["breakfast"][index][1] === "on" ||
                                               el["launch"][index][1] === "on" ||
@@ -1093,19 +1013,7 @@ const Meal = () => {
                                                 setArrOfMeals([...prevArrOfMeals]);
                                                 return;
                                               }
-                                              // updatePersonFullMeal({
-                                              //   id: el.id,
-                                              //   personIndex: index,
-                                              //   userIndex: registeredUsers.findIndex(
-                                              //     (item) => item._id === user._id
-                                              //   ),
-                                              //   month: el.month,
-                                              //   year: el.date.split(" ")[2] * 1,
-                                              //   day: el.date.split(" ")[0] * 1,
-                                              //   personBreakfast: breakfastArr[index],
-                                              //   personLaunch: launchArr[index],
-                                              //   personDinner: dinnerArr[index],
-                                              // });
+
                                               const lunch = [...el.launch[index]]
                                               lunch[0] = e.target.value === 'on' ? 1 : 0
                                               lunch[1] = e.target.value === 'on' ? 'on' : 'off'
@@ -1129,23 +1037,9 @@ const Meal = () => {
                                       }}
                                     >
                                       <input
+
                                         type="text"
                                         onChange={(e) => {
-                                          // if (
-                                          //   new Date() >
-                                          //   new Date(
-                                          //     el.year,
-                                          //     el.month,
-                                          //     el.date.split(" ")[0] * 1,
-                                          //     24
-                                          //   ) &&
-                                          //   user?.role == "admin"
-                                          // ) {
-                                          //   alert(
-                                          //     "The date is passed. You can't update previous day's deposite"
-                                          //   );
-                                          //   return;
-                                          // }
                                           if (user?.role === "user") {
                                             alert("Only admin can update deposite");
                                             return;
@@ -1155,9 +1049,6 @@ const Meal = () => {
                                           );
                                           const desireMeal = arrOfMeals[desireMealIndex];
                                           const copyDesireMeal = { ...desireMeal };
-                                          // const moneys = desireMeal.money;
-                                          // const desireMoney = moneys[index];
-                                          // console.log(desireMoney)
                                           const moneys = copyDesireMeal.money;
                                           const copyMoneys = [...moneys];
                                           copyMoneys[index] = e.target.value * 1;
@@ -1196,22 +1087,10 @@ const Meal = () => {
                                     >
                                       <input
                                         type="text"
+                                        onFocus={() => {
+                                          setFocusOnShopField(true);
+                                        }}
                                         onChange={(e) => {
-                                          // if (
-                                          //   new Date() >
-                                          //   new Date(
-                                          //     el.year,
-                                          //     el.month,
-                                          //     el.date.split(" ")[0] * 1,
-                                          //     24
-                                          //   ) &&
-                                          //   user?.role == "admin"
-                                          // ) {
-                                          //   alert(
-                                          //     "The date is passed. You can't update previous day's shop"
-                                          //   );
-                                          //   return;
-                                          // }
                                           if (user?.role === "user") {
                                             alert("Only admin can update shop");
                                             return;
@@ -1243,8 +1122,6 @@ const Meal = () => {
                                         style={{
                                           color: "black",
                                           width: "80px",
-                                          // border: "1px solid black",
-                                          // borderRadius: "5px",
                                           textAlign: "center",
                                         }}
                                       />
@@ -1304,8 +1181,6 @@ const Meal = () => {
                                         style={{
                                           color: "black",
                                           width: "80px",
-                                          // border: "1px solid black",
-                                          // borderRadius: "5px",
                                           textAlign: "center",
                                         }}
                                       />
@@ -1315,63 +1190,6 @@ const Meal = () => {
                                   <tr>
                                     <td>
                                       <div className={`flex justify-start`}>
-                                        {/* <input
-                                          onMouseEnter={() => {
-                                            setItem({
-                                              ...item,
-                                              type: "text",
-                                              borderIndex: index,
-                                              date: el.date,
-                                              mealName: "dinner",
-                                            });
-                                          }}
-                                          onMouseLeave={() => {
-                                            setItem({});
-                                          }}
-                                          style={{
-                                            color: "black",
-                                            background: "white",
-                                            border:
-                                              el.dinner &&
-                                                el.dinner[index] &&
-                                                el.dinner[index][1] !== "off"
-                                                ? "1.5px solid black"
-                                                : "1.5px solid red",
-                                            borderRadius: "5px",
-                                            width: "40px",
-                                            textAlign: "center",
-                                            marginRight: ".5rem",
-                                          }}
-                                          disabled={
-                                            el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
-                                          }
-                                          onChange={(e) => {
-                                            updateMealHandler(e, el.date, el.id, index, "dinner")
-                                            const dinner = [...el.dinner[index]]
-                                            dinner[0] = parseInt(e.target.value)
-                                            dinner[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
-                                            dinner[2] = user.role
-                                            updateDinner({ id: el.id, borderIndex: index, dinner })
-                                          }
-                                          }
-                                          type={
-                                            item.type === "number" &&
-                                              item.borderIndex === index &&
-                                              item.date === el.date &&
-                                              item.mealName === "dinner" &&
-                                              el.dinner[index] &&
-                                              el.dinner[index][1] !== "off"
-                                              ? "number"
-                                              : "text"
-                                          }
-                                          value={
-                                            el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
-                                              ? "off"
-                                              : el.dinner && el.dinner[index] && el.dinner[index][0] === 0
-                                                ? ""
-                                                : el.dinner && el.dinner[index] && el.dinner[index][0]
-                                          }
-                                        /> */}
                                         <select
                                           value={el.dinner[index][0]}
                                           onChange={(e) => {
@@ -1387,18 +1205,6 @@ const Meal = () => {
                                             ) {
                                               alert("You can't change previous Meall!")
                                             }
-                                            // else if (
-                                            //   user?.role === "admin" &&
-                                            //   new Date() >
-                                            //   new Date(
-                                            //     el.year,
-                                            //     el.month,
-                                            //     el.date.split(" ")[0],
-                                            //     24
-                                            //   )
-                                            // ) {
-                                            //   alert("Admin can't change previous days Meal")
-                                            // } 
                                             else {
                                               updateMealHandler(e, el.date, el.id, index, "dinner")
                                               // updateLunch({id:el.id, borderIndex:index, })
@@ -1434,22 +1240,6 @@ const Meal = () => {
                                           <>
                                             <input
                                               value={el.dinner[index][1]}
-                                              // onChange={(e) => {
-                                              //   updateMealHandler(
-                                              //     e,
-                                              //     el.date,
-                                              //     el.id,
-                                              //     index,
-                                              //     "dinner",
-                                              //     "checkbox"
-                                              //   )
-                                              //   const dinner = [...el.dinner[index]]
-                                              //   dinner[0] = e.target.value === 'off' ? 1 : 0
-                                              //   dinner[1] = e.target.value === 'off' ? 'on' : 'off'
-                                              //   dinner[2] = user.role
-                                              //   updateDinner({ id: el.id, borderIndex: index, dinner })
-                                              // }
-                                              // }
                                               onChange={(e) => {
                                                 if (
                                                   user?.role === "user" &&
@@ -1463,18 +1253,6 @@ const Meal = () => {
                                                 ) {
                                                   alert("You can't change previous Meall!")
                                                 }
-                                                //  else if (
-                                                //   user?.role === "admin" &&
-                                                //   new Date() >
-                                                //   new Date(
-                                                //     el.year,
-                                                //     el.month,
-                                                //     el.date.split(" ")[0],
-                                                //     24
-                                                //   )
-                                                // ) {
-                                                //   alert("Admin can't change previous days Meal")
-                                                // } 
                                                 else {
                                                   updateMealHandler(
                                                     e,

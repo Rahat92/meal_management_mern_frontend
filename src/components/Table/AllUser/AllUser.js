@@ -40,13 +40,6 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                 onMouseLeave={() => {
                                                     setItem("text");
                                                 }}
-                                                // disabled={
-                                                //     (el.breakfast &&
-                                                //         el.breakfast[index] &&
-                                                //         el.breakfast[index][1] === "off") ||
-                                                //     el.breakfast[index][2] === "user"
-                                                //     // ||user?.role === "user"
-                                                // }
                                                 disabled
                                                 onChange={(e) =>
                                                     updateMealHandler(
@@ -81,19 +74,6 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                         ? "text"
                                                         : "text"
                                                 }
-                                                // value={
-                                                //     el.breakfast &&
-                                                //         el.breakfast[index] &&
-                                                //         el.breakfast[index][1] === "off"
-                                                //         ? "off"
-                                                //         : el.breakfast &&
-                                                //             el.breakfast[index] &&
-                                                //             el.breakfast[index][0] === 0
-                                                //             ? ""
-                                                //             : el.breakfast &&
-                                                //             el.breakfast[index] &&
-                                                //             el.breakfast[index][0]
-                                                // }
                                                 value={'off'}
                                             />
                                         </div>
@@ -102,73 +82,6 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                 {/* Launch input field */}
                                 <tr style={{}}>
                                     <td>
-                                        {/* <input
-                                            onMouseEnter={() => {
-                                                setItem({
-                                                    ...item,
-                                                    type: "text",
-                                                    borderIndex: index,
-                                                    date: el.date,
-                                                    mealName: "launch",
-                                                });
-                                            }}
-                                            onMouseLeave={() => {
-                                                setItem("text");
-                                            }}
-                                            disabled={
-                                                (el.launch &&
-                                                    el.launch[index] &&
-                                                    el.launch[index][1] === "off") ||
-                                                el.launch[index][2] === "user"
-                                                // ||user?.role === "user"
-                                            }
-                                            onChange={(e) =>
-                                                updateMealHandler(
-                                                    e,
-                                                    el.date,
-                                                    el.id,
-                                                    index,
-                                                    "launch"
-                                                )
-                                            }
-                                            style={{
-                                                color: "black",
-                                                background: "white",
-                                                border:
-                                                    el.launch &&
-                                                        el.launch[index] &&
-                                                        el.launch[index][1] !== "off"
-                                                        ? "1.5px solid black"
-                                                        : "1.5px solid red",
-                                                borderRadius: "5px",
-                                                width: "40px",
-                                                textAlign: "center",
-                                                zIndex: -100,
-                                            }}
-                                            type={
-                                                item.type === "number" &&
-                                                    item.borderIndex === index &&
-                                                    item.date === el.date &&
-                                                    item.mealName === "launch" &&
-                                                    el.launch[index] &&
-                                                    el.launch[index][1] !== "off"
-                                                    ? "text"
-                                                    : "text"
-                                            }
-                                            value={
-                                                el.launch &&
-                                                    el.launch[index] &&
-                                                    el.launch[index][1] === "off"
-                                                    ? "off"
-                                                    : el.launch &&
-                                                        el.launch[index] &&
-                                                        el.launch[index][0] === 0
-                                                        ? ""
-                                                        : el.launch &&
-                                                        el.launch[index] &&
-                                                        el.launch[index][0]
-                                            }
-                                        /> */}
                                         <select
                                             value={el.launch[index][0]}
                                             onChange={(e) => {

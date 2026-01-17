@@ -8,7 +8,7 @@ const CurrentStatus = () => {
     const dispatch = useDispatch()
     const { data: monthlyMeals, isLoading: isMealsLoading } =
         useGetMonthlyMealsQuery(
-            { getMonth: 4, getYear: 2025 }
+            { getMonth: 4, getYear: 2026 }
         );
     const [menus, setMenus] = useState([])
     useEffect(() => {
@@ -17,7 +17,7 @@ const CurrentStatus = () => {
     const currentDate = readableDate(new Date())
     useEffect(() => {
         if (monthlyMeals?.monthlyMeals?.length > 0) {
-            const menuArr = monthlyMeals?.monthlyMeals?.find(item => item.date === `${currentDate.day} May 2025`) && monthlyMeals?.monthlyMeals?.find(item => item.date === `${currentDate.day} May 2025`)['launch'].map((item, i) => {
+            const menuArr = monthlyMeals?.monthlyMeals?.find(item => item.date === `${currentDate.day} May 2026`) && monthlyMeals?.monthlyMeals?.find(item => item.date === `${currentDate.day} May 2026`)['launch'].map((item, i) => {
                 console.log(monthlyMeals?.monthlyMeals[0].border)
                 return {
                     borderName: monthlyMeals.monthlyMeals[0].border && monthlyMeals.monthlyMeals[0].border[i].name,

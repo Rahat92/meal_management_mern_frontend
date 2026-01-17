@@ -32,7 +32,7 @@ const AllMonthsStats = () => {
   });
   const { data: monthlyMeals, isLoading: isMealsLoading } =
     useGetMonthlyMealsQuery(
-      { getMonth: month, getYear: 2025 },
+      { getMonth: month, getYear: 2026 },
       // {
       //   skip: !isSkipped,
       // }
@@ -347,7 +347,7 @@ const AllMonthsStats = () => {
               ? mealStatMonthly
                 ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
                 ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
-                ?.filter((item) => item.month === `${month} 2025`)
+                ?.filter((item) => item.month === `${month} 2026`)
                 ?.map((el) => {
                   return (
                     <tbody>
