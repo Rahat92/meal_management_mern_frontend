@@ -49,8 +49,8 @@ const Meal = () => {
   const [products, setProducts] = useState([
     { itemName: "", quantity: "", price: "" },
   ]);
-  console.log('products', products)
   const [currentIndex, setCurrentIndex] = useState();
+  console.log(currentIndex)
   const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState();
   const [isChanged, setIsChanged] = useState(false);
@@ -101,7 +101,7 @@ const Meal = () => {
       setSelectMeal({ ...selectMeal, setMeal: false })
     }
   };
-
+  console.log(item)
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -516,7 +516,6 @@ const Meal = () => {
     e.preventDefault();
     console.log(products); // send this to backend
   };
-
   return (
     <>
       {focusOnShopField && (
@@ -524,7 +523,7 @@ const Meal = () => {
           <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg w-[95%] max-w-lg max-h-[90vh] overflow-y-auto">
 
-              <h2 className="text-xl font-bold mb-4 text-black">Shop Details of ({currentUser.split(' ')[0]}) date</h2>
+              <h2 className="text-xl font-bold mb-4 text-black">Shop Details of ({currentUser.split(' ')[0]}) {selectDate}</h2>
 
               <form onSubmit={handleSubmit}>
                 {products.map((product, index) => (
@@ -1089,6 +1088,8 @@ const Meal = () => {
                                         type="text"
                                         onFocus={() => {
                                           setFocusOnShopField(true);
+                                          setSelectDate(el.date)
+                                          console.log(arrOfMeals.find(item => item.date === el.date))
                                         }}
                                         onChange={(e) => {
                                           if (user?.role === "user") {
