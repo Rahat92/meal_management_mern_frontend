@@ -44,10 +44,11 @@ const Meal = () => {
   const [borderTotalMeal, setBorderTotalMeal] = useState(0);
   const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
   const [selectDate, setSelectDate] = useState(null)
+  const [currentItem, setCurrentItem] = useState({});
   const [headHeight, setHeadHeight] = useState(0);
   const [focusOnShopField, setFocusOnShopField] = useState(false);
   const [products, setProducts] = useState([
-    { itemName: "", quantity: "", price: "" },
+    { id:1, removeProduct:false, productName: "", productCount: null, unitPrice: null },
   ]);
   const [currentIndex, setCurrentIndex] = useState();
   console.log(currentIndex)
@@ -101,7 +102,6 @@ const Meal = () => {
       setSelectMeal({ ...selectMeal, setMeal: false })
     }
   };
-  console.log(item)
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -155,22 +155,28 @@ const Meal = () => {
     };
   }, [deposite]);
 
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (shopping?.id) {
+  //       updateShopMoney({
+  //         id: shopping.id,
+  //         year: shopping.year,
+  //         month: shopping.month,
+  //         borderIndex: shopping.borderIndex,
+  //         shop: shopping.shop,
+  //         shoppingComments: products
+  //       });
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, []);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (shopping?.id) {
-        updateShopMoney({
-          id: shopping.id,
-          year: shopping.year,
-          month: shopping.month,
-          borderIndex: shopping.borderIndex,
-          shop: shopping.shop,
-        });
-      }
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [shopping]);
+    if (products) {
+      console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
+    }
+  }, [JSON.stringify(products)])
   useEffect(() => {
     const timer = setTimeout(() => {
       if (extraShopping?.id) {
@@ -345,6 +351,7 @@ const Meal = () => {
           dinner: el.dinner,
           money: el.money,
           shop: el.shop,
+          shoppingComments: el.shoppingComments,
           extraShop: el.extraShop,
         };
       }).sort((a, b) => a.day - b.day);
@@ -496,25 +503,50 @@ const Meal = () => {
       setBorderTotalMeal(totalBreakfast + totalLunch + totalDinner)
     }
   }, [currentIndex, isChanged])
-
+  console.log(products)
   const handleChange = (index, field, value) => {
     const updated = [...products];
     updated[index][field] = value;
     setProducts(updated);
   };
-
+  
   const addProduct = () => {
-    setProducts([...products, { itemName: "", quantity: "", price: "" }]);
+    setProducts([...products, { id:products.length+1, removeProduct:false, productName: "", productCount: null, unitPrice: null }]);
   };
 
-  const removeProduct = (index) => {
-    const updated = products.filter((_, i) => i !== index);
+  const removeProduct = (productId) => {
+    // const updated = products.filter((_, i) => i !== index);
+    const updated = products.map((item, index) => {
+      if(item.id === productId){
+        return {
+          ...item,
+          removeProduct: true,
+        }
+      } else {
+        return {
+          ...item
+        }
+      }
+    })
+
     setProducts(updated);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(products); // send this to backend
+    updateShopMoney({
+      id: shopping.id,
+      year: shopping.year,
+      month: shopping.month,
+      borderIndex: shopping.borderIndex,
+      shop: products.filter(item => !item.removeProduct).reduce((f, i) => Number(i.unitPrice) + f, 0),
+      shoppingComments: products.filter(item => !item.removeProduct),
+      customerId: currentUser.split(' ')[1]
+    });
+    // setShopping({
+    //   ...shopping,
+    //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
+    // })
   };
   return (
     <>
@@ -526,9 +558,8 @@ const Meal = () => {
               <h2 className="text-xl font-bold mb-4 text-black">Shop Details of ({currentUser.split(' ')[0]}) {selectDate}</h2>
 
               <form onSubmit={handleSubmit}>
-                {products.map((product, index) => (
-                  <div key={index} className="border p-4 mb-4 rounded-lg">
-
+                {products?.map((product, index) => (
+                  <div key={product.id} className={`border p-4 mb-4 rounded-lg ${product.removeProduct?'hidden':''}`}>
                     <h3 className="font-semibold mb-2 text-black">
                       Product {index + 1}
                     </h3>
@@ -540,9 +571,9 @@ const Meal = () => {
                       </label>
                       <input
                         type="text"
-                        value={product.itemName}
+                        value={product.productName}
                         onChange={(e) =>
-                          handleChange(index, "itemName", e.target.value)
+                          handleChange(index, "productName", e.target.value)
                         }
                         className="border rounded w-full px-3 py-2 text-black"
                       />
@@ -555,9 +586,9 @@ const Meal = () => {
                       </label>
                       <input
                         type="number"
-                        value={product.quantity}
+                        value={product.productCount}
                         onChange={(e) =>
-                          handleChange(index, "quantity", e.target.value)
+                          handleChange(index, "productCount", e.target.value)
                         }
                         className="border rounded w-full px-3 py-2 text-black"
                       />
@@ -570,9 +601,9 @@ const Meal = () => {
                       </label>
                       <input
                         type="number"
-                        value={product.price}
+                        value={product.unitPrice}
                         onChange={(e) =>
-                          handleChange(index, "price", e.target.value)
+                          handleChange(index, "unitPrice", e.target.value)
                         }
                         className="border rounded w-full px-3 py-2 text-black"
                       />
@@ -582,7 +613,7 @@ const Meal = () => {
                     {products.length > 1 && (
                       <button
                         type="button"
-                        onClick={() => removeProduct(index)}
+                        onClick={() => removeProduct(product.id)}
                         className="text-red-500 text-sm"
                       >
                         Remove Product
@@ -1089,34 +1120,52 @@ const Meal = () => {
                                         onFocus={() => {
                                           setFocusOnShopField(true);
                                           setSelectDate(el.date)
-                                          console.log(arrOfMeals.find(item => item.date === el.date))
-                                        }}
-                                        onChange={(e) => {
-                                          if (user?.role === "user") {
-                                            alert("Only admin can update shop");
-                                            return;
-                                          }
-                                          const desireMealIndex = arrOfMeals.findIndex(
-                                            (item) => item.id === el.id
-                                          );
-                                          const desireMeal = arrOfMeals[desireMealIndex];
-                                          const copyDesireMeal = { ...desireMeal };
-                                          const shops = copyDesireMeal.shop;
-                                          const copyshops = [...shops];
-                                          copyshops[index] = e.target.value * 1;
-                                          arrOfMeals[desireMealIndex] = {
-                                            ...copyDesireMeal,
-                                            shop: copyshops,
-                                          };
-                                          setArrOfMeals([...arrOfMeals]);
-
+                                          setCurrentItem(arrOfMeals.find(item => item.date === el.date))
                                           setShopping({
                                             id: el.id,
                                             month: el.month,
                                             year: el.year,
                                             borderIndex: index,
-                                            shop: e.target.value * 1,
                                           });
+                                          console.log(el.date, selectDate)
+                                          if(el.date !== selectDate){
+                                            setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                              return {
+                                                id: i+1,
+                                                removeProduct: false,
+                                                ...item
+                                              }
+                                            }))
+                                          }
+                                          // setProducts()
+                                        }}
+
+                                        onChange={(e) => {
+                                          if (user?.role === "user") {
+                                            alert("Only admin can update shop");
+                                            return;
+                                          }
+                                          // const desireMealIndex = arrOfMeals.findIndex(
+                                          //   (item) => item.id === el.id
+                                          // );
+                                          // const desireMeal = arrOfMeals[desireMealIndex];
+                                          // const copyDesireMeal = { ...desireMeal };
+                                          // const shops = copyDesireMeal.shop;
+                                          // const copyshops = [...shops];
+                                          // copyshops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   shop: copyshops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+
+                                          // setShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   shop: e.target.value * 1,
+                                          // });
                                         }}
                                         placeholder="Shopping"
                                         value={el.shop[index] === 0 ? "" : el.shop[index]}

@@ -275,10 +275,8 @@ const bikriApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["getAllMonthStat"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        console.log(args);
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
