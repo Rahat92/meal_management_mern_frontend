@@ -48,10 +48,9 @@ const Meal = () => {
   const [headHeight, setHeadHeight] = useState(0);
   const [focusOnShopField, setFocusOnShopField] = useState(false);
   const [products, setProducts] = useState([
-    { id:1, removeProduct:false, productName: "", productCount: null, unitPrice: null },
+    { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
   ]);
   const [currentIndex, setCurrentIndex] = useState();
-  console.log(currentIndex)
   const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState();
   const [isChanged, setIsChanged] = useState(false);
@@ -123,12 +122,23 @@ const Meal = () => {
       alert(shopMoneyError?.data?.message);
     }
     if (isShopMoneyUpdateSuccess) {
+      const copyArrOfMeals = [...arrOfMeals]
+      const desireMeal = copyArrOfMeals.find(item => item.id == shopping.id)
+      const desireMealIndex = copyArrOfMeals.findIndex((item => item.id === shopping.id))
+      const shoppingComment = [...desireMeal.shoppingComments]
+      const updatedComments = { ...shoppingComment[shopping.borderIndex], comment: products.filter(item => !item.removeProduct) };
+      shoppingComment[shopping.borderIndex] = updatedComments;
+      desireMeal.shoppingComments = shoppingComment;
+      copyArrOfMeals[desireMealIndex] = desireMeal;
+      console.log(copyArrOfMeals)
+      setArrOfMeals([...copyArrOfMeals])
       alert("Shopping updated successfully")
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name}, you've done shopping worth ${shopping.shop} taka is added successfully. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
-  }, [isShopMoneyError, isShopMoneyUpdateSuccess]);
 
+  }, [isShopMoneyError, isShopMoneyUpdateSuccess]);
+  console.log(arrOfMeals)
   useEffect(() => {
     if (isShopExtraMoneyError) {
       alert(extraShopMoneyError?.data?.message);
@@ -355,6 +365,7 @@ const Meal = () => {
           extraShop: el.extraShop,
         };
       }).sort((a, b) => a.day - b.day);
+      console.log('running')
       setArrOfMeals(mealsArr);
       setPrevArrOfMeals(mealsArr);
     }
@@ -509,15 +520,15 @@ const Meal = () => {
     updated[index][field] = value;
     setProducts(updated);
   };
-  
+
   const addProduct = () => {
-    setProducts([...products, { id:products.length+1, removeProduct:false, productName: "", productCount: null, unitPrice: null }]);
+    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: null, unitPrice: null }]);
   };
 
   const removeProduct = (productId) => {
     // const updated = products.filter((_, i) => i !== index);
     const updated = products.map((item, index) => {
-      if(item.id === productId){
+      if (item.id === productId) {
         return {
           ...item,
           removeProduct: true,
@@ -559,7 +570,7 @@ const Meal = () => {
 
               <form onSubmit={handleSubmit}>
                 {products?.map((product, index) => (
-                  <div key={product.id} className={`border p-4 mb-4 rounded-lg ${product.removeProduct?'hidden':''}`}>
+                  <div key={product.id} className={`border p-4 mb-4 rounded-lg ${product.removeProduct ? 'hidden' : ''}`}>
                     <h3 className="font-semibold mb-2 text-black">
                       Product {index + 1}
                     </h3>
@@ -1128,16 +1139,30 @@ const Meal = () => {
                                             borderIndex: index,
                                           });
                                           console.log(el.date, selectDate)
-                                          if(el.date !== selectDate){
-                                            setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
-                                              return {
-                                                id: i+1,
-                                                removeProduct: false,
-                                                ...item
-                                              }
-                                            }))
-                                          }
+                                          setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                            return {
+                                              id: i + 1,
+                                              removeProduct: false,
+                                              ...item
+                                            }
+                                          }))
                                           // setProducts()
+
+                                          // copyshops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   shop: copyshops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+
+                                          // setShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   shop: e.target.value * 1,
+                                          // });
+
                                         }}
 
                                         onChange={(e) => {

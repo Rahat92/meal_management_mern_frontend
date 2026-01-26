@@ -291,6 +291,7 @@ const bikriApi = apiSlice.injectEndpoints({
                 // desireMeal["shop"] = [...desireMeal["shop"]];
                 desireMeal["shop"][args.borderIndex] =
                   data.meal.shop[args.borderIndex];
+                desireMeal['shoppingComments'][args.borderIndex] = data.meal.shoppingComments[args.borderIndex]
                 // desireMeal["shop"] = [...desireMeal["shop"]];
               }
             )
