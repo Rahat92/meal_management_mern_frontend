@@ -47,6 +47,8 @@ const Meal = () => {
   const [currentItem, setCurrentItem] = useState({});
   const [headHeight, setHeadHeight] = useState(0);
   const [focusOnShopField, setFocusOnShopField] = useState(false);
+  const [showModal, setShowModal] = useState(true);
+
   const [products, setProducts] = useState([
     { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
   ]);
@@ -64,6 +66,12 @@ const Meal = () => {
   const [selectMeal, setSelectMeal] = useState({
     setMeal: false
   })
+
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const modalRef = useRef(null);
+
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
   const todayDate = new Date().getDate();
@@ -122,17 +130,19 @@ const Meal = () => {
       alert(shopMoneyError?.data?.message);
     }
     if (isShopMoneyUpdateSuccess) {
-      const copyArrOfMeals = [...arrOfMeals]
-      const desireMeal = copyArrOfMeals.find(item => item.id == shopping.id)
-      const desireMealIndex = copyArrOfMeals.findIndex((item => item.id === shopping.id))
-      const shoppingComment = [...desireMeal.shoppingComments]
-      const updatedComments = { ...shoppingComment[shopping.borderIndex], comment: products.filter(item => !item.removeProduct) };
-      shoppingComment[shopping.borderIndex] = updatedComments;
-      desireMeal.shoppingComments = shoppingComment;
-      copyArrOfMeals[desireMealIndex] = desireMeal;
-      console.log(copyArrOfMeals)
-      setArrOfMeals([...copyArrOfMeals])
+      // const copyArrOfMeals = [...arrOfMeals]
+      // const desireMeal = copyArrOfMeals.find(item => item.id == shopping.id)
+      // const desireMealIndex = copyArrOfMeals.findIndex((item => item.id === shopping.id))
+      // const shoppingComment = [...desireMeal.shoppingComments]
+      // const updatedComments = { ...shoppingComment[shopping.borderIndex], comment: products.filter(item => !item.removeProduct) };
+      // shoppingComment[shopping.borderIndex] = updatedComments;
+      // desireMeal.shoppingComments = shoppingComment;
+      // copyArrOfMeals[desireMealIndex] = desireMeal;
+      // setArrOfMeals([...copyArrOfMeals])
+      setShowModal(false)
       alert("Shopping updated successfully")
+      
+  
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name}, you've done shopping worth ${shopping.shop} taka is added successfully. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
@@ -559,108 +569,146 @@ const Meal = () => {
     //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
     // })
   };
+
+  const handleMouseDown = (e) => {
+    if (e.target.closest('.modal-header')) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      setPosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
   return (
     <>
       {focusOnShopField && (
         <ShopModalPortal>
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg w-[95%] max-w-lg max-h-[90vh] overflow-y-auto">
+          <div
+            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 ${showModal?'flex':'hidden'} items-center justify-center z-50`}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+          >
+            <div
+              ref={modalRef}
+              className="bg-white p-6 rounded-lg w-[95%] max-w-lg max-h-[90vh] overflow-hidden flex flex-col"
+              style={{
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                cursor: isDragging ? 'grabbing' : 'default'
+              }}
+            >
+              <div
+                className="modal-header cursor-grab active:cursor-grabbing pb-4 border-b mb-4"
+                onMouseDown={handleMouseDown}
+              >
+                <h2 className="text-xl font-bold text-black">
+                  Shop Details of ({currentUser.split(' ')[0]}) {selectDate}
+                </h2>
+              </div>
 
-              <h2 className="text-xl font-bold mb-4 text-black">Shop Details of ({currentUser.split(' ')[0]}) {selectDate}</h2>
+              <div className="overflow-y-auto flex-1">
+                <div>
+                  {products?.map((product, index) => (
+                    <div key={product.id} className={`border p-4 mb-4 rounded-lg ${product.removeProduct ? 'hidden' : ''}`}>
+                      <h3 className="font-semibold mb-2 text-black">
+                        Product {index + 1}
+                      </h3>
 
-              <form onSubmit={handleSubmit}>
-                {products?.map((product, index) => (
-                  <div key={product.id} className={`border p-4 mb-4 rounded-lg ${product.removeProduct ? 'hidden' : ''}`}>
-                    <h3 className="font-semibold mb-2 text-black">
-                      Product {index + 1}
-                    </h3>
+                      <div className="mb-3">
+                        <label className="block text-sm font-bold mb-1 text-black">
+                          Item Name
+                        </label>
+                        <input
+                          type="text"
+                          value={product.productName}
+                          onChange={(e) =>
+                            handleChange(index, "productName", e.target.value)
+                          }
+                          className="border rounded w-full px-3 py-2 text-black"
+                        />
+                      </div>
 
-                    {/* Item Name */}
-                    <div className="mb-3">
-                      <label className="block text-sm font-bold mb-1 text-black">
-                        Item Name
-                      </label>
-                      <input
-                        type="text"
-                        value={product.productName}
-                        onChange={(e) =>
-                          handleChange(index, "productName", e.target.value)
-                        }
-                        className="border rounded w-full px-3 py-2 text-black"
-                      />
+                      <div className="mb-3">
+                        <label className="block text-sm font-bold mb-1 text-black">
+                          Quantity
+                        </label>
+                        <input
+                          type="number"
+                          value={product.productCount}
+                          onChange={(e) =>
+                            handleChange(index, "productCount", e.target.value)
+                          }
+                          className="border rounded w-full px-3 py-2 text-black"
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="block text-sm font-bold mb-1 text-black">
+                          Price
+                        </label>
+                        <input
+                          type="number"
+                          value={product.unitPrice}
+                          onChange={(e) =>
+                            handleChange(index, "unitPrice", e.target.value)
+                          }
+                          className="border rounded w-full px-3 py-2 text-black"
+                        />
+                      </div>
+
+                      {products.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeProduct(product.id)}
+                          className="text-red-500 text-sm"
+                        >
+                          Remove Product
+                        </button>
+                      )}
                     </div>
+                  ))}
 
-                    {/* Quantity */}
-                    <div className="mb-3">
-                      <label className="block text-sm font-bold mb-1 text-black">
-                        Quantity
-                      </label>
-                      <input
-                        type="number"
-                        value={product.productCount}
-                        onChange={(e) =>
-                          handleChange(index, "productCount", e.target.value)
-                        }
-                        className="border rounded w-full px-3 py-2 text-black"
-                      />
-                    </div>
-
-                    {/* Price */}
-                    <div className="mb-3">
-                      <label className="block text-sm font-bold mb-1 text-black">
-                        Price
-                      </label>
-                      <input
-                        type="number"
-                        value={product.unitPrice}
-                        onChange={(e) =>
-                          handleChange(index, "unitPrice", e.target.value)
-                        }
-                        className="border rounded w-full px-3 py-2 text-black"
-                      />
-                    </div>
-
-                    {/* Remove */}
-                    {products.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeProduct(product.id)}
-                        className="text-red-500 text-sm"
-                      >
-                        Remove Product
-                      </button>
-                    )}
-                  </div>
-                ))}
-
-                {/* Actions */}
-                <div className="flex justify-between items-center">
-                  <button
-                    type="button"
-                    onClick={addProduct}
-                    className="bg-green-500 text-white px-4 py-2 rounded"
-                  >
-                    + Add More
-                  </button>
-
-                  <div className="flex gap-2">
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
-                    >
-                      Save All
-                    </button>
+                  <div className="flex justify-between items-center pt-4 border-t">
                     <button
                       type="button"
-                      onClick={() => setFocusOnShopField(false)}
-                      className="bg-gray-500 text-white px-4 py-2 rounded"
+                      onClick={addProduct}
+                      className="bg-green-500 text-white px-4 py-2 rounded"
                     >
-                      Cancel
+                      + Add More
                     </button>
+
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                      >
+                        Save All
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                        className="bg-gray-500 text-white px-4 py-2 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </form>
-
+              </div>
             </div>
           </div>
         </ShopModalPortal>
@@ -1130,6 +1178,7 @@ const Meal = () => {
                                         type="text"
                                         onFocus={() => {
                                           setFocusOnShopField(true);
+                                          setShowModal(true)
                                           setSelectDate(el.date)
                                           setCurrentItem(arrOfMeals.find(item => item.date === el.date))
                                           setShopping({
