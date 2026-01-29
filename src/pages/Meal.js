@@ -52,6 +52,10 @@ const Meal = () => {
   const [products, setProducts] = useState([
     { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
   ]);
+  const [deposits, setDeposits] = useState([
+    { id: 1, removeDeposit: false, amount: "", reason: "" },
+  ]);
+  console.log(deposits)
   const [currentIndex, setCurrentIndex] = useState();
   const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState();
@@ -141,8 +145,8 @@ const Meal = () => {
       // setArrOfMeals([...copyArrOfMeals])
       setShowModal(false)
       alert("Shopping updated successfully")
-      
-  
+
+
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name}, you've done shopping worth ${shopping.shop} taka is added successfully. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
@@ -598,162 +602,162 @@ const Meal = () => {
       {focusOnShopField && (
         <ShopModalPortal>
           <div
-  className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 backdrop-blur-sm ${showModal?'flex':'hidden'} items-center justify-center z-50 transition-all duration-300`}
-  onMouseMove={handleMouseMove}
-  onMouseUp={handleMouseUp}
->
-  <div
-    ref={modalRef}
-    className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200"
-    style={{
-      transform: `translate(${position.x}px, ${position.y}px)`,
-      cursor: isDragging ? 'grabbing' : 'default'
-    }}
-  >
-    <div
-      className="modal-header cursor-grab active:cursor-grabbing pb-5 border-b-2 border-gray-200 mb-6"
-      onMouseDown={handleMouseDown}
-    >
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">
-            Shop Details
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            {currentUser.split(' ')[0]} • {selectDate}
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div className="overflow-y-auto flex-1 pr-2 custom-scrollbar">
-      <div className="space-y-5">
-        {products?.map((product, index) => (
-          <div 
-            key={product.id} 
-            className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${product.removeProduct ? 'hidden' : ''}`}
+            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 backdrop-blur-sm ${showModal ? 'flex' : 'hidden'} items-center justify-center z-50 transition-all duration-300`}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
           >
-            <div className="flex justify-between items-center mb-5">
-              <div className="flex items-center gap-2">
-                <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
-                  {index + 1}
-                </span>
-                <h3 className="font-bold text-lg text-gray-800">
-                  Product {index + 1}
-                </h3>
+            <div
+              ref={modalRef}
+              className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200"
+              style={{
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                cursor: isDragging ? 'grabbing' : 'default'
+              }}
+            >
+              <div
+                className="modal-header cursor-grab active:cursor-grabbing pb-5 border-b-2 border-gray-200 mb-6"
+                onMouseDown={handleMouseDown}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Shop Details
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {currentUser.split(' ')[0]} • {selectDate}
+                    </p>
+                  </div>
+                </div>
               </div>
-              {products.length > 1 && (
+
+              <div className="overflow-y-auto flex-1 pr-2 custom-scrollbar">
+                <div className="space-y-5">
+                  {products?.map((product, index) => (
+                    <div
+                      key={product.id}
+                      className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${product.removeProduct ? 'hidden' : ''}`}
+                    >
+                      <div className="flex justify-between items-center mb-5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
+                            {index + 1}
+                          </span>
+                          <h3 className="font-bold text-lg text-gray-800">
+                            Product {index + 1}
+                          </h3>
+                        </div>
+                        {products.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeProduct(product.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-1"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            Item Name
+                          </label>
+                          <input
+                            type="text"
+                            value={product.productName}
+                            onChange={(e) =>
+                              handleChange(index, "productName", e.target.value)
+                            }
+                            placeholder="Enter product name"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                            </svg>
+                            Quantity
+                          </label>
+                          <input
+                            type="number"
+                            value={product.productCount}
+                            onChange={(e) =>
+                              handleChange(index, "productCount", e.target.value)
+                            }
+                            placeholder="0"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Price
+                          </label>
+                          <input
+                            type="number"
+                            value={product.unitPrice}
+                            onChange={(e) =>
+                              handleChange(index, "unitPrice", e.target.value)
+                            }
+                            placeholder="0.00"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addProduct}
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+                  >
+                    <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add More Product
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-200 mt-6">
                 <button
                   type="button"
-                  onClick={() => removeProduct(product.id)}
-                  className="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-1"
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold transition-all duration-200 shadow-sm hover:shadow-md"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  Remove
+                  Cancel
                 </button>
-              )}
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  Item Name
-                </label>
-                <input
-                  type="text"
-                  value={product.productName}
-                  onChange={(e) =>
-                    handleChange(index, "productName", e.target.value)
-                  }
-                  placeholder="Enter product name"
-                  className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
-                  </svg>
-                  Quantity
-                </label>
-                <input
-                  type="number"
-                  value={product.productCount}
-                  onChange={(e) =>
-                    handleChange(index, "productCount", e.target.value)
-                  }
-                  placeholder="0"
-                  className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Price
-                </label>
-                <input
-                  type="number"
-                  value={product.unitPrice}
-                  onChange={(e) =>
-                    handleChange(index, "unitPrice", e.target.value)
-                  }
-                  placeholder="0.00"
-                  className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
-                />
+                  Save All
+                </button>
               </div>
             </div>
-          </div>
-        ))}
 
-        <button
-          type="button"
-          onClick={addProduct}
-          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group"
-        >
-          <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add More Product
-        </button>
-      </div>
-    </div>
-
-    <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-200 mt-6">
-      <button
-        type="button"
-        onClick={() => setShowModal(false)}
-        className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold transition-all duration-200 shadow-sm hover:shadow-md"
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        onClick={handleSubmit}
-        className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-        Save All
-      </button>
-    </div>
-  </div>
-
-  <style jsx>{`
+            <style jsx>{`
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
     }
@@ -769,7 +773,7 @@ const Meal = () => {
       background: #94a3b8;
     }
   `}</style>
-</div>
+          </div>
 
         </ShopModalPortal>
       )}
@@ -1188,6 +1192,43 @@ const Meal = () => {
                                       <input
 
                                         type="text"
+                                        onFocus={() => {
+                                          setFocusOnShopField(true);
+                                          setShowModal(true)
+                                          setSelectDate(el.date)
+                                          setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                          setShopping({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                          });
+                                          console.log(el.date, selectDate)
+                                          setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                            return {
+                                              id: i + 1,
+                                              removeProduct: false,
+                                              ...item
+                                            }
+                                          }))
+                                          // setProducts()
+
+                                          // copyshops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   shop: copyshops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+
+                                          // setShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   shop: e.target.value * 1,
+                                          // });
+
+                                        }}
                                         onChange={(e) => {
                                           if (user?.role === "user") {
                                             alert("Only admin can update deposite");
