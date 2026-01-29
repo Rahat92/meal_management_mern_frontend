@@ -534,9 +534,17 @@ const Meal = () => {
     updated[index][field] = value;
     setProducts(updated);
   };
+  const depositHandleChange = (index, field, value) => {
+    const updated = [...deposits];
+    updated[index][field] = value;
+    setDeposits(updated);
+  };
 
   const addProduct = () => {
     setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: null, unitPrice: null }]);
+  };
+  const addDeposit = () => {
+    setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: 0, reason: '' }]);
   };
 
   const removeProduct = (productId) => {
@@ -555,6 +563,23 @@ const Meal = () => {
     })
 
     setProducts(updated);
+  };
+  const removeDeposit = (depositId) => {
+    // const updated = products.filter((_, i) => i !== index);
+    const updated = deposits.map((item, index) => {
+      if (item.id === depositId) {
+        return {
+          ...item,
+          removeDeposit: true,
+        }
+      } else {
+        return {
+          ...item
+        }
+      }
+    })
+
+    setDeposits(updated);
   };
 
   const handleSubmit = (e) => {
