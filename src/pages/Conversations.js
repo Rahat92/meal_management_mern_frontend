@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Socket, io } from "socket.io-client";
-import { format } from "timeago.js";
+import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 
 import { useGetConversationsQuery } from "../features/Chat/chatApi";
 import { useSelector } from "react-redux";
@@ -118,7 +117,7 @@ const Conversation = () => {
                 </span>
                 <div className="flex flex-col items-end">
                   <span>{el.message}</span>
-                  <span className="text-sm">{format(el.createdAt)}</span>
+                  {/* <span className="text-sm">{format(el.createdAt)}</span> */}
                 </div>
               </div>
             );

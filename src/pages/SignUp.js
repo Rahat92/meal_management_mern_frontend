@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./SignUp.module.css";
 import { useForgotPasswordMutation, useGetManagersQuery, useSignUpMutation } from "../features/bikri/bikriApi";
 const SignUp = () => {
   const {data:managers} = useGetManagersQuery()
   console.log(managers)
-  const [signUp, { isSuccess, isError, error, isLoading }] =
+  const [signUp, { isSuccess, isError, error }] =
     useSignUpMutation();
   const [forgotPassword] = useForgotPasswordMutation();
   const [formValues, setFormValues] = useState({});
@@ -15,15 +15,14 @@ const SignUp = () => {
     if (isError) {
       alert(error.data.message);
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, error.data.message]);
   const formHandler = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
-  console.log(formValues);
 
   useEffect(() => {
     forgotPassword()
-  }, [])
+  }, [forgotPassword])
   return (
     <div>
       <div className={style.signUpFormWrapper}>

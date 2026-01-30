@@ -1,12 +1,9 @@
-import React from "react";
 import { useState } from "react";
 import { useLoginMutation } from "../features/bikri/bikriApi";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { locationPathChanged } from "../features/locationPath";
-import style from "./SignIn.module.css";
-import LoaderComponent from "../components/LoaderComponent";
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,12 +19,12 @@ const SignIn = () => {
   }, [isSuccess]);
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
-  }, []);
+  });
   useEffect(() => {
     if (isError) {
       alert(error?.data?.message);
     }
-  }, [isError]);
+  }, [isError, error?.data?.message]);
   return (
     <div className="font-sans h-screen ">
       <section className="bg-gray-50 dark:bg-gray-900 h-full">

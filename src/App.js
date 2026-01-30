@@ -7,7 +7,6 @@ import SignIn from "./pages/SignIn";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { userLoggedIn } from "./features/auth/authSlice";
-import { locationPathChanged } from "./features/locationPath";
 import Test from "./pages/Test";
 import SignUp from "./pages/SignUp";
 import NavBar from "./components/NavBar";
@@ -25,7 +24,7 @@ const App = () => {
     dispatch(
       userLoggedIn({ accessToken: localAuth?.token || null, user: localAuth?.user || null })
     );
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="font-sans">
