@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./features/apis/apiSlice";
 import authReducer from "./features/auth/authSlice";
 import currentPathReducer from "./features/locationPath";

@@ -1,47 +1,14 @@
-export default (month, year) => {
-    let monthLength = 0;
-    switch (month) {
-      case 0:
-        monthLength = 31;
-        break;
-      case 1:
-        monthLength = 29;
-        break;
-      case 2:
-        monthLength = 31;
-        break;
-      case 3:
-        monthLength = 30;
-        break;
-      case 4:
-        monthLength = 31;
-        break;
-      case 5:
-        monthLength = 30;
-        break;
-      case 6:
-        monthLength = 31; //july
-        break;
-      case 7:
-        monthLength = 31; //august
-        break;
-      case 8:
-        monthLength = 30;
-        break;
-      case 9:
-        monthLength = 31; //octobar
-        break;
-      case 10:
-        monthLength = 30;
-        break;
-      case 11:
-        monthLength = 31;
-        break;
-      default:
-        monthLength = 31;
-    }
-    return monthLength
+export default function getMonthLength(month, year) {
+  if (month < 0 || month > 11) return 0;
+
+  if (month === 1) {
+    const isLeapYear =
+      (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+
+    return isLeapYear ? 29 : 28;
   }
 
-  
+  const thirtyOneDays = [0, 2, 4, 6, 7, 9, 11];
 
+  return thirtyOneDays.includes(month) ? 31 : 30;
+}

@@ -16,7 +16,6 @@ import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 const AllMonthsStats = () => {
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
-  const todayDate = new Date().getDate();
   const { user } = useSelector((state) => state.auth);
   const [mealStatMonthly, setMealStatMonthly] = useState([]);
   const [selectBorder, setSelectBorder] = useState()
