@@ -225,10 +225,8 @@ const bikriApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["getAllMonthStat", 'getMeals'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        console.log(args);
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
@@ -240,6 +238,8 @@ const bikriApi = apiSlice.injectEndpoints({
                 console.log(JSON.stringify(desireMeal));
                 desireMeal["money"][args.borderIndex] =
                   data.meal.money[args.borderIndex];
+                desireMeal["depositComments"][args.borderIndex] =
+                  data.meal.depositComments[args.borderIndex];
               }
             )
           );
@@ -331,7 +331,6 @@ const bikriApi = apiSlice.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           dispatch(
             apiSlice.util.updateQueryData(
               "getMonthlyMeals",
@@ -342,6 +341,8 @@ const bikriApi = apiSlice.injectEndpoints({
                 );
                 desireMeal["extraShop"][args.borderIndex] =
                   data.meal.extraShop[args.borderIndex];
+                desireMeal["extraShoppingComments"][args.borderIndex] =
+                  data.meal.extraShoppingComments[args.borderIndex];
               }
             )
           );
@@ -399,7 +400,7 @@ const bikriApi = apiSlice.injectEndpoints({
     getManagers: builder.query({
       query: () => ({
         url: `/users/managers`,
-        method:'GET'
+        method: 'GET'
       })
     }),
     login: builder.mutation({

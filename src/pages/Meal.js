@@ -30,6 +30,8 @@ import TableHeader from "../components/Table/TableHeader";
 import AllUser from "../components/Table/AllUser/AllUser";
 import getDayName from "../utils/getDayName";
 import ShopModalPortal from "../components/Modal/ShopModal";
+import ExtraShopModalPortal from "../components/Modal/ShopModal";
+import DepositModalPortal from "../components/Modal/ShopModal";
 const Meal = () => {
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -47,15 +49,21 @@ const Meal = () => {
   const [currentItem, setCurrentItem] = useState({});
   const [headHeight, setHeadHeight] = useState(0);
   const [focusOnShopField, setFocusOnShopField] = useState(false);
+  const [focusOnExtraShopField, setFocusOnExtraShopField] = useState(false);
+  const [focusOnDepositField, setFocusOnDepositField] = useState(false);
   const [showModal, setShowModal] = useState(true);
+  const [showExtraShopModal, setShowExtraShopModal] = useState(true);
+  const [showDepositModal, setShowDepositModal] = useState(true);
 
   const [products, setProducts] = useState([
     { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
   ]);
-  const [deposits, setDeposits] = useState([
-    { id: 1, removeDeposit: false, amount: "", reason: "" },
+  const [extraShops, setExtraShops] = useState([
+    { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
   ]);
-  console.log(deposits)
+  const [deposits, setDeposits] = useState([
+    { id: 1, removeDeposit: false, amount: null, reason: "" },
+  ]);
   const [currentIndex, setCurrentIndex] = useState();
   const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState();
@@ -75,6 +83,8 @@ const Meal = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const modalRef = useRef(null);
+  const depositModalRef = useRef(null);
+  const extraShopModalRef = useRef(null);
 
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
@@ -95,7 +105,7 @@ const Meal = () => {
     { data: shopMoney, isSuccess: isShopMoneyUpdateSuccess, isError: isShopMoneyError, error: shopMoneyError },
   ] = useUpdateShopMoneyMutation();
   const [
-    updateExtraShopMoney,
+    updateExtraShopMMoneMoney,
     {
       data: extraShopMoney,
       isSuccess: isExtraShopMoneyUpdateSuccess,
@@ -104,7 +114,7 @@ const Meal = () => {
     },
   ] = useUpdateExtraShopMoneyMutation();
 
-  const [deposite, setDeposite] = useState({});
+  const [deposit, setDeposit] = useState({});
   const [shopping, setShopping] = useState({});
   const [extraShopping, setExtraShopping] = useState({});
 
@@ -126,6 +136,7 @@ const Meal = () => {
     }
     if (isDepositeUpdateSuccess) {
       alert("Deposite updated successfully")
+      setShowDepositModal(false)
       // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
     }
   }, [isUpdateMoneyError, isDepositeUpdateSuccess]);
@@ -152,32 +163,32 @@ const Meal = () => {
     }
 
   }, [isShopMoneyError, isShopMoneyUpdateSuccess]);
-  console.log(arrOfMeals)
   useEffect(() => {
     if (isShopExtraMoneyError) {
       alert(extraShopMoneyError?.data?.message);
     }
     if (isExtraShopMoneyUpdateSuccess) {
       alert("Extra shopping updated successfully")
+      setShowExtraShopModal(false)
     }
   }, [isShopExtraMoneyError, isExtraShopMoneyUpdateSuccess]);
   console.log('Hello world')
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (deposite?.id) {
-        updateMoney({
-          id: deposite.id,
-          year: deposite.year,
-          month: deposite.month,
-          borderIndex: deposite.borderIndex,
-          money: deposite.money,
-        });
-      }
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [deposite]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (deposit?.id) {
+  //       updateMoney({
+  //         id: deposit.id,
+  //         year: deposit.year,
+  //         month: deposit.month,
+  //         borderIndex: deposit.borderIndex,
+  //         money: deposit.money,
+  //       });
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [deposit]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {
@@ -201,22 +212,22 @@ const Meal = () => {
       console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
     }
   }, [JSON.stringify(products)])
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (extraShopping?.id) {
-        updateExtraShopMoney({
-          id: extraShopping.id,
-          year: extraShopping.year,
-          month: extraShopping.month,
-          borderIndex: extraShopping.borderIndex,
-          extraShop: extraShopping.extraShop,
-        });
-      }
-    }, 500);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [extraShopping]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (extraShopping?.id) {
+  //       updateExtraShopMMoneMoney({
+  //         id: extraShopping.id,
+  //         year: extraShopping.year,
+  //         month: extraShopping.month,
+  //         borderIndex: extraShopping.borderIndex,
+  //         extraShop: extraShopping.extraShop,
+  //       });
+  //     }
+  //   }, 500);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [extraShopping]);
 
   const [
     updatePersonFullMeal,
@@ -253,7 +264,7 @@ const Meal = () => {
   }, []);
   useEffect(() => {
   }, [yearMonth?.yearMonth]);
-  let year = 2024;
+  let year = 2026;
   let month = 11;
   const currentDay = new Date().getDate();
   const monthLength = getCurrentMonthLength(month, year)
@@ -376,16 +387,16 @@ const Meal = () => {
           money: el.money,
           shop: el.shop,
           shoppingComments: el.shoppingComments,
+          extraShoppingComments: el.extraShoppingComments,
+          depositComment: el.depositComment,
           extraShop: el.extraShop,
         };
       }).sort((a, b) => a.day - b.day);
-      console.log('running')
       setArrOfMeals(mealsArr);
       setPrevArrOfMeals(mealsArr);
     }
   }, [monthlyMeals?.monthlyMeals]);
   // submain branch
-  console.log(monthlyMeals?.monthlyMeals)
   useEffect(() => {
     if (prevArrOfMeals?.length > 0) {
       const changedArr = arrOfMeals.filter((item, i) => {
@@ -528,7 +539,7 @@ const Meal = () => {
       setBorderTotalMeal(totalBreakfast + totalLunch + totalDinner)
     }
   }, [currentIndex, isChanged])
-  console.log(products)
+  console.log(extraShops)
   const handleChange = (index, field, value) => {
     const updated = [...products];
     updated[index][field] = value;
@@ -539,12 +550,20 @@ const Meal = () => {
     updated[index][field] = value;
     setDeposits(updated);
   };
+  const extraShopHandleChange = (index, field, value) => {
+    const updated = [...extraShops];
+    updated[index][field] = value;
+    setExtraShops(updated);
+  };
 
   const addProduct = () => {
     setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: null, unitPrice: null }]);
   };
+  const addExtraShop = () => {
+    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: null, unitPrice: null }]);
+  };
   const addDeposit = () => {
-    setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: 0, reason: '' }]);
+    setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
   };
 
   const removeProduct = (productId) => {
@@ -563,6 +582,23 @@ const Meal = () => {
     })
 
     setProducts(updated);
+  };
+  const removeExtraShop = (extraShopId) => {
+    // const updated = products.filter((_, i) => i !== index);
+    const updated = extraShops.map((item, index) => {
+      if (item.id === extraShopId) {
+        return {
+          ...item,
+          removeExtraShop: true,
+        }
+      } else {
+        return {
+          ...item
+        }
+      }
+    })
+
+    setExtraShops(updated);
   };
   const removeDeposit = (depositId) => {
     // const updated = products.filter((_, i) => i !== index);
@@ -591,6 +627,38 @@ const Meal = () => {
       borderIndex: shopping.borderIndex,
       shop: products.filter(item => !item.removeProduct).reduce((f, i) => Number(i.unitPrice) + f, 0),
       shoppingComments: products.filter(item => !item.removeProduct),
+      customerId: currentUser.split(' ')[1]
+    });
+    // setShopping({
+    //   ...shopping,
+    //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
+    // })
+  };
+  const handleExtraShopSubmit = (e) => {
+    e.preventDefault();
+    updateExtraShopMMoneMoney({
+      id: extraShopping.id,
+      year: extraShopping.year,
+      month: extraShopping.month,
+      borderIndex: extraShopping.borderIndex,
+      extraShop: extraShops.filter(item => !item.removeExtraShop).reduce((f, i) => Number(i.unitPrice) + f, 0),
+      extraShoppingComments: extraShops.filter(item => !item.removeExtraShop),
+      customerId: currentUser.split(' ')[1]
+    });
+    // setShopping({
+    //   ...shopping,
+    //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
+    // })
+  };
+  const handleDepositsSubmit = (e) => {
+    e.preventDefault();
+    updateMoney({
+      id: deposit.id,
+      year: deposit.year,
+      month: deposit.month,
+      borderIndex: deposit.borderIndex,
+      money: deposits.filter(item => !item.removeDeposit).reduce((f, i) => Number(i.amount) + f, 0),
+      depositComment: deposits.filter(item => !item.removeDeposit),
       customerId: currentUser.split(' ')[1]
     });
     // setShopping({
@@ -649,13 +717,16 @@ const Meal = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                   </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      Shop Details
-                    </h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {currentUser.split(' ')[0]} • {selectDate}
-                    </p>
+                  <div className="flex justify-between w-full items-center">
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-800">
+                        Shop Details
+                      </h2>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {currentUser.split(' ')[0]} • {selectDate}
+                      </p>
+                    </div>
+                    <div className="font-bold text-black text-xl">{products?.reduce((f,c) => f+c.unitPrice, 0)}</div>
                   </div>
                 </div>
               </div>
@@ -738,7 +809,7 @@ const Meal = () => {
                             type="number"
                             value={product.unitPrice}
                             onChange={(e) =>
-                              handleChange(index, "unitPrice", e.target.value)
+                              handleChange(index, "unitPrice", Number(e.target.value))
                             }
                             placeholder="0.00"
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
@@ -801,6 +872,344 @@ const Meal = () => {
           </div>
 
         </ShopModalPortal>
+      )}
+      {focusOnExtraShopField && (
+        <ExtraShopModalPortal>
+          <div
+            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 backdrop-blur-sm ${showExtraShopModal ? 'flex' : 'hidden'} items-center justify-center z-50 transition-all duration-300`}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+          >
+            <div
+              ref={extraShopModalRef}
+              className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200"
+              style={{
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                cursor: isDragging ? 'grabbing' : 'default'
+              }}
+            >
+              <div
+                className="modal-header cursor-grab active:cursor-grabbing pb-5 border-b-2 border-gray-200 mb-6"
+                onMouseDown={handleMouseDown}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Extra Shop Details
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {currentUser.split(' ')[0]} • {selectDate}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="overflow-y-auto flex-1 pr-2 custom-scrollbar">
+                <div className="space-y-5">
+                  {extraShops?.map((extraShop, index) => (
+                    <div
+                      key={extraShop.id}
+                      className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${extraShop.removeExtraShop ? 'hidden' : ''}`}
+                    >
+                      <div className="flex justify-between items-center mb-5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
+                            {index + 1}
+                          </span>
+                          <h3 className="font-bold text-lg text-gray-800">
+                            Extra Shop {index + 1}
+                          </h3>
+                        </div>
+                        {extraShops.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeExtraShop(extraShop.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-1"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            Item Name
+                          </label>
+                          <input
+                            type="text"
+                            value={extraShop.productName}
+                            onChange={(e) =>
+                              extraShopHandleChange(index, "productName", e.target.value)
+                            }
+                            placeholder="Enter product name"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                            </svg>
+                            Quantity
+                          </label>
+                          <input
+                            type="number"
+                            value={extraShop.productCount}
+                            onChange={(e) =>
+                              extraShopHandleChange(index, "productCount", e.target.value)
+                            }
+                            placeholder="0"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Price
+                          </label>
+                          <input
+                            type="number"
+                            value={extraShop.unitPrice}
+                            onChange={(e) =>
+                              extraShopHandleChange(index, "unitPrice", e.target.value)
+                            }
+                            placeholder="0.00"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addExtraShop}
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+                  >
+                    <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add More ExtraShop
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-200 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowExtraShopModal(false)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold transition-all duration-200 shadow-sm hover:shadow-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExtraShopSubmit}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Save All
+                </button>
+              </div>
+            </div>
+
+            <style jsx>{`
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  `}</style>
+          </div>
+
+        </ExtraShopModalPortal>
+      )}
+      {focusOnDepositField && (
+        <DepositModalPortal>
+          <div
+            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 backdrop-blur-sm ${showDepositModal ? 'flex' : 'hidden'} items-center justify-center z-50 transition-all duration-300`}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+          >
+            <div
+              ref={depositModalRef}
+              className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200"
+              style={{
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                cursor: isDragging ? 'grabbing' : 'default'
+              }}
+            >
+              <div
+                className="modal-header cursor-grab active:cursor-grabbing pb-5 border-b-2 border-gray-200 mb-6"
+                onMouseDown={handleMouseDown}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Shop Details
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {currentUser.split(' ')[0]} • {selectDate}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="overflow-y-auto flex-1 pr-2 custom-scrollbar">
+                <div className="space-y-5">
+                  {deposits?.map((deposit, index) => (
+                    <div
+                      key={deposit.id}
+                      className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${deposit.removeDeposit ? 'hidden' : ''}`}
+                    >
+                      <div className="flex justify-between items-center mb-5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
+                            {index + 1}
+                          </span>
+                          <h3 className="font-bold text-lg text-gray-800">
+                            Amount {index + 1}
+                          </h3>
+                        </div>
+                        {deposits.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeDeposit(deposit.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-1"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            Amount
+                          </label>
+                          <input
+                            type="number"
+                            value={deposit.amount}
+                            onChange={(e) =>
+                              depositHandleChange(index, "amount", e.target.value)
+                            }
+                            placeholder="0.00"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                            </svg>
+                            Reason
+                          </label>
+                          <input
+                            type="text"
+                            value={deposit.reason}
+                            onChange={(e) =>
+                              depositHandleChange(index, "reason", e.target.value)
+                            }
+                            placeholder="Reason"
+                            className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addDeposit}
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+                  >
+                    <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add More Deposit
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-200 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowDepositModal(false)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold transition-all duration-200 shadow-sm hover:shadow-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDepositsSubmit}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Save All
+                </button>
+              </div>
+            </div>
+
+            <style jsx>{`
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  `}</style>
+          </div>
+
+        </DepositModalPortal>
       )}
       <FilterBox
         setGetMonth={setGetMonth}
@@ -1214,25 +1623,26 @@ const Meal = () => {
                                           screenWidth < 600 && moneyOption !== "Deposite" ? "none" : "",
                                       }}
                                     >
+                                      {/* deposit field */}
                                       <input
-
                                         type="text"
                                         onFocus={() => {
-                                          setFocusOnShopField(true);
-                                          setShowModal(true)
+                                          setFocusOnDepositField(true);
+                                          setShowDepositModal(true)
                                           setSelectDate(el.date)
                                           setCurrentItem(arrOfMeals.find(item => item.date === el.date))
-                                          setShopping({
+                                          setDeposit({
                                             id: el.id,
                                             month: el.month,
                                             year: el.year,
                                             borderIndex: index,
                                           });
                                           console.log(el.date, selectDate)
-                                          setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                          console.log(el)
+                                          setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
                                             return {
                                               id: i + 1,
-                                              removeProduct: false,
+                                              removeDeposit: false,
                                               ...item
                                             }
                                           }))
@@ -1259,28 +1669,28 @@ const Meal = () => {
                                             alert("Only admin can update deposite");
                                             return;
                                           }
-                                          const desireMealIndex = arrOfMeals.findIndex(
-                                            (item) => item.id === el.id
-                                          );
-                                          const desireMeal = arrOfMeals[desireMealIndex];
-                                          const copyDesireMeal = { ...desireMeal };
-                                          const moneys = copyDesireMeal.money;
-                                          const copyMoneys = [...moneys];
-                                          copyMoneys[index] = e.target.value * 1;
-                                          arrOfMeals[desireMealIndex] = {
-                                            ...copyDesireMeal,
-                                            money: copyMoneys,
-                                          };
+                                          // const desireMealIndex = arrOfMeals.findIndex(
+                                          //   (item) => item.id === el.id
+                                          // );
+                                          // const desireMeal = arrOfMeals[desireMealIndex];
+                                          // const copyDesireMeal = { ...desireMeal };
+                                          // const moneys = copyDesireMeal.money;
+                                          // const copyMoneys = [...moneys];
+                                          // copyMoneys[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   money: copyMoneys,
+                                          // };
 
-                                          setArrOfMeals([...arrOfMeals]);
+                                          // setArrOfMeals([...arrOfMeals]);
 
-                                          setDeposite({
-                                            id: el.id,
-                                            year: el.year,
-                                            month: el.month,
-                                            borderIndex: index,
-                                            money: e.target.value * 1,
-                                          });
+                                          // setDeposit({
+                                          //   id: el.id,
+                                          //   year: el.year,
+                                          //   month: el.month,
+                                          //   borderIndex: index,
+                                          //   money: e.target.value * 1,
+                                          // });
                                         }}
                                         value={el.money[index] === 0 ? "" : el.money[index]}
                                         placeholder="Deposite"
@@ -1300,6 +1710,7 @@ const Meal = () => {
                                           screenWidth < 600 && moneyOption !== "Shopping" ? "none" : "",
                                       }}
                                     >
+                                      {/* shop input field */}
                                       <input
                                         type="text"
                                         onFocus={() => {
@@ -1383,8 +1794,47 @@ const Meal = () => {
                                           screenWidth < 600 && moneyOption !== "Extra" ? "none" : "",
                                       }}
                                     >
+                                      {/* extra shop input field */}
                                       <input
                                         type="text"
+                                        onFocus={() => {
+                                          setFocusOnExtraShopField(true);
+                                          setShowExtraShopModal(true)
+                                          setSelectDate(el.date)
+                                          setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                          setExtraShopping({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                          });
+                                          console.log(el.date, selectDate)
+                                          console.log(el)
+                                          setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
+                                            return {
+                                              id: i + 1,
+                                              removeExtraShop: false,
+                                              ...item
+                                            }
+                                          }))
+                                          // setProducts()
+
+                                          // copyshops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   shop: copyshops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+
+                                          // setShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   shop: e.target.value * 1,
+                                          // });
+
+                                        }}
                                         onChange={(e) => {
                                           if (
                                             new Date() >
@@ -1405,26 +1855,26 @@ const Meal = () => {
                                             alert("Only admin can update extra shop");
                                             return;
                                           }
-                                          const desireMealIndex = arrOfMeals.findIndex(
-                                            (item) => item.id === el.id
-                                          );
-                                          const desireMeal = arrOfMeals[desireMealIndex];
-                                          const copyDesireMeal = { ...desireMeal };
-                                          const extraShops = copyDesireMeal.extraShop;
-                                          const copyExtraShops = [...extraShops];
-                                          copyExtraShops[index] = e.target.value * 1;
-                                          arrOfMeals[desireMealIndex] = {
-                                            ...copyDesireMeal,
-                                            extraShop: copyExtraShops,
-                                          };
-                                          setArrOfMeals([...arrOfMeals]);
-                                          setExtraShopping({
-                                            id: el.id,
-                                            month: el.month,
-                                            year: el.year,
-                                            borderIndex: index,
-                                            extraShop: e.target.value * 1,
-                                          });
+                                          // const desireMealIndex = arrOfMeals.findIndex(
+                                          //   (item) => item.id === el.id
+                                          // );
+                                          // const desireMeal = arrOfMeals[desireMealIndex];
+                                          // const copyDesireMeal = { ...desireMeal };
+                                          // const extraShops = copyDesireMeal.extraShop;
+                                          // const copyExtraShops = [...extraShops];
+                                          // copyExtraShops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   extraShop: copyExtraShops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+                                          // setExtraShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   extraShop: e.target.value * 1,
+                                          // });
                                         }}
                                         placeholder="Extra"
                                         value={el.extraShop[index] === 0 ? "" : el.extraShop[index]}
