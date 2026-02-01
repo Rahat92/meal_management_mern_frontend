@@ -144,7 +144,7 @@ const FilterBox = ({
       >
         <button
           style={{
-            color: "white",
+            color: "black",
             visibility: isChanged ? "visible" : "hidden",
             background: "none",
             fontWeight: "400",

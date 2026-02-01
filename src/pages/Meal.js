@@ -172,62 +172,13 @@ const Meal = () => {
       setShowExtraShopModal(false)
     }
   }, [isShopExtraMoneyError, isExtraShopMoneyUpdateSuccess]);
-  console.log('Hello world')
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (deposit?.id) {
-  //       updateMoney({
-  //         id: deposit.id,
-  //         year: deposit.year,
-  //         month: deposit.month,
-  //         borderIndex: deposit.borderIndex,
-  //         money: deposit.money,
-  //       });
-  //     }
-  //   }, 1000);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [deposit]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (shopping?.id) {
-  //       updateShopMoney({
-  //         id: shopping.id,
-  //         year: shopping.year,
-  //         month: shopping.month,
-  //         borderIndex: shopping.borderIndex,
-  //         shop: shopping.shop,
-  //         shoppingComments: products
-  //       });
-  //     }
-  //   }, 1000);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, []);
+  
   useEffect(() => {
     if (products) {
       console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
     }
   }, [JSON.stringify(products)])
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (extraShopping?.id) {
-  //       updateExtraShopMMoneMoney({
-  //         id: extraShopping.id,
-  //         year: extraShopping.year,
-  //         month: extraShopping.month,
-  //         borderIndex: extraShopping.borderIndex,
-  //         extraShop: extraShopping.extraShop,
-  //       });
-  //     }
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [extraShopping]);
+  
 
   const [
     updatePersonFullMeal,
@@ -481,7 +432,6 @@ const Meal = () => {
 
     copyArrOfMeals[dateIndex] = { ...obj, [mealName]: copyMealArr };
     setArrOfMeals([...copyArrOfMeals]);
-    // let updatedArr = [];
     const updatedDateObj = { ...obj, [mealName]: copyMealArr };
     let mealError = "";
 
@@ -567,7 +517,6 @@ const Meal = () => {
   };
 
   const removeProduct = (productId) => {
-    // const updated = products.filter((_, i) => i !== index);
     const updated = products.map((item, index) => {
       if (item.id === productId) {
         return {
@@ -629,10 +578,6 @@ const Meal = () => {
       shoppingComments: products.filter(item => !item.removeProduct),
       customerId: currentUser.split(' ')[1]
     });
-    // setShopping({
-    //   ...shopping,
-    //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
-    // })
   };
   const handleExtraShopSubmit = (e) => {
     e.preventDefault();
@@ -645,10 +590,6 @@ const Meal = () => {
       extraShoppingComments: extraShops.filter(item => !item.removeExtraShop),
       customerId: currentUser.split(' ')[1]
     });
-    // setShopping({
-    //   ...shopping,
-    //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
-    // })
   };
   const handleDepositsSubmit = (e) => {
     e.preventDefault();
@@ -661,10 +602,6 @@ const Meal = () => {
       depositComment: deposits.filter(item => !item.removeDeposit),
       customerId: currentUser.split(' ')[1]
     });
-    // setShopping({
-    //   ...shopping,
-    //    shop: products.reduce((f, i) => Number(i.unitPrice) + f, 0),
-    // })
   };
 
   const handleMouseDown = (e) => {
@@ -692,6 +629,7 @@ const Meal = () => {
 
   return (
     <>
+    {/* shop modal */}
       {focusOnShopField && (
         <ShopModalPortal>
           <div
@@ -726,7 +664,7 @@ const Meal = () => {
                         {currentUser.split(' ')[0]} • {selectDate}
                       </p>
                     </div>
-                    <div className="font-bold text-black text-xl">{products?.reduce((f,c) => f+c.unitPrice, 0)}</div>
+                    <div className="font-bold text-black text-xl">{products?.reduce((f,c) => f+Number(c.unitPrice), 0)}</div>
                   </div>
                 </div>
               </div>
@@ -809,7 +747,7 @@ const Meal = () => {
                             type="number"
                             value={product.unitPrice}
                             onChange={(e) =>
-                              handleChange(index, "unitPrice", Number(e.target.value))
+                              handleChange(index, "unitPrice", e.target.value )
                             }
                             placeholder="0.00"
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
@@ -873,6 +811,7 @@ const Meal = () => {
 
         </ShopModalPortal>
       )}
+      {/* extraShop modal */}
       {focusOnExtraShopField && (
         <ExtraShopModalPortal>
           <div
@@ -1051,6 +990,7 @@ const Meal = () => {
 
         </ExtraShopModalPortal>
       )}
+      {/* deposit modal */}
       {focusOnDepositField && (
         <DepositModalPortal>
           <div
@@ -1225,7 +1165,7 @@ const Meal = () => {
         isChanged={isChanged}
       />
       {monthlyMeals?.monthlyMeals && monthlyMeals.monthlyMeals.length > 0 ? (
-        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto">
+        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto bg-black">
           <table className="">
             {/* table header */}
             <TableHeader
@@ -2027,6 +1967,7 @@ const Meal = () => {
           </div>
         </div>
       ) : (
+        // not found message
         <div className="fixed top-0 z-[-10] left-0 right-0 justify-center items-center h-screen">
           <div className="w-full h-full flex justify-center items-center">
             <h1 className="text-2xl font-bold w-full text-center">No Meal Sheets Found</h1>

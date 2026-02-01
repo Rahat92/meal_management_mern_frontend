@@ -15,7 +15,7 @@ const SignUp = () => {
     if (isError) {
       alert(error.data.message);
     }
-  }, [isSuccess, isError, error.data.message]);
+  }, [isSuccess, isError, error?.data?.message]);
   const formHandler = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
