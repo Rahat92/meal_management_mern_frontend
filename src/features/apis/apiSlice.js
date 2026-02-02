@@ -3,6 +3,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_URL,
+    // baseUrl: `http://localhost:5000/api/v1`,
   }),
   tagTypes: ["getMeals", "getAllMonthStat", 'getMessages', 'createMessage'],
   endpoints: (builder) => ({}),

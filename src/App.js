@@ -27,7 +27,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className="font-sans">
+    <div className="font-sans bg-green-500/20">
       <Router>
         {pathname !== "/" && pathname && <NavBar />}
         <Routes>

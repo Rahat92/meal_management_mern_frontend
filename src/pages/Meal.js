@@ -1153,6 +1153,7 @@ const Meal = () => {
       )}
       <FilterBox
         setGetMonth={setGetMonth}
+        setGetYear = {setGetYear}
         style={style}
         yearMonth={yearMonth}
         registeredUsers={registeredUsers}
