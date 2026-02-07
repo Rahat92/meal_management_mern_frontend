@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { readableDate } from "../utils/readableDate";
@@ -42,6 +42,8 @@ const Meal = () => {
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
   const [nowScroll, setNowScroll] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState({});
+  console.log('currentProduct', currentProduct)
   const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
@@ -175,6 +177,16 @@ const Meal = () => {
     }
   }, [isShopExtraMoneyError, isExtraShopMoneyUpdateSuccess]);
 
+  const tooltipItems = useMemo(() => {
+    const comments =
+      currentProduct?.products || [];
+
+    return comments.map((item, i) => ({
+      id: i,
+      ...item,
+    }));
+  }, [currentProduct]);
+  console.log(tooltipItems)
   useEffect(() => {
     if (products) {
       console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
@@ -1655,86 +1667,93 @@ const Meal = () => {
                                       }}
                                     >
                                       {/* shop input field */}
-                                        <input
-                                          data-tooltip-id={`tooltip-${el.id}-${index}`}
-                                          type="text"
-                                          onFocus={() => {
-                                            setFocusOnShopField(true);
-                                            setShowModal(true)
-                                            setSelectDate(el.date)
-                                            setCurrentItem(arrOfMeals.find(item => item.date === el.date))
-                                            setShopping({
-                                              id: el.id,
-                                              month: el.month,
-                                              year: el.year,
-                                              borderIndex: index,
-                                            });
-                                            console.log(el.date, selectDate)
-                                            setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
-                                              return {
-                                                id: i + 1,
-                                                removeProduct: false,
-                                                ...item
-                                              }
-                                            }))
-                                            // setProducts()
-
-                                            // copyshops[index] = e.target.value * 1;
-                                            // arrOfMeals[desireMealIndex] = {
-                                            //   ...copyDesireMeal,
-                                            //   shop: copyshops,
-                                            // };
-                                            // setArrOfMeals([...arrOfMeals]);
-
-                                            // setShopping({
-                                            //   id: el.id,
-                                            //   month: el.month,
-                                            //   year: el.year,
-                                            //   borderIndex: index,
-                                            //   shop: e.target.value * 1,
-                                            // });
-
-                                          }}
-
-                                          onChange={(e) => {
-                                            if (user?.role === "user") {
-                                              alert("Only admin can update shop");
-                                              return;
+                                      <input
+                                        data-tooltip-id={`tooltip-${el.id}-${index}`}
+                                        type="text"
+                                        onFocus={() => {
+                                          setFocusOnShopField(true);
+                                          setShowModal(true)
+                                          setSelectDate(el.date)
+                                          setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                          setShopping({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                          });
+                                          console.log(el.date, selectDate)
+                                          setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                            return {
+                                              id: i + 1,
+                                              removeProduct: false,
+                                              ...item
                                             }
-                                            // const desireMealIndex = arrOfMeals.findIndex(
-                                            //   (item) => item.id === el.id
-                                            // );
-                                            // const desireMeal = arrOfMeals[desireMealIndex];
-                                            // const copyDesireMeal = { ...desireMeal };
-                                            // const shops = copyDesireMeal.shop;
-                                            // const copyshops = [...shops];
-                                            // copyshops[index] = e.target.value * 1;
-                                            // arrOfMeals[desireMealIndex] = {
-                                            //   ...copyDesireMeal,
-                                            //   shop: copyshops,
-                                            // };
-                                            // setArrOfMeals([...arrOfMeals]);
+                                          }))
+                                          // setProducts()
 
-                                            // setShopping({
-                                            //   id: el.id,
-                                            //   month: el.month,
-                                            //   year: el.year,
-                                            //   borderIndex: index,
-                                            //   shop: e.target.value * 1,
-                                            // });
-                                          }}
-                                          placeholder="Shopping"
-                                          value={el.shop[index] === 0 ? "" : el.shop[index]}
-                                          style={{
-                                            color: "black",
-                                            width: "80px",
-                                            textAlign: "center",
-                                          }}
-                                        />
-                                      <Tooltip id={`tooltip-${el.id}-${index}`} clickable
-                                        positionStrategy="fixed"
+                                          // copyshops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   shop: copyshops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+
+                                          // setShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   shop: e.target.value * 1,
+                                          // });
+
+                                        }}
+                                        onMouseOver={() => {
+                                          setCurrentProduct({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                            products: el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                          });
+                                        }}
+                                        onChange={(e) => {
+                                          if (user?.role === "user") {
+                                            alert("Only admin can update shop");
+                                            return;
+                                          }
+                                          // const desireMealIndex = arrOfMeals.findIndex(
+                                          //   (item) => item.id === el.id
+                                          // );
+                                          // const desireMeal = arrOfMeals[desireMealIndex];
+                                          // const copyDesireMeal = { ...desireMeal };
+                                          // const shops = copyDesireMeal.shop;
+                                          // const copyshops = [...shops];
+                                          // copyshops[index] = e.target.value * 1;
+                                          // arrOfMeals[desireMealIndex] = {
+                                          //   ...copyDesireMeal,
+                                          //   shop: copyshops,
+                                          // };
+                                          // setArrOfMeals([...arrOfMeals]);
+
+                                          // setShopping({
+                                          //   id: el.id,
+                                          //   month: el.month,
+                                          //   year: el.year,
+                                          //   borderIndex: index,
+                                          //   shop: e.target.value * 1,
+                                          // });
+                                        }}
+                                        placeholder="Shopping"
+                                        value={el.shop[index] === 0 ? "" : el.shop[index]}
+                                        style={{
+                                          color: "black",
+                                          width: "80px",
+                                          textAlign: "center",
+                                        }}
+                                      />
+                                      <Tooltip id={`tooltip-${el.id}-${index}`}                                      positionStrategy="fixed"
                                         delayShow={100}>
-                                        {el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                        {tooltipItems.map((item, i) => {
                                           return {
                                             id: i + 1,
                                             removeProduct: false,
