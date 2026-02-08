@@ -859,13 +859,16 @@ const Meal = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                   </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      Extra Shop Details
-                    </h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {currentUser.split(' ')[0]} • {selectDate}
-                    </p>
+                  <div className="flex justify-between w-full items-center">
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-800">
+                        Extra Shop Details
+                      </h2>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {currentUser.split(' ')[0]} • {selectDate}
+                      </p>
+                    </div>
+                    <div className="font-bold text-black text-xl">{extraShops.filter(item => !item.removeExtraShop)?.reduce((f, c) => f + Number(c.unitPrice), 0)}</div>
                   </div>
                 </div>
               </div>
