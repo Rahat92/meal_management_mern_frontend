@@ -1166,7 +1166,7 @@ const Meal = () => {
         isChanged={isChanged}
       />
       {monthlyMeals?.monthlyMeals && monthlyMeals.monthlyMeals.length > 0 ? (
-        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto bg-black">
+        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto">
           <table className="">
             {/* table header */}
             <TableHeader
