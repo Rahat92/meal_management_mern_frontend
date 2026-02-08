@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { readableDate } from "../utils/readableDate";
+import { Tooltip } from 'react-tooltip'
+
 import {
   useCreateMealMutation,
   useGetMonthlyMealsQuery,
@@ -40,6 +42,8 @@ const Meal = () => {
   const nameRef = useRef();
   const [arrOfMeals, setArrOfMeals] = useState([]);
   const [nowScroll, setNowScroll] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState({});
+  console.log('currentProduct', currentProduct)
   const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
@@ -56,10 +60,10 @@ const Meal = () => {
   const [showDepositModal, setShowDepositModal] = useState(true);
 
   const [products, setProducts] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null },
   ]);
   const [extraShops, setExtraShops] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: null, unitPrice: null },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null },
   ]);
   const [deposits, setDeposits] = useState([
     { id: 1, removeDeposit: false, amount: null, reason: "" },
@@ -172,13 +176,23 @@ const Meal = () => {
       setShowExtraShopModal(false)
     }
   }, [isShopExtraMoneyError, isExtraShopMoneyUpdateSuccess]);
-  
+
+  const tooltipItems = useMemo(() => {
+    const comments =
+      currentProduct?.products || [];
+
+    return comments.map((item, i) => ({
+      id: i,
+      ...item,
+    }));
+  }, [currentProduct]);
+  console.log(tooltipItems)
   useEffect(() => {
     if (products) {
       console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
     }
   }, [JSON.stringify(products)])
-  
+
 
   const [
     updatePersonFullMeal,
@@ -507,10 +521,10 @@ const Meal = () => {
   };
 
   const addProduct = () => {
-    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: null, unitPrice: null }]);
+    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null }]);
   };
   const addExtraShop = () => {
-    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: null, unitPrice: null }]);
+    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null }]);
   };
   const addDeposit = () => {
     setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -629,7 +643,7 @@ const Meal = () => {
 
   return (
     <>
-    {/* shop modal */}
+      {/* shop modal */}
       {focusOnShopField && (
         <ShopModalPortal>
           <div
@@ -664,7 +678,7 @@ const Meal = () => {
                         {currentUser.split(' ')[0]} • {selectDate}
                       </p>
                     </div>
-                    <div className="font-bold text-black text-xl">{products?.reduce((f,c) => f+Number(c.unitPrice), 0)}</div>
+                    <div className="font-bold text-black text-xl">{products.filter(item => !item.removeProduct)?.reduce((f, c) => f + Number(c.unitPrice), 0)}</div>
                   </div>
                 </div>
               </div>
@@ -726,12 +740,12 @@ const Meal = () => {
                             Quantity
                           </label>
                           <input
-                            type="number"
+                            type="text"
                             value={product.productCount}
                             onChange={(e) =>
                               handleChange(index, "productCount", e.target.value)
                             }
-                            placeholder="0"
+                            placeholder="Enter quantity"
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
                           />
                         </div>
@@ -747,7 +761,7 @@ const Meal = () => {
                             type="number"
                             value={product.unitPrice}
                             onChange={(e) =>
-                              handleChange(index, "unitPrice", e.target.value )
+                              handleChange(index, "unitPrice", e.target.value)
                             }
                             placeholder="0.00"
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
@@ -1153,7 +1167,7 @@ const Meal = () => {
       )}
       <FilterBox
         setGetMonth={setGetMonth}
-        setGetYear = {setGetYear}
+        setGetYear={setGetYear}
         style={style}
         yearMonth={yearMonth}
         registeredUsers={registeredUsers}
@@ -1165,8 +1179,9 @@ const Meal = () => {
         isLoading={isLoading}
         isChanged={isChanged}
       />
+
       {monthlyMeals?.monthlyMeals && monthlyMeals.monthlyMeals.length > 0 ? (
-        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto">
+        <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto ">
           <table className="">
             {/* table header */}
             <TableHeader
@@ -1653,6 +1668,7 @@ const Meal = () => {
                                     >
                                       {/* shop input field */}
                                       <input
+                                        data-tooltip-id={`tooltip-${el.id}-${index}`}
                                         type="text"
                                         onFocus={() => {
                                           setFocusOnShopField(true);
@@ -1691,7 +1707,15 @@ const Meal = () => {
                                           // });
 
                                         }}
-
+                                        onMouseOver={() => {
+                                          setCurrentProduct({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                            products: el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                          });
+                                        }}
                                         onChange={(e) => {
                                           if (user?.role === "user") {
                                             alert("Only admin can update shop");
@@ -1727,6 +1751,20 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
+                                      <Tooltip id={`tooltip-${el.id}-${index}`}                                      positionStrategy="fixed"
+                                        delayShow={100}>
+                                        {tooltipItems.map((item, i) => {
+                                          return {
+                                            id: i + 1,
+                                            removeProduct: false,
+                                            ...item
+                                          }
+                                        }).map((item, i) => {
+                                          return (<div key={item._id} style={{ borderBottom: '1px solid gray', marginBottom: '5px' }}>
+                                            <span>{item.productName} - {item.unitPrice}</span>
+                                          </div>)
+                                        })}
+                                      </Tooltip>
                                     </td>
                                     <td
                                       style={{
@@ -1976,6 +2014,7 @@ const Meal = () => {
         </div>
       )}
       {createPortal(<FoodSelect selectMeal={selectMeal} user={user} currentUser={currentUser} currentIndex={currentIndex} setSelectMeal={setSelectMeal} />, document.querySelector('#food'))}
+
     </>
   );
 };
