@@ -43,6 +43,7 @@ const Meal = () => {
   const [arrOfMeals, setArrOfMeals] = useState([]);
   const [nowScroll, setNowScroll] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({});
+  const [currentExtraShop, setCurrentExtraShop] = useState({});
   console.log('currentProduct', currentProduct)
   const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
@@ -186,7 +187,14 @@ const Meal = () => {
       ...item,
     }));
   }, [currentProduct]);
-  console.log(tooltipItems)
+  const extraTooltipItems = useMemo(() => {
+    const comments =
+      currentExtraShop?.extraShops || [];
+    return comments.map((item, i) => ({
+      id: i,
+      ...item,
+    }));
+  }, [currentExtraShop]);
   useEffect(() => {
     if (products) {
       console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
@@ -1751,7 +1759,7 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
-                                      <Tooltip id={`tooltip-${el.id}-${index}`}                                      positionStrategy="fixed"
+                                      <Tooltip id={`tooltip-${el.id}-${index}`} positionStrategy="fixed"
                                         delayShow={100}>
                                         {tooltipItems.map((item, i) => {
                                           return {
@@ -1775,6 +1783,7 @@ const Meal = () => {
                                     >
                                       {/* extra shop input field */}
                                       <input
+                                        data-tooltip-id={`extra-shop-tooltip-${el.id}-${index}`}
                                         type="text"
                                         onFocus={() => {
                                           setFocusOnExtraShopField(true);
@@ -1813,6 +1822,15 @@ const Meal = () => {
                                           //   shop: e.target.value * 1,
                                           // });
 
+                                        }}
+                                        onMouseOver={() => {
+                                          setCurrentExtraShop({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                            extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                          });
                                         }}
                                         onChange={(e) => {
                                           if (
@@ -1863,6 +1881,20 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
+                                      <Tooltip id={`extra-shop-tooltip-${el.id}-${index}`} positionStrategy="fixed"
+                                        delayShow={100}>
+                                        {extraTooltipItems.map((item, i) => {
+                                          return {
+                                            id: i + 1,
+                                            removeExtraShop: false,
+                                            ...item
+                                          }
+                                        }).map((item, i) => {
+                                          return (<div key={item._id} style={{ borderBottom: '1px solid gray', marginBottom: '5px' }}>
+                                            <span>{item.productName} - {item.unitPrice}</span>
+                                          </div>)
+                                        })}
+                                      </Tooltip>
                                     </td>
                                   </tr>
                                   {/* dinner section end */}
