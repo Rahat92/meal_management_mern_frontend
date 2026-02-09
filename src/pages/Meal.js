@@ -64,8 +64,9 @@ const Meal = () => {
     { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null },
   ]);
   const [extraShops, setExtraShops] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null },
   ]);
+  console.log(extraShops)
   const [deposits, setDeposits] = useState([
     { id: 1, removeDeposit: false, amount: null, reason: "" },
   ]);
@@ -1802,6 +1803,7 @@ const Meal = () => {
                                           console.log(el.date, selectDate)
                                           console.log(el)
                                           setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
+                                            console.log(item)
                                             return {
                                               id: i + 1,
                                               removeExtraShop: false,
