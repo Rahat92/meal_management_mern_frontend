@@ -44,7 +44,7 @@ const Meal = () => {
   const [nowScroll, setNowScroll] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({});
   const [currentExtraShop, setCurrentExtraShop] = useState({});
-  console.log('currentProduct', currentProduct)
+  const [currentDeposit, setCurrentDeposit] = useState({});
   const [item, setItem] = useState({});
   const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
   const [borderTotalShop, setBorderTotalShop] = useState(0);
@@ -196,6 +196,14 @@ const Meal = () => {
       ...item,
     }));
   }, [currentExtraShop]);
+  const depositTooltipItems = useMemo(() => {
+    const comments =
+      currentDeposit?.deposits || [];
+    return comments.map((item, i) => ({
+      id: i,
+      ...item,
+    }));
+  }, [currentDeposit]);
   useEffect(() => {
     if (products) {
       console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
@@ -1593,7 +1601,17 @@ const Meal = () => {
                                     >
                                       {/* deposit field */}
                                       <input
+                                        data-tooltip-id={`deposit-tooltip-${el.id}-${index}`}
                                         type="text"
+                                        onMouseOver={() => {
+                                          setCurrentDeposit({
+                                            id: el.id,
+                                            month: el.month,
+                                            year: el.year,
+                                            borderIndex: index,
+                                            deposits: el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                          });
+                                        }}
                                         onFocus={() => {
                                           setFocusOnDepositField(true);
                                           setShowDepositModal(true)
@@ -1605,8 +1623,6 @@ const Meal = () => {
                                             year: el.year,
                                             borderIndex: index,
                                           });
-                                          console.log(el.date, selectDate)
-                                          console.log(el)
                                           setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
                                             return {
                                               id: i + 1,
@@ -1614,51 +1630,12 @@ const Meal = () => {
                                               ...item
                                             }
                                           }))
-                                          // setProducts()
-
-                                          // copyshops[index] = e.target.value * 1;
-                                          // arrOfMeals[desireMealIndex] = {
-                                          //   ...copyDesireMeal,
-                                          //   shop: copyshops,
-                                          // };
-                                          // setArrOfMeals([...arrOfMeals]);
-
-                                          // setShopping({
-                                          //   id: el.id,
-                                          //   month: el.month,
-                                          //   year: el.year,
-                                          //   borderIndex: index,
-                                          //   shop: e.target.value * 1,
-                                          // });
-
                                         }}
                                         onChange={(e) => {
                                           if (user?.role === "user") {
                                             alert("Only admin can update deposite");
                                             return;
                                           }
-                                          // const desireMealIndex = arrOfMeals.findIndex(
-                                          //   (item) => item.id === el.id
-                                          // );
-                                          // const desireMeal = arrOfMeals[desireMealIndex];
-                                          // const copyDesireMeal = { ...desireMeal };
-                                          // const moneys = copyDesireMeal.money;
-                                          // const copyMoneys = [...moneys];
-                                          // copyMoneys[index] = e.target.value * 1;
-                                          // arrOfMeals[desireMealIndex] = {
-                                          //   ...copyDesireMeal,
-                                          //   money: copyMoneys,
-                                          // };
-
-                                          // setArrOfMeals([...arrOfMeals]);
-
-                                          // setDeposit({
-                                          //   id: el.id,
-                                          //   year: el.year,
-                                          //   month: el.month,
-                                          //   borderIndex: index,
-                                          //   money: e.target.value * 1,
-                                          // });
                                         }}
                                         value={el.money[index] === 0 ? "" : el.money[index]}
                                         placeholder="Deposite"
@@ -1670,6 +1647,20 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
+                                      <Tooltip id={`deposit-tooltip-${el.id}-${index}`} positionStrategy="fixed"
+                                        delayShow={100}>
+                                        {depositTooltipItems.map((item, i) => {
+                                          return {
+                                            id: i,
+                                            removeDeposit: false,
+                                            ...item
+                                          }
+                                        }).map((item, i) => {
+                                          return (<div key={item._id} style={{ borderBottom: '1px solid gray', marginBottom: '5px' }}>
+                                            <span>{item.amount} - ({item.reason})</span>
+                                          </div>)
+                                        })}
+                                      </Tooltip>
                                     </td>
                                     <td
                                       style={{
@@ -1701,23 +1692,6 @@ const Meal = () => {
                                               ...item
                                             }
                                           }))
-                                          // setProducts()
-
-                                          // copyshops[index] = e.target.value * 1;
-                                          // arrOfMeals[desireMealIndex] = {
-                                          //   ...copyDesireMeal,
-                                          //   shop: copyshops,
-                                          // };
-                                          // setArrOfMeals([...arrOfMeals]);
-
-                                          // setShopping({
-                                          //   id: el.id,
-                                          //   month: el.month,
-                                          //   year: el.year,
-                                          //   borderIndex: index,
-                                          //   shop: e.target.value * 1,
-                                          // });
-
                                         }}
                                         onMouseOver={() => {
                                           setCurrentProduct({
@@ -1733,27 +1707,6 @@ const Meal = () => {
                                             alert("Only admin can update shop");
                                             return;
                                           }
-                                          // const desireMealIndex = arrOfMeals.findIndex(
-                                          //   (item) => item.id === el.id
-                                          // );
-                                          // const desireMeal = arrOfMeals[desireMealIndex];
-                                          // const copyDesireMeal = { ...desireMeal };
-                                          // const shops = copyDesireMeal.shop;
-                                          // const copyshops = [...shops];
-                                          // copyshops[index] = e.target.value * 1;
-                                          // arrOfMeals[desireMealIndex] = {
-                                          //   ...copyDesireMeal,
-                                          //   shop: copyshops,
-                                          // };
-                                          // setArrOfMeals([...arrOfMeals]);
-
-                                          // setShopping({
-                                          //   id: el.id,
-                                          //   month: el.month,
-                                          //   year: el.year,
-                                          //   borderIndex: index,
-                                          //   shop: e.target.value * 1,
-                                          // });
                                         }}
                                         placeholder="Shopping"
                                         value={el.shop[index] === 0 ? "" : el.shop[index]}
@@ -1810,23 +1763,6 @@ const Meal = () => {
                                               ...item
                                             }
                                           }))
-                                          // setProducts()
-
-                                          // copyshops[index] = e.target.value * 1;
-                                          // arrOfMeals[desireMealIndex] = {
-                                          //   ...copyDesireMeal,
-                                          //   shop: copyshops,
-                                          // };
-                                          // setArrOfMeals([...arrOfMeals]);
-
-                                          // setShopping({
-                                          //   id: el.id,
-                                          //   month: el.month,
-                                          //   year: el.year,
-                                          //   borderIndex: index,
-                                          //   shop: e.target.value * 1,
-                                          // });
-
                                         }}
                                         onMouseOver={() => {
                                           setCurrentExtraShop({
@@ -1857,26 +1793,6 @@ const Meal = () => {
                                             alert("Only admin can update extra shop");
                                             return;
                                           }
-                                          // const desireMealIndex = arrOfMeals.findIndex(
-                                          //   (item) => item.id === el.id
-                                          // );
-                                          // const desireMeal = arrOfMeals[desireMealIndex];
-                                          // const copyDesireMeal = { ...desireMeal };
-                                          // const extraShops = copyDesireMeal.extraShop;
-                                          // const copyExtraShops = [...extraShops];
-                                          // copyExtraShops[index] = e.target.value * 1;
-                                          // arrOfMeals[desireMealIndex] = {
-                                          //   ...copyDesireMeal,
-                                          //   extraShop: copyExtraShops,
-                                          // };
-                                          // setArrOfMeals([...arrOfMeals]);
-                                          // setExtraShopping({
-                                          //   id: el.id,
-                                          //   month: el.month,
-                                          //   year: el.year,
-                                          //   borderIndex: index,
-                                          //   extraShop: e.target.value * 1,
-                                          // });
                                         }}
                                         placeholder="Extra"
                                         value={el.extraShop[index] === 0 ? "" : el.extraShop[index]}
