@@ -1646,7 +1646,7 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
-                                      <Tooltip id={`deposit-tooltip-${el.id}-${index}`} positionStrategy="fixed"
+                                      <Tooltip id={`deposit-tooltip-${el.id}-${index}`} positionStrategy="fixed"  style={{ zIndex: 5000000 }}
                                         delayShow={100}>
                                         {depositTooltipItems.map((item, i) => {
                                           return {
@@ -1715,7 +1715,7 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
-                                      <Tooltip id={`tooltip-${el.id}-${index}`} positionStrategy="fixed"
+                                      <Tooltip id={`tooltip-${el.id}-${index}`} positionStrategy="fixed" style={{ zIndex: 5000000 }}
                                         delayShow={100}>
                                         {tooltipItems.map((item, i) => {
                                           return {
@@ -1800,7 +1800,7 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
-                                      <Tooltip id={`extra-shop-tooltip-${el.id}-${index}`} positionStrategy="fixed"
+                                      <Tooltip id={`extra-shop-tooltip-${el.id}-${index}`} positionStrategy="fixed"  style={{ zIndex: 5000000 }}
                                         delayShow={100}>
                                         {extraTooltipItems.map((item, i) => {
                                           return {
