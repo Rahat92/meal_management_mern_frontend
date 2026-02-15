@@ -610,7 +610,12 @@ const Meal = () => {
       month: shopping.month,
       borderIndex: shopping.borderIndex,
       shop: products.filter(item => !item.removeProduct).reduce((f, i) => Number(i.unitPrice) + f, 0),
-      shoppingComments: products.filter(item => !item.removeProduct),
+      shoppingComments: products.filter(item => !item.removeProduct).map(item => {
+        return {
+          ...item,
+          category: item.category.split('~')[1]
+        }
+      }),
       customerId: currentUser.split(' ')[1]
     });
   };
@@ -661,7 +666,7 @@ const Meal = () => {
   const handleMouseUp = () => {
     setIsDragging(false);
   };
-
+  console.log(products)
   return (
     <>
       {/* shop modal */}
@@ -798,14 +803,15 @@ const Meal = () => {
                           <div className="w-full self-center">
                             <div className="flex flex-col items-center justify-center">
                               <Select
-                                value={product.category || ""}
+                                value={pCategories.find(item => item._id === product.category)?.name || ""}
                                 onChange={(e) => {
-                                  handleChange(index, "category", e)
+                                  console.log(e)
+                                  handleChange(index, "category", e.split('~')[0])
                                   setValue(e)
                                 }
                                 }
                                 options={[
-                                  ...pCategories?.length > 0 ? pCategories.map(item => item.name) : []
+                                  ...pCategories?.length > 0 ? pCategories.map(item => item.name+"~"+item._id) : []
                                 ]}
                               />
                             </div>
@@ -1711,6 +1717,7 @@ const Meal = () => {
                                             year: el.year,
                                             borderIndex: index,
                                           });
+                                          console.log(el)
                                           setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
                                             return {
                                               id: i + 1,

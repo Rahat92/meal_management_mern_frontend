@@ -41,7 +41,7 @@ export const Select = ({ options, value, onChange }) => {
                         setOpen(false);
                     }}
                 >
-                    {o}
+                    {o.split('~')[0]}
                 </div>
             ))
             : [
@@ -95,7 +95,7 @@ export const Select = ({ options, value, onChange }) => {
             <div
                 id="options"
                 className={classNames(
-                    "absolute top-14 bg-white border-neutral-400 w-full rounded-md overflow-auto transition-all",
+                    "absolute top-14 bg-white border-neutral-400 w-full rounded-md overflow-auto transition-all h-[100px]",
                     open ? "max-h-40 border" : "max-h-0 border-0"
                 )}
             >
