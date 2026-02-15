@@ -526,8 +526,9 @@ const Meal = () => {
   }, [currentIndex, isChanged])
   console.log(extraShops)
   const handleChange = (index, field, value) => {
+    console.log(value)
     const updated = [...products];
-    updated[index][field] = value;
+    updated[index][field] = field==='category' ? value.split('~')[1] : value;
     setProducts(updated);
   };
   const depositHandleChange = (index, field, value) => {
@@ -610,12 +611,7 @@ const Meal = () => {
       month: shopping.month,
       borderIndex: shopping.borderIndex,
       shop: products.filter(item => !item.removeProduct).reduce((f, i) => Number(i.unitPrice) + f, 0),
-      shoppingComments: products.filter(item => !item.removeProduct).map(item => {
-        return {
-          ...item,
-          category: item.category.split('~')[1]
-        }
-      }),
+      shoppingComments: products.filter(item => !item.removeProduct),
       customerId: currentUser.split(' ')[1]
     });
   };
@@ -803,10 +799,10 @@ const Meal = () => {
                           <div className="w-full self-center">
                             <div className="flex flex-col items-center justify-center">
                               <Select
-                                value={pCategories.find(item => item._id === product.category)?.name || ""}
+                                value={pCategories?.length>0 && pCategories.find(item => item._id === product.category)?.name || ""}
                                 onChange={(e) => {
                                   console.log(e)
-                                  handleChange(index, "category", e.split('~')[0])
+                                  handleChange(index, "category", e)
                                   setValue(e)
                                 }
                                 }

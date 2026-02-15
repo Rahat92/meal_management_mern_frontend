@@ -76,7 +76,10 @@ export const Select = ({ options, value, onChange }) => {
                     placeholder="Search..."
                     type="text"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                        setSearch(e.target.value)
+                        onChange(e.target.value);
+                    }}
                     onFocus={() => setOpen(true)}
                 />
                 <span
