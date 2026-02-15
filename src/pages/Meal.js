@@ -65,7 +65,7 @@ const Meal = () => {
   const [showDepositModal, setShowDepositModal] = useState(true);
 
   const [products, setProducts] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "" },
   ]);
   const [extraShops, setExtraShops] = useState([
     { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null },
@@ -542,7 +542,7 @@ const Meal = () => {
   };
 
   const addProduct = () => {
-    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null }]);
+    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "" }]);
   };
   const addExtraShop = () => {
     setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null }]);
@@ -788,43 +788,24 @@ const Meal = () => {
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
                           />
                         </div>
-                        {/* <div className="w-full self-center bg-red-500">
-                          
-                          <div className="flex flex-col items-center justify-center">
-                            <Select
-                              value={value}
-                              onChange={(e) => setValue(e)}
-                              options={[
-                                "item 1",
-                                "item 2",
-                                "item 3",
-                                "item 4",
-                                "item 5",
-                                "item 6",
-                                "item 7",
-                                "item 8",
-                                "item 9",
-                                "item 10",
-                                "item 11",
-                                "item 12",
-                              ]}
-                            />
-                          </div>
-                        </div> */}
                         <div>
                           <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Price
+                            Category
                           </label>
                           <div className="w-full self-center">
                             <div className="flex flex-col items-center justify-center">
                               <Select
-                                value={value}
-                                onChange={(e) => setValue(e)}
+                                value={product.category || ""}
+                                onChange={(e) => {
+                                  handleChange(index, "category", e)
+                                  setValue(e)
+                                }
+                                }
                                 options={[
-                                  ...pCategories?.length>0?pCategories.map(item => item.name):[]
+                                  ...pCategories?.length > 0 ? pCategories.map(item => item.name) : []
                                 ]}
                               />
                             </div>
@@ -1730,7 +1711,6 @@ const Meal = () => {
                                             year: el.year,
                                             borderIndex: index,
                                           });
-                                          console.log(el.date, selectDate)
                                           setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
                                             return {
                                               id: i + 1,
