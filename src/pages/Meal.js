@@ -34,7 +34,11 @@ import getDayName from "../utils/getDayName";
 import ShopModalPortal from "../components/Modal/ShopModal";
 import ExtraShopModalPortal from "../components/Modal/ShopModal";
 import DepositModalPortal from "../components/Modal/ShopModal";
+import { useGetProductCategoriesQuery } from "../features/productCategory/productCategoryApi";
+import { Select } from "../components/Select";
 const Meal = () => {
+  const { data: pCategories } = useGetProductCategoriesQuery();
+  const [value, setValue] = useState("");
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
   const tableBodyRef = useRef();
@@ -730,7 +734,7 @@ const Meal = () => {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                         <div>
                           <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -783,6 +787,48 @@ const Meal = () => {
                             placeholder="0.00"
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
                           />
+                        </div>
+                        {/* <div className="w-full self-center bg-red-500">
+                          
+                          <div className="flex flex-col items-center justify-center">
+                            <Select
+                              value={value}
+                              onChange={(e) => setValue(e)}
+                              options={[
+                                "item 1",
+                                "item 2",
+                                "item 3",
+                                "item 4",
+                                "item 5",
+                                "item 6",
+                                "item 7",
+                                "item 8",
+                                "item 9",
+                                "item 10",
+                                "item 11",
+                                "item 12",
+                              ]}
+                            />
+                          </div>
+                        </div> */}
+                        <div>
+                          <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Price
+                          </label>
+                          <div className="w-full self-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <Select
+                                value={value}
+                                onChange={(e) => setValue(e)}
+                                options={[
+                                  ...pCategories?.length>0?pCategories.map(item => item.name):[]
+                                ]}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1647,7 +1693,7 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
-                                      <Tooltip id={`deposit-tooltip-${el.id}-${index}`} positionStrategy="fixed"  style={{ zIndex: 5000000 }}
+                                      <Tooltip id={`deposit-tooltip-${el.id}-${index}`} positionStrategy="fixed" style={{ zIndex: 5000000 }}
                                         delayShow={100}>
                                         {depositTooltipItems.map((item, i) => {
                                           return {
@@ -1802,7 +1848,7 @@ const Meal = () => {
                                           textAlign: "center",
                                         }}
                                       />
-                                      <Tooltip id={`extra-shop-tooltip-${el.id}-${index}`} positionStrategy="fixed"  style={{ zIndex: 5000000 }}
+                                      <Tooltip id={`extra-shop-tooltip-${el.id}-${index}`} positionStrategy="fixed" style={{ zIndex: 5000000 }}
                                         delayShow={100}>
                                         {extraTooltipItems.map((item, i) => {
                                           return {

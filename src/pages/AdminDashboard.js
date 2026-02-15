@@ -192,6 +192,30 @@ const AdminDashboard = () => {
               </div>
             </div>
           </Link>
+          <Link to="/product-categories" className="card-link group block">
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl p-10 border border-slate-100 h-full">
+              <div className="flex flex-col items-center text-center space-y-6">
+                <div className="card-icon w-20 h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                
+                <div>
+                  <h2 className="text-3xl font-bold text-slate-800 mb-2">
+                    Product Categories
+                  </h2>
+                  <p className="text-slate-500 text-sm">
+                    Monitor active meal status in real-time
+                  </p>
+                </div>
+                
+                <div className="badge inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
+                  Click to access
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
         
         {/* Footer */}

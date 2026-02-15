@@ -16,6 +16,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import MealSheets from "./pages/MealSheets";
 import Conversation from "./pages/Conversations";
 import CurrentStatus from "./pages/CurrentStatus";
+import ProductCategories from "./pages/ProductCategories";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/all-month-stats" element={<AllMonthsStats />} />
             <Route path="/meals" element={<Meal />} />
+            <Route path="/product-categories" element={<ProductCategories/>} />
           </Route>
         </Routes>
       </Router>
