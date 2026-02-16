@@ -68,7 +68,7 @@ const Meal = () => {
     { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "" },
   ]);
   const [extraShops, setExtraShops] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "" },
   ]);
   console.log(extraShops)
   const [deposits, setDeposits] = useState([
@@ -315,6 +315,7 @@ const Meal = () => {
       }
     }
   }, [user, registeredUsers]);
+  console.log(registeredUsers)
   useEffect(() => {
     // updateMeal({data:needUpdateObj,id})
   }, [needUpdateObj]);
@@ -354,6 +355,7 @@ const Meal = () => {
 
   useEffect(() => {
     if (monthlyMeals?.monthlyMeals?.length > 0) {
+      console.log(monthlyMeals)
       setRegisteredUsers([
         ...(monthlyMeals &&
           monthlyMeals.monthlyMeals &&
@@ -528,7 +530,7 @@ const Meal = () => {
   const handleChange = (index, field, value) => {
     console.log(value)
     const updated = [...products];
-    updated[index][field] = field==='category' ? value.split('~')[1] : value;
+    updated[index][field] = field === 'category' ? value.split('~')[1] : value;
     setProducts(updated);
   };
   const depositHandleChange = (index, field, value) => {
@@ -538,7 +540,7 @@ const Meal = () => {
   };
   const extraShopHandleChange = (index, field, value) => {
     const updated = [...extraShops];
-    updated[index][field] = value;
+    updated[index][field] = field === 'category' ? value.split('~')[1] : value;
     setExtraShops(updated);
   };
 
@@ -546,7 +548,7 @@ const Meal = () => {
     setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "" }]);
   };
   const addExtraShop = () => {
-    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null }]);
+    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null, category: "" }]);
   };
   const addDeposit = () => {
     setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -799,7 +801,7 @@ const Meal = () => {
                           <div className="w-full self-center">
                             <div className="flex flex-col items-center justify-center">
                               <Select
-                                value={pCategories?.length>0 && pCategories.find(item => item._id === product.category)?.name || ""}
+                                value={pCategories?.length > 0 && pCategories.find(item => item._id === product.category)?.name || ""}
                                 onChange={(e) => {
                                   console.log(e)
                                   handleChange(index, "category", e)
@@ -807,7 +809,7 @@ const Meal = () => {
                                 }
                                 }
                                 options={[
-                                  ...pCategories?.length > 0 ? pCategories.map(item => item.name+"~"+item._id) : []
+                                  ...pCategories?.length > 0 ? pCategories.map(item => item.name + "~" + item._id) : []
                                 ]}
                               />
                             </div>
@@ -941,7 +943,7 @@ const Meal = () => {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                           <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -994,6 +996,30 @@ const Meal = () => {
                             placeholder="0.00"
                             className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
                           />
+                        </div>
+                        <div>
+                          <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Category
+                          </label>
+                          <div className="w-full self-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <Select
+                                value={pCategories?.length > 0 && pCategories.find(item => item._id === extraShop.category)?.name || ""}
+                                onChange={(e) => {
+                                  console.log(e)
+                                  extraShopHandleChange(index, "category", e)
+                                  setValue(e)
+                                }
+                                }
+                                options={[
+                                  ...pCategories?.length > 0 ? pCategories.map(item => item.name + "~" + item._id) : []
+                                ]}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
