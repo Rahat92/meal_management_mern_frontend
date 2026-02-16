@@ -25,9 +25,20 @@ const productCategoryApi = apiSlice.injectEndpoints({
                 method: 'DELETE'
             }),
             invalidatesTags:['getProductCategories']
-        })
+        }),
+        updateProductCategory: builder.mutation({
+            query:({id, data}) => {
+                console.log(id, data)
+                return {
+                    url: `/product-categories/${id}`,
+                    method: 'PATCH',
+                    body: data
+                }
+            },
+            invalidatesTags:['getProductCategories']
+        }),
     })
 })
 
-export const { useGetProductCategoriesQuery, useCreateProductCategoryMutation, useDeleteProductCategoryMutation } = productCategoryApi;
+export const { useGetProductCategoriesQuery, useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useUpdateProductCategoryMutation } = productCategoryApi;
 

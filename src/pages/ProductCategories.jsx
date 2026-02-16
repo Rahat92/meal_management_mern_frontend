@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { locationPathChanged } from '../features/locationPath';
 import { useDispatch } from 'react-redux';
-import { useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useGetProductCategoriesQuery } from '../features/productCategory/productCategoryApi';
+import { useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useGetProductCategoriesQuery, useUpdateProductCategoryMutation } from '../features/productCategory/productCategoryApi';
 const ProductCategories = () => {
     const [createProductCategory, {isSuccess}] = useCreateProductCategoryMutation();
     const {data:pCategories, isSuccess:pCategorySuccess} = useGetProductCategoriesQuery();
+    const [updateProductCategory, {isSuccess: updateProductCategorySuccess}] = useUpdateProductCategoryMutation()
     const [deleteProductCategory, {isSuccess: deleteProductCategorySuccess, isLoading:deleteProductCategoryIsLoading, isError: deleteProductCategoryIsError}] = useDeleteProductCategoryMutation()
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState('');
@@ -84,28 +85,34 @@ const ProductCategories = () => {
         if (!editingName.trim()) return;
 
         try {
-            const response = await fetch(`/api/categories/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: editingName })
-            });
+            // const response = await fetch(`/api/categories/${id}`, {
+            //     method: 'PUT',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ name: editingName })
+            // });
 
-            if (response.ok) {
-                const data = await response.json();
-                setCategories(categories.map(cat => cat._id === id ? data : cat));
-                setEditingId(null);
-                setEditingName('');
-                setError('');
-            } else {
-                const errorData = await response.json();
-                setError(errorData.message || 'Failed to update category');
-            }
+            // if (response.ok) {
+            //     const data = await response.json();
+            //     setCategories(categories.map(cat => cat._id === id ? data : cat));
+            //     setEditingId(null);
+            //     setEditingName('');
+            //     setError('');
+            // } else {
+            //     const errorData = await response.json();
+            //     setError(errorData.message || 'Failed to update category');
+            // }
+            console.log(id, editingName)
+            updateProductCategory({id, data:{name: editingName}})
         } catch (err) {
             setError('Failed to update category');
             console.error(err);
         }
     };
-
+    useEffect(() => {
+        if(updateProductCategorySuccess){
+            alert('Update a category successfully')
+        }
+    }, [updateProductCategorySuccess])
     const handleDeleteCategory = async (id) => {
         if (!window.confirm('Are you sure you want to delete this category?')) return;
 
