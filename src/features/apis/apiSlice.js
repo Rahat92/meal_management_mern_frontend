@@ -7,3 +7,4 @@ export const apiSlice = createApi({
   tagTypes: ["getMeals", "getAllMonthStat", 'getMessages', 'createMessage'],
   endpoints: (builder) => ({}),
 });
+

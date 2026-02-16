@@ -37,8 +37,17 @@ const productCategoryApi = apiSlice.injectEndpoints({
             },
             invalidatesTags:['getProductCategories']
         }),
+        ExtraShoppingWithCategory: builder.query({
+            query:() => {
+                return {
+                    url: `/product-categories/summary`,
+                    method: 'GET',
+                }
+            },
+        }),
+
     })
 })
 
-export const { useGetProductCategoriesQuery, useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useUpdateProductCategoryMutation } = productCategoryApi;
+export const { useGetProductCategoriesQuery, useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useUpdateProductCategoryMutation, useExtraShoppingWithCategoryQuery } = productCategoryApi;
 
