@@ -38,16 +38,22 @@ const productCategoryApi = apiSlice.injectEndpoints({
             invalidatesTags:['getProductCategories']
         }),
         ExtraShoppingWithCategory: builder.query({
-            query:() => {
+            query:(managerId) => {
+                console.log(managerId)
                 return {
-                    url: `/product-categories/summary`,
+                    url: `/product-categories/extra-shopping-summary/${managerId}`,
                     method: 'GET',
                 }
             },
         }),
-
+        marketingSummaryWithCategory: builder.query({
+            query: (managerId) => ({
+                url: `/product-categories/marketing-summary/${managerId}`,
+                method: 'GET',
+            })
+        })
     })
 })
 
-export const { useGetProductCategoriesQuery, useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useUpdateProductCategoryMutation, useExtraShoppingWithCategoryQuery } = productCategoryApi;
+export const { useGetProductCategoriesQuery, useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useUpdateProductCategoryMutation, useExtraShoppingWithCategoryQuery, useMarketingSummaryWithCategoryQuery } = productCategoryApi;
 

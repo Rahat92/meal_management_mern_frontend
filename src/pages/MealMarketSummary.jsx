@@ -1,11 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { DollarSign, TrendingUp, Calendar, User, Tag, Package } from 'lucide-react';
-import { useExtraShoppingWithCategoryQuery } from '../features/productCategory/productCategoryApi';
+import { useMarketingSummaryWithCategoryQuery } from '../features/productCategory/productCategoryApi';
+import { useSelector } from 'react-redux';
 
-export default function ExpenseSummary() {
-    const { data: extraShoppingData, isLoading, isError } = useExtraShoppingWithCategoryQuery()
-    console.log(extraShoppingData)
-        const expenseData = extraShoppingData?.data || [];
+export default function MealExpenseSummary() {
+    const [skip, setSkip] = useState(true);
+
+    const { user } = useSelector((state) => state.auth);
+    console.log(user)
+    useEffect(() => {
+        if (user && user?._id) {
+            setSkip(false);
+        } else {
+            setSkip(true);
+        }
+    }, [user]);
+    const managerId = user?.role === 'admin' ? user?._id : user?.manager
+    console.log(managerId)
+    const { data: marketingData, isLoading, isError } = useMarketingSummaryWithCategoryQuery(managerId, { skip:skip })
+    const expenseData = marketingData?.data || [];
 
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedUser, setSelectedUser] = useState('all');
@@ -49,7 +62,7 @@ export default function ExpenseSummary() {
         id: item.userId,
         name: item.userName
     })).map(u => JSON.stringify(u)))].map(u => JSON.parse(u));
-
+    console.log(users)
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
@@ -67,7 +80,7 @@ export default function ExpenseSummary() {
                             <select
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Categories</option>
                                 {categories.map(cat => (
@@ -80,7 +93,7 @@ export default function ExpenseSummary() {
                             <select
                                 value={selectedUser}
                                 onChange={(e) => setSelectedUser(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Users</option>
                                 {users.map(user => (
