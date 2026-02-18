@@ -52,7 +52,7 @@ export default function ExpenseSummary() {
 
         return { totalExpense, totalItems, byCategory, byUser, filteredData };
     }, [selectedCategory, selectedUser]);
-
+    console.log(summary)
     const categories = [...new Set(expenseData.map(item => ({
         id: item.categoryId || 'uncategorized',
         name: item.categoryName || 'Uncategorized'
@@ -194,7 +194,7 @@ export default function ExpenseSummary() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {summary.filteredData.slice(0, 10).map((item, index) => (
+                                {summary.filteredData.map((item, index) => (
                                     <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                         <td className="py-3 px-4 text-sm text-slate-600">{item.mealDate}</td>
                                         <td className="py-3 px-4 text-sm text-slate-800 font-medium">{item.productName}</td>
