@@ -15,7 +15,7 @@ export default function MealExpenseSummary() {
             setSkip(true);
         }
     }, [user]);
-    const managerId = user?.role === 'admin' ? user?._id : user?.manager
+    const managerId = user?.role === 'admin' ? user?._id : user?.manager._id;
     console.log(managerId)
     const { data: marketingData, isLoading, isError } = useMarketingSummaryWithCategoryQuery(managerId, { skip: skip })
     const expenseData = marketingData?.data || [];
