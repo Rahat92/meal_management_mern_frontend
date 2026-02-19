@@ -255,7 +255,7 @@ export default function MealExpenseSummary() {
                                                 {item.category.categoryName || 'N/A'}
                                             </span>
                                         </td>
-                                        <td className="py-3 px-4 text-sm text-slate-700">{item.userName}</td>
+                                        <td className="py-3 px-4 text-sm text-slate-700">{item.user.userName}</td>
                                         <td className="py-3 px-4 text-sm text-right font-semibold text-slate-900">৳{item?.unitPrice?.toLocaleString()}</td>
                                     </tr>
                                 ))}
