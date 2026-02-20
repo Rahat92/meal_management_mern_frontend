@@ -36,8 +36,21 @@ import ExtraShopModalPortal from "../components/Modal/ShopModal";
 import DepositModalPortal from "../components/Modal/ShopModal";
 import { useGetProductCategoriesQuery } from "../features/productCategory/productCategoryApi";
 import { Select } from "../components/Select";
+import { useGetTagsQuery } from "../features/tag/tagApi";
 const Meal = () => {
-  const { data: pCategories } = useGetProductCategoriesQuery();
+  const [skip, setSkip] = useState(false);
+  const [currentItem, setCurrentItem] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState("");
+  console.log(selectedCategory)
+  const { data: pCategories } = useGetProductCategoriesQuery(currentItem?.category);
+  console.log(pCategories)
+  const { data: tags } = useGetTagsQuery();
+  useEffect(() => {
+    if (selectedCategory) {
+      setSkip(true)
+    }
+  }, [selectedCategory])
+  console.log(tags)
   const [value, setValue] = useState("");
   const { user } = useSelector((state) => state.auth);
   const headRef = useRef();
@@ -55,7 +68,6 @@ const Meal = () => {
   const [borderTotalMeal, setBorderTotalMeal] = useState(0);
   const [borderTotalExtraShop, setBorderTotalExtraShop] = useState(0);
   const [selectDate, setSelectDate] = useState(null)
-  const [currentItem, setCurrentItem] = useState({});
   const [headHeight, setHeadHeight] = useState(0);
   const [focusOnShopField, setFocusOnShopField] = useState(false);
   const [focusOnExtraShopField, setFocusOnExtraShopField] = useState(false);
@@ -65,10 +77,10 @@ const Meal = () => {
   const [showDepositModal, setShowDepositModal] = useState(true);
 
   const [products, setProducts] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "" },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] },
   ]);
   const [extraShops, setExtraShops] = useState([
-    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "" },
+    { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
   ]);
   console.log(extraShops)
   const [deposits, setDeposits] = useState([
@@ -528,9 +540,9 @@ const Meal = () => {
   }, [currentIndex, isChanged])
   console.log(extraShops)
   const handleChange = (index, field, value) => {
-    console.log(value)
+    console.log(value, field)
     const updated = [...products];
-    updated[index][field] = field === 'category' ? value.split('~')[1] : value;
+    updated[index][field] = field === 'category' ? value.split('~')[1] :field==='tags' ? [value.split('~')[1]] : value;
     setProducts(updated);
   };
   const depositHandleChange = (index, field, value) => {
@@ -539,16 +551,17 @@ const Meal = () => {
     setDeposits(updated);
   };
   const extraShopHandleChange = (index, field, value) => {
+    console.log(value, field)
     const updated = [...extraShops];
-    updated[index][field] = field === 'category' ? value.split('~')[1] : value;
+    updated[index][field] = field === 'category' ? value.split('~')[1] :field==='tags' ? [value.split('~')[1]] : value;
     setExtraShops(updated);
   };
 
   const addProduct = () => {
-    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "" }]);
+    setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [""] }]);
   };
   const addExtraShop = () => {
-    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null, category: "" }]);
+    setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [""] }]);
   };
   const addDeposit = () => {
     setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -664,7 +677,7 @@ const Meal = () => {
   const handleMouseUp = () => {
     setIsDragging(false);
   };
-  console.log(products)
+  console.log(extraShops)
   return (
     <>
       {/* shop modal */}
@@ -737,7 +750,7 @@ const Meal = () => {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
                         <div>
                           <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -803,13 +816,38 @@ const Meal = () => {
                               <Select
                                 value={pCategories?.length > 0 && pCategories.find(item => item._id === product.category)?.name || ""}
                                 onChange={(e) => {
-                                  console.log(e)
+                                  setSelectedCategory(e)
                                   handleChange(index, "category", e)
                                   setValue(e)
                                 }
                                 }
                                 options={[
                                   ...pCategories?.length > 0 ? pCategories.map(item => item.name + "~" + item._id) : []
+                                ]}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Sub Category
+                          </label>
+                          
+                          <div className="w-full self-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <Select
+                                value={tags?.data?.length > 0 && tags?.data?.find(item => item._id === product?.tags[0])?.name || ""}
+                                onChange={(e) => {
+                                  console.log(e)
+                                  handleChange(index, "tags", e)
+                                  setValue(e)
+                                }
+                                }
+                                options={[
+                                  ...pCategories?.length > 0 ? pCategories.find(item => item._id === product.category)?.productTags?.map(sub => sub.name + "~" + sub._id) || [] : []
                                 ]}
                               />
                             </div>
@@ -943,7 +981,7 @@ const Meal = () => {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div>
                           <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1016,6 +1054,31 @@ const Meal = () => {
                                 }
                                 options={[
                                   ...pCategories?.length > 0 ? pCategories.map(item => item.name + "~" + item._id) : []
+                                ]}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Sub Category
+                          </label>
+                          {console.log(tags?.data?.length > 0 && tags?.data?.find(item => item._id === extraShop?.tags&&tags[0])?.name)}
+                          <div className="w-full self-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <Select
+                                value={tags?.data?.length > 0 && tags?.data?.find(item => item._id === extraShop?.tags[0])?.name || ""}
+                                onChange={(e) => {
+                                  console.log(e)
+                                  extraShopHandleChange(index, "tags", e)
+                                  setValue(e)
+                                }
+                                }
+                                options={[
+                                  ...pCategories?.length > 0 ? pCategories.find(item => item._id === extraShop.category)?.productTags?.map(sub => sub.name + "~" + sub._id) || [] : []
                                 ]}
                               />
                             </div>
@@ -1107,7 +1170,7 @@ const Meal = () => {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-800">
-                      Shop Details
+                      Deposit Details
                     </h2>
                     <p className="text-sm text-gray-500 mt-1">
                       {currentUser.split(' ')[0]} • {selectDate}
