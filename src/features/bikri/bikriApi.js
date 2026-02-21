@@ -125,6 +125,7 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data
       }),
+      invalidatesTags: ["getAllMonthStat", 'getMeals'],
       // headers: {
       //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
       //     }`,
@@ -136,6 +137,7 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data
       }),
+      invalidatesTags: ["getAllMonthStat", 'getMeals'],
       // headers: {
       //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
       //     }`,
@@ -159,6 +161,7 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data
       }),
+      invalidatesTags: ["getAllMonthStat", 'getMeals'],
       // headers: {
       //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
       //     }`,

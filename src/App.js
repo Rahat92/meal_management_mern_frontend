@@ -20,6 +20,7 @@ import ProductCategories from "./pages/ProductCategories";
 import ExpenseSummary from "./pages/ExtraExpenseSummary";
 import MealExpenseSummary from "./pages/MealMarketSummary";
 import MealHomePage from "./pages/UserDashboard";
+import NewMeal from "./pages/NewMeal";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="/extra-expense-summary" element={<ExpenseSummary />} />
             <Route path="/meal-expense-summary" element={<MealExpenseSummary />} />
             <Route path="/meals" element={<Meal />} />
+            <Route path="/new-meals" element={<NewMeal />} />
             <Route path="/product-categories" element={<ProductCategories/>} />
           </Route>
         </Routes>
