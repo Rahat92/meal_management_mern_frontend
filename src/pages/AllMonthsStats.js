@@ -39,6 +39,7 @@ const AllMonthsStats = () => {
   const currentBorders = monthlyMeals && monthlyMeals.monthlyMeals[0] && monthlyMeals.monthlyMeals[0].border;
 
   const { data: yearMonth } = useGetYearMonthQuery();
+  console.log(yearMonth)
   const [yearMonthArr, setYearMonthArr] = useState([]);
   const [sendSms] = useSendSmsMutation();
   const dateNameRef = useRef();

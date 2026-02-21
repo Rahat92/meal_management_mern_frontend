@@ -1,9 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { DollarSign, TrendingUp, Calendar, User, Tag, Package } from 'lucide-react';
 import { useMarketingSummaryWithCategoryQuery } from '../features/productCategory/productCategoryApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { locationPathChanged } from '../features/locationPath';
 
 export default function MealExpenseSummary() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(locationPathChanged(window.location.pathname));
+      }, []);
     const [skip, setSkip] = useState(true);
 
     const { user } = useSelector((state) => state.auth);

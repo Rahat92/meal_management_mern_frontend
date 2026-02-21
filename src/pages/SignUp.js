@@ -3,7 +3,6 @@ import style from "./SignUp.module.css";
 import { useForgotPasswordMutation, useGetManagersQuery, useSignUpMutation } from "../features/bikri/bikriApi";
 const SignUp = () => {
   const {data:managers} = useGetManagersQuery()
-  console.log(managers)
   const [signUp, { isSuccess, isError, error }] =
     useSignUpMutation();
   const [forgotPassword] = useForgotPasswordMutation();
