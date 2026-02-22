@@ -15,6 +15,8 @@ const FilterBox = ({
   saveUpdate,
   isLoading,
 }) => {
+  console.log(registeredUsers);
+  
   const [yearMonthArr, setYearMonthArr] = useState([]);
   useEffect(() => {
     if (todayMonth && todayYear && yearMonth?.yearMonth?.length > 0) {
@@ -127,10 +129,10 @@ const FilterBox = ({
           )}
           {(user?.role === "admin" || user?.role === "superadmin") &&
             registeredUsers
-              ?.filter((el) => el._id !== user?._id)
+              ?.filter((el) => el.user._id !== user?._id)
               .map((el) => {
                 return (
-                  <option value={el.name + " " + el._id}>{el.name}</option>
+                  <option value={el.user.name + " " + el.user._id}>{el.user.name}</option>
                 );
               })}
         </select>

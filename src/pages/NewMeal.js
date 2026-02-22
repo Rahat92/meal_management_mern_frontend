@@ -328,7 +328,6 @@ const NewMeal = () => {
             }
         }
     }, [user, registeredUsers]);
-    console.log(registeredUsers)
     useEffect(() => {
         // updateMeal({data:needUpdateObj,id})
     }, [needUpdateObj]);
@@ -384,13 +383,13 @@ const NewMeal = () => {
                     month: el.month,
                     year: el.year,
                     breakfast: el.borders.map(item => {
-                        return { user:item.user._id,...item.breakfast }
+                        return { user: item.user._id, ...item.breakfast }
                     }),
                     launch: el.borders.map(item => {
-                        return {user:item.user._id,...item.launch}
+                        return { user: item.user._id, ...item.launch }
                     }),
                     dinner: el.borders.map(item => {
-                        return {user:item.user._id,...item.dinner}
+                        return { user: item.user._id, ...item.dinner }
                     }),
                     money: el.borders.map(item => {
                         return item.money
@@ -445,6 +444,7 @@ const NewMeal = () => {
         let totalBorderExtraShop = 0;
         if (arrOfMeals.length > 0) {
             const totalMealsCalc = arrOfMeals.map((el) => {
+                console.log(el)
                 const totalBreakfast = el.breakfast.reduce((f, c) => f + c.meal, 0);
                 const totalLaunch = el.launch.reduce((f, c) => f + c.meal, 0);
                 const totalDinner = el.dinner.reduce((f, c) => f + c.meal, 0);
@@ -468,7 +468,7 @@ const NewMeal = () => {
         setBorderTotalDeposite(totalBorderDeposite);
         setBorderTotalShop(totalBorderShop);
         setBorderTotalExtraShop(totalBorderExtraShop);
-    }, [arrOfMeals, currentIndex]);
+    }, [arrOfMeals, currentIndex, currentUser]);
 
     const updateMealHandler = (e, date, id, mealIndex, mealName, type) => {
         if (e.target.value === 'off') {
@@ -553,13 +553,25 @@ const NewMeal = () => {
     }, [arrOfMeals?.length]);
     useEffect(() => {
         if (currentIndex !== undefined) {
-            const totalBreakfast = arrOfMeals.filter((item) => item.day <= currentDay).reduce((f, c) => f + c['breakfast'][currentIndex][0], 0)
-            const totalLunch = arrOfMeals.filter((item) => item.day <= currentDay).reduce((f, c) => f + c['launch'][currentIndex][0], 0)
-            const totalDinner = arrOfMeals.filter((item) => item.day <= currentDay).reduce((f, c) => f + c['dinner'][currentIndex][0], 0)
+            let borderTotalBreakfastArr = []
+            let borderTotalLunchArr = [];
+            let borderTotalDinnerArr = [];
+            arrOfMeals.filter((item) => item.day <= currentDay).map(item => item.breakfast).forEach(item => {
+                item.forEach(item => borderTotalBreakfastArr.push(item))
+            })
+
+            arrOfMeals.filter((item) => item.day <= currentDay).map(item => item.launch).forEach(item => {
+                item.forEach(item => borderTotalLunchArr.push(item))
+            })
+            arrOfMeals.filter((item) => item.day <= currentDay).map(item => item.dinner).forEach(item => {
+                item.forEach(item => borderTotalDinnerArr.push(item))
+            })
+            const totalBreakfast = borderTotalBreakfastArr.filter(item => item.user === currentUser.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
+            const totalLunch = borderTotalLunchArr.filter(item => item.user === currentUser.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
+            const totalDinner = borderTotalDinnerArr.filter(item => item.user === currentUser.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
             setBorderTotalMeal(totalBreakfast + totalLunch + totalDinner)
         }
-    }, [currentIndex, isChanged])
-    console.log(extraShops)
+    }, [currentIndex, isChanged, currentUser])
     const handleChange = (index, field, value) => {
         console.log(value, field)
         const updated = [...products];
@@ -1422,16 +1434,15 @@ const NewMeal = () => {
                                                 setItem={setItem}
                                                 updateMealHandler={updateMealHandler}
                                                 updateLunch={updateLunch}
-                                                updatebreakfast = {updateBreakfast}
+                                                updatebreakfast={updateBreakfast}
                                                 user={user}
                                                 currentIndex={currentIndex}
                                                 updateDinner={updateDinner}
                                             />
 
                                             {/* For customer */}
-                                            {console.log(registeredUsers)}
                                             {registeredUsers?.length > 0 && registeredUsers.map((elem, index) => {
-                                                if (elem._id === currentUser.split(' ')[currentUser.split(' ').length - 1]) {
+                                                if (elem.user._id === currentUser.split(' ')[currentUser.split(' ').length - 1]) {
                                                     return (
                                                         <>
                                                             <td
@@ -1454,7 +1465,7 @@ const NewMeal = () => {
 
                                                                                 {/* breakfast section start */}
                                                                                 <select
-                                                                                    value={el.breakfast[index][0]}
+                                                                                    value={el.breakfast.find(item => item.user === elem.user._id)?.meal}
                                                                                     onChange={(e) => {
                                                                                         if (
                                                                                             user?.role === "user" &&
@@ -1471,10 +1482,8 @@ const NewMeal = () => {
                                                                                         else {
                                                                                             updateMealHandler(e, el.date, el.id, index, "breakfast")
                                                                                             // updateLunch({id:el.id, borderIndex:index, })
-                                                                                            const breakfast = [...el.breakfast[index]]
-                                                                                            breakfast[0] = parseInt(e.target.value)
-                                                                                            breakfast[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
-                                                                                            breakfast[2] = user.role
+                                                                                            const breakfast = el.breakfast.find(item => item.user === elem.user._id)
+                                                                                            breakfast.meal = Number(e.target.value);
                                                                                             updateBreakfast({ id: el.id, borderIndex: index, breakfast })
                                                                                         }
                                                                                     }
@@ -1496,9 +1505,7 @@ const NewMeal = () => {
                                                                                         setItem({});
                                                                                     }}
                                                                                     style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                                    <option value={el.breakfast[index][0]}>{el.breakfast[index][0] == 0 ? 'off' : el.breakfast[index][0]}</option>
-                                                                                    {[1, 2, 3, 0].filter(item => item != el.breakfast[index][0]
-                                                                                    ).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
+                                                                                    {[.5, 1, 1.5, 0].map(el => <option value={el} selected={el == el.breakfast?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
                                                                                 </select>
                                                                                 {/* Breakfast checkbox */}
                                                                                 {1 === 1 && (
@@ -1539,8 +1546,6 @@ const NewMeal = () => {
                                                                                                         breakfast[2] = user.role
                                                                                                         updateBreakfast({ id: el.id, borderIndex: index, breakfast })
                                                                                                     }
-
-
                                                                                                 }
 
                                                                                                 }
@@ -1561,7 +1566,7 @@ const NewMeal = () => {
                                                                         <td style={{ width: '25%' }}>
                                                                             <div className={`flex justify-start items-center`}>
                                                                                 <select
-                                                                                    value={el.launch[index][0]}
+                                                                                    value={el.launch.find(item => item.user === elem.user._id)?.meal}
                                                                                     onChange={(e) => {
                                                                                         if (
                                                                                             user?.role === "user" &&
@@ -1603,8 +1608,7 @@ const NewMeal = () => {
                                                                                         setItem({});
                                                                                     }}
                                                                                     style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                                    <option value={el.launch[index][0]}>{el.launch[index][0] == 0 ? 'off' : el.launch[index][0]}</option>
-                                                                                    {[1, 2, 3, 0].filter(item => item != el.launch[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
+                                                                                    {[1, 2, 3, 0].map(el => <option value={el} selected={el == el.launch?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
                                                                                 </select>
 
                                                                                 <div className="flex justify-start gap-2">
@@ -1964,7 +1968,7 @@ const NewMeal = () => {
                                                                         <td>
                                                                             <div className={`flex justify-start`}>
                                                                                 <select
-                                                                                    value={el.dinner[index][0]}
+                                                                                    value={el.dinner.find(item => item.user === elem.user._id)?.meal}
                                                                                     onChange={(e) => {
                                                                                         if (
                                                                                             user?.role === "user" &&
@@ -2005,8 +2009,7 @@ const NewMeal = () => {
                                                                                         setItem({});
                                                                                     }}
                                                                                     style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                                    <option value={el.dinner[index][0]}>{el.dinner[index][0] == 0 ? 'off' : el.dinner[index][0]}</option>
-                                                                                    {[1, 2, 3, 0].filter(item => item != el.dinner[index][0]).map(el => <option value={el}>{el == 0 ? 'off' : el}</option>)}
+                                                                                    {[1, 2, 3, 0].map(el => <option value={el} selected={el == el.dinner?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
                                                                                 </select>
                                                                                 {/* {currentIndex === index && ( */}
                                                                                 {1 === 1 && (

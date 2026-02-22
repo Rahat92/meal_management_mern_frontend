@@ -2,7 +2,6 @@ import React from 'react'
 import UserHomeTableHeadContent from '../UserHomeTableHeadContent';
 
 const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption, moneyOption, borderTotalDeposite, borderTotalShop, borderTotalExtraShop, borderTotalMeal }) => {
-    console.log(registeredUsers)
     return (
         <>
             <thead className="sticky top-0 z-10">
@@ -16,7 +15,7 @@ const TableHeader = ({ currentUser, registeredUsers, screenWidth, setMoneyOption
                     {registeredUsers
                         ?.filter((el) => {
                             if (currentUser !== "all") {
-                                if (el._id === currentUser?.split(" ")[currentUser?.split(" ").length - 1]) {
+                                if (el.user._id === currentUser?.split(" ")[currentUser?.split(" ").length - 1]) {
                                     return true;
                                 }
                             } else {
