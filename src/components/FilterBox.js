@@ -15,13 +15,11 @@ const FilterBox = ({
   saveUpdate,
   isLoading,
 }) => {
-  console.log(registeredUsers);
   
   const [yearMonthArr, setYearMonthArr] = useState([]);
   useEffect(() => {
     if (todayMonth && todayYear && yearMonth?.yearMonth?.length > 0) {
       const arr = yearMonth?.yearMonth?.filter((el) => el.month !== todayMonth);
-      console.log(arr);
       setYearMonthArr(arr);
     }
   }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);

@@ -41,16 +41,13 @@ const NewMeal = () => {
     const [skip, setSkip] = useState(false);
     const [currentItem, setCurrentItem] = useState({});
     const [selectedCategory, setSelectedCategory] = useState("");
-    console.log(selectedCategory)
     const { data: pCategories } = useGetProductCategoriesQuery(currentItem?.category);
-    console.log(pCategories)
     const { data: tags } = useGetTagsQuery();
     useEffect(() => {
         if (selectedCategory) {
             setSkip(true)
         }
     }, [selectedCategory])
-    console.log(tags)
     const [value, setValue] = useState("");
     const { user } = useSelector((state) => state.auth);
     const headRef = useRef();
@@ -82,7 +79,6 @@ const NewMeal = () => {
     const [extraShops, setExtraShops] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
     ]);
-    console.log(extraShops)
     const [deposits, setDeposits] = useState([
         { id: 1, removeDeposit: false, amount: null, reason: "" },
     ]);
@@ -159,7 +155,6 @@ const NewMeal = () => {
         if (isDepositeUpdateSuccess) {
             alert("Deposite updated successfully")
             setShowDepositModal(false)
-            // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
         }
     }, [isUpdateMoneyError, isDepositeUpdateSuccess]);
     useEffect(() => {
@@ -180,8 +175,6 @@ const NewMeal = () => {
             alert("Shopping updated successfully")
 
 
-            // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name} (vai), you are currently deposite ${deposite.money} Tk. Your total deposite is ${borderTotalDeposite} TK. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
-            // fetch(`http://45.120.38.242/api/sendsms?api_key=01319193270.VXMtkxGPG7XwoldS2a&type=text&phone=${registeredUsers[index].phoneNo}&senderid=URCL&message=Dear ${registeredUsers[index].name}, you've done shopping worth ${shopping.shop} taka is added successfully. Rahat(Meal Manager)=> Bachelor Point`).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.log(err))
         }
 
     }, [isShopMoneyError, isShopMoneyUpdateSuccess]);
@@ -222,7 +215,6 @@ const NewMeal = () => {
     }, [currentDeposit]);
     useEffect(() => {
         if (products) {
-            console.log('wow', products.reduce((f, i) => Number(i.unitPrice) + f, 0))
         }
     }, [JSON.stringify(products)])
 
@@ -256,7 +248,6 @@ const NewMeal = () => {
                 skip: !isSkipped,
             }
         );
-    console.log(monthlyMeals)
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(locationPathChanged(window.location.pathname));
@@ -367,7 +358,6 @@ const NewMeal = () => {
 
     useEffect(() => {
         if (monthlyMeals?.monthlyMeals?.length > 0) {
-            console.log(monthlyMeals)
             setRegisteredUsers([
                 ...(monthlyMeals &&
                     monthlyMeals.monthlyMeals &&
@@ -375,7 +365,6 @@ const NewMeal = () => {
                     monthlyMeals.monthlyMeals[0].borders),
             ]);
             const mealsArr = monthlyMeals?.monthlyMeals?.map((el) => {
-                console.log(el)
                 return {
                     id: el._id,
                     date: el.date,
@@ -392,22 +381,22 @@ const NewMeal = () => {
                         return { user: item.user._id, ...item.dinner }
                     }),
                     money: el.borders.map(item => {
-                        return item.money
+                        return { user: item.user._id, money: item.money }
                     }),
                     shop: el.borders.map(item => {
-                        return item.shopMoney
+                        return { user: item.user._id, shop: item.shop }
                     }),
                     shoppingComments: el.borders.map(item => {
-                        return item.shoppingComments
+                        return { user: item.user._id, shoppingComments: item.shoppingComments }
                     }),
                     extraShoppingComments: el.borders.map(item => {
-                        return item.extraShoppingComments
+                        return { user: item.user._id, extraShoppingComments: item.extraShoppingComments }
                     }),
                     depositComment: el.borders.map(item => {
-                        return item.depositComment
+                        return { user: item.user._id, depositComment: item.depositComment }
                     }),
                     extraShop: el.borders.map(item => {
-                        return item.extraShop
+                        return { user: item.user._id, extraShop: item.extraShop }
                     }),
                 };
             }).sort((a, b) => a.day - b.day);
@@ -415,7 +404,6 @@ const NewMeal = () => {
             setPrevArrOfMeals(mealsArr);
         }
     }, [monthlyMeals?.monthlyMeals]);
-    console.log(arrOfMeals)
     // submain branch
     useEffect(() => {
         if (prevArrOfMeals?.length > 0) {
@@ -444,13 +432,12 @@ const NewMeal = () => {
         let totalBorderExtraShop = 0;
         if (arrOfMeals.length > 0) {
             const totalMealsCalc = arrOfMeals.map((el) => {
-                console.log(el)
                 const totalBreakfast = el.breakfast.reduce((f, c) => f + c.meal, 0);
                 const totalLaunch = el.launch.reduce((f, c) => f + c.meal, 0);
                 const totalDinner = el.dinner.reduce((f, c) => f + c.meal, 0);
-                totalBorderDeposite += el.money[currentIndex];
-                totalBorderShop += el.shop[currentIndex];
-                totalBorderExtraShop += el.extraShop[currentIndex];
+                totalBorderDeposite += el.money.find(item => item.user === currentUser.split(' ')[1])?.money;
+                totalBorderShop += el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop;
+                totalBorderExtraShop += el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop;
                 return {
                     id: el.id,
                     date: el.date,
@@ -573,7 +560,6 @@ const NewMeal = () => {
         }
     }, [currentIndex, isChanged, currentUser])
     const handleChange = (index, field, value) => {
-        console.log(value, field)
         const updated = [...products];
         updated[index][field] = field === 'category' ? value.split('~')[1] : field === 'tags' ? [value.split('~')[1]] : value;
         setProducts(updated);
@@ -584,7 +570,6 @@ const NewMeal = () => {
         setDeposits(updated);
     };
     const extraShopHandleChange = (index, field, value) => {
-        console.log(value, field)
         const updated = [...extraShops];
         updated[index][field] = field === 'category' ? value.split('~')[1] : field === 'tags' ? [value.split('~')[1]] : value;
         setExtraShops(updated);
@@ -710,7 +695,6 @@ const NewMeal = () => {
     const handleMouseUp = () => {
         setIsDragging(false);
     };
-    console.log(extraShops)
     return (
         <>
             {/* shop modal */}
@@ -874,7 +858,6 @@ const NewMeal = () => {
                                                             <Select
                                                                 value={tags?.data?.length > 0 && tags?.data?.find(item => item._id === product?.tags[0])?.name || ""}
                                                                 onChange={(e) => {
-                                                                    console.log(e)
                                                                     handleChange(index, "tags", e)
                                                                     setValue(e)
                                                                 }
@@ -1080,7 +1063,6 @@ const NewMeal = () => {
                                                             <Select
                                                                 value={pCategories?.length > 0 && pCategories.find(item => item._id === extraShop.category)?.name || ""}
                                                                 onChange={(e) => {
-                                                                    console.log(e)
                                                                     extraShopHandleChange(index, "category", e)
                                                                     setValue(e)
                                                                 }
@@ -1099,13 +1081,11 @@ const NewMeal = () => {
                                                         </svg>
                                                         Sub Category
                                                     </label>
-                                                    {console.log(tags?.data?.length > 0 && tags?.data?.find(item => item._id === extraShop?.tags && tags[0])?.name)}
                                                     <div className="w-full self-center">
                                                         <div className="flex flex-col items-center justify-center">
                                                             <Select
                                                                 value={tags?.data?.length > 0 && tags?.data?.find(item => item._id === extraShop?.tags[0])?.name || ""}
                                                                 onChange={(e) => {
-                                                                    console.log(e)
                                                                     extraShopHandleChange(index, "tags", e)
                                                                     setValue(e)
                                                                 }
@@ -1484,6 +1464,7 @@ const NewMeal = () => {
                                                                                             // updateLunch({id:el.id, borderIndex:index, })
                                                                                             const breakfast = el.breakfast.find(item => item.user === elem.user._id)
                                                                                             breakfast.meal = Number(e.target.value);
+                                                                                            
                                                                                             updateBreakfast({ id: el.id, borderIndex: index, breakfast })
                                                                                         }
                                                                                     }
@@ -1549,8 +1530,8 @@ const NewMeal = () => {
                                                                                                 }
 
                                                                                                 }
-                                                                                                value={el.breakfast[index][1]}
-                                                                                                checked={el.breakfast[index][1] === "on" ? true : false}
+                                                                                                value={el.breakfast?.find(item => item.user === elem.user._id)?.meal === 0?'off':'on'}
+                                                                                                checked={el.breakfast?.find(item => item.user === elem.user._id)?.meal === 0 ? false : true}
                                                                                             />
 
                                                                                         </div>
@@ -1652,20 +1633,20 @@ const NewMeal = () => {
                                                                                             }
 
                                                                                             }
-                                                                                            value={el.launch[index][1]}
-                                                                                            checked={el.launch[index][1] === "on" ? true : false}
+                                                                                            value={el.launch?.find(item => item.user === elem.user._id)?.meal === 0?'off':'on'}
+                                                                                            checked={el.launch?.find(item => item.user === elem.user._id)?.meal === 0 ? false : true}
                                                                                         />
                                                                                     )}
                                                                                     <input
                                                                                         checked={
-                                                                                            // el["breakfast"][index][1] === "on" ||
-                                                                                            el["launch"][index][1] === "on" ||
-                                                                                            el["dinner"][index][1] === "on"
+                                                                                            el.breakfast?.find(item => item.user === elem.user._id)?.meal !==0 ||
+                                                                                            el.launch?.find(item => item.user === elem.user._id)?.meal !==0 ||
+                                                                                            el.dinner?.find(item => item.user === elem.user._id)?.meal !==0
                                                                                         }
                                                                                         value={
-                                                                                            // el["breakfast"][index][1] === "on" ||
-                                                                                            el["launch"][index][1] === "on" ||
-                                                                                                el["dinner"][index][1] === "on"
+                                                                                            el.breakfast?.find(item => item.user === elem.user._id)?.meal !==0 ||
+                                                                                            el.launch?.find(item => item.user === elem.user._id)?.meal !==0 ||
+                                                                                                el.dinner?.find(item => item.user === elem.user._id)?.meal !==0
                                                                                                 ? "off"
                                                                                                 : "on"
                                                                                         }
@@ -1782,7 +1763,7 @@ const NewMeal = () => {
                                                                                         return;
                                                                                     }
                                                                                 }}
-                                                                                value={el.money[index] === 0 ? "" : el.money[index]}
+                                                                                value={el.money.find(item => item.user === currentUser.split(' ')[1])?.money === 0 ? "" : el.money.find(item => item.user === currentUser.split(' ')[1])?.money}
                                                                                 placeholder="Deposite"
                                                                                 style={{
                                                                                     color: "black",
@@ -1829,7 +1810,6 @@ const NewMeal = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    console.log(el)
                                                                                     setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
@@ -1854,7 +1834,7 @@ const NewMeal = () => {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="Shopping"
-                                                                                value={el.shop[index] === 0 ? "" : el.shop[index]}
+                                                                                value={el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop === 0 ? "" : el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop}
                                                                                 style={{
                                                                                     color: "black",
                                                                                     width: "80px",
@@ -1898,10 +1878,7 @@ const NewMeal = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    console.log(el.date, selectDate)
-                                                                                    console.log(el)
                                                                                     setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
-                                                                                        console.log(item)
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeExtraShop: false,
@@ -1940,7 +1917,7 @@ const NewMeal = () => {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="Extra"
-                                                                                value={el.extraShop[index] === 0 ? "" : el.extraShop[index]}
+                                                                                value={el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop === 0 ? "" : el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop}
                                                                                 style={{
                                                                                     color: "black",
                                                                                     width: "80px",
@@ -2015,7 +1992,7 @@ const NewMeal = () => {
                                                                                 {1 === 1 && (
                                                                                     <>
                                                                                         <input
-                                                                                            value={el.dinner[index][1]}
+                                                                                            value={el.dinner?.find(item => item.user === elem.user._id)?.meal !==0?'on':'off'}
                                                                                             onChange={(e) => {
                                                                                                 if (
                                                                                                     user?.role === "user" &&
@@ -2048,7 +2025,7 @@ const NewMeal = () => {
                                                                                             }
 
                                                                                             type="checkbox"
-                                                                                            checked={el.dinner[index][1] === "on" ? true : false}
+                                                                                            checked={el.dinner?.find(item => item.user === elem.user._id)?.meal !==0 ? true : false}
                                                                                         />
                                                                                     </>
                                                                                 )}
