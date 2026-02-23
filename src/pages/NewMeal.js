@@ -1372,6 +1372,7 @@ const NewMeal = () => {
                             {/* table body rows */}
                             {
                                 arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
+                                    console.log(el)
                                     return (
                                         <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
                                             {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
@@ -1460,7 +1461,7 @@ const NewMeal = () => {
                                                                                             alert("You can't change previous Meal!")
                                                                                         }
                                                                                         else {
-                                                                                            updateMealHandler(e, el.date, el.id, index, "breakfast")
+                                                                                            // updateMealHandler(e, el.date, el.id, index, "breakfast")
                                                                                             // updateLunch({id:el.id, borderIndex:index, })
                                                                                             const breakfast = el.breakfast.find(item => item.user === elem.user._id)
                                                                                             breakfast.meal = Number(e.target.value);
@@ -1486,7 +1487,7 @@ const NewMeal = () => {
                                                                                         setItem({});
                                                                                     }}
                                                                                     style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                                    {[.5, 1, 1.5, 0].map(el => <option value={el} selected={el == el.breakfast?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
+                                                                                    {[.5, 1, 1.5, 0].map(el => <option className="bg-[#191970] text-white" value={el} selected={el == el.breakfast?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
                                                                                 </select>
                                                                                 {/* Breakfast checkbox */}
                                                                                 {1 === 1 && (
@@ -1563,12 +1564,10 @@ const NewMeal = () => {
                                                                                         }
 
                                                                                         else {
-                                                                                            updateMealHandler(e, el.date, el.id, index, "launch")
+                                                                                            // updateMealHandler(e, el.date, el.id, index, "launch")
                                                                                             // updateLunch({id:el.id, borderIndex:index, })
-                                                                                            const lunch = [...el.launch[index]]
-                                                                                            lunch[0] = parseInt(e.target.value)
-                                                                                            lunch[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
-                                                                                            lunch[2] = user.role
+                                                                                            const lunch = el.launch.find(item => item.user === elem.user._id)
+                                                                                            lunch.meal = Number(e.target.value)
                                                                                             updateLunch({ id: el.id, borderIndex: index, lunch })
                                                                                         }
                                                                                     }
@@ -1589,7 +1588,7 @@ const NewMeal = () => {
                                                                                         setItem({});
                                                                                     }}
                                                                                     style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                                    {[1, 2, 3, 0].map(el => <option value={el} selected={el == el.launch?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
+                                                                                    {[1, 2, 3, 0].map(el => <option className="bg-[#191970] text-white" value={el} selected={el == el.launch?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
                                                                                 </select>
 
                                                                                 <div className="flex justify-start gap-2">
@@ -1810,7 +1809,7 @@ const NewMeal = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).comment?.map((item, i) => {
+                                                                                    setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).shoppingComments.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeProduct: false,
@@ -1824,7 +1823,7 @@ const NewMeal = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        products: el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                                                                        products: el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.shoppingComments?.comment || []
                                                                                     });
                                                                                 }}
                                                                                 onChange={(e) => {
@@ -1878,7 +1877,7 @@ const NewMeal = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
+                                                                                    setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.extraShoppingComments.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeExtraShop: false,
@@ -1960,12 +1959,10 @@ const NewMeal = () => {
                                                                                             alert("You can't change previous Meall!")
                                                                                         }
                                                                                         else {
-                                                                                            updateMealHandler(e, el.date, el.id, index, "dinner")
+                                                                                            // updateMealHandler(e, el.date, el.id, index, "dinner")
                                                                                             // updateLunch({id:el.id, borderIndex:index, })
-                                                                                            const dinner = [...el.dinner[index]]
-                                                                                            dinner[0] = parseInt(e.target.value)
-                                                                                            dinner[1] = parseInt(e.target.value) > 0 ? 'on' : 'off'
-                                                                                            dinner[2] = user.role
+                                                                                            const dinner = el.dinner.find(item => item.user === elem.user._id)
+                                                                                            dinner.meal = Number(e.target.value)
                                                                                             updateDinner({ id: el.id, borderIndex: index, dinner })
                                                                                         }
                                                                                     }
@@ -1985,8 +1982,8 @@ const NewMeal = () => {
                                                                                     onMouseLeave={() => {
                                                                                         setItem({});
                                                                                     }}
-                                                                                    style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                                    {[1, 2, 3, 0].map(el => <option value={el} selected={el == el.dinner?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
+                                                                                    style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center focus:bg-red-500">
+                                                                                    {[1, 2, 3, 0].map(el => <option className="bg-[#191970] text-white" value={el} selected={el == el.dinner?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
                                                                                 </select>
                                                                                 {/* {currentIndex === index && ( */}
                                                                                 {1 === 1 && (
