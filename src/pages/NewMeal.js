@@ -82,6 +82,7 @@ const NewMeal = () => {
     const [deposits, setDeposits] = useState([
         { id: 1, removeDeposit: false, amount: null, reason: "" },
     ]);
+    console.log(deposits)
     const [currentIndex, setCurrentIndex] = useState();
     const [id, setId] = useState("");
     const [currentUser, setCurrentUser] = useState();
@@ -208,6 +209,7 @@ const NewMeal = () => {
     const depositTooltipItems = useMemo(() => {
         const comments =
             currentDeposit?.deposits || [];
+            console.log(comments)
         return comments.map((item, i) => ({
             id: i,
             ...item,
@@ -404,6 +406,7 @@ const NewMeal = () => {
             setPrevArrOfMeals(mealsArr);
         }
     }, [monthlyMeals?.monthlyMeals]);
+    console.log(arrOfMeals)
     // submain branch
     useEffect(() => {
         if (prevArrOfMeals?.length > 0) {
@@ -1372,7 +1375,6 @@ const NewMeal = () => {
                             {/* table body rows */}
                             {
                                 arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
-                                    console.log(el)
                                     return (
                                         <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
                                             {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
@@ -1734,7 +1736,7 @@ const NewMeal = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        deposits: el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                                                                        deposits: el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.depositComment?.comment || []
                                                                                     });
                                                                                 }}
                                                                                 onFocus={() => {
@@ -1748,7 +1750,7 @@ const NewMeal = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.comment?.map((item, i) => {
+                                                                                    setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeDeposit: false,
@@ -1891,7 +1893,7 @@ const NewMeal = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.comment || []
+                                                                                        extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.extraShoppingComments?.comment || []
                                                                                     });
                                                                                 }}
                                                                                 onChange={(e) => {

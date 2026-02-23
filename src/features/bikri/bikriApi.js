@@ -276,7 +276,7 @@ const bikriApi = apiSlice.injectEndpoints({
             }`,
         },
       }),
-      invalidatesTags: ["getAllMonthStat"],
+      invalidatesTags: ["getAllMonthStat", "getMeals"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -330,7 +330,7 @@ const bikriApi = apiSlice.injectEndpoints({
             }`,
         },
       }),
-      invalidatesTags: ["getAllMonthStat"],
+      invalidatesTags: ["getAllMonthStat","getMeals"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
