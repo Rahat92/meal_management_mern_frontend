@@ -579,10 +579,10 @@ const NewMeal = () => {
     };
 
     const addProduct = () => {
-        setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [""] }]);
+        setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addExtraShop = () => {
-        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [""] }]);
+        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addDeposit = () => {
         setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
