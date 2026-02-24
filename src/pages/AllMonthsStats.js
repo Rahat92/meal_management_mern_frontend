@@ -36,6 +36,7 @@ const AllMonthsStats = () => {
       //   skip: !isSkipped,
       // }
     );
+  console.log(getMonthlyMealStats)
   const currentBorders = monthlyMeals && monthlyMeals.monthlyMeals[0] && monthlyMeals.monthlyMeals[0].border;
 
   const { data: yearMonth } = useGetYearMonthQuery();
@@ -300,7 +301,8 @@ const AllMonthsStats = () => {
           </ul>
         </div>{" "}
       </div>
-      {currentBorders?.length > 0 && mealStatMonthly?.length > 0 && (
+
+      {getMonthlyMealStats?.stats?.length > 0 && (
         <div
           ref={mainBodyRef}
           className="border shadow-lg w-full md:w-full h-[300px] overflow-auto relative"
@@ -343,20 +345,16 @@ const AllMonthsStats = () => {
               </tr>
             </thead>
 
-            {mealStatMonthly?.length > 0
-              ? mealStatMonthly
-                ?.sort((a, b) => b.month.split(" ")[0] - a.month.split(" ")[0])
-                ?.sort((a, b) => b.month.split(" ")[1] - a.month.split(" ")[1])
-                ?.filter((item) => item.month === `${month} 2026`)
-                ?.map((el) => {
-                  return (
-                    <tbody>
-                      <tr className={``}>
-                        <th
-                          className="sticky top-[50%] transform block w-[80px]"
-                          style={{ backfaceVisibility: "hidden" }}
-                        >
-                          {el.month.split(" ")[0] === "0"
+            {1 > 0
+              ? ["1"].map((el) => {
+                return (
+                  <tbody>
+                    <tr className={``}>
+                      <th
+                        className="sticky top-[50%] transform block w-[80px]"
+                        style={{ backfaceVisibility: "hidden" }}
+                      >
+                        {/* {el.month.split(" ")[0] === "0"
                             ? "January"
                             : el.month.split(" ")[0] === "1"
                               ? "February"
@@ -380,181 +378,179 @@ const AllMonthsStats = () => {
                                                 ? "November"
                                                 : el.month.split(" ")[0] === "11"
                                                   ? "December"
-                                                  : ""}{" "}
-                          <br />
-                          {el.month.split(" ")[1]}
-                        </th>
-                        <th className="sticky left-[-2px] bg-white z-50 shadow-md border-r-2">
-                          <table className="w-full">
-                            <tr>
-                              <th className="w-full border-l-2 border-r-2">
-                                <table className="w-full">
-                                  {el.finalArr.map((item) => {
-                                    return (
-                                      <tr onClick={() => {
-                                        setSelectBorder(item.border_id)
-                                        console.log(selectBorder)
-                                      }} className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                        <td className={`py-2`}>{item.border}</td>
-                                      </tr>
-                                    );
-                                  })}
-                                </table>
-                              </th>
-                            </tr>
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">{item.breakfast}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className={`py-2`}>{item.launch}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">{item.dinner}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">{item.totalMeal}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.totalMeal}
-                        </th>
-                        <th className="border-l-2 border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">{item.totalShop}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform bg-red-500 text-gray-800 font-bold text-3xl rounded px-2">
-                          {isNaN(el.mealRate.toFixed(2))
-                            ? 0
-                            : el.mealRate.toFixed(2)}
-                        </th>
-                        <th className="border-r-2 border-l-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">
-                                    {item.totalExtraShop}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.overAllShop + el.overAllExtraShop}
-                        </th>
-                        <th className="border-r-2 border-l-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">{item.totalMoney}</td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">
-                                    {isNaN(
-                                      (
-                                        item.totalMeal * el.mealRate +
-                                        el.overAllExtraShop / el.finalArr.length
-                                      ).toFixed(2)
-                                    )
-                                      ? 0
-                                      : (
-                                        item.totalMeal * el.mealRate +
-                                        el.overAllExtraShop /
-                                        el.finalArr.length
-                                      ).toFixed(2)}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="border-r-2">
-                          <table className="w-full">
-                            {el.finalArr.map((item) => {
-                              return (
-                                <tr className={`${user.role==='superadmin'&& item.border_id === selectBorder?'bg-green-500':''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                  <td className="py-2">
-                                    {isNaN(
-                                      item.totalMoney -
-                                      item.totalMeal * el.mealRate -
-                                      el.overAllExtraShop / el.finalArr.length
-                                    )
-                                      ? 0
-                                      : (
-                                        item.totalMoney -
-                                        item.totalMeal * el.mealRate -
-                                        el.overAllExtraShop /
-                                        el.finalArr.length
-                                      ).toFixed(2)}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </table>
-                        </th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.overAllMoney}
-                        </th>
-                        <th className="border-l-2"></th>
-                        <th className="block sticky top-[50%] transform">
-                          {el.overAllMoney -
-                            el.overAllShop -
-                            el.overAllExtraShop}
-                        </th>
-                      </tr>
-                    </tbody>
-                  );
-                })
+                                                  : ""}{" "} */}
+                        <br />
+                        {''}
+                      </th>
+                      <th className="sticky left-[-2px] bg-white z-50 shadow-md border-r-2">
+                        <table className="w-full">
+                          <tr>
+                            <th className="w-full border-l-2 border-r-2">
+                              <table className="w-full">
+                                {getMonthlyMealStats.stats.map((item) => {
+                                  return (
+                                    <tr onClick={() => {
+                                      setSelectBorder(item.userId)
+                                      console.log(selectBorder)
+                                    }} className={`${user.role === 'superadmin' && item.userId === selectBorder ? 'bg-green-500' : ''} ${item.userId === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                      <td className={`py-2`}>{item.name}</td>
+                                    </tr>
+                                  );
+                                })}
+                              </table>
+                            </th>
+                          </tr>
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">{item.totalBreakfast}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className={`py-2`}>{item.totalLaunch}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">{item.totalDinner}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">{item.totalBreakfast + item.totalLaunch + item.totalDinner}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {getMonthlyMealStats.stats.reduce((f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner), 0)}
+                      </th>
+                      <th className="border-l-2 border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">{item.totalShop}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform bg-red-500 text-gray-800 font-bold text-3xl rounded px-2">
+                        {((getMonthlyMealStats.stats.reduce(
+                          (f, c) => f + (c.totalShop),
+                          0
+                        )) / (getMonthlyMealStats.stats.reduce(
+                          (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
+                          0
+                        ))).toFixed(2)}
+                      </th>
+                      <th className="border-r-2 border-l-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">
+                                  {item.totalExtraShop}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {getMonthlyMealStats.stats.reduce((f, c) => f + c.totalExtraShop+c.totalShop, 0)}
+                      </th>
+                      <th className="border-r-2 border-l-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">{item.totalMoney}</td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className="py-2">
+                                  {((((getMonthlyMealStats.stats.reduce(
+                                    (f, c) => f + (c.totalShop),
+                                    0
+                                  )) / (getMonthlyMealStats.stats.reduce(
+                                    (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
+                                    0
+                                  ))).toFixed(2))*(item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="border-r-2">
+                        <table className="w-full">
+                          {getMonthlyMealStats.stats.map((item) => {
+                            return (
+                              <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
+                                <td className={`py-2 ${(item.totalMoney-((((getMonthlyMealStats.stats.reduce(
+                                    (f, c) => f + (c.totalShop),
+                                    0
+                                  )) / (getMonthlyMealStats.stats.reduce(
+                                    (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
+                                    0
+                                  ))).toFixed(2))*(item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)).toFixed(2)<0?'text-red-500':'text-green-500'}`}>
+                                  {(item.totalMoney-((((getMonthlyMealStats.stats.reduce(
+                                    (f, c) => f + (c.totalShop),
+                                    0
+                                  )) / (getMonthlyMealStats.stats.reduce(
+                                    (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
+                                    0
+                                  ))).toFixed(2))*(item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)).toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
+                      </th>
+                      <th className="block sticky top-[50%] transform">
+                        {getMonthlyMealStats.stats.reduce((f,c) => f+c.totalMoney, 0)}
+                      </th>
+                      <th className="border-l-2"></th>
+                      <th className="block sticky top-[50%] transform">
+                        {(getMonthlyMealStats.stats.reduce((f,c) => f+c.totalMoney, 0))-getMonthlyMealStats.stats.reduce((f,c) => f+(c.totalShop+c.totalExtraShop), 0)}
+                      </th>
+                    </tr>
+                  </tbody>
+                );
+              })
               : null}
           </table>
         </div>
