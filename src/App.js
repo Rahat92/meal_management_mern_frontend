@@ -21,6 +21,7 @@ import ExpenseSummary from "./pages/ExtraExpenseSummary";
 import MealExpenseSummary from "./pages/MealMarketSummary";
 import MealHomePage from "./pages/UserDashboard";
 import NewMeal from "./pages/NewMeal";
+import AdvanceSheet from "./pages/AdvanceSheet";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ const App = () => {
             <Route path="/meal-expense-summary" element={<MealExpenseSummary />} />
             <Route path="/meals" element={<Meal />} />
             <Route path="/new-meals" element={<NewMeal />} />
+            <Route path="/advance-sheet" element={<AdvanceSheet />} />
             <Route path="/product-categories" element={<ProductCategories/>} />
           </Route>
         </Routes>

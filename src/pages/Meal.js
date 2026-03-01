@@ -2369,7 +2369,7 @@ const Meal = () => {
     }, [fullMealUpdateError]);
 
     const [dates, setDates] = useState([]);
-
+    console.log(registeredUsers)
     useEffect(() => {
         let days = [];
         for (let i = 1; i <= monthLength; i++) {

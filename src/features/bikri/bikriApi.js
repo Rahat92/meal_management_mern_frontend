@@ -5,7 +5,7 @@ const bikriApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createMeal: builder.mutation({
       query: (data) => ({
-        url: `/meal`,
+        url: `/api/v1/meal`,
         method: "POST",
         body: data,
         headers: {
@@ -16,7 +16,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     deleteYearMonth: builder.mutation({
       query: (yearMonth) => ({
-        url: `/year-month/${yearMonth._id}`,
+        url: `/api/v1/year-month/${yearMonth._id}`,
         method: 'DELETE',
         body: yearMonth,
         headers: {
@@ -27,7 +27,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     getMonthlyMeals: builder.query({
       query: ({ getMonth, getYear }) => ({
-        url: `/meal/${getMonth}/${getYear}`,
+        url: `/api/v1/meal/${getMonth}/${getYear}`,
         headers: {
           authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
             }`,
@@ -37,7 +37,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateMeal: builder.mutation({
       query: ({ data, id }) => ({
-        url: `/meal/${id}`,
+        url: `/api/v1/meal/${id}`,
         method: "PATCH",
         body: data,
         headers: {
@@ -49,7 +49,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateMyMealStatus: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-my-meal/${data.id}`,
+        url: `/api/v1/meal/update-my-meal/${data.id}`,
         method: "PATCH",
         body: data,
         headers: {
@@ -121,7 +121,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateBreakfast: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-breakfast/${data.id}`,
+        url: `/api/v1/meal/update-breakfast/${data.id}`,
         method: "PATCH",
         body: data
       }),
@@ -133,7 +133,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateLunch: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-lunch/${data.id}`,
+        url: `/api/v1/meal/update-lunch/${data.id}`,
         method: "PATCH",
         body: data
       }),
@@ -146,7 +146,7 @@ const bikriApi = apiSlice.injectEndpoints({
 
     updateLunchMenu: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-lunch-menu/${data.id}`,
+        url: `/api/v1/meal/update-lunch-menu/${data.id}`,
         method: "PATCH",
         body: data
       }),
@@ -157,7 +157,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateDinner: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-dinner/${data.id}`,
+        url: `/api/v1/meal/update-dinner/${data.id}`,
         method: "PATCH",
         body: data
       }),
@@ -170,7 +170,7 @@ const bikriApi = apiSlice.injectEndpoints({
 
     updatePersonFullMeal: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-person-full-meal/${data.id}`,
+        url: `/api/v1/meal/update-person-full-meal/${data.id}`,
         method: "PATCH",
         body: data,
         headers: {
@@ -218,7 +218,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateMoney: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-border-money/${data.id}`,
+        url: `/api/v1/meal/update-border-money/${data.id}`,
         method: "PATCH",
         body: data,
         headers: {
@@ -268,7 +268,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateShopMoney: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-shop-money/${data.id}`,
+        url: `/api/v1/meal/update-shop-money/${data.id}`,
         method: "PATCH",
         body: data,
         headers: {
@@ -322,7 +322,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateExtraShopMoney: builder.mutation({
       query: (data) => ({
-        url: `/meal/update-extra-shop-money/${data.id}`,
+        url: `/api/v1/meal/update-extra-shop-money/${data.id}`,
         method: "PATCH",
         body: data,
         headers: {
@@ -330,7 +330,7 @@ const bikriApi = apiSlice.injectEndpoints({
             }`,
         },
       }),
-      invalidatesTags: ["getAllMonthStat","getMeals"],
+      invalidatesTags: ["getAllMonthStat", "getMeals"],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -374,7 +374,7 @@ const bikriApi = apiSlice.injectEndpoints({
     getMonthlyStats: builder.query({
       query: ({ year, month, day }) => {
         return {
-          url: `/meal/monthly-borders-stats/${year}/${month}/${day}`,
+          url: `/api/v1/meal/monthly-borders-stats/${year}/${month}/${day}`,
           headers: {
             authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
               }`,
@@ -386,7 +386,7 @@ const bikriApi = apiSlice.injectEndpoints({
     getYearMonth: builder.query({
       // query: () => `/year-month`,
       query: () => ({
-        url: `/year-month`,
+        url: `/api/v1/year-month`,
         headers: {
           authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
             }`,
@@ -395,20 +395,20 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     signUp: builder.mutation({
       query: (data) => ({
-        url: `/users/register`,
+        url: `/api/v1/users/register`,
         method: "POST",
         body: data,
       }),
     }),
     getManagers: builder.query({
       query: () => ({
-        url: `/users/managers`,
+        url: `/api/v1/users/managers`,
         method: 'GET'
       })
     }),
     login: builder.mutation({
       query: (data) => ({
-        url: `/users/login`,
+        url: `/api/v1/users/login`,
         method: "POST",
         body: data,
       }),
@@ -436,21 +436,21 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     sendSms: builder.mutation({
       query: (body) => ({
-        url: `/users/send-message`,
+        url: `/api/v1/users/send-message`,
         method: "POST",
         body: body
       }),
     }),
     forgotPassword: builder.mutation({
       query: () => ({
-        url: `/users/forgot-password`,
+        url: `/api/v1/users/forgot-password`,
         method: "POST",
         body: { email: 'shamim@gmail.com' },
       }),
     }),
     logout: builder.mutation({
       query: () => ({
-        url: `/users/logout`,
+        url: `/api/v1/users/logout`,
         method: "GET",
         headers: {
           authorization: `Bearer ${JSON.parse(localStorage.getItem("auth"))?.token}`,
@@ -472,7 +472,7 @@ const bikriApi = apiSlice.injectEndpoints({
       },
     }),
     getUsers: builder.query({
-      query: () => `/users`,
+      query: () => `/api/v1/users`,
     }),
   }),
 });
