@@ -44,7 +44,6 @@ const AdvanceSheet = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const { data: pCategories } = useGetProductCategoriesQuery(currentItem?.category);
     const {data: advanceSheet} = useGetAdvanceSheetQuery('69a059226ca3adea43a135b6')
-    console.log(advanceSheet)
     const { data: tags } = useGetTagsQuery();
     useEffect(() => {
         if (selectedCategory) {
@@ -85,7 +84,6 @@ const AdvanceSheet = () => {
     const [deposits, setDeposits] = useState([
         { id: 1, removeDeposit: false, amount: null, reason: "" },
     ]);
-    console.log(deposits)
     const [currentIndex, setCurrentIndex] = useState();
     const [id, setId] = useState("");
     const [currentUser, setCurrentUser] = useState();
@@ -93,7 +91,6 @@ const AdvanceSheet = () => {
     const [totalMeals, setTotalMeals] = useState([]);
     const [prevArrOfMeals, setPrevArrOfMeals] = useState([]);
     const [registeredUsers, setRegisteredUsers] = useState([]);
-    console.log(registeredUsers)
 
     const [needUpdateObj, setNeedUpdateObj] = useState({});
     const [updatedArrOfMeals, setUpdatedArrOfMeals] = useState([]);
@@ -214,7 +211,6 @@ const AdvanceSheet = () => {
     const depositTooltipItems = useMemo(() => {
         const comments =
             currentDeposit?.deposits || [];
-            console.log(comments)
         return comments.map((item, i) => ({
             id: i,
             ...item,
@@ -362,20 +358,21 @@ const AdvanceSheet = () => {
         }
     }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
 
-
+    console.log(advanceSheet?.data)
     useEffect(() => {
         if (monthlyMeals?.monthlyMeals?.length>0 && advanceSheet?.data?.length > 0) {
             const mealDays = {}
             advanceSheet.data.forEach(item => {
                 item.meals.forEach(el => {
                     if(mealDays[el.mealDay]){
-                        mealDays[el.mealDay] = {day:el.day, user: [...mealDays[el.mealDay].user, item.name]}
+                        mealDays[el.mealDay] = {id: el.mealDay, day:el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, {user:item.userId, meal:el.breakfast}], launch: [...mealDays[el.mealDay].launch, {user:item.userId, meal:el.lunch}], dinner: [...mealDays[el.mealDay].dinner, {user:item.userId, meal:el.dinner}]}
                     }else{
-                        mealDays[el.mealDay] = {day: el.day, user: [item.name]}
+                        mealDays[el.mealDay] = {day: el.day, user: [item.name], breakfast: [{user:item.userId, meal: el.breakfast}], launch: [{user:item.userId, meal: el.lunch}], dinner: [{user:item.userId, meal: el.dinner}]};
                     }
                 })
             })
-            console.log(mealDays)
+            console.log(Object.values(mealDays));
+            
             setRegisteredUsers(advanceSheet.data.map(item => {
                 return {
                     user: {
@@ -425,7 +422,7 @@ const AdvanceSheet = () => {
             setPrevArrOfMeals(mealsArr);
         }
     }, [monthlyMeals?.monthlyMeals, advanceSheet?.data]);
-    console.log(registeredUsers)
+    console.log(arrOfMeals)
     // submain branch
     useEffect(() => {
         if (prevArrOfMeals?.length > 0) {
@@ -1390,7 +1387,7 @@ const AdvanceSheet = () => {
                                 {/* problem */}
                                 <td className="w-1 sticky right-[100px] bg-gray-300 z-[-100]"></td>
                             </tr>
-
+                                {console.log(arrOfMeals)}
                             {/* table body rows */}
                             {
                                 arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
@@ -1430,6 +1427,7 @@ const AdvanceSheet = () => {
                                             {/* For admin */}
                                             <AllUser
                                                 registeredUsers={registeredUsers}
+                                                mealInfo = {advanceSheet?.data}
                                                 currentUser={currentUser}
                                                 el={el}
                                                 item={item}
@@ -1465,7 +1463,7 @@ const AdvanceSheet = () => {
                                                                         <td style={{ width: "25%" }}>
                                                                             <div className="flex justify-start">
 
-                                                                                {/* breakfast section start */}
+                                                                                {/*users breakfast section start */}
                                                                                 <select
                                                                                     value={el.breakfast.find(item => item.user === elem.user._id)?.meal}
                                                                                     onChange={(e) => {

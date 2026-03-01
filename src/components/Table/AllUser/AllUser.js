@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem, updateMealHandler, user, updatebreakfast, updateLunch, updateDinner }) => {
+const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem, updateMealHandler, user, updatebreakfast, updateLunch, updateDinner, mealInfo }) => {
     const loggedInUserIndex = registeredUsers.findIndex((itm, i) => itm._id === user._id)
     return (
         <>
