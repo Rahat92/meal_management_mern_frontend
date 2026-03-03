@@ -133,7 +133,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateLunch: builder.mutation({
       query: (data) => ({
-        url: `/api/v1/meal/update-lunch/${data.id}`,
+        url: `/api/v2/border-meal/${data.id}`,
         method: "PATCH",
         body: data
       }),

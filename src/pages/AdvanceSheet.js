@@ -365,9 +365,9 @@ const AdvanceSheet = () => {
             advanceSheet.data.forEach(item => {
                 item.meals.forEach(el => {
                     if(mealDays[el.mealDay]){
-                        mealDays[el.mealDay] = {id: el.mealDay, day:el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, {user:item.userId, meal:el.breakfast}], launch: [...mealDays[el.mealDay].launch, {user:item.userId, meal:el.lunch}], dinner: [...mealDays[el.mealDay].dinner, {user:item.userId, meal:el.dinner}]}
+                        mealDays[el.mealDay] = {id: el.id, month: el.month, date: `${el.day} February 2026`, day:el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, {user:item.userId, meal:el.breakfast}], launch: [...mealDays[el.mealDay].launch, {user:item.userId, meal:el.lunch}], dinner: [...mealDays[el.mealDay].dinner, {user:item.userId, meal:el.dinner}]}
                     }else{
-                        mealDays[el.mealDay] = {day: el.day, user: [item.name], breakfast: [{user:item.userId, meal: el.breakfast}], launch: [{user:item.userId, meal: el.lunch}], dinner: [{user:item.userId, meal: el.dinner}]};
+                        mealDays[el.mealDay] = {day: el.day, month: el.month, date: `${el.day} February 2026`, user: [item.name], breakfast: [{user:item.userId, meal: el.breakfast}], launch: [{user:item.userId, meal: el.lunch}], dinner: [{user:item.userId, meal: el.dinner}]};
                     }
                 })
             })
@@ -418,7 +418,7 @@ const AdvanceSheet = () => {
                     }),
                 };
             }).sort((a, b) => a.day - b.day);
-            setArrOfMeals(mealsArr);
+            setArrOfMeals(Object.values(mealDays));
             setPrevArrOfMeals(mealsArr);
         }
     }, [monthlyMeals?.monthlyMeals, advanceSheet?.data]);
@@ -454,9 +454,9 @@ const AdvanceSheet = () => {
                 const totalBreakfast = el.breakfast.reduce((f, c) => f + c.meal, 0);
                 const totalLaunch = el.launch.reduce((f, c) => f + c.meal, 0);
                 const totalDinner = el.dinner.reduce((f, c) => f + c.meal, 0);
-                totalBorderDeposite += el.money.find(item => item.user === currentUser.split(' ')[1])?.money;
-                totalBorderShop += el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop;
-                totalBorderExtraShop += el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop;
+                // totalBorderDeposite += el.money.find(item => item.user === currentUser.split(' ')[1])?.money;
+                // totalBorderShop += el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop;
+                // totalBorderExtraShop += el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop;
                 return {
                     id: el.id,
                     date: el.date,
