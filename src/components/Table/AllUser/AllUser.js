@@ -46,7 +46,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     else {
                                                         const breakfast = el.breakfast.find(item => item.user === elem.user._id)
                                                         breakfast.meal = Number(e.target.value);
-                                                        updatebreakfast({ id: el.id, borderIndex: index, breakfast })
+                                                        updateLunch({ mealDay: el.mealDay, borderIndex: index, breakfast })
                                                     }
                                                 }
                                                 }
@@ -91,7 +91,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     // const lunch = [...el.launch[index]]
                                                     const lunch = el.launch.find(item => item.user === elem.user._id)
                                                     lunch.meal = Number(e.target.value);
-                                                    updateLunch({ id: el.id, borderIndex: index, lunch })
+                                                    updateLunch({ mealDay: el.mealDay, borderIndex: index, lunch })
                                                 }
                                             }
                                             }
@@ -138,7 +138,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                 else {
                                                     const dinner = el.dinner.find(item => item.user === elem.user._id)
                                                     dinner.meal = Number(e.target.value);
-                                                    updateDinner({ id: el.id, borderIndex: index, dinner })
+                                                    updateLunch({ mealDay: el.mealDay, borderIndex: index, dinner })
                                                 }
                                             }
                                             }

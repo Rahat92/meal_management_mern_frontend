@@ -365,7 +365,7 @@ const AdvanceSheet = () => {
             advanceSheet.data.forEach(item => {
                 item.meals.forEach(el => {
                     if(mealDays[el.mealDay]){
-                        mealDays[el.mealDay] = {id: el.id, month: el.month, date: `${el.day} February 2026`, day:el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, {user:item.userId, meal:el.breakfast}], launch: [...mealDays[el.mealDay].launch, {user:item.userId, meal:el.lunch}], dinner: [...mealDays[el.mealDay].dinner, {user:item.userId, meal:el.dinner}]}
+                        mealDays[el.mealDay] = {mealDay: el.mealDay, month: el.month, date: `${el.day} February 2026`, day:el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, {user:item.userId, meal:el.breakfast}], launch: [...mealDays[el.mealDay].launch, {user:item.userId, meal:el.lunch}], dinner: [...mealDays[el.mealDay].dinner, {user:item.userId, meal:el.dinner}]}
                     }else{
                         mealDays[el.mealDay] = {day: el.day, month: el.month, date: `${el.day} February 2026`, user: [item.name], breakfast: [{user:item.userId, meal: el.breakfast}], launch: [{user:item.userId, meal: el.lunch}], dinner: [{user:item.userId, meal: el.dinner}]};
                     }
