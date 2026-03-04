@@ -37,14 +37,15 @@ import DepositModalPortal from "../components/Modal/ShopModal";
 import { useGetProductCategoriesQuery } from "../features/productCategory/productCategoryApi";
 import { Select } from "../components/Select";
 import { useGetTagsQuery } from "../features/tag/tagApi";
-import { useGetAdvanceSheetQuery } from "../features/advance-sheet/advanceSheetApi";
+import { useGetAdvanceSheetQuery, useGetUserAdvanceSheetQuery } from "../features/advance-sheet/advanceSheetApi";
 const AdvanceSheet = () => {
     const [skip, setSkip] = useState(false);
     const [currentItem, setCurrentItem] = useState({});
     const [selectedCategory, setSelectedCategory] = useState("");
     const { data: pCategories } = useGetProductCategoriesQuery(currentItem?.category);
-    const {data: advanceSheet} = useGetAdvanceSheetQuery('69a059226ca3adea43a135b6')
+    const { data: advanceSheet } = useGetAdvanceSheetQuery('69a059226ca3adea43a135b6')
     const { data: tags } = useGetTagsQuery();
+
     useEffect(() => {
         if (selectedCategory) {
             setSkip(true)
@@ -86,7 +87,13 @@ const AdvanceSheet = () => {
     ]);
     const [currentIndex, setCurrentIndex] = useState();
     const [id, setId] = useState("");
+    const [isUserSheetSkip, setIsUserSheetSkip] = useState(false);
     const [currentUser, setCurrentUser] = useState();
+    const { data: userSheetData } = useGetUserAdvanceSheetQuery({ userId: currentUser?.split(' ')[1], year: 2026, month: 2 }, {
+        skip: !isUserSheetSkip
+    });
+    console.log(userSheetData)
+    console.log(currentUser)
     const [isChanged, setIsChanged] = useState(false);
     const [totalMeals, setTotalMeals] = useState([]);
     const [prevArrOfMeals, setPrevArrOfMeals] = useState([]);
@@ -138,7 +145,6 @@ const AdvanceSheet = () => {
     const [deposit, setDeposit] = useState({});
     const [shopping, setShopping] = useState({});
     const [extraShopping, setExtraShopping] = useState({});
-
     const handleClickOutside = (event) => {
         if (selectMealRef.current && !selectMealRef.current.contains(event.target)) {
             setSelectMeal({ ...selectMeal, setMeal: false })
@@ -151,6 +157,12 @@ const AdvanceSheet = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (currentUser) {
+            setIsUserSheetSkip(true)
+            console.log('changed current user')
+        }
+    }, [currentUser])
     useEffect(() => {
         if (isUpdateMoneyError) {
             alert(updateMoneyError?.data.message);
@@ -246,7 +258,7 @@ const AdvanceSheet = () => {
     const [isSkipped, setIsSkipped] = useState(true);
     const { data: monthlyMeals, isLoading: isMealsLoading } =
         useGetMonthlyMealsQuery(
-            { getMonth:1, getYear:2026 },
+            { getMonth: 1, getYear: 2026 },
             {
                 skip: !isSkipped,
             }
@@ -358,26 +370,24 @@ const AdvanceSheet = () => {
         }
     }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
 
-    console.log(advanceSheet?.data)
     useEffect(() => {
-        if (monthlyMeals?.monthlyMeals?.length>0 && advanceSheet?.data?.length > 0) {
+        if (monthlyMeals?.monthlyMeals?.length > 0 && advanceSheet?.data?.length > 0) {
             const mealDays = {}
             advanceSheet.data.forEach(item => {
                 item.meals.forEach(el => {
-                    if(mealDays[el.mealDay]){
-                        mealDays[el.mealDay] = {mealDay: el.mealDay, month: el.month, date: `${el.day} February 2026`, day:el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, {user:item.userId, meal:el.breakfast}], launch: [...mealDays[el.mealDay].launch, {user:item.userId, meal:el.lunch}], dinner: [...mealDays[el.mealDay].dinner, {user:item.userId, meal:el.dinner}]}
-                    }else{
-                        mealDays[el.mealDay] = {day: el.day, month: el.month, date: `${el.day} February 2026`, user: [item.name], breakfast: [{user:item.userId, meal: el.breakfast}], launch: [{user:item.userId, meal: el.lunch}], dinner: [{user:item.userId, meal: el.dinner}]};
+                    if (mealDays[el.mealDay]) {
+                        mealDays[el.mealDay] = { mealDay: el.mealDay, month: el.month, date: `${el.day} February 2026`, day: el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, { user: item.userId, meal: el.breakfast }], launch: [...mealDays[el.mealDay].launch, { user: item.userId, meal: el.lunch }], dinner: [...mealDays[el.mealDay].dinner, { user: item.userId, meal: el.dinner }] }
+                    } else {
+                        mealDays[el.mealDay] = { day: el.day, month: el.month, date: `${el.day} February 2026`, user: [item.name], breakfast: [{ user: item.userId, meal: el.breakfast }], launch: [{ user: item.userId, meal: el.lunch }], dinner: [{ user: item.userId, meal: el.dinner }] };
                     }
                 })
             })
-            console.log(Object.values(mealDays));
-            
+
             setRegisteredUsers(advanceSheet.data.map(item => {
                 return {
                     user: {
                         _id: item.userId,
-                        name:item.name,
+                        name: item.name,
                         email: item.email
                     }
                 }
@@ -422,7 +432,6 @@ const AdvanceSheet = () => {
             setPrevArrOfMeals(mealsArr);
         }
     }, [monthlyMeals?.monthlyMeals, advanceSheet?.data]);
-    console.log(arrOfMeals)
     // submain branch
     useEffect(() => {
         if (prevArrOfMeals?.length > 0) {
@@ -454,9 +463,9 @@ const AdvanceSheet = () => {
                 const totalBreakfast = el.breakfast.reduce((f, c) => f + c.meal, 0);
                 const totalLaunch = el.launch.reduce((f, c) => f + c.meal, 0);
                 const totalDinner = el.dinner.reduce((f, c) => f + c.meal, 0);
-                // totalBorderDeposite += el.money.find(item => item.user === currentUser.split(' ')[1])?.money;
-                // totalBorderShop += el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop;
-                // totalBorderExtraShop += el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop;
+                // totalBorderDeposite += el.money.find(item => item.user === currentUser?.split(' ')[1])?.money;
+                // totalBorderShop += el.shop.find(item => item.user === currentUser?.split(' ')[1])?.shop;
+                // totalBorderExtraShop += el.extraShop.find(item => item.user === currentUser?.split(' ')[1])?.extraShop;
                 return {
                     id: el.id,
                     date: el.date,
@@ -572,9 +581,9 @@ const AdvanceSheet = () => {
             arrOfMeals.filter((item) => item.day <= currentDay).map(item => item.dinner).forEach(item => {
                 item.forEach(item => borderTotalDinnerArr.push(item))
             })
-            const totalBreakfast = borderTotalBreakfastArr.filter(item => item.user === currentUser.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
-            const totalLunch = borderTotalLunchArr.filter(item => item.user === currentUser.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
-            const totalDinner = borderTotalDinnerArr.filter(item => item.user === currentUser.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
+            const totalBreakfast = borderTotalBreakfastArr.filter(item => item.user === currentUser?.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
+            const totalLunch = borderTotalLunchArr.filter(item => item.user === currentUser?.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
+            const totalDinner = borderTotalDinnerArr.filter(item => item.user === currentUser?.split(' ')[1]).reduce((f, c) => f + c.meal, 0)
             setBorderTotalMeal(totalBreakfast + totalLunch + totalDinner)
         }
     }, [currentIndex, isChanged, currentUser])
@@ -664,7 +673,7 @@ const AdvanceSheet = () => {
             borderIndex: shopping.borderIndex,
             shop: products.filter(item => !item.removeProduct).reduce((f, i) => Number(i.unitPrice) + f, 0),
             shoppingComments: products.filter(item => !item.removeProduct),
-            customerId: currentUser.split(' ')[1]
+            customerId: currentUser?.split(' ')[1]
         });
     };
     const handleExtraShopSubmit = (e) => {
@@ -676,7 +685,7 @@ const AdvanceSheet = () => {
             borderIndex: extraShopping.borderIndex,
             extraShop: extraShops.filter(item => !item.removeExtraShop).reduce((f, i) => Number(i.unitPrice) + f, 0),
             extraShoppingComments: extraShops.filter(item => !item.removeExtraShop),
-            customerId: currentUser.split(' ')[1]
+            customerId: currentUser?.split(' ')[1]
         });
     };
     const handleDepositsSubmit = (e) => {
@@ -688,7 +697,7 @@ const AdvanceSheet = () => {
             borderIndex: deposit.borderIndex,
             money: deposits.filter(item => !item.removeDeposit).reduce((f, i) => Number(i.amount) + f, 0),
             depositComment: deposits.filter(item => !item.removeDeposit),
-            customerId: currentUser.split(' ')[1]
+            customerId: currentUser?.split(' ')[1]
         });
     };
 
@@ -748,7 +757,7 @@ const AdvanceSheet = () => {
                                                 Shop Details
                                             </h2>
                                             <p className="text-sm text-gray-500 mt-1">
-                                                {currentUser.split(' ')[0]} • {selectDate}
+                                                {currentUser?.split(' ')[0]} • {selectDate}
                                             </p>
                                         </div>
                                         <div className="font-bold text-black text-xl">{products.filter(item => !item.removeProduct)?.reduce((f, c) => f + Number(c.unitPrice), 0)}</div>
@@ -978,7 +987,7 @@ const AdvanceSheet = () => {
                                                 Extra Shop Details
                                             </h2>
                                             <p className="text-sm text-gray-500 mt-1">
-                                                {currentUser.split(' ')[0]} • {selectDate}
+                                                {currentUser?.split(' ')[0]} • {selectDate}
                                             </p>
                                         </div>
                                         <div className="font-bold text-black text-xl">{extraShops.filter(item => !item.removeExtraShop)?.reduce((f, c) => f + Number(c.unitPrice), 0)}</div>
@@ -1205,7 +1214,7 @@ const AdvanceSheet = () => {
                                             Deposit Details
                                         </h2>
                                         <p className="text-sm text-gray-500 mt-1">
-                                            {currentUser.split(' ')[0]} • {selectDate}
+                                            {currentUser?.split(' ')[0]} • {selectDate}
                                         </p>
                                     </div>
                                 </div>
@@ -1387,16 +1396,16 @@ const AdvanceSheet = () => {
                                 {/* problem */}
                                 <td className="w-1 sticky right-[100px] bg-gray-300 z-[-100]"></td>
                             </tr>
-                                {console.log(arrOfMeals)}
                             {/* table body rows */}
                             {
                                 arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
+                                    console.log(el)
                                     return (
                                         <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
                                             {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
                                             <td
                                                 onClick={() => {
-                                                    if (currentUser.split(' ')[1] === user._id) {
+                                                    if (currentUser?.split(' ')[1] === user._id) {
                                                         setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
                                                     }
                                                 }}
@@ -1427,7 +1436,7 @@ const AdvanceSheet = () => {
                                             {/* For admin */}
                                             <AllUser
                                                 registeredUsers={registeredUsers}
-                                                mealInfo = {advanceSheet?.data}
+                                                mealInfo={advanceSheet?.data}
                                                 currentUser={currentUser}
                                                 el={el}
                                                 item={item}
@@ -1442,7 +1451,7 @@ const AdvanceSheet = () => {
 
                                             {/* For customer */}
                                             {registeredUsers?.length > 0 && registeredUsers.map((elem, index) => {
-                                                if (elem.user._id === currentUser.split(' ')[currentUser.split(' ').length - 1]) {
+                                                if (elem.user._id === currentUser?.split(' ')[currentUser?.split(' ').length - 1]) {
                                                     return (
                                                         <>
                                                             <td
@@ -1484,7 +1493,7 @@ const AdvanceSheet = () => {
                                                                                             // updateLunch({id:el.id, borderIndex:index, })
                                                                                             const breakfast = el.breakfast.find(item => item.user === elem.user._id)
                                                                                             breakfast.meal = Number(e.target.value);
-                                                                                            
+
                                                                                             updateBreakfast({ id: el.id, borderIndex: index, breakfast })
                                                                                         }
                                                                                     }
@@ -1550,7 +1559,7 @@ const AdvanceSheet = () => {
                                                                                                 }
 
                                                                                                 }
-                                                                                                value={el.breakfast?.find(item => item.user === elem.user._id)?.meal === 0?'off':'on'}
+                                                                                                value={el.breakfast?.find(item => item.user === elem.user._id)?.meal === 0 ? 'off' : 'on'}
                                                                                                 checked={el.breakfast?.find(item => item.user === elem.user._id)?.meal === 0 ? false : true}
                                                                                             />
 
@@ -1651,20 +1660,20 @@ const AdvanceSheet = () => {
                                                                                             }
 
                                                                                             }
-                                                                                            value={el.launch?.find(item => item.user === elem.user._id)?.meal === 0?'off':'on'}
+                                                                                            value={el.launch?.find(item => item.user === elem.user._id)?.meal === 0 ? 'off' : 'on'}
                                                                                             checked={el.launch?.find(item => item.user === elem.user._id)?.meal === 0 ? false : true}
                                                                                         />
                                                                                     )}
                                                                                     <input
                                                                                         checked={
-                                                                                            el.breakfast?.find(item => item.user === elem.user._id)?.meal !==0 ||
-                                                                                            el.launch?.find(item => item.user === elem.user._id)?.meal !==0 ||
-                                                                                            el.dinner?.find(item => item.user === elem.user._id)?.meal !==0
+                                                                                            el.breakfast?.find(item => item.user === elem.user._id)?.meal !== 0 ||
+                                                                                            el.launch?.find(item => item.user === elem.user._id)?.meal !== 0 ||
+                                                                                            el.dinner?.find(item => item.user === elem.user._id)?.meal !== 0
                                                                                         }
                                                                                         value={
-                                                                                            el.breakfast?.find(item => item.user === elem.user._id)?.meal !==0 ||
-                                                                                            el.launch?.find(item => item.user === elem.user._id)?.meal !==0 ||
-                                                                                                el.dinner?.find(item => item.user === elem.user._id)?.meal !==0
+                                                                                            el.breakfast?.find(item => item.user === elem.user._id)?.meal !== 0 ||
+                                                                                                el.launch?.find(item => item.user === elem.user._id)?.meal !== 0 ||
+                                                                                                el.dinner?.find(item => item.user === elem.user._id)?.meal !== 0
                                                                                                 ? "off"
                                                                                                 : "on"
                                                                                         }
@@ -1753,7 +1762,7 @@ const AdvanceSheet = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        deposits: el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.depositComment?.comment || []
+                                                                                        deposits: el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment || []
                                                                                     });
                                                                                 }}
                                                                                 onFocus={() => {
@@ -1767,7 +1776,7 @@ const AdvanceSheet = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    setDeposits(el.depositComment.find(comment => comment.user === currentUser.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
+                                                                                    setDeposits(el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeDeposit: false,
@@ -1781,7 +1790,7 @@ const AdvanceSheet = () => {
                                                                                         return;
                                                                                     }
                                                                                 }}
-                                                                                value={el.money.find(item => item.user === currentUser.split(' ')[1])?.money === 0 ? "" : el.money.find(item => item.user === currentUser.split(' ')[1])?.money}
+                                                                                value={userSheetData?.data?.days?.find(item=> item.mealDay === el.mealDay)?.deposit || ""}
                                                                                 placeholder="Deposite"
                                                                                 style={{
                                                                                     color: "black",
@@ -1828,7 +1837,7 @@ const AdvanceSheet = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    setProducts(el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1]).shoppingComments.comment?.map((item, i) => {
+                                                                                    setProducts(el.shoppingComments.find(comment => comment.user === currentUser?.split(' ')[1]).shoppingComments.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeProduct: false,
@@ -1842,7 +1851,7 @@ const AdvanceSheet = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        products: el.shoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.shoppingComments?.comment || []
+                                                                                        products: el.shoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.shoppingComments?.comment || []
                                                                                     });
                                                                                 }}
                                                                                 onChange={(e) => {
@@ -1852,7 +1861,7 @@ const AdvanceSheet = () => {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="Shopping"
-                                                                                value={el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop === 0 ? "" : el.shop.find(item => item.user === currentUser.split(' ')[1])?.shop}
+                                                                                value={userSheetData?.data?.days?.find(item=> item.mealDay === el.mealDay)?.mealExpense || ""}
                                                                                 style={{
                                                                                     color: "black",
                                                                                     width: "80px",
@@ -1896,7 +1905,7 @@ const AdvanceSheet = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                     });
-                                                                                    setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.extraShoppingComments.comment?.map((item, i) => {
+                                                                                    setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.extraShoppingComments.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeExtraShop: false,
@@ -1910,7 +1919,7 @@ const AdvanceSheet = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser.split(' ')[1])?.extraShoppingComments?.comment || []
+                                                                                        extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.extraShoppingComments?.comment || []
                                                                                     });
                                                                                 }}
                                                                                 onChange={(e) => {
@@ -1935,7 +1944,7 @@ const AdvanceSheet = () => {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="Extra"
-                                                                                value={el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop === 0 ? "" : el.extraShop.find(item => item.user === currentUser.split(' ')[1])?.extraShop}
+                                                                                value={userSheetData?.data?.days?.find(item=> item.mealDay === el.mealDay)?.extraExpense || ""}
                                                                                 style={{
                                                                                     color: "black",
                                                                                     width: "80px",
@@ -2008,7 +2017,7 @@ const AdvanceSheet = () => {
                                                                                 {1 === 1 && (
                                                                                     <>
                                                                                         <input
-                                                                                            value={el.dinner?.find(item => item.user === elem.user._id)?.meal !==0?'on':'off'}
+                                                                                            value={el.dinner?.find(item => item.user === elem.user._id)?.meal !== 0 ? 'on' : 'off'}
                                                                                             onChange={(e) => {
                                                                                                 if (
                                                                                                     user?.role === "user" &&
@@ -2041,7 +2050,7 @@ const AdvanceSheet = () => {
                                                                                             }
 
                                                                                             type="checkbox"
-                                                                                            checked={el.dinner?.find(item => item.user === elem.user._id)?.meal !==0 ? true : false}
+                                                                                            checked={el.dinner?.find(item => item.user === elem.user._id)?.meal !== 0 ? true : false}
                                                                                         />
                                                                                     </>
                                                                                 )}
@@ -2067,17 +2076,18 @@ const AdvanceSheet = () => {
                                                 <table className="w-full text-center">
                                                     <tr>
                                                         <td style={{ textAlign: "center" }}>
-                                                            {totalMeals.length > 0 && totalMeals.find((item) => item.date === el.date)?.totalBreakfast}
+                                                            {/* {totalMeals.length > 0 && totalMeals.find((item) => item.date === el.date)?.totalBreakfast} */}
+                                                            {advanceSheet?.dailyTotals?.length > 0 && advanceSheet.dailyTotals.find((item) => item._id === el.mealDay)?.totalBreakfast}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td style={{ textAlign: "center" }}>
-                                                            {totalMeals.length > 0 && totalMeals.find((item) => item.date === el.date)?.totalLaunch}
+                                                            {advanceSheet?.dailyTotals?.length > 0 && advanceSheet.dailyTotals.find((item) => item._id === el.mealDay)?.totalLunch}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td style={{ textAlign: "center" }}>
-                                                            {totalMeals.length > 0 && totalMeals.find((item) => item.date === el.date)?.totalDinner}
+                                                            {advanceSheet?.dailyTotals?.length > 0 && advanceSheet.dailyTotals.find((item) => item._id === el.mealDay)?.totalDinner}
                                                         </td>
                                                     </tr>
                                                 </table>

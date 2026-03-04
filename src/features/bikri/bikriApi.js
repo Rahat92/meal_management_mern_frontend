@@ -137,7 +137,7 @@ const bikriApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data
       }),
-      invalidatesTags: ["getAllMonthStat", 'getMeals'],
+      invalidatesTags: ["getAllMonthStat", 'getMeals', 'AdvanceSheet'],
       // headers: {
       //   authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
       //     }`,
