@@ -1369,9 +1369,9 @@ const AdvanceSheet = () => {
                             screenWidth={screenWidth}
                             setMoneyOption={setMoneyOption}
                             moneyOption={moneyOption}
-                            borderTotalDeposite={borderTotalDeposite}
-                            borderTotalShop={borderTotalShop}
-                            borderTotalExtraShop={borderTotalExtraShop}
+                            borderTotalDeposite={userSheetData?.data?.totalDeposit}
+                            borderTotalShop={userSheetData?.data?.totalMealExpense}
+                            borderTotalExtraShop={userSheetData?.data?.totalExtraExpense}
                             borderTotalMeal={borderTotalMeal}
                         />
 
