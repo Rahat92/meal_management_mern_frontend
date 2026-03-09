@@ -79,6 +79,7 @@ const AdvanceSheet = () => {
     const [products, setProducts] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] },
     ]);
+    console.log(products)
     const [extraShops, setExtraShops] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
     ]);
@@ -1398,7 +1399,7 @@ const AdvanceSheet = () => {
                             </tr>
                             {/* table body rows */}
                             {
-                                arrOfMeals?.length > 0 && arrOfMeals.map((el, i) => {
+                                currentUser == 'all' && arrOfMeals?.length > 0 ? arrOfMeals.map((el, i) => {
                                     console.log(el)
                                     return (
                                         <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
@@ -1790,7 +1791,7 @@ const AdvanceSheet = () => {
                                                                                         return;
                                                                                     }
                                                                                 }}
-                                                                                value={userSheetData?.data?.days?.find(item=> item.mealDay === el.mealDay)?.deposit || ""}
+                                                                                value={userSheetData?.data?.days?.find(item => item.mealDay === el.mealDay)?.deposit || ""}
                                                                                 placeholder="Deposite"
                                                                                 style={{
                                                                                     color: "black",
@@ -1838,6 +1839,7 @@ const AdvanceSheet = () => {
                                                                                         borderIndex: index,
                                                                                     });
                                                                                     setProducts(el.shoppingComments.find(comment => comment.user === currentUser?.split(' ')[1]).shoppingComments.comment?.map((item, i) => {
+                                                                                        console.log(el.shoppingComments)
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeProduct: false,
@@ -1861,7 +1863,7 @@ const AdvanceSheet = () => {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="Shopping"
-                                                                                value={userSheetData?.data?.days?.find(item=> item.mealDay === el.mealDay)?.mealExpense || ""}
+                                                                                value={userSheetData?.data?.days?.find(item => item.mealDay === el.mealDay)?.mealExpense || ""}
                                                                                 style={{
                                                                                     color: "black",
                                                                                     width: "80px",
@@ -1944,7 +1946,7 @@ const AdvanceSheet = () => {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="Extra"
-                                                                                value={userSheetData?.data?.days?.find(item=> item.mealDay === el.mealDay)?.extraExpense || ""}
+                                                                                value={userSheetData?.data?.days?.find(item => item.mealDay === el.mealDay)?.extraExpense || ""}
                                                                                 style={{
                                                                                     color: "black",
                                                                                     width: "80px",
@@ -2051,6 +2053,686 @@ const AdvanceSheet = () => {
 
                                                                                             type="checkbox"
                                                                                             checked={el.dinner?.find(item => item.user === elem.user._id)?.meal !== 0 ? true : false}
+                                                                                        />
+                                                                                    </>
+                                                                                )}
+
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </table>
+                                                            </td >
+                                                            {/* for customer */}
+                                                            <td td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 bg-green-500`
+                                                            }>& nbsp;</td>
+                                                        </>
+                                                    )
+                                                }
+
+                                            })}
+                                            <td className={`${currentUser === 'all' ? '' : 'hidden'} w-1 sticky right-[50px] md:right-[100px] bg-gray-300`}>&nbsp;</td> {/* Total meal left border element */}
+
+                                            {/* total meal calculation */}
+                                            <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-white text-black sticky right-0 font-bold`}>
+                                                <table className="w-full text-center">
+                                                    <tr>
+                                                        <td style={{ textAlign: "center" }}>
+                                                            {/* {totalMeals.length > 0 && totalMeals.find((item) => item.date === el.date)?.totalBreakfast} */}
+                                                            {advanceSheet?.dailyTotals?.length > 0 && advanceSheet.dailyTotals.find((item) => item._id === el.mealDay)?.totalBreakfast}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style={{ textAlign: "center" }}>
+                                                            {advanceSheet?.dailyTotals?.length > 0 && advanceSheet.dailyTotals.find((item) => item._id === el.mealDay)?.totalLunch}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style={{ textAlign: "center" }}>
+                                                            {advanceSheet?.dailyTotals?.length > 0 && advanceSheet.dailyTotals.find((item) => item._id === el.mealDay)?.totalDinner}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    )
+                                }) : [...(userSheetData?.data?.days || [])].sort((a, b) => a.day - b.day).map((el, i) => {
+                                    return (
+                                        <tr key={el.id} onClick={(e) => setSelectDate(el.date)} className={`h-[100px] ${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${i !== arrOfMeals.length - 1 && 'border-b-4'}`}> {/* Horizontal body meal border*/}
+                                            {/* <td className="bg-white text-black sticky left-0">{el.date}</td> */}
+                                            <td
+                                                onClick={() => {
+                                                    if (currentUser?.split(' ')[1] === user._id) {
+                                                        setSelectMeal({ ...selectMeal, setMeal: true, el, date: el.date })
+                                                    }
+                                                }}
+                                                className={`cursor-default ${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.day == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
+                                            >
+                                                {/* {el.date?.split(" ")[0]}  Date body */}
+                                                <span className={`${getDayName(getYear, getMonth + 1, el.day) === 'Friday' ? 'font-bold text-gray-800 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.day) === 'Friday' ? 'Fr' : el.day == currentDay ? <span className="text-[15px]">Today</span> : el.day}</span>
+                                            </td>
+                                            <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
+                                            <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black md:sticky md:left-[54.39px] border-black h-[100px] pt-[5.5px]`}> {/* meal name body width */}
+                                                <table className="w-full text-center ml-1 h-full">
+                                                    {['breakfast', 'launch', 'dinner'].map((meal, i) => {
+                                                        return (
+                                                            <tr>
+                                                                <td className="text-left flex items-center">{meal}&nbsp;
+                                                                    <div className="inline-block">
+                                                                        <div className={`cursor-pointer`} >*</div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
+                                                </table>
+                                            </td>
+                                            <td className={`${currentUser == 'all' ? '' : 'hidden'} bg-gray-300 md:sticky md:left-[134.39px]`}></td> {/* Type body vertical right border element */}
+                                            <td className={`${currentUser === 'all' ? '' : 'hidden'} bg-gray-300`}></td> {/* first body vertical indicator */}
+
+
+                                            {/* For customer */}
+                                            {registeredUsers?.length > 0 && registeredUsers.map((elem, index) => {
+                                                if (elem.user._id === currentUser?.split(' ')[currentUser?.split(' ').length - 1]) {
+                                                    return (
+                                                        <>
+                                                            <td
+                                                                className={`${currentUser === 'all' ? 'hidden' : ''} pl-5 `}
+                                                                style={{
+                                                                    width: "50px",
+                                                                    textAlign: "center",
+                                                                }}
+                                                            >
+                                                                <table
+                                                                    style={{
+                                                                        width: "100%",
+                                                                        height: "86px",
+                                                                    }}
+                                                                >
+                                                                    {/* breakfast section start */}
+                                                                    <tr>
+                                                                        <td style={{ width: "25%" }}>
+                                                                            <div className="flex justify-start">
+
+                                                                                {/*users breakfast section start */}
+                                                                                <select
+                                                                                    value={el.breakfast}
+                                                                                    onChange={(e) => {
+                                                                                        if (
+                                                                                            user?.role === "user" &&
+                                                                                            new Date() >
+                                                                                            new Date(
+                                                                                                el.year,
+                                                                                                el.month,
+                                                                                                el.date.split(" ")[0],
+                                                                                                10
+                                                                                            )
+                                                                                        ) {
+                                                                                            alert("You can't change previous Meal!")
+                                                                                        }
+                                                                                        else {
+                                                                                            // updateMealHandler(e, el.date, el.id, index, "breakfast")
+                                                                                            // updateLunch({id:el.id, borderIndex:index, })
+                                                                                            const breakfast = el.breakfast.find(item => item.user === elem.user._id)
+                                                                                            breakfast.meal = Number(e.target.value);
+
+                                                                                            updateBreakfast({ id: el.id, borderIndex: index, breakfast })
+                                                                                        }
+                                                                                    }
+                                                                                    }
+
+                                                                                    onMouseEnter={() => {
+                                                                                        setItem({
+                                                                                            ...item,
+                                                                                            type: "text",
+                                                                                            borderIndex: index,
+                                                                                            date: el.date,
+                                                                                            mealName: "breakfast",
+                                                                                        });
+                                                                                    }}
+                                                                                    onMouseLeave={() => {
+                                                                                        setItem({});
+                                                                                    }}
+                                                                                    style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                                                                    {[.5, 1, 1.5, 0].map(el => <option className="bg-[#191970] text-white" value={el} selected={el == el.breakfast?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
+                                                                                </select>
+                                                                                {/* Breakfast checkbox */}
+                                                                                {1 === 1 && (
+                                                                                    <>
+                                                                                        {/* &nbsp;&nbsp; */}
+                                                                                        <div className="inline-block relative ">
+                                                                                            <input
+                                                                                                style={{
+                                                                                                    paddingLeft: "1rem",
+                                                                                                }}
+                                                                                                type="checkbox"
+                                                                                                onChange={(e) => {
+
+                                                                                                    if (
+                                                                                                        user?.role === "user" &&
+                                                                                                        new Date() >
+                                                                                                        new Date(
+                                                                                                            el.year,
+                                                                                                            el.month,
+                                                                                                            el.date.split(" ")[0],
+                                                                                                            10
+                                                                                                        )
+                                                                                                    ) {
+                                                                                                        alert("You can't change previous Meal!")
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        updateMealHandler(
+                                                                                                            e,
+                                                                                                            el.date,
+                                                                                                            el.id,
+                                                                                                            index,
+                                                                                                            "breakfast",
+                                                                                                            "checkbox"
+                                                                                                        )
+                                                                                                        const breakfast = [...el.breakfast[index]]
+                                                                                                        breakfast[0] = e.target.value === 'off' ? (user?.manager?.morningMealCount || user?.morningMealCount) : 0
+                                                                                                        breakfast[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                                                                        breakfast[2] = user.role
+                                                                                                        updateBreakfast({ id: el.id, borderIndex: index, breakfast })
+                                                                                                    }
+                                                                                                }
+
+                                                                                                }
+                                                                                                value={el.breakfast === 0 ? 'off' : 'on'}
+                                                                                                checked={el.breakfast === 0 ? false : true}
+                                                                                            />
+
+                                                                                        </div>
+                                                                                    </>
+                                                                                )}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {/* breakfast section end */}
+
+                                                                    {/* Customer Launch section start */}
+                                                                    <tr style={{}}>
+                                                                        <td style={{ width: '25%' }}>
+                                                                            <div className={`flex justify-start items-center`}>
+                                                                                <select
+                                                                                    value={el.launch}
+                                                                                    onChange={(e) => {
+                                                                                        if (
+                                                                                            user?.role === "user" &&
+                                                                                            new Date() >
+                                                                                            new Date(
+                                                                                                el.year,
+                                                                                                el.month,
+                                                                                                el.date.split(" ")[0],
+                                                                                                10
+                                                                                            )
+                                                                                        ) {
+                                                                                            alert("You can't change previous Meal!")
+                                                                                        }
+
+                                                                                        else {
+                                                                                            // updateMealHandler(e, el.date, el.id, index, "launch")
+                                                                                            // updateLunch({id:el.id, borderIndex:index, })
+                                                                                            const lunch = el.launch.find(item => item.user === elem.user._id)
+                                                                                            lunch.meal = Number(e.target.value)
+                                                                                            updateLunch({ id: el.id, borderIndex: index, lunch })
+                                                                                        }
+                                                                                    }
+                                                                                    }
+                                                                                    disabled={
+                                                                                        el.launch && el.launch[index] && el.launch[index][1] === "off"
+                                                                                    }
+                                                                                    onMouseEnter={() => {
+                                                                                        setItem({
+                                                                                            ...item,
+                                                                                            type: "text",
+                                                                                            borderIndex: index,
+                                                                                            date: el.date,
+                                                                                            mealName: "launch",
+                                                                                        });
+                                                                                    }}
+                                                                                    onMouseLeave={() => {
+                                                                                        setItem({});
+                                                                                    }}
+                                                                                    style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
+                                                                                    {[1, 2, 3, 0].map(el => <option className="bg-[#191970] text-white" value={el} selected={el == el.launch?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
+                                                                                </select>
+
+                                                                                <div className="flex justify-start gap-2">
+                                                                                    {1 === 1 && (
+                                                                                        <input
+                                                                                            style={{
+                                                                                                paddingLeft: "1rem",
+                                                                                            }}
+                                                                                            type="checkbox"
+                                                                                            onChange={(e) => {
+
+                                                                                                if (
+                                                                                                    user?.role === "user" &&
+                                                                                                    new Date() >
+                                                                                                    new Date(
+                                                                                                        el.year,
+                                                                                                        el.month,
+                                                                                                        el.date.split(" ")[0],
+                                                                                                        10
+                                                                                                    )
+                                                                                                ) {
+                                                                                                    alert("You can't change previous Meal!")
+                                                                                                }
+                                                                                                else {
+                                                                                                    updateMealHandler(
+                                                                                                        e,
+                                                                                                        el.date,
+                                                                                                        el.id,
+                                                                                                        index,
+                                                                                                        "launch",
+                                                                                                        "checkbox"
+                                                                                                    )
+                                                                                                    const lunch = [...el.launch[index]]
+                                                                                                    lunch[0] = e.target.value === 'off' ? 1 : 0
+                                                                                                    lunch[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                                                                    lunch[2] = user.role
+                                                                                                    updateLunch({ id: el.id, borderIndex: index, lunch })
+                                                                                                }
+
+
+                                                                                            }
+
+                                                                                            }
+                                                                                            value={el.launch?.find(item => item.user === elem.user._id)?.meal === 0 ? 'off' : 'on'}
+                                                                                            checked={el.launch?.find(item => item.user === elem.user._id)?.meal === 0 ? false : true}
+                                                                                        />
+                                                                                    )}
+                                                                                    <input
+                                                                                        checked={
+                                                                                            el.breakfast !== 0 ||
+                                                                                            el.launch !== 0 ||
+                                                                                            el.dinner !== 0
+                                                                                        }
+                                                                                        value={
+                                                                                            el.breakfast !== 0 ||
+                                                                                                el.lunch !== 0 ||
+                                                                                                el.dinner !== 0
+                                                                                                ? "off"
+                                                                                                : "on"
+                                                                                        }
+                                                                                        type="checkbox"
+                                                                                        onChange={(e) => {
+                                                                                            const copyArrOfMeals = [...arrOfMeals];
+
+                                                                                            const desireItemIndex = copyArrOfMeals.findIndex(
+                                                                                                (item) => item.id === el.id
+                                                                                            );
+                                                                                            const desireItem = copyArrOfMeals[desireItemIndex];
+                                                                                            const breakfastArr = [...desireItem["breakfast"]];
+                                                                                            const launchArr = [...desireItem["launch"]];
+                                                                                            const dinnerArr = [...desireItem["dinner"]];
+
+                                                                                            breakfastArr[index] =
+                                                                                                e.target.value === "off"
+                                                                                                    ? [0, "off", "admin"]
+                                                                                                    : [0, "on", "admin"];
+                                                                                            launchArr[index] =
+                                                                                                e.target.value === "off"
+                                                                                                    ? [0, "off", "admin"]
+                                                                                                    : [1, "on", "admin"];
+                                                                                            dinnerArr[index] =
+                                                                                                e.target.value === "off"
+                                                                                                    ? [0, "off", "admin"]
+                                                                                                    : [1, "on", "admin"];
+
+                                                                                            const copyDesireItem = {
+                                                                                                ...desireItem,
+                                                                                                breakfast: breakfastArr,
+                                                                                                launch: launchArr,
+                                                                                                dinner: dinnerArr,
+                                                                                            };
+                                                                                            copyArrOfMeals[desireItemIndex] = copyDesireItem;
+                                                                                            setArrOfMeals([...copyArrOfMeals]);
+                                                                                            let mealError = "";
+                                                                                            if (
+                                                                                                new Date() >
+                                                                                                new Date(
+                                                                                                    el.year,
+                                                                                                    el.month,
+                                                                                                    el.date.split(" ")[0] * 1,
+                                                                                                    6
+                                                                                                ) &&
+                                                                                                (user.role === "user" || user.role === "admin")
+                                                                                            ) {
+                                                                                                mealError = "Full meal request time is over";
+                                                                                            }
+                                                                                            if (mealError) {
+                                                                                                alert(mealError);
+                                                                                                // prevArrOfMeals[desireItemIndex] = { ...obj, [mealName]: mealArr };
+                                                                                                setArrOfMeals([...prevArrOfMeals]);
+                                                                                                return;
+                                                                                            }
+
+                                                                                            const lunch = [...el.launch[index]]
+                                                                                            lunch[0] = e.target.value === 'on' ? 1 : 0
+                                                                                            lunch[1] = e.target.value === 'on' ? 'on' : 'off'
+                                                                                            lunch[2] = user.role
+                                                                                            updateLunch({ id: el.id, borderIndex: index, lunch })
+                                                                                            const dinner = [...el.dinner[index]]
+                                                                                            dinner[0] = e.target.value === 'on' ? 1 : 0
+                                                                                            dinner[1] = e.target.value === 'on' ? 'on' : 'off'
+                                                                                            dinner[2] = user.role
+                                                                                            updateDinner({ id: el.id, borderIndex: index, dinner })
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td
+                                                                            style={{
+                                                                                width: "25%",
+                                                                                display:
+                                                                                    screenWidth < 600 && moneyOption !== "Deposite" ? "none" : "",
+                                                                            }}
+                                                                        >
+                                                                            {/* deposit field */}
+                                                                            <input
+                                                                                data-tooltip-id={`deposit-tooltip-${el.id}-${index}`}
+                                                                                type="text"
+                                                                                onMouseOver={() => {
+                                                                                    setCurrentDeposit({
+                                                                                        id: el.id,
+                                                                                        month: el.month,
+                                                                                        year: el.year,
+                                                                                        borderIndex: index,
+                                                                                        deposits: el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment || []
+                                                                                    });
+                                                                                }}
+                                                                                onFocus={() => {
+                                                                                    setFocusOnDepositField(true);
+                                                                                    setShowDepositModal(true)
+                                                                                    setSelectDate(el.date)
+                                                                                    setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                                                                    setDeposit({
+                                                                                        id: el.id,
+                                                                                        month: el.month,
+                                                                                        year: el.year,
+                                                                                        borderIndex: index,
+                                                                                    });
+                                                                                    setDeposits(el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
+                                                                                        return {
+                                                                                            id: i + 1,
+                                                                                            removeDeposit: false,
+                                                                                            ...item
+                                                                                        }
+                                                                                    }))
+                                                                                }}
+                                                                                onChange={(e) => {
+                                                                                    if (user?.role === "user") {
+                                                                                        alert("Only admin can update deposite");
+                                                                                        return;
+                                                                                    }
+                                                                                }}
+                                                                                value={userSheetData?.data?.days?.find(item => item.mealDay === el.mealDay)?.deposit || ""}
+                                                                                placeholder="Deposite"
+                                                                                style={{
+                                                                                    color: "black",
+                                                                                    // border: "1px solid black",
+                                                                                    // borderRadius: "5px",
+                                                                                    width: "80px",
+                                                                                    textAlign: "center",
+                                                                                }}
+                                                                            />
+                                                                            <Tooltip id={`deposit-tooltip-${el.id}-${index}`} positionStrategy="fixed" style={{ zIndex: 5000000 }}
+                                                                                delayShow={100}>
+                                                                                {depositTooltipItems.map((item, i) => {
+                                                                                    return {
+                                                                                        id: i,
+                                                                                        removeDeposit: false,
+                                                                                        ...item
+                                                                                    }
+                                                                                }).map((item, i) => {
+                                                                                    return (<div key={item._id} style={{ borderBottom: '1px solid gray', marginBottom: '5px' }}>
+                                                                                        <span>{item.amount} - ({item.reason})</span>
+                                                                                    </div>)
+                                                                                })}
+                                                                            </Tooltip>
+                                                                        </td>
+                                                                        <td
+                                                                            style={{
+                                                                                width: "25%",
+                                                                                display:
+                                                                                    screenWidth < 600 && moneyOption !== "Shopping" ? "none" : "",
+                                                                            }}
+                                                                        >
+                                                                            {/* shop input field */}
+                                                                            <input
+                                                                                data-tooltip-id={`tooltip-${el.id}-${index}`}
+                                                                                type="text"
+                                                                                onFocus={() => {
+                                                                                    setFocusOnShopField(true);
+                                                                                    setShowModal(true)
+                                                                                    setSelectDate(el.date)
+                                                                                    setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                                                                    setShopping({
+                                                                                        id: el.mealDay,
+                                                                                        month: el.month,
+                                                                                        year: el.year,
+                                                                                    });
+                                                                                    setProducts(el.shopping?.filter(item => item.type === 'regular')?.map((item, i) => {
+                                                                                        console.log(el.shopping, "el shopping")
+                                                                                        return {
+                                                                                            id: item._id,
+                                                                                            removeProduct: false,
+                                                                                            category: item.category._id,
+                                                                                            productName: item.productName,
+                                                                                            unitPrice: item.unitPrice,
+                                                                                            tag: item.tags?.map(tag => tag._id) || []
+                                                                                        }
+                                                                                    }))
+                                                                                }}
+                                                                                onMouseOver={() => {
+                                                                                    setCurrentProduct({
+                                                                                        id: el.id,
+                                                                                        month: el.month,
+                                                                                        year: el.year,
+                                                                                        borderIndex: index,
+                                                                                        products: el.shopping?.filter(item => item.type === 'regular') || []
+                                                                                    });
+                                                                                }}
+                                                                                onChange={(e) => {
+                                                                                    if (user?.role === "user") {
+                                                                                        alert("Only admin can update shop");
+                                                                                        return;
+                                                                                    }
+                                                                                }}
+                                                                                placeholder="Shopping"
+                                                                                value={userSheetData?.data?.days?.find(item => item.mealDay === el.mealDay)?.mealExpense || ""}
+                                                                                style={{
+                                                                                    color: "black",
+                                                                                    width: "80px",
+                                                                                    textAlign: "center",
+                                                                                }}
+                                                                            />
+                                                                            <Tooltip id={`tooltip-${el.id}-${index}`} positionStrategy="fixed" style={{ zIndex: 5000000 }}
+                                                                                delayShow={100}>
+                                                                                {tooltipItems.map((item, i) => {
+                                                                                    return {
+                                                                                        id: i + 1,
+                                                                                        removeProduct: false,
+                                                                                        ...item
+                                                                                    }
+                                                                                }).map((item, i) => {
+                                                                                    return (<div key={item._id} style={{ borderBottom: '1px solid gray', marginBottom: '5px' }}>
+                                                                                        <span>{item.productName} - {item.unitPrice}</span>
+                                                                                    </div>)
+                                                                                })}
+                                                                            </Tooltip>
+                                                                        </td>
+                                                                        <td
+                                                                            style={{
+                                                                                width: "25%",
+                                                                                display:
+                                                                                    screenWidth < 600 && moneyOption !== "Extra" ? "none" : "",
+                                                                            }}
+                                                                        >
+                                                                            {/* extra shop input field */}
+                                                                            <input
+                                                                                data-tooltip-id={`extra-shop-tooltip-${el.id}-${index}`}
+                                                                                type="text"
+                                                                                onFocus={() => {
+                                                                                    setFocusOnExtraShopField(true);
+                                                                                    setShowExtraShopModal(true)
+                                                                                    setSelectDate(el.date)
+                                                                                    setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                                                                    setExtraShopping({
+                                                                                        id: el.id,
+                                                                                        month: el.month,
+                                                                                        year: el.year,
+                                                                                        borderIndex: index,
+                                                                                    });
+                                                                                    setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.extraShoppingComments.comment?.map((item, i) => {
+                                                                                        return {
+                                                                                            id: i + 1,
+                                                                                            removeExtraShop: false,
+                                                                                            ...item
+                                                                                        }
+                                                                                    }))
+                                                                                }}
+                                                                                onMouseOver={() => {
+                                                                                    setCurrentExtraShop({
+                                                                                        id: el.id,
+                                                                                        month: el.month,
+                                                                                        year: el.year,
+                                                                                        borderIndex: index,
+                                                                                        extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.extraShoppingComments?.comment || []
+                                                                                    });
+                                                                                }}
+                                                                                onChange={(e) => {
+                                                                                    if (
+                                                                                        new Date() >
+                                                                                        new Date(
+                                                                                            el.year,
+                                                                                            el.month,
+                                                                                            el.date.split(" ")[0] * 1,
+                                                                                            24
+                                                                                        ) &&
+                                                                                        user?.role == "admin"
+                                                                                    ) {
+                                                                                        alert(
+                                                                                            "The date is passed. You can't update previous day's extra shop"
+                                                                                        );
+                                                                                        return;
+                                                                                    }
+                                                                                    if (user?.role === "user") {
+                                                                                        alert("Only admin can update extra shop");
+                                                                                        return;
+                                                                                    }
+                                                                                }}
+                                                                                placeholder="Extra"
+                                                                                value={userSheetData?.data?.days?.find(item => item.mealDay === el.mealDay)?.extraExpense || ""}
+                                                                                style={{
+                                                                                    color: "black",
+                                                                                    width: "80px",
+                                                                                    textAlign: "center",
+                                                                                }}
+                                                                            />
+                                                                            <Tooltip id={`extra-shop-tooltip-${el.id}-${index}`} positionStrategy="fixed" style={{ zIndex: 5000000 }}
+                                                                                delayShow={100}>
+                                                                                {extraTooltipItems.map((item, i) => {
+                                                                                    return {
+                                                                                        id: i + 1,
+                                                                                        removeExtraShop: false,
+                                                                                        ...item
+                                                                                    }
+                                                                                }).map((item, i) => {
+                                                                                    return (<div key={item._id} style={{ borderBottom: '1px solid gray', marginBottom: '5px' }}>
+                                                                                        <span>{item.productName} - {item.unitPrice}</span>
+                                                                                    </div>)
+                                                                                })}
+                                                                            </Tooltip>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {/* dinner section end */}
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div className={`flex justify-start`}>
+                                                                                <select
+                                                                                    value={el.dinner}
+                                                                                    onChange={(e) => {
+                                                                                        if (
+                                                                                            user?.role === "user" &&
+                                                                                            new Date() >
+                                                                                            new Date(
+                                                                                                el.year,
+                                                                                                el.month,
+                                                                                                el.date.split(" ")[0],
+                                                                                                18
+                                                                                            )
+                                                                                        ) {
+                                                                                            alert("You can't change previous Meall!")
+                                                                                        }
+                                                                                        else {
+                                                                                            // updateMealHandler(e, el.date, el.id, index, "dinner")
+                                                                                            // updateLunch({id:el.id, borderIndex:index, })
+                                                                                            const dinner = el.dinner.find(item => item.user === elem.user._id)
+                                                                                            dinner.meal = Number(e.target.value)
+                                                                                            updateDinner({ id: el.id, borderIndex: index, dinner })
+                                                                                        }
+                                                                                    }
+                                                                                    }
+                                                                                    disabled={
+                                                                                        el.dinner && el.dinner[index] && el.dinner[index][1] === "off"
+                                                                                    }
+                                                                                    onMouseEnter={() => {
+                                                                                        setItem({
+                                                                                            ...item,
+                                                                                            type: "text",
+                                                                                            borderIndex: index,
+                                                                                            date: el.date,
+                                                                                            mealName: "dinner",
+                                                                                        });
+                                                                                    }}
+                                                                                    onMouseLeave={() => {
+                                                                                        setItem({});
+                                                                                    }}
+                                                                                    style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center focus:bg-red-500">
+                                                                                    {[1, 2, 3, 0].map(el => <option className="bg-[#191970] text-white" value={el} selected={el == el.dinner?.find(item => item.user === elem.user._id)?.meal}>{el == 0 ? 'off' : el}</option>)}
+                                                                                </select>
+                                                                                {/* {currentIndex === index && ( */}
+                                                                                {1 === 1 && (
+                                                                                    <>
+                                                                                        <input
+                                                                                            value={el.dinner !== 0 ? 'on' : 'off'}
+                                                                                            onChange={(e) => {
+                                                                                                if (
+                                                                                                    user?.role === "user" &&
+                                                                                                    new Date() >
+                                                                                                    new Date(
+                                                                                                        el.year,
+                                                                                                        el.month,
+                                                                                                        el.date.split(" ")[0],
+                                                                                                        18
+                                                                                                    )
+                                                                                                ) {
+                                                                                                    alert("You can't change previous Meall!")
+                                                                                                }
+                                                                                                else {
+                                                                                                    updateMealHandler(
+                                                                                                        e,
+                                                                                                        el.date,
+                                                                                                        el.id,
+                                                                                                        index,
+                                                                                                        "dinner",
+                                                                                                        "checkbox"
+                                                                                                    )
+                                                                                                    const dinner = [...el.dinner[index]]
+                                                                                                    dinner[0] = e.target.value === 'off' ? 1 : 0
+                                                                                                    dinner[1] = e.target.value === 'off' ? 'on' : 'off'
+                                                                                                    dinner[2] = user.role
+                                                                                                    updateDinner({ id: el.id, borderIndex: index, dinner })
+                                                                                                }
+                                                                                            }
+                                                                                            }
+
+                                                                                            type="checkbox"
+                                                                                            checked={el.dinner !== 0 ? true : false}
                                                                                         />
                                                                                     </>
                                                                                 )}
