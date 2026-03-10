@@ -45,7 +45,6 @@ const AdvanceSheet = () => {
     const { data: pCategories } = useGetProductCategoriesQuery(currentItem?.category);
     const { data: advanceSheet } = useGetAdvanceSheetQuery('69a059226ca3adea43a135b6')
     const { data: tags } = useGetTagsQuery();
-
     useEffect(() => {
         if (selectedCategory) {
             setSkip(true)
@@ -83,6 +82,7 @@ const AdvanceSheet = () => {
     const [extraShops, setExtraShops] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
     ]);
+    console.log(extraShops)
     const [deposits, setDeposits] = useState([
         { id: 1, removeDeposit: false, amount: null, reason: "" },
     ]);
@@ -884,6 +884,7 @@ const AdvanceSheet = () => {
 
                                                     <div className="w-full self-center">
                                                         <div className="flex flex-col items-center justify-center">
+                                                            {console.log("tags", product)}
                                                             <Select
                                                                 value={tags?.data?.length > 0 && tags?.data?.find(item => item._id === product?.tags[0])?.name || ""}
                                                                 onChange={(e) => {
@@ -1839,7 +1840,6 @@ const AdvanceSheet = () => {
                                                                                         borderIndex: index,
                                                                                     });
                                                                                     setProducts(el.shoppingComments.find(comment => comment.user === currentUser?.split(' ')[1]).shoppingComments.comment?.map((item, i) => {
-                                                                                        console.log(el.shoppingComments)
                                                                                         return {
                                                                                             id: i + 1,
                                                                                             removeProduct: false,
@@ -2523,7 +2523,7 @@ const AdvanceSheet = () => {
                                                                                             category: item.category._id,
                                                                                             productName: item.productName,
                                                                                             unitPrice: item.unitPrice,
-                                                                                            tag: item.tags?.map(tag => tag._id) || []
+                                                                                            tags: item.tags?.map(tag => tag._id) || []
                                                                                         }
                                                                                     }))
                                                                                 }}
@@ -2535,7 +2535,7 @@ const AdvanceSheet = () => {
                                                                                         year: el.year,
                                                                                         borderIndex: index,
                                                                                         products: el.shopping?.filter(item => item.type === 'regular').map(item => {
-                                                                                            return{
+                                                                                            return {
                                                                                                 productName: item.productName,
                                                                                                 unitPrice: item.unitPrice,
                                                                                                 category: item.category._id,
@@ -2588,18 +2588,27 @@ const AdvanceSheet = () => {
                                                                                     setFocusOnExtraShopField(true);
                                                                                     setShowExtraShopModal(true)
                                                                                     setSelectDate(el.date)
-                                                                                    setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                                                                    setCurrentItem(el.shopping?.filter(item => item.type === 'extra').map(item => {
+                                                                                        return {
+                                                                                            productName: item.productName,
+                                                                                            unitPrice: item.unitPrice,
+                                                                                            category: item.category._id,
+                                                                                            tags: item.tags?.map(tag => tag._id) || []
+                                                                                        }
+                                                                                    }) || [])
                                                                                     setExtraShopping({
                                                                                         id: el.id,
                                                                                         month: el.month,
                                                                                         year: el.year,
-                                                                                        borderIndex: index,
                                                                                     });
-                                                                                    setExtraShops(el.extraShoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.extraShoppingComments.comment?.map((item, i) => {
+                                                                                    setExtraShops(el.shopping?.filter(item => item.type === 'extra')?.map((item, i) => {
                                                                                         return {
-                                                                                            id: i + 1,
-                                                                                            removeExtraShop: false,
-                                                                                            ...item
+                                                                                            id: item._id,
+                                                                                            removeProduct: false,
+                                                                                            category: item.category._id,
+                                                                                            productName: item.productName,
+                                                                                            unitPrice: item.unitPrice,
+                                                                                            tags: item.tags?.map(tag => tag._id) || []
                                                                                         }
                                                                                     }))
                                                                                 }}

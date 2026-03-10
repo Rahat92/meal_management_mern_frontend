@@ -1,0 +1,22 @@
+@baseUrl = http://localhost:5000/api/v1/users
+
+### Login User
+# @name tokenAPI
+
+POST http://localhost:5000/api/v1/users/login
+Content-Type: application/json
+
+{
+    "email": "roman@gmail.com",
+    "password": "roman1234"
+
+}
+
+
+###
+
+@authToken = {{tokenAPI.response.body.token}}
+# Get User
+# @name getUser
+GET {{baseUrl}}/User
+Authorization: Bearer {{authToken}}

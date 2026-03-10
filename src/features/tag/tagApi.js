@@ -5,7 +5,7 @@ const tagApi = apiSlice.injectEndpoints({
         getTags: builder.query({
             query: (categoryId) => {
                 return {
-                    url: `/product-tags?categoryId=${categoryId??''}`,
+                    url: `/api/v1/product-tags?categoryId=${categoryId??''}`,
                     method: 'GET'
                 }
             }

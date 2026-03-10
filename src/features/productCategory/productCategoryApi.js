@@ -5,7 +5,7 @@ const productCategoryApi = apiSlice.injectEndpoints({
         getProductCategories: builder.query({
             query: () => {
                 return {
-                    url: `/product-categories`,
+                    url: `/api/v1/product-categories`,
                     method: 'GET'
                 }
             },
@@ -13,7 +13,7 @@ const productCategoryApi = apiSlice.injectEndpoints({
         }),
         createProductCategory: builder.mutation({
             query: (data) => ({
-                url: `/product-categories`,
+                url: `/api/v1/product-categories`,
                 method: "POST",
                 body: data
             }),
@@ -21,7 +21,7 @@ const productCategoryApi = apiSlice.injectEndpoints({
         }),
         deleteProductCategory: builder.mutation({
             query:(id) => ({
-                url: `/product-categories/${id}`,
+                url: `/api/v1/product-categories/${id}`,
                 method: 'DELETE'
             }),
             invalidatesTags:['getProductCategories']
@@ -30,7 +30,7 @@ const productCategoryApi = apiSlice.injectEndpoints({
             query:({id, data}) => {
                 console.log(id, data)
                 return {
-                    url: `/product-categories/${id}`,
+                    url: `/api/v1/product-categories/${id}`,
                     method: 'PATCH',
                     body: data
                 }
@@ -41,14 +41,14 @@ const productCategoryApi = apiSlice.injectEndpoints({
             query:(managerId) => {
                 console.log(managerId)
                 return {
-                    url: `/product-categories/extra-shopping-summary/${managerId}`,
+                    url: `/api/v1/product-categories/extra-shopping-summary/${managerId}`,
                     method: 'GET',
                 }
             },
         }),
         marketingSummaryWithCategory: builder.query({
             query: (managerId) => ({
-                url: `/product-categories/marketing-summary/${managerId}`,
+                url: `/api/v1/product-categories/marketing-summary/${managerId}`,
                 method: 'GET',
             })
         })
