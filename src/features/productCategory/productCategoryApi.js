@@ -6,9 +6,14 @@ const productCategoryApi = apiSlice.injectEndpoints({
             query: () => {
                 return {
                     url: `/api/v1/product-categories`,
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+                            }`,
+                    },
                 }
             },
+            authorization: true,
             providesTags: ['getProductCategories']
         }),
         createProductCategory: builder.mutation({
@@ -20,14 +25,14 @@ const productCategoryApi = apiSlice.injectEndpoints({
             invalidatesTags: ['getProductCategories']
         }),
         deleteProductCategory: builder.mutation({
-            query:(id) => ({
+            query: (id) => ({
                 url: `/api/v1/product-categories/${id}`,
                 method: 'DELETE'
             }),
-            invalidatesTags:['getProductCategories']
+            invalidatesTags: ['getProductCategories']
         }),
         updateProductCategory: builder.mutation({
-            query:({id, data}) => {
+            query: ({ id, data }) => {
                 console.log(id, data)
                 return {
                     url: `/api/v1/product-categories/${id}`,
@@ -35,10 +40,10 @@ const productCategoryApi = apiSlice.injectEndpoints({
                     body: data
                 }
             },
-            invalidatesTags:['getProductCategories']
+            invalidatesTags: ['getProductCategories']
         }),
         ExtraShoppingWithCategory: builder.query({
-            query:(managerId) => {
+            query: (managerId) => {
                 console.log(managerId)
                 return {
                     url: `/api/v1/product-categories/extra-shopping-summary/${managerId}`,

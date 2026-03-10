@@ -42,7 +42,8 @@ const AdvanceSheet = () => {
     const [skip, setSkip] = useState(false);
     const [currentItem, setCurrentItem] = useState({});
     const [selectedCategory, setSelectedCategory] = useState("");
-    const { data: pCategories } = useGetProductCategoriesQuery(currentItem?.category);
+    const { data: pCategories } = useGetProductCategoriesQuery();
+    console.log(pCategories)
     const { data: advanceSheet } = useGetAdvanceSheetQuery('69a059226ca3adea43a135b6')
     const { data: tags } = useGetTagsQuery();
     useEffect(() => {
@@ -60,6 +61,7 @@ const AdvanceSheet = () => {
     const [nowScroll, setNowScroll] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({});
     const [currentExtraShop, setCurrentExtraShop] = useState({});
+    console.log(currentExtraShop)
     const [currentDeposit, setCurrentDeposit] = useState({});
     const [item, setItem] = useState({});
     const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
@@ -82,6 +84,7 @@ const AdvanceSheet = () => {
     const [extraShops, setExtraShops] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
     ]);
+    
     console.log(extraShops)
     const [deposits, setDeposits] = useState([
         { id: 1, removeDeposit: false, amount: null, reason: "" },
@@ -1090,6 +1093,7 @@ const AdvanceSheet = () => {
                                                     </label>
                                                     <div className="w-full self-center">
                                                         <div className="flex flex-col items-center justify-center">
+                                                        {console.log(pCategories)}
                                                             <Select
                                                                 value={pCategories?.length > 0 && pCategories.find(item => item._id === extraShop.category)?.name || ""}
                                                                 onChange={(e) => {
@@ -1900,7 +1904,7 @@ const AdvanceSheet = () => {
                                                                                     setFocusOnExtraShopField(true);
                                                                                     setShowExtraShopModal(true)
                                                                                     setSelectDate(el.date)
-                                                                                    setCurrentItem(arrOfMeals.find(item => item.date === el.date))
+                                                                                    setCurrentItem(el.shopping?.filter(item => item.type === 'extra') || [])
                                                                                     setExtraShopping({
                                                                                         id: el.id,
                                                                                         month: el.month,
@@ -2539,7 +2543,7 @@ const AdvanceSheet = () => {
                                                                                                 productName: item.productName,
                                                                                                 unitPrice: item.unitPrice,
                                                                                                 category: item.category._id,
-                                                                                                tag: item.tags?.map(tag => tag._id) || []
+                                                                                                tags: item.tags?.map(tag => tag._id) || []
                                                                                             }
                                                                                         }) || []
                                                                                     });
@@ -2618,7 +2622,14 @@ const AdvanceSheet = () => {
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        extraShops: el.extraShoppingComments.find(comment => comment.user === currentUser?.split(' ')[1])?.extraShoppingComments?.comment || []
+                                                                                        extraShops: el.shopping?.filter(item => item.type === 'extra').map(item => {
+                                                                                            return {
+                                                                                                productName: item.productName,
+                                                                                                unitPrice: item.unitPrice,
+                                                                                                category: item.category._id,
+                                                                                                tags: item.tags?.map(tag => tag._id) || []
+                                                                                            }
+                                                                                        }) || []
                                                                                     });
                                                                                 }}
                                                                                 onChange={(e) => {
