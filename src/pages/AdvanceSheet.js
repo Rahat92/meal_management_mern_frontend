@@ -2506,6 +2506,7 @@ const AdvanceSheet = () => {
                                                                                 data-tooltip-id={`tooltip-${el.id}-${index}`}
                                                                                 type="text"
                                                                                 onFocus={() => {
+                                                                                    console.log(el.shopping, "shopping")
                                                                                     setFocusOnShopField(true);
                                                                                     setShowModal(true)
                                                                                     setSelectDate(el.date)
@@ -2516,7 +2517,6 @@ const AdvanceSheet = () => {
                                                                                         year: el.year,
                                                                                     });
                                                                                     setProducts(el.shopping?.filter(item => item.type === 'regular')?.map((item, i) => {
-                                                                                        console.log(el.shopping, "el shopping")
                                                                                         return {
                                                                                             id: item._id,
                                                                                             removeProduct: false,
@@ -2528,12 +2528,20 @@ const AdvanceSheet = () => {
                                                                                     }))
                                                                                 }}
                                                                                 onMouseOver={() => {
+                                                                                    console.log(el.shopping, "shopping")
                                                                                     setCurrentProduct({
                                                                                         id: el.id,
                                                                                         month: el.month,
                                                                                         year: el.year,
                                                                                         borderIndex: index,
-                                                                                        products: el.shopping?.filter(item => item.type === 'regular') || []
+                                                                                        products: el.shopping?.filter(item => item.type === 'regular').map(item => {
+                                                                                            return{
+                                                                                                productName: item.productName,
+                                                                                                unitPrice: item.unitPrice,
+                                                                                                category: item.category._id,
+                                                                                                tag: item.tags?.map(tag => tag._id) || []
+                                                                                            }
+                                                                                        }) || []
                                                                                     });
                                                                                 }}
                                                                                 onChange={(e) => {
