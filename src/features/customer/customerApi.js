@@ -4,14 +4,14 @@ import { apiSlice } from "../apis/apiSlice";
 const customerApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCustomer: builder.query({
-      query: (customerId) => `/customers/${customerId}`,
+      query: (customerId) => `/api/v1/customers/${customerId}`,
     }),
     getCustomers: builder.query({
-      query: () => `/customers`,
+      query: () => `/api/v1/customers`,
     }),
     createCustomer: builder.mutation({
       query: (body) => ({
-        url: `/customers`,
+        url: `/api/v1/customers`,
         method: "POST",
         body: {
           name: "Jamal Uddin",

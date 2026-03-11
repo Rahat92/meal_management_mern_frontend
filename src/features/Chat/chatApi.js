@@ -3,7 +3,7 @@ import { apiSlice } from "../apis/apiSlice";
 const conversationApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getConversations: builder.query({
-      query: (data) => `/conversations/${data.id}`,
+      query: (data) => `/api/v1/conversations/${data.id}`,
       headers: {
         authorization: `Bearer ${
           JSON.parse(localStorage.getItem("auth"))?.token

@@ -4,7 +4,7 @@ import { apiSlice } from "../apis/apiSlice";
 const foodApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getFoods: builder.query({
-            query: () => `/foods`,
+            query: () => `/api/v1/foods`,
         })
     })
 });

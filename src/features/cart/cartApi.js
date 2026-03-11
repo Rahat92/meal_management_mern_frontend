@@ -4,7 +4,7 @@ const cartApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         cartProduct: builder.mutation({
             query: ({quantity, customer, productId}) => ({
-                url: `/cart/${productId}`,
+                url: `/api/v1/cart/${productId}`,
                 method: 'POST',
                 body: {quantity, customer}
             }),
@@ -28,7 +28,7 @@ const cartApi = apiSlice.injectEndpoints({
             }
         }),
         getCustomers: builder.query({
-            query: () => `/customers`
+            query: () => `/api/v1/customers`
         }),
     })
 })

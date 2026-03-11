@@ -5,7 +5,7 @@ const productApi = apiSlice.injectEndpoints({
     getProduct: builder.query({
       query: ({ category, page, search }) => {
         const limit = 2;
-        const rootUrl = `/products?page=${page}&limit=${limit}&keyword=${
+        const rootUrl = `/api/v1/products?page=${page}&limit=${limit}&keyword=${
           search ? search : ""
         }${category !== "all" ? `&productCategory=${category}` : ""}`;
         console.log(rootUrl);
@@ -36,7 +36,7 @@ const productApi = apiSlice.injectEndpoints({
     }),
     createProduct: builder.mutation({
       query: (data) => ({
-        url: "/products",
+        url: "/api/v1/products",
         method: "POST",
         body: data,
       }),
