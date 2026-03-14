@@ -268,8 +268,8 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     updateShopMoney: builder.mutation({
       query: (data) => ({
-        url: `/api/v1/meal/update-shop-money/${data.id}`,
-        method: "PATCH",
+        url: `/api/v2/meal-expense-details`,
+        method: "POST",
         body: data,
         headers: {
           authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token

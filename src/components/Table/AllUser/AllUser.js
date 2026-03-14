@@ -45,7 +45,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     else {
                                                         const breakfast = el.breakfast.find(item => item.user === elem.user._id)
                                                         breakfast.meal = Number(e.target.value);
-                                                        updateLunch({ mealDay: el.mealDay, borderIndex: index, breakfast })
+                                                        updateLunch({ mealDay: el.mealDay, breakfast })
                                                     }
                                                 }
                                                 }

@@ -85,7 +85,6 @@ const AdvanceSheet = () => {
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
     ]);
 
-    console.log(extraShops)
     const [deposits, setDeposits] = useState([
         { id: 1, removeDeposit: false, amount: null, reason: "" },
     ]);
@@ -606,12 +605,12 @@ const AdvanceSheet = () => {
         updated[index][field] = field === 'category' ? value.split('~')[1] : field === 'tags' ? [value.split('~')[1]] : value;
         setExtraShops(updated);
     };
-
+    console.log(shopping)
     const addProduct = () => {
-        setProducts([...products, { id: products.length + 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
+        setProducts([...products, { id: products.length + 1, removeProduct: false, borderMeal: shopping.borderMeal, type:"", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addExtraShop = () => {
-        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
+        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, borderMeal: "", type:"", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addDeposit = () => {
         setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -670,15 +669,9 @@ const AdvanceSheet = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateShopMoney({
-            id: shopping.id,
-            year: shopping.year,
-            month: shopping.month,
-            borderIndex: shopping.borderIndex,
-            shop: products.filter(item => !item.removeProduct).reduce((f, i) => Number(i.unitPrice) + f, 0),
-            shoppingComments: products.filter(item => !item.removeProduct),
-            customerId: currentUser?.split(' ')[1]
-        });
+        updateShopMoney({expenseDetails: products.map(item => {
+            return {...item, type: 'regular'}
+        })});
     };
     const handleExtraShopSubmit = (e) => {
         e.preventDefault();
@@ -2157,7 +2150,6 @@ const AdvanceSheet = () => {
 
                                                                     {/*users breakfast section start */}
                                                                     <select
-                                                                        value={el.breakfast}
                                                                         onChange={(e) => {
                                                                             if (
                                                                                 user?.role === "user" &&
@@ -2176,8 +2168,10 @@ const AdvanceSheet = () => {
                                                                                 // updateMealHandler(e, el.date, el.id, index, "launch")
                                                                                 // updateLunch({id:el.id, borderIndex:index, })
                                                                                 const breakfast = {}
-                                                                                breakfast.meal = Number(el.breakfast)
-                                                                                updateLunch({ id: el.id, breakfast })
+                                                                                breakfast.meal = Number(e.target.value)
+                                                                                breakfast.user = currentUser.split(' ')[1]
+                                                                                console.log(breakfast)
+                                                                                updateLunch({ mealDay: el.mealDay, breakfast })
                                                                             }
                                                                         }
                                                                         }
@@ -2196,7 +2190,7 @@ const AdvanceSheet = () => {
                                                                             setItem({});
                                                                         }}
                                                                         style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                        {[.5, 1, 1.5, 0].map(el => <option className="bg-[#191970] text-white" value={el.breakfast} selected={el.breakfast===el}>{el == 0 ? 'off' : el}</option>)}
+                                                                        {[.5, 1, 1.5, 0].map(item => <option className="bg-[#191970] text-white" value={item} selected={el.breakfast === item}>{item == 0 ? 'off' : item}</option>)}
                                                                     </select>
                                                                     {/* Breakfast checkbox */}
                                                                     {1 === 1 && (
@@ -2254,7 +2248,6 @@ const AdvanceSheet = () => {
                                                             <td style={{ width: '25%' }}>
                                                                 <div className={`flex justify-start items-center`}>
                                                                     <select
-                                                                        value={el.launch}
                                                                         onChange={(e) => {
                                                                             if (
                                                                                 user?.role === "user" &&
@@ -2273,8 +2266,9 @@ const AdvanceSheet = () => {
                                                                                 // updateMealHandler(e, el.date, el.id, index, "launch")
                                                                                 // updateLunch({id:el.id, borderIndex:index, })
                                                                                 const lunch = {}
-                                                                                lunch.meal = Number(el.lunch)
-                                                                                updateLunch({ id: el.id, lunch })
+                                                                                lunch.meal = Number(e.target.value)
+                                                                                lunch.user = currentUser.split(' ')[1]
+                                                                                updateLunch({ mealDay: el.mealDay, lunch })
                                                                             }
                                                                         }
                                                                         }
@@ -2293,7 +2287,7 @@ const AdvanceSheet = () => {
                                                                             setItem({});
                                                                         }}
                                                                         style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center">
-                                                                        {[1, 2, 3, 0].map(el => <option className="bg-[#191970] text-white" value={el.lunch} selected={el.lunch !== 0}>{el == 0 ? 'off' : el}</option>)}
+                                                                        {[1, 2, 3, 0].map(item => <option className="bg-[#191970] text-white" value={item} selected={el.lunch === item}>{item == 0 ? 'off' : item}</option>)}
                                                                     </select>
 
                                                                     <div className="flex justify-start gap-2">
@@ -2496,20 +2490,23 @@ const AdvanceSheet = () => {
                                                                             id: el.mealDay,
                                                                             month: el.month,
                                                                             year: el.year,
+                                                                            borderMeal: el.borderMealId
                                                                         });
-                                                                        setProducts(el.shopping?.filter(item => item.type === 'regular')?.map((item, i) => {
+                                                                        setProducts(el.shopping?.filter(item => item.type === 'regular')?.length>0?el.shopping?.filter(item => item.type === 'regular').map((item, i) => {
                                                                             return {
                                                                                 id: item._id,
                                                                                 removeProduct: false,
+                                                                                borderMeal: el.borderMealId,
+                                                                                type: item.type,
                                                                                 category: item.category._id,
                                                                                 productName: item.productName,
                                                                                 unitPrice: item.unitPrice,
                                                                                 tags: item.tags?.map(tag => tag._id) || []
                                                                             }
-                                                                        }))
+                                                                        }):[{ id: 1, removeProduct: false, borderMeal: el.borderMealId, type: 'regular', productName: "", unitPrice: null, category: "", tags: [] }])
                                                                     }}
                                                                     onMouseOver={() => {
-                                                                        console.log(el.shopping, "shopping")
+                                                                        console.log(el, "shopping")
                                                                         setCurrentProduct({
                                                                             id: el.id,
                                                                             month: el.month,
@@ -2657,7 +2654,6 @@ const AdvanceSheet = () => {
                                                             <td>
                                                                 <div className={`flex justify-start`}>
                                                                     <select
-                                                                        value={el.dinner}
                                                                         onChange={(e) => {
                                                                             if (
                                                                                 user?.role === "user" &&
@@ -2676,7 +2672,8 @@ const AdvanceSheet = () => {
                                                                                 // updateLunch({id:el.id, borderIndex:index, })
                                                                                 const dinner = {}
                                                                                 dinner.meal = Number(e.target.value)
-                                                                                updateLunch({ id: el.id, dinner })
+                                                                                dinner.user = currentUser.split(' ')[1]
+                                                                                updateLunch({ mealDay: el.mealDay, dinner })
                                                                             }
                                                                         }
                                                                         }
@@ -2695,13 +2692,12 @@ const AdvanceSheet = () => {
                                                                             setItem({});
                                                                         }}
                                                                         style={{ marginRight: '.5rem', border: '1px solid black' }} className="appearance-none border border-black-300  rounded h-[27px] w-[40px] text-center focus:bg-red-500">
-                                                                        {[1, 2, 3, 0].map(el => <option className="bg-[#191970] text-white" value={el.dinner} selected={el == el.dinner}>{el.dinner == 0 ? 'off' : el.dinner}</option>)}
+                                                                        {[1, 2, 3, 0].map(item => <option className="bg-[#191970] text-white" value={item} selected={el.dinner === item}>{item == 0 ? 'off' : item}</option>)}
                                                                     </select>
                                                                     {/* {currentIndex === index && ( */}
                                                                     {1 === 1 && (
                                                                         <>
                                                                             <input
-                                                                                value={el.dinner !== 0 ? 'on' : 'off'}
                                                                                 onChange={(e) => {
                                                                                     if (
                                                                                         user?.role === "user" &&
@@ -2716,16 +2712,17 @@ const AdvanceSheet = () => {
                                                                                         alert("You can't change previous Meall!")
                                                                                     }
                                                                                     else {
-                                                                                        updateMealHandler(
-                                                                                            e,
-                                                                                            el.date,
-                                                                                            el.id,
-                                                                                            "dinner",
-                                                                                            "checkbox"
-                                                                                        )
+                                                                                        // updateMealHandler(
+                                                                                        //     e,
+                                                                                        //     el.date,
+                                                                                        //     el.id,
+                                                                                        //     "dinner",
+                                                                                        //     "checkbox"
+                                                                                        // )
                                                                                         const dinner = {}
-                                                                                        dinner.meal = Number(el.dinner)
-                                                                                        updateDinner({ id: el.id, dinner })
+                                                                                        dinner.meal = Number(el.dinner === 0 ? 1 : 0)
+                                                                                        dinner.user = currentUser.split(' ')[1]
+                                                                                        updateLunch({ mealDay: el.mealDay, dinner })
                                                                                     }
                                                                                 }
                                                                                 }
