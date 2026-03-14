@@ -80,7 +80,6 @@ const AdvanceSheet = () => {
     const [products, setProducts] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] },
     ]);
-    console.log(products)
     const [extraShops, setExtraShops] = useState([
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
     ]);
@@ -605,12 +604,11 @@ const AdvanceSheet = () => {
         updated[index][field] = field === 'category' ? value.split('~')[1] : field === 'tags' ? [value.split('~')[1]] : value;
         setExtraShops(updated);
     };
-    console.log(shopping)
     const addProduct = () => {
-        setProducts([...products, { id: products.length + 1, removeProduct: false, borderMeal: shopping.borderMeal, type:"", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
+        setProducts([...products, { id: products.length + 1, removeProduct: false, borderMeal: shopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addExtraShop = () => {
-        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, borderMeal: "", type:"", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
+        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addDeposit = () => {
         setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -669,20 +667,20 @@ const AdvanceSheet = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateShopMoney({expenseDetails: products.map(item => {
-            return {...item, type: 'regular'}
-        })});
+        updateShopMoney({
+            type: 'regular',
+            expenseDetails: products.map(item => {
+                return { ...item, type: 'regular' }
+            })
+        });
     };
     const handleExtraShopSubmit = (e) => {
         e.preventDefault();
-        updateExtraShopMMoneMoney({
-            id: extraShopping.id,
-            year: extraShopping.year,
-            month: extraShopping.month,
-            borderIndex: extraShopping.borderIndex,
-            extraShop: extraShops.filter(item => !item.removeExtraShop).reduce((f, i) => Number(i.unitPrice) + f, 0),
-            extraShoppingComments: extraShops.filter(item => !item.removeExtraShop),
-            customerId: currentUser?.split(' ')[1]
+        updateShopMoney({
+            type: 'extra',
+            expenseDetails: extraShops.map(item => {
+                return { ...item, type: 'extra' }
+            })
         });
     };
     const handleDepositsSubmit = (e) => {
@@ -762,19 +760,21 @@ const AdvanceSheet = () => {
                                 </div>
                             </div>
 
-                            <div className="overflow-y-auto flex-1 pr-2 custom-scrollbar">
-                                <div className="space-y-5">
+                            <div className="overflow-y-auto flex-1 custom-scrollbar">
+                                <div className="space-y-4">
                                     {products?.map((product, index) => (
                                         <div
                                             key={product.id}
-                                            className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${product.removeProduct ? 'hidden' : ''}`}
+                                            className={`bg-white border border-gray-200 rounded-2xl shadow-sm transition-all duration-200 ${product.removeProduct ? "hidden" : ""
+                                                }`}
                                         >
-                                            <div className="flex justify-between items-center mb-5">
+                                            {/* Card Header */}
+                                            <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
+                                                    <span className="w-7 h-7 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs">
                                                         {index + 1}
                                                     </span>
-                                                    <h3 className="font-bold text-lg text-gray-800">
+                                                    <h3 className="font-semibold text-base text-gray-800">
                                                         Product {index + 1}
                                                     </h3>
                                                 </div>
@@ -782,20 +782,23 @@ const AdvanceSheet = () => {
                                                     <button
                                                         type="button"
                                                         onClick={() => removeProduct(product.id)}
-                                                        className="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-1"
+                                                        className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-1"
                                                     >
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                         </svg>
-                                                        Remove
+                                                        <span className="hidden sm:inline">Remove</span>
                                                     </button>
                                                 )}
                                             </div>
 
-                                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
-                                                <div>
-                                                    <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                                                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            {/* Card Body */}
+                                            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
+
+                                                {/* Item Name */}
+                                                <div className="sm:col-span-2 xl:col-span-1">
+                                                    <label className="text-xs font-bold mb-1.5 text-gray-600 flex items-center gap-1.5 uppercase tracking-wide">
+                                                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                                         </svg>
                                                         Item Name
@@ -803,17 +806,16 @@ const AdvanceSheet = () => {
                                                     <input
                                                         type="text"
                                                         value={product.productName}
-                                                        onChange={(e) =>
-                                                            handleChange(index, "productName", e.target.value)
-                                                        }
+                                                        onChange={(e) => handleChange(index, "productName", e.target.value)}
                                                         placeholder="Enter product name"
-                                                        className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                                        className="border border-gray-300 rounded-xl w-full px-3 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none"
                                                     />
                                                 </div>
 
+                                                {/* Quantity */}
                                                 <div>
-                                                    <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                                                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <label className="text-xs font-bold mb-1.5 text-gray-600 flex items-center gap-1.5 uppercase tracking-wide">
+                                                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                                                         </svg>
                                                         Quantity
@@ -821,17 +823,16 @@ const AdvanceSheet = () => {
                                                     <input
                                                         type="text"
                                                         value={product.productCount}
-                                                        onChange={(e) =>
-                                                            handleChange(index, "productCount", e.target.value)
-                                                        }
+                                                        onChange={(e) => handleChange(index, "productCount", e.target.value)}
                                                         placeholder="Enter quantity"
-                                                        className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                                        className="border border-gray-300 rounded-xl w-full px-3 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none"
                                                     />
                                                 </div>
 
+                                                {/* Price */}
                                                 <div>
-                                                    <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                                                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <label className="text-xs font-bold mb-1.5 text-gray-600 flex items-center gap-1.5 uppercase tracking-wide">
+                                                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                         </svg>
                                                         Price
@@ -839,72 +840,85 @@ const AdvanceSheet = () => {
                                                     <input
                                                         type="number"
                                                         value={product.unitPrice}
-                                                        onChange={(e) =>
-                                                            handleChange(index, "unitPrice", e.target.value)
-                                                        }
+                                                        onChange={(e) => handleChange(index, "unitPrice", e.target.value)}
                                                         placeholder="0.00"
-                                                        className="border-2 border-gray-300 rounded-lg w-full px-4 py-3 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                                                        className="border border-gray-300 rounded-xl w-full px-3 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none"
                                                     />
                                                 </div>
+
+                                                {/* Category */}
                                                 <div>
-                                                    <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                                                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    <label className="text-xs font-bold mb-1.5 text-gray-600 flex items-center gap-1.5 uppercase tracking-wide">
+                                                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                                         </svg>
                                                         Category
                                                     </label>
-                                                    <div className="w-full self-center">
-                                                        <div className="flex flex-col items-center justify-center">
-                                                            <Select
-                                                                value={pCategories?.length > 0 && pCategories.find(item => item._id === product.category)?.name || ""}
-                                                                onChange={(e) => {
-                                                                    setSelectedCategory(e)
-                                                                    handleChange(index, "category", e)
-                                                                    setValue(e)
-                                                                }
-                                                                }
-                                                                options={[
-                                                                    ...pCategories?.length > 0 ? pCategories.map(item => item.name + "~" + item._id) : []
-                                                                ]}
-                                                            />
-                                                        </div>
+                                                    <div className="w-full">
+                                                        <Select
+                                                            value={
+                                                                pCategories?.length > 0 &&
+                                                                pCategories.find((item) => item._id === product.category)?.name || ""
+                                                            }
+                                                            onChange={(e) => {
+                                                                setSelectedCategory(e);
+                                                                handleChange(index, "category", e);
+                                                                setValue(e);
+                                                            }}
+                                                            options={[
+                                                                ...(pCategories?.length > 0
+                                                                    ? pCategories.map((item) => item.name + "~" + item._id)
+                                                                    : []),
+                                                            ]}
+                                                        />
                                                     </div>
                                                 </div>
+
+                                                {/* Sub Category */}
                                                 <div>
-                                                    <label className="text-sm font-bold mb-2 text-gray-700 flex items-center gap-2">
-                                                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    <label className="text-xs font-bold mb-1.5 text-gray-600 flex items-center gap-1.5 uppercase tracking-wide">
+                                                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                         </svg>
                                                         Sub Category
                                                     </label>
-
-                                                    <div className="w-full self-center">
-                                                        <div className="flex flex-col items-center justify-center">
-                                                            {console.log("tags", product)}
-                                                            <Select
-                                                                value={tags?.data?.length > 0 && tags?.data?.find(item => item._id === product?.tags[0])?.name || ""}
-                                                                onChange={(e) => {
-                                                                    handleChange(index, "tags", e)
-                                                                    setValue(e)
-                                                                }
-                                                                }
-                                                                options={[
-                                                                    ...pCategories?.length > 0 ? pCategories.find(item => item._id === product.category)?.productTags?.map(sub => sub.name + "~" + sub._id) || [] : []
-                                                                ]}
-                                                            />
-                                                        </div>
+                                                    <div className="w-full">
+                                                        {console.log("tags", product)}
+                                                        <Select
+                                                            value={
+                                                                tags?.data?.length > 0 &&
+                                                                tags?.data?.find((item) => item._id === product?.tags[0])?.name || ""
+                                                            }
+                                                            onChange={(e) => {
+                                                                handleChange(index, "tags", e);
+                                                                setValue(e);
+                                                            }}
+                                                            options={[
+                                                                ...(pCategories?.length > 0
+                                                                    ? pCategories
+                                                                        .find((item) => item._id === product.category)
+                                                                        ?.productTags?.map((sub) => sub.name + "~" + sub._id) || []
+                                                                    : []),
+                                                            ]}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     ))}
 
+                                    {/* Add More Product Button */}
                                     <button
                                         type="button"
                                         onClick={addProduct}
-                                        className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+                                        className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-3.5 rounded-2xl font-bold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group text-sm sm:text-base"
                                     >
-                                        <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg
+                                            className="w-5 h-5 group-hover:rotate-90 transition-transform duration-200 shrink-0"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                                         </svg>
                                         Add More Product
@@ -2492,7 +2506,7 @@ const AdvanceSheet = () => {
                                                                             year: el.year,
                                                                             borderMeal: el.borderMealId
                                                                         });
-                                                                        setProducts(el.shopping?.filter(item => item.type === 'regular')?.length>0?el.shopping?.filter(item => item.type === 'regular').map((item, i) => {
+                                                                        setProducts(el.shopping?.filter(item => item.type === 'regular')?.length > 0 ? el.shopping?.filter(item => item.type === 'regular').map((item, i) => {
                                                                             return {
                                                                                 id: item._id,
                                                                                 removeProduct: false,
@@ -2500,10 +2514,11 @@ const AdvanceSheet = () => {
                                                                                 type: item.type,
                                                                                 category: item.category._id,
                                                                                 productName: item.productName,
+                                                                                productCount: item.productCount,
                                                                                 unitPrice: item.unitPrice,
                                                                                 tags: item.tags?.map(tag => tag._id) || []
                                                                             }
-                                                                        }):[{ id: 1, removeProduct: false, borderMeal: el.borderMealId, type: 'regular', productName: "", unitPrice: null, category: "", tags: [] }])
+                                                                        }) : [{ id: 1, removeProduct: false, borderMeal: el.borderMealId, type: 'regular', productName: "", unitPrice: null, category: "", tags: [] }])
                                                                     }}
                                                                     onMouseOver={() => {
                                                                         console.log(el, "shopping")
@@ -2574,20 +2589,25 @@ const AdvanceSheet = () => {
                                                                             }
                                                                         }) || [])
                                                                         setExtraShopping({
-                                                                            id: el.id,
+                                                                            id: el.mealDay,
                                                                             month: el.month,
                                                                             year: el.year,
+                                                                            borderMeal: el.borderMealId
                                                                         });
-                                                                        setExtraShops(el.shopping?.filter(item => item.type === 'extra')?.map((item, i) => {
+                                                                        setExtraShops(el.shopping?.filter(item => item.type === 'extra')?.length > 0 ? el.shopping?.filter(item => item.type === 'extra').map((item, i) => {
                                                                             return {
                                                                                 id: item._id,
                                                                                 removeProduct: false,
+                                                                                borderMeal: el.borderMealId,
+                                                                                type: item.type,
                                                                                 category: item.category._id,
                                                                                 productName: item.productName,
+                                                                                productCount: item.productCount,
                                                                                 unitPrice: item.unitPrice,
                                                                                 tags: item.tags?.map(tag => tag._id) || []
                                                                             }
-                                                                        }))
+                                                                        }) : [{ id: 1, removeProduct: false, borderMeal: el.borderMealId, type: 'extra', productName: "", unitPrice: null, category: "", tags: [] }])
+
                                                                     }}
                                                                     onMouseOver={() => {
                                                                         setCurrentExtraShop({
