@@ -81,7 +81,7 @@ const AdvanceSheet = () => {
         { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, category: "", tags: [] },
     ]);
     const [extraShops, setExtraShops] = useState([
-        { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: "", tags: [] },
+        { id: 1, removeProduct: false, productName: "", productCount: "", unitPrice: null, createdAt: null, category: null, tags: [] },
     ]);
 
     const [deposits, setDeposits] = useState([
@@ -604,11 +604,12 @@ const AdvanceSheet = () => {
         updated[index][field] = field === 'category' ? value.split('~')[1] : field === 'tags' ? [value.split('~')[1]] : value;
         setExtraShops(updated);
     };
+    console.log(extraShopping)
     const addProduct = () => {
         setProducts([...products, { id: products.length + 1, removeProduct: false, borderMeal: shopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addExtraShop = () => {
-        setExtraShops([...extraShops, { id: extraShops.length + 1, removeProduct: false, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
+        setExtraShops([...extraShops, { id: extraShops.length + 1, removeProduct: false, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: null, tags: [] }]);
     };
     const addDeposit = () => {
         setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -2585,7 +2586,7 @@ const AdvanceSheet = () => {
                                                                             return {
                                                                                 productName: item.productName,
                                                                                 unitPrice: item.unitPrice,
-                                                                                category: item.category._id,
+                                                                                category: item.category?._id,
                                                                                 tags: item.tags?.map(tag => tag._id) || []
                                                                             }
                                                                         }) || [])
@@ -2601,13 +2602,13 @@ const AdvanceSheet = () => {
                                                                                 removeProduct: false,
                                                                                 borderMeal: el.borderMealId,
                                                                                 type: item.type,
-                                                                                category: item.category._id,
+                                                                                category: item.category?._id,
                                                                                 productName: item.productName,
                                                                                 productCount: item.productCount,
                                                                                 unitPrice: item.unitPrice,
                                                                                 tags: item.tags?.map(tag => tag._id) || []
                                                                             }
-                                                                        }) : [{ id: 1, removeProduct: false, borderMeal: el.borderMealId, type: 'extra', productName: "", unitPrice: null, category: "", tags: [] }])
+                                                                        }) : [{ id: 1, removeProduct: false, borderMeal: el.borderMealId, type: 'extra', productName: "", unitPrice: null, category: null, tags: [] }])
 
                                                                     }}
                                                                     onMouseOver={() => {
@@ -2619,7 +2620,8 @@ const AdvanceSheet = () => {
                                                                                 return {
                                                                                     productName: item.productName,
                                                                                     unitPrice: item.unitPrice,
-                                                                                    category: item.category._id,
+                                                                                    category: item.category?._id,
+                                                                                    borderMeal: el.borderMealId,
                                                                                     tags: item.tags?.map(tag => tag._id) || []
                                                                                 }
                                                                             }) || []
