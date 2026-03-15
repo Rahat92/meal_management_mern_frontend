@@ -608,7 +608,7 @@ const AdvanceSheet = () => {
         setProducts([...products, { id: products.length + 1, removeProduct: false, borderMeal: shopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addExtraShop = () => {
-        setExtraShops([...extraShops, { id: extraShops.length + 1, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
+        setExtraShops([...extraShops, { id: extraShops.length + 1, removeProduct: false, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
     const addDeposit = () => {
         setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
@@ -636,7 +636,7 @@ const AdvanceSheet = () => {
             if (item.id === extraShopId) {
                 return {
                     ...item,
-                    removeExtraShop: true,
+                    removeProduct: true,
                 }
             } else {
                 return {
@@ -647,6 +647,7 @@ const AdvanceSheet = () => {
 
         setExtraShops(updated);
     };
+    console.log(extraShops)
     const removeDeposit = (depositId) => {
         // const updated = products.filter((_, i) => i !== index);
         const updated = deposits.map((item, index) => {
@@ -1002,7 +1003,7 @@ const AdvanceSheet = () => {
                                                 {currentUser?.split(' ')[0]} • {selectDate}
                                             </p>
                                         </div>
-                                        <div className="font-bold text-black text-xl">{extraShops.filter(item => !item.removeExtraShop)?.reduce((f, c) => f + Number(c.unitPrice), 0)}</div>
+                                        <div className="font-bold text-black text-xl">{extraShops.filter(item => !item.removeProduct)?.reduce((f, c) => f + Number(c.unitPrice), 0)}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1012,7 +1013,7 @@ const AdvanceSheet = () => {
                                     {extraShops?.map((extraShop, index) => (
                                         <div
                                             key={extraShop.id}
-                                            className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${extraShop.removeExtraShop ? 'hidden' : ''}`}
+                                            className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${extraShop.removeProduct ? 'hidden' : ''}`}
                                         >
                                             <div className="flex justify-between items-center mb-5">
                                                 <div className="flex items-center gap-2">
