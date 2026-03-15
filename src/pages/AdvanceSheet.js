@@ -189,6 +189,8 @@ const AdvanceSheet = () => {
             // copyArrOfMeals[desireMealIndex] = desireMeal;
             // setArrOfMeals([...copyArrOfMeals])
             setShowModal(false)
+            setShowExtraShopModal(false)
+            setShowExtraShopModal(false)
             alert("Shopping updated successfully")
 
 
@@ -671,6 +673,9 @@ const AdvanceSheet = () => {
         e.preventDefault();
         updateShopMoney({
             type: 'regular',
+            userId: currentUser?.split(' ')[1],
+            year: shopping.year,
+            month: shopping.month,
             expenseDetails: products.map(item => {
                 return { ...item, type: 'regular' }
             })
@@ -680,6 +685,9 @@ const AdvanceSheet = () => {
         e.preventDefault();
         updateShopMoney({
             type: 'extra',
+            userId: currentUser?.split(' ')[1],
+            year: extraShopping.year,
+            month: extraShopping.month,
             expenseDetails: extraShops.map(item => {
                 return { ...item, type: 'extra' }
             })

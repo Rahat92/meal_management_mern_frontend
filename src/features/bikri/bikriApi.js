@@ -276,7 +276,13 @@ const bikriApi = apiSlice.injectEndpoints({
             }`,
         },
       }),
-      invalidatesTags: ["getAllMonthStat", "getMeals"],
+      invalidatesTags: (result, error, arg) => {
+        console.log(arg);
+        return [
+          // { type: "AdvanceSheet", id: `${arg.month}-${arg.year}` },
+          { type: "userAdvanceSheet", id: `${arg.userId}-${arg.year}-${arg.month}` }
+        ]
+      },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;

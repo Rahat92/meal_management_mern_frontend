@@ -6,7 +6,9 @@ const advanceSheetApi = apiSlice.injectEndpoints({
             query: (body) => ({
                 url: `/api/v2/advance-meal-sheet/user/${body.userId}?year=${body.year}&month=${body.month}`,
             }),
-            providesTags: ['AdvanceSheet']
+            providesTags: (result, error, arg) => [
+                { type: "userAdvanceSheet", id: `${arg.userId}-${arg.year}-${arg.month}` }
+            ],
         }),
         getAdvanceSheet: builder.query({
             query: (monthId) => ({
