@@ -85,7 +85,7 @@ const AdvanceSheet = () => {
     ]);
 
     const [deposits, setDeposits] = useState([
-        { id: 1, removeDeposit: false, amount: null, reason: "" },
+        { id: 1, removeItem: false, amount: null, reason: "" },
     ]);
     const [currentIndex, setCurrentIndex] = useState();
     const [id, setId] = useState("");
@@ -167,7 +167,7 @@ const AdvanceSheet = () => {
     }, [currentUser])
     useEffect(() => {
         if (isUpdateMoneyError) {
-            alert(updateMoneyError?.data.message);
+            alert(updateMoneyError?.data?.message);
         }
         if (isDepositeUpdateSuccess) {
             alert("Deposite updated successfully")
@@ -179,15 +179,6 @@ const AdvanceSheet = () => {
             alert(shopMoneyError?.data?.message);
         }
         if (isShopMoneyUpdateSuccess) {
-            // const copyArrOfMeals = [...arrOfMeals]
-            // const desireMeal = copyArrOfMeals.find(item => item.id == shopping.id)
-            // const desireMealIndex = copyArrOfMeals.findIndex((item => item.id === shopping.id))
-            // const shoppingComment = [...desireMeal.shoppingComments]
-            // const updatedComments = { ...shoppingComment[shopping.borderIndex], comment: products.filter(item => !item.removeProduct) };
-            // shoppingComment[shopping.borderIndex] = updatedComments;
-            // desireMeal.shoppingComments = shoppingComment;
-            // copyArrOfMeals[desireMealIndex] = desireMeal;
-            // setArrOfMeals([...copyArrOfMeals])
             setShowModal(false)
             setShowExtraShopModal(false)
             setShowExtraShopModal(false)
@@ -437,26 +428,26 @@ const AdvanceSheet = () => {
         }
     }, [monthlyMeals?.monthlyMeals, advanceSheet?.data]);
     // submain branch
-        // useEffect(() => {
-        //     if (prevArrOfMeals?.length > 0) {
-        //         const changedArr = arrOfMeals.filter((item, i) => {
-        //             if (
-        //                 JSON.stringify(item.breakfast) !==
-        //                 JSON.stringify(prevArrOfMeals[i].breakfast) ||
-        //                 JSON.stringify(item.launch) !==
-        //                 JSON.stringify(prevArrOfMeals[i].launch) ||
-        //                 JSON.stringify(item.dinner) !==
-        //                 JSON.stringify(prevArrOfMeals[i].dinner)
-        //             ) {
-        //                 return true;
-        //             }
-        //         });
-        //         setUpdatedArrOfMeals([...changedArr]);
-        //         if (changedArr.length > 0) {
-        //             setIsChanged(true);
-        //         }
-        //     }
-        // }, [prevArrOfMeals, arrOfMeals]);
+    // useEffect(() => {
+    //     if (prevArrOfMeals?.length > 0) {
+    //         const changedArr = arrOfMeals.filter((item, i) => {
+    //             if (
+    //                 JSON.stringify(item.breakfast) !==
+    //                 JSON.stringify(prevArrOfMeals[i].breakfast) ||
+    //                 JSON.stringify(item.launch) !==
+    //                 JSON.stringify(prevArrOfMeals[i].launch) ||
+    //                 JSON.stringify(item.dinner) !==
+    //                 JSON.stringify(prevArrOfMeals[i].dinner)
+    //             ) {
+    //                 return true;
+    //             }
+    //         });
+    //         setUpdatedArrOfMeals([...changedArr]);
+    //         if (changedArr.length > 0) {
+    //             setIsChanged(true);
+    //         }
+    //     }
+    // }, [prevArrOfMeals, arrOfMeals]);
 
     useEffect(() => {
         let totalBorderDeposite = 0;
@@ -606,7 +597,6 @@ const AdvanceSheet = () => {
         updated[index][field] = field === 'category' ? value.split('~')[1] : field === 'tags' ? [value.split('~')[1]] : value;
         setExtraShops(updated);
     };
-    console.log(extraShopping)
     const addProduct = () => {
         setProducts([...products, { id: products.length + 1, removeProduct: false, borderMeal: shopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: "", tags: [] }]);
     };
@@ -614,7 +604,7 @@ const AdvanceSheet = () => {
         setExtraShops([...extraShops, { id: extraShops.length + 1, removeProduct: false, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: null, tags: [] }]);
     };
     const addDeposit = () => {
-        setDeposits([...deposits, { id: deposits.length + 1, removeDeposit: false, amount: null, reason: '' }]);
+        setDeposits([...deposits, { id: deposits.length + 1, removeItem: false, borderMeal: deposit.borderMeal, amount: null, reason: '' }]);
     };
 
     const removeProduct = (productId) => {
@@ -650,14 +640,13 @@ const AdvanceSheet = () => {
 
         setExtraShops(updated);
     };
-    console.log(extraShops)
     const removeDeposit = (depositId) => {
         // const updated = products.filter((_, i) => i !== index);
         const updated = deposits.map((item, index) => {
             if (item.id === depositId) {
                 return {
                     ...item,
-                    removeDeposit: true,
+                    removeItem: true,
                 }
             } else {
                 return {
@@ -697,12 +686,12 @@ const AdvanceSheet = () => {
         e.preventDefault();
         updateMoney({
             id: deposit.id,
+            userId: currentUser?.split(' ')[1],
             year: deposit.year,
             month: deposit.month,
-            borderIndex: deposit.borderIndex,
-            money: deposits.filter(item => !item.removeDeposit).reduce((f, i) => Number(i.amount) + f, 0),
-            depositComment: deposits.filter(item => !item.removeDeposit),
-            customerId: currentUser?.split(' ')[1]
+            money: deposits.filter(item => !item.removeItem).reduce((f, i) => Number(i.amount) + f, 0),
+            depositDetails: deposits,
+            mealDay: deposit.mealDay
         });
     };
 
@@ -1248,7 +1237,7 @@ const AdvanceSheet = () => {
                                     {deposits?.map((deposit, index) => (
                                         <div
                                             key={deposit.id}
-                                            className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${deposit.removeDeposit ? 'hidden' : ''}`}
+                                            className={`bg-white border-2 border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ${deposit.removeItem ? 'hidden' : ''}`}
                                         >
                                             <div className="flex justify-between items-center mb-5">
                                                 <div className="flex items-center gap-2">
@@ -1801,7 +1790,7 @@ const AdvanceSheet = () => {
                                                                                     setDeposits(el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
                                                                                         return {
                                                                                             id: i + 1,
-                                                                                            removeDeposit: false,
+                                                                                            removeItem: false,
                                                                                             ...item
                                                                                         }
                                                                                     }))
@@ -1827,7 +1816,7 @@ const AdvanceSheet = () => {
                                                                                 {depositTooltipItems.map((item, i) => {
                                                                                     return {
                                                                                         id: i,
-                                                                                        removeDeposit: false,
+                                                                                        removeItem: false,
                                                                                         ...item
                                                                                     }
                                                                                 }).map((item, i) => {
@@ -2441,7 +2430,7 @@ const AdvanceSheet = () => {
                                                                             id: el.id,
                                                                             month: el.month,
                                                                             year: el.year,
-                                                                            deposits: el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment || []
+                                                                            deposits: el.depositDetails || []
                                                                         });
                                                                     }}
                                                                     onFocus={() => {
@@ -2450,18 +2439,20 @@ const AdvanceSheet = () => {
                                                                         setSelectDate(el.date)
                                                                         setCurrentItem(arrOfMeals.find(item => item.date === el.date))
                                                                         setDeposit({
-                                                                            id: el.id,
+                                                                            id: el.mealDay,
                                                                             month: el.month,
                                                                             year: el.year,
+                                                                            borderMeal: el.borderMealId
                                                                         });
                                                                         console.log(el)
-                                                                        setDeposits(el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
+                                                                    
+                                                                        setDeposits(el.depositDetails?.length>0?el.depositDetails.map((item, i) => {
                                                                             return {
-                                                                                id: i + 1,
-                                                                                removeDeposit: false,
+                                                                                id: item._id,
+                                                                                removeItem: false,
                                                                                 ...item
                                                                             }
-                                                                        }))
+                                                                        }):[{id:1, borderMeal: el.borderMealId, removeItem:false, amount:"", reason:""}])
                                                                     }}
                                                                     onChange={(e) => {
                                                                         if (user?.role === "user") {
@@ -2484,7 +2475,7 @@ const AdvanceSheet = () => {
                                                                     {depositTooltipItems.map((item, i) => {
                                                                         return {
                                                                             id: i,
-                                                                            removeDeposit: false,
+                                                                            removeItem: false,
                                                                             ...item
                                                                         }
                                                                     }).map((item, i) => {
