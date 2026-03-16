@@ -85,7 +85,7 @@ const AdvanceSheet = () => {
     ]);
 
     const [deposits, setDeposits] = useState([
-        { id: 1, removeItem: false, amount: null, reason: "" },
+        { id: 1, removeItem: false, amount: 0, reason: "" },
     ]);
     const [currentIndex, setCurrentIndex] = useState();
     const [id, setId] = useState("");
@@ -604,7 +604,7 @@ const AdvanceSheet = () => {
         setExtraShops([...extraShops, { id: extraShops.length + 1, removeProduct: false, removeExtraShop: false, borderMeal: extraShopping.borderMeal, type: "", productName: "", productCount: "", unitPrice: null, category: null, tags: [] }]);
     };
     const addDeposit = () => {
-        setDeposits([...deposits, { id: deposits.length + 1, removeItem: false, borderMeal: deposit.borderMeal, amount: null, reason: '' }]);
+        setDeposits([...deposits, { id: deposits.length + 1, removeItem: false, borderMeal: deposit.borderMeal, amount: 0, reason: '' }]);
     };
 
     const removeProduct = (productId) => {
@@ -1272,7 +1272,7 @@ const AdvanceSheet = () => {
                                                     </label>
                                                     <input
                                                         type="number"
-                                                        value={deposit.amount}
+                                                        value={deposit.amount==0?"":deposit.amount}
                                                         onChange={(e) =>
                                                             depositHandleChange(index, "amount", e.target.value)
                                                         }
@@ -2452,7 +2452,7 @@ const AdvanceSheet = () => {
                                                                                 removeItem: false,
                                                                                 ...item
                                                                             }
-                                                                        }):[{id:1, borderMeal: el.borderMealId, removeItem:false, amount:"", reason:""}])
+                                                                        }):[{id:1, borderMeal: el.borderMealId, removeItem:false, amount:0, reason:""}])
                                                                     }}
                                                                     onChange={(e) => {
                                                                         if (user?.role === "user") {
