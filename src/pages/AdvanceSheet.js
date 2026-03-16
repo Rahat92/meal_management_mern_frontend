@@ -341,12 +341,12 @@ const AdvanceSheet = () => {
     useEffect(() => {
         // updateMeal({data:needUpdateObj,id})
     }, [needUpdateObj]);
-    useEffect(() => {
-        if (isSuccess) {
-            setIsChanged(false);
-            setUpdatedArrOfMeals([]);
-        }
-    }, [isSuccess]);
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         setIsChanged(false);
+    //         setUpdatedArrOfMeals([]);
+    //     }
+    // }, [isSuccess]);
 
     useEffect(() => {
         if (updateLunchLoading) {
@@ -357,22 +357,22 @@ const AdvanceSheet = () => {
             setUpdatedArrOfMeals([]);
         }
     }, [updateLunchSuccess, updateLunchLoading])
-    useEffect(() => {
-        if (updateDinnerLoading) {
-            setIsChanged(true)
-        }
-        if (updateBreakfastLoading) {
-            setIsChanged(true)
-        }
-        if (updateDinnerSuccess) {
-            setIsChanged(false)
-            setUpdatedArrOfMeals([]);
-        }
-        if (updateBreakfastSuccess) {
-            setIsChanged(false)
-            setUpdatedArrOfMeals([]);
-        }
-    }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
+    // useEffect(() => {
+    //     if (updateDinnerLoading) {
+    //         setIsChanged(true)
+    //     }
+    //     if (updateBreakfastLoading) {
+    //         setIsChanged(true)
+    //     }
+    //     if (updateDinnerSuccess) {
+    //         setIsChanged(false)
+    //         setUpdatedArrOfMeals([]);
+    //     }
+    //     if (updateBreakfastSuccess) {
+    //         setIsChanged(false)
+    //         setUpdatedArrOfMeals([]);
+    //     }
+    // }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
 
     useEffect(() => {
         if (monthlyMeals?.monthlyMeals?.length > 0 && advanceSheet?.data?.length > 0) {
@@ -437,26 +437,26 @@ const AdvanceSheet = () => {
         }
     }, [monthlyMeals?.monthlyMeals, advanceSheet?.data]);
     // submain branch
-    useEffect(() => {
-        if (prevArrOfMeals?.length > 0) {
-            const changedArr = arrOfMeals.filter((item, i) => {
-                if (
-                    JSON.stringify(item.breakfast) !==
-                    JSON.stringify(prevArrOfMeals[i].breakfast) ||
-                    JSON.stringify(item.launch) !==
-                    JSON.stringify(prevArrOfMeals[i].launch) ||
-                    JSON.stringify(item.dinner) !==
-                    JSON.stringify(prevArrOfMeals[i].dinner)
-                ) {
-                    return true;
-                }
-            });
-            setUpdatedArrOfMeals([...changedArr]);
-            if (changedArr.length > 0) {
-                setIsChanged(true);
-            }
-        }
-    }, [prevArrOfMeals, arrOfMeals]);
+        // useEffect(() => {
+        //     if (prevArrOfMeals?.length > 0) {
+        //         const changedArr = arrOfMeals.filter((item, i) => {
+        //             if (
+        //                 JSON.stringify(item.breakfast) !==
+        //                 JSON.stringify(prevArrOfMeals[i].breakfast) ||
+        //                 JSON.stringify(item.launch) !==
+        //                 JSON.stringify(prevArrOfMeals[i].launch) ||
+        //                 JSON.stringify(item.dinner) !==
+        //                 JSON.stringify(prevArrOfMeals[i].dinner)
+        //             ) {
+        //                 return true;
+        //             }
+        //         });
+        //         setUpdatedArrOfMeals([...changedArr]);
+        //         if (changedArr.length > 0) {
+        //             setIsChanged(true);
+        //         }
+        //     }
+        // }, [prevArrOfMeals, arrOfMeals]);
 
     useEffect(() => {
         let totalBorderDeposite = 0;
@@ -2454,6 +2454,7 @@ const AdvanceSheet = () => {
                                                                             month: el.month,
                                                                             year: el.year,
                                                                         });
+                                                                        console.log(el)
                                                                         setDeposits(el.depositComment.find(comment => comment.user === currentUser?.split(' ')[1])?.depositComment?.comment?.map((item, i) => {
                                                                             return {
                                                                                 id: i + 1,
