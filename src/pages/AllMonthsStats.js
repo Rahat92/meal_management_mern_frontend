@@ -29,6 +29,35 @@ const AllMonthsStats = () => {
     month: month,
     day: day,
   });
+  const [overAllCurrentMeal, setOverAllCurrentMeal] = useState(0);
+  const [overAllDeposite, setOverAllDeposite] = useState(0);
+  const [overAllExpense, setOverAllExpense] = useState(0);
+  const [overAllExtraExpense, setOverAllExtraExpense] = useState(0);
+  const [overAllMealExpense, setOverAllMealExpense] = useState(0);
+  const [mealRate, setMealRate] = useState(0);
+  const [overAllMeal, setOverAllMeal] = useState(0);
+  useEffect(() => {
+    if (getMonthlyMealStats?.data?.length > 0) {
+      let totalMeal = 0;
+      getMonthlyMealStats.data.forEach((item) => {
+        item.meals?.filter(item => item.day <= 15).forEach((meal) => {
+          totalMeal += meal.breakfast + meal.lunch + meal.dinner;
+        });
+      });
+      setOverAllCurrentMeal(getMonthlyMealStats.dailyTotals.filter(item => item.day <= 15).reduce((f, c) => f + c.totalBreakfast + c.totalLunch + c.totalDinner, 0))
+      setOverAllDeposite(getMonthlyMealStats.dailyTotals.filter(item => item.day <= day).reduce((f, c) => f + c.deposit, 0))
+      setOverAllMealExpense(getMonthlyMealStats.dailyTotals.filter(item => item.day <= day).reduce((f, c) => f + c.mealExpense, 0))
+      setOverAllExpense(getMonthlyMealStats.dailyTotals.filter(item => item.day <= day).reduce((f, c) => f + c.overAllExpense, 0))
+      setOverAllExtraExpense(getMonthlyMealStats.dailyTotals.reduce((f, c) => f + c.extraExpense, 0))
+      setOverAllMeal(getMonthlyMealStats.dailyTotals.filter(item => item.day <= day).reduce((f, c) => f + c.totalBreakfast + c.totalLunch + c.totalDinner, 0))
+    }
+  }, [getMonthlyMealStats?.data?.length, day])
+  console.log(overAllExtraExpense)
+  useEffect(() => {
+    if (overAllMeal > 0 && overAllMealExpense > 0) {
+      setMealRate((overAllMealExpense / overAllMeal).toFixed(2))
+    }
+  }, [overAllMeal, overAllMealExpense])
   const { data: monthlyMeals, isLoading: isMealsLoading } =
     useGetMonthlyMealsQuery(
       { getMonth: month, getYear: 2026 },
@@ -302,7 +331,7 @@ const AllMonthsStats = () => {
         </div>{" "}
       </div>
 
-      {getMonthlyMealStats?.stats?.length > 0 && (
+      {getMonthlyMealStats?.data?.length > 0 && (
         <div
           ref={mainBodyRef}
           className="border shadow-lg w-full md:w-full h-[300px] overflow-auto relative"
@@ -354,40 +383,15 @@ const AllMonthsStats = () => {
                         className="sticky top-[50%] transform block w-[80px]"
                         style={{ backfaceVisibility: "hidden" }}
                       >
-                        {/* {el.month.split(" ")[0] === "0"
-                            ? "January"
-                            : el.month.split(" ")[0] === "1"
-                              ? "February"
-                              : el.month.split(" ")[0] === "2"
-                                ? "March"
-                                : el.month.split(" ")[0] === "3"
-                                  ? "April"
-                                  : el.month.split(" ")[0] === "4"
-                                    ? "May"
-                                    : el.month.split(" ")[0] === "5"
-                                      ? "June"
-                                      : el.month.split(" ")[0] === "6"
-                                        ? "July"
-                                        : el.month.split(" ")[0] === "7"
-                                          ? "August"
-                                          : el.month.split(" ")[0] === "8"
-                                            ? "September"
-                                            : el.month.split(" ")[0] === "9"
-                                              ? "Octobor"
-                                              : el.month.split(" ")[0] === "10"
-                                                ? "November"
-                                                : el.month.split(" ")[0] === "11"
-                                                  ? "December"
-                                                  : ""}{" "} */}
                         <br />
-                        {''}
+                        {getMonthlyMealStats?.yearMonth}
                       </th>
                       <th className="sticky left-[-2px] bg-white z-50 shadow-md border-r-2">
                         <table className="w-full">
                           <tr>
                             <th className="w-full border-l-2 border-r-2">
                               <table className="w-full">
-                                {getMonthlyMealStats.stats.map((item) => {
+                                {getMonthlyMealStats?.data?.map((item) => {
                                   return (
                                     <tr onClick={() => {
                                       setSelectBorder(item.userId)
@@ -404,10 +408,10 @@ const AllMonthsStats = () => {
                       </th>
                       <th className="border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className="py-2">{item.totalBreakfast}</td>
+                                <td className="py-2">{item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + c.breakfast, 0)}</td>
                               </tr>
                             );
                           })}
@@ -415,10 +419,10 @@ const AllMonthsStats = () => {
                       </th>
                       <th className="border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className={`py-2`}>{item.totalLaunch}</td>
+                                <td className={`py-2`}>{item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + c.lunch, 0)}</td>
                               </tr>
                             );
                           })}
@@ -426,10 +430,10 @@ const AllMonthsStats = () => {
                       </th>
                       <th className="border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className="py-2">{item.totalDinner}</td>
+                                <td className="py-2">{item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + c.dinner, 0)}</td>
                               </tr>
                             );
                           })}
@@ -437,60 +441,53 @@ const AllMonthsStats = () => {
                       </th>
                       <th className="border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className="py-2">{item.totalBreakfast + item.totalLaunch + item.totalDinner}</td>
+                                <td className="py-2">{item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + c.breakfast, 0) + item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + c.lunch, 0) + item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + c.dinner, 0)}</td>
                               </tr>
                             );
                           })}
                         </table>
                       </th>
                       <th className="block sticky top-[50%] transform">
-                        {getMonthlyMealStats.stats.reduce((f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner), 0)}
+                        {overAllMeal}
                       </th>
                       <th className="border-l-2 border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className="py-2">{item.totalShop}</td>
+                                <td className="py-2">{item.meals.filter(item => item.day <= day).reduce((f, c) => f + c.expense, 0)}</td>
                               </tr>
                             );
                           })}
                         </table>
                       </th>
                       <th className="block sticky top-[50%] transform bg-red-500 text-gray-800 font-bold text-3xl rounded px-2">
-                        {((getMonthlyMealStats.stats.reduce(
-                          (f, c) => f + (c.totalShop),
-                          0
-                        )) / (getMonthlyMealStats.stats.reduce(
-                          (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
-                          0
-                        ))).toFixed(2)}
+                        {mealRate}
                       </th>
                       <th className="border-r-2 border-l-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className="py-2">
-                                  {item.totalExtraShop}
-                                </td>
+                                <td className="py-2">{item.meals.filter(item => item.day <= day).reduce((f, c) => f + c.exExpense, 0)}</td>
+
                               </tr>
                             );
                           })}
                         </table>
                       </th>
                       <th className="block sticky top-[50%] transform">
-                        {getMonthlyMealStats.stats.reduce((f, c) => f + c.totalExtraShop+c.totalShop, 0)}
+                        {overAllExpense}
                       </th>
                       <th className="border-r-2 border-l-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className="py-2">{item.totalMoney}</td>
+                                <td className="py-2">{item.meals.filter(item => item.day <= day).reduce((f, c) => f + c.deposit, 0)}</td>
                               </tr>
                             );
                           })}
@@ -498,17 +495,11 @@ const AllMonthsStats = () => {
                       </th>
                       <th className="border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
                                 <td className="py-2">
-                                  {((((getMonthlyMealStats.stats.reduce(
-                                    (f, c) => f + (c.totalShop),
-                                    0
-                                  )) / (getMonthlyMealStats.stats.reduce(
-                                    (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
-                                    0
-                                  ))).toFixed(2))*(item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)}
+                                  {(item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + ((mealRate * (c.breakfast + c.lunch + c.dinner))), 0) + (overAllExtraExpense / getMonthlyMealStats.totalUsers)).toFixed(2)}
                                 </td>
                               </tr>
                             );
@@ -517,23 +508,17 @@ const AllMonthsStats = () => {
                       </th>
                       <th className="border-r-2">
                         <table className="w-full">
-                          {getMonthlyMealStats.stats.map((item) => {
+                          {getMonthlyMealStats?.data?.map((item) => {
                             return (
                               <tr className={`${user.role === 'superadmin' && item.border_id === selectBorder ? 'bg-green-500' : ''} ${item.border_id === user?._id ? 'bg-green-500 text-white' : ''}`}>
-                                <td className={`py-2 ${(item.totalMoney-((((getMonthlyMealStats.stats.reduce(
-                                    (f, c) => f + (c.totalShop),
-                                    0
-                                  )) / (getMonthlyMealStats.stats.reduce(
-                                    (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
-                                    0
-                                  ))).toFixed(2))*(item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)).toFixed(2)<0?'text-red-500':'text-green-500'}`}>
-                                  {(item.totalMoney-((((getMonthlyMealStats.stats.reduce(
-                                    (f, c) => f + (c.totalShop),
-                                    0
-                                  )) / (getMonthlyMealStats.stats.reduce(
-                                    (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
-                                    0
-                                  ))).toFixed(2))*(item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)).toFixed(2)}
+                                <td className={`py-2 ${(item.totalMoney - ((((getMonthlyMealStats?.data?.reduce(
+                                  (f, c) => f + (c.totalShop),
+                                  0
+                                )) / (getMonthlyMealStats?.data?.reduce(
+                                  (f, c) => f + (c.totalBreakfast + c.totalLaunch + c.totalDinner),
+                                  0
+                                ))).toFixed(2)) * (item.totalBreakfast + item.totalLaunch + item.totalDinner)).toFixed(2)).toFixed(2) < 0 ? 'text-red-500' : 'text-green-500'}`}>
+                                  {(item.totalDeposit - (item.meals.filter((meal) => meal.day <= day).reduce((f, c) => f + ((mealRate * (c.breakfast + c.lunch + c.dinner))), 0) + (overAllExtraExpense / getMonthlyMealStats.totalUsers))).toFixed(2)}
                                 </td>
                               </tr>
                             );
@@ -541,11 +526,11 @@ const AllMonthsStats = () => {
                         </table>
                       </th>
                       <th className="block sticky top-[50%] transform">
-                        {getMonthlyMealStats.stats.reduce((f,c) => f+c.totalMoney, 0)}
+                        {overAllDeposite}
                       </th>
                       <th className="border-l-2"></th>
                       <th className="block sticky top-[50%] transform">
-                        {(getMonthlyMealStats.stats.reduce((f,c) => f+c.totalMoney, 0))-getMonthlyMealStats.stats.reduce((f,c) => f+(c.totalShop+c.totalExtraShop), 0)}
+                        {(overAllDeposite - (overAllExpense)).toFixed(2)}
                       </th>
                     </tr>
                   </tbody>
