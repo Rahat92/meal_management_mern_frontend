@@ -912,7 +912,7 @@ const AllMonthsStats = () => {
                     ].map((h) => (
                       <th
                         key={h}
-                        className={`${h==='Name'?'sticky left-0 top-0 bg-white border-r-2 z-[21]':''} sticky top-0 z-10 px-3 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 border-b border-gray-200 whitespace-nowrap`}
+                        className={`${h==='Name'?'sticky left-0 top-0 border-r border-gray-200 bg-white z-[21]':''} z-10 px-3 py-2.5 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 border-b border-gray-200 whitespace-nowrap`}
                       >
                         {h}
                       </th>

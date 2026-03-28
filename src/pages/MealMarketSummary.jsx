@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { locationPathChanged } from '../features/locationPath';
 
 export default function MealExpenseSummary() {
+    const [totalExpense, setTotalExpense] = useState(0)
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(locationPathChanged(window.location.pathname));
-      }, []);
+    }, []);
     const [skip, setSkip] = useState(true);
 
     const { user } = useSelector((state) => state.auth);
@@ -20,64 +21,74 @@ export default function MealExpenseSummary() {
             setSkip(true);
         }
     }, [user]);
+
     const managerId = user?.role === 'admin' ? user?._id : user?.manager._id;
     console.log(managerId)
-    const { data: marketingData, isLoading, isError } = useMarketingSummaryWithCategoryQuery(managerId, { skip: skip })
+    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery(managerId, { skip: skip })
     const expenseData = marketingData?.data || [];
 
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedUser, setSelectedUser] = useState('all');
     const [selectedTag, setSelectedTag] = useState('all');
-
+    const [totalTransactions, setTotalTransactions] = useState(0);
+    useEffect(() => {
+        if (marketingDataLoadSuccess) {
+            setTotalExpense(marketingData.data.summary[0].totalExpense)
+            setTotalTransactions(marketingData.data.summary[0].totalTransactions)
+        }
+    }, [marketingDataLoadSuccess])
     const summary = useMemo(() => {
         let filteredData = expenseData;
         if (selectedCategory !== 'all') {
-            filteredData = filteredData.filter(item =>
+            filteredData = filteredData.categorySummary.filter(item =>
                 item.category.categoryId === selectedCategory || (!item.category.categoryId && selectedCategory === 'uncategorized')
             );
         }
-
         if (selectedUser !== 'all') {
             filteredData = filteredData.filter(item => item.user.userId === selectedUser);
         }
         console.log(filteredData)
-        if(selectedTag !== 'all') {
+        if (selectedTag !== 'all') {
             filteredData = filteredData.filter(item => item.tags && JSON.stringify(item.tags).includes(selectedTag));
             console.log(filteredData)
         }
 
-        const totalExpense = filteredData.reduce((sum, item) => sum + item.unitPrice, 0);
+        console.log(expenseData)
+        const totalExpense = expenseData;
+        console.log(totalExpense)
         const totalItems = filteredData.length;
 
         const byCategory = {};
         const byUser = {};
         const byTag = {};
-        filteredData.forEach(item => {
-            const category = item.category.categoryName || 'Uncategorized';
-            const user = item.user.userName;
-            const tagList = item.tags || [];
+        // filteredData.forEach(item => {
+        //     const category = item.category.categoryName || 'Uncategorized';
+        //     const user = item.user.userName;
+        //     const tagList = item.tags || [];
 
-            byCategory[category] = (byCategory[category] || 0) + item.unitPrice;
-            byUser[user] = (byUser[user] || 0) + item.unitPrice;
-            tagList.forEach(tag => {
-                console.log(tag)
-                byTag[tag.tagName] = (byTag[tag.tagName] || 0) + item.unitPrice;
-            });
-        });
+        //     byCategory[category] = (byCategory[category] || 0) + item.unitPrice;
+        //     byUser[user] = (byUser[user] || 0) + item.unitPrice;
+        //     tagList.forEach(tag => {
+        //         console.log(tag)
+        //         byTag[tag.tagName] = (byTag[tag.tagName] || 0) + item.unitPrice;
+        //     });
+        // });
 
-        return { totalExpense, totalItems, byCategory, byUser, byTag, filteredData };
+        return { totalExpense: 0, totalItems: 0, byCategory, byUser, byTag, filteredData };
     }, [selectedCategory, selectedUser, selectedTag, expenseData]);
-    console.log(summary)
-    const categories = [...new Set(expenseData.map(item => ({
-        id: item.category.categoryId || 'uncategorized',
-        name: item.category.categoryName || 'Uncategorized'
+
+
+    console.log(totalExpense)
+    const categories = [...new Set(expenseData?.categorySummary?.map(item => ({
+        id: item.categoryId || 'uncategorized',
+        name: item.name || 'Uncategorized'
     })).map(c => JSON.stringify(c)))].map(c => JSON.parse(c));
 
-    const users = [...new Set(expenseData.map(item => ({
-        id: item.user.userId,
-        name: item.user.userName
+    const users = [...new Set(expenseData?.userSummary?.map(item => ({
+        id: item.userId,
+        name: item.name
     })).map(u => JSON.stringify(u)))].map(u => JSON.parse(u));
-    let tags = [...new Set(expenseData.map(item => item.tags).flat())].filter(Boolean);
+    let tags = [...new Set(expenseData?.tagSummary?.map(item => item).flat())].filter(Boolean);
     // Remove duplicate tags based on tagId
     const uniqueTagsMap = {};
     tags.forEach(tag => {
@@ -150,7 +161,7 @@ export default function MealExpenseSummary() {
                             <TrendingUp className="w-6 h-6 opacity-80" />
                         </div>
                         <h3 className="text-sm font-medium opacity-90 mb-1">Total Expenses</h3>
-                        <p className="text-4xl font-bold">৳{summary.totalExpense.toLocaleString()}</p>
+                        <p className="text-4xl font-bold">৳{totalExpense}</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-xl p-6 text-white">
@@ -161,7 +172,7 @@ export default function MealExpenseSummary() {
                             <Calendar className="w-6 h-6 opacity-80" />
                         </div>
                         <h3 className="text-sm font-medium opacity-90 mb-1">Total Transactions</h3>
-                        <p className="text-4xl font-bold">{summary.totalItems}</p>
+                        <p className="text-4xl font-bold">{totalTransactions}</p>
                     </div>
                 </div>
 
@@ -172,13 +183,13 @@ export default function MealExpenseSummary() {
                         <h2 className="text-xl font-bold text-slate-800">Expenses by Category</h2>
                     </div>
                     <div className="space-y-3">
-                        {Object.entries(summary.byCategory).map(([category, amount]) => {
-                            const percentage = (amount / summary.totalExpense) * 100;
+                        {marketingData?.data?.categorySummary?.map(({ total, name, categoryId }) => {
+                            const percentage = (total / totalExpense) * 100;
                             return (
-                                <div key={category} className="space-y-2">
+                                <div key={categoryId} className="space-y-2">
                                     <div className="flex justify-between items-center">
-                                        <span className="text-slate-700 font-medium">{category}</span>
-                                        <span className="text-slate-900 font-semibold">৳{amount.toLocaleString()}</span>
+                                        <span className="text-slate-700 font-medium">{name}</span>
+                                        <span className="text-slate-900 font-semibold">৳{total.toLocaleString()}</span>
                                     </div>
                                     <div className="w-full bg-slate-200 rounded-full h-2.5">
                                         <div
@@ -199,16 +210,16 @@ export default function MealExpenseSummary() {
                         <h2 className="text-xl font-bold text-slate-800">Expenses by User</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {Object.entries(summary.byUser).map(([user, amount]) => (
-                            <div key={user} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
+                        {marketingData?.data?.userSummary?.map(({ name, total, userId }) => (
+                            <div key={userId} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center">
                                         <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                            {user.charAt(0)}
+                                            {name.charAt(0)}
                                         </div>
-                                        <span className="font-semibold text-slate-800">{user}</span>
+                                        <span className="font-semibold text-slate-800">{name}</span>
                                     </div>
-                                    <span className="text-lg font-bold text-purple-600">৳{amount.toLocaleString()}</span>
+                                    <span className="text-lg font-bold text-purple-600">৳{total.toLocaleString()}</span>
                                 </div>
                             </div>
                         ))}
@@ -220,16 +231,17 @@ export default function MealExpenseSummary() {
                         <h2 className="text-xl font-bold text-slate-800">Expenses by Tag</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {Object.entries(summary.byTag).map(([tag, amount]) => (
-                            <div key={tag} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
+                        {console.log(marketingData?.data?.tagSummary)}
+                        {marketingData?.data?.tagSummary?.map(({ tagName, tagId, total }) => (
+                            <div key={tagId} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center">
                                         <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                            {tag.charAt(0)}
+                                            {tagName.charAt(0)}
                                         </div>
-                                        <span className="font-semibold text-slate-800">{tag}</span>
+                                        <span className="font-semibold text-slate-800">{tagName}</span>
                                     </div>
-                                    <span className="text-lg font-bold text-purple-600">৳{amount.toLocaleString()}</span>
+                                    <span className="text-lg font-bold text-purple-600">৳{total.toLocaleString()}</span>
                                 </div>
                             </div>
                         ))}
@@ -251,19 +263,22 @@ export default function MealExpenseSummary() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {summary.filteredData.map((item, index) => (
-                                    <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                                        <td className="py-3 px-4 text-sm text-slate-600">{item.mealDate}</td>
-                                        <td className="py-3 px-4 text-sm text-slate-800 font-medium">{item.productName}</td>
-                                        <td className="py-3 px-4 text-sm">
-                                            <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
-                                                {item.category.categoryName || 'N/A'}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-4 text-sm text-slate-700">{item.user.userName}</td>
-                                        <td className="py-3 px-4 text-sm text-right font-semibold text-slate-900">৳{item?.unitPrice?.toLocaleString()}</td>
-                                    </tr>
-                                ))}
+                                {marketingData?.data?.recent?.map(({ date, product, category, amount, user },index) => {
+                                    console.log(product)
+                                    return (
+                                        <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                                            <td className="py-3 px-4 text-sm text-slate-600">{date}</td>
+                                            <td className="py-3 px-4 text-sm text-slate-800 font-medium">{product}</td>
+                                            <td className="py-3 px-4 text-sm">
+                                                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                                                    {category || 'N/A'}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-4 text-sm text-slate-700">{user}</td>
+                                            <td className="py-3 px-4 text-sm text-right font-semibold text-slate-900">৳{amount}</td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -272,4 +287,3 @@ export default function MealExpenseSummary() {
         </div>
     );
 }
-
