@@ -1,16 +1,21 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { locationPathChanged } from "../features/locationPath";
 import { useDeleteYearMonthMutation, useGetYearMonthQuery } from "../features/bikri/bikriApi";
 import AddSheetModal from "../components/AddSheetModal";
 import { Button } from "../components/TailwindStyledComponent/Button";
 
 const MealSheets = () => {
-  const { data: yearMonths } = useGetYearMonthQuery();
+  const { user } = useSelector((state) => state.auth);
+  console.log(user)
+  const { data: yearMonths } = useGetYearMonthQuery(user?._id, {
+    skip: !user?._id,
+  });
+  console.log(yearMonths)
   const [deleteYearMonth, { isSuccess }] = useDeleteYearMonthMutation();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = React.useState(false);
-  
+
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
   }, []);
@@ -124,7 +129,7 @@ const MealSheets = () => {
           }
         }
       `}</style>
-      
+
       <div className="meal-sheets-container max-w-5xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
@@ -139,9 +144,9 @@ const MealSheets = () => {
 
         {/* Add Sheet Button */}
         <div className="add-btn-wrapper flex justify-center mb-8">
-          <Button 
-            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300" 
-            $primary={true} 
+          <Button
+            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            $primary={true}
             onClick={() => setShowModal(true)}
           >
             <span className="flex items-center gap-2">
@@ -167,9 +172,9 @@ const MealSheets = () => {
 
           {/* Table Body */}
           <div className="divide-y divide-slate-100">
-            {yearMonths?.yearMonth?.length > 0 ? (
-              yearMonths.yearMonth.map((yearMonth, index) => (
-                <div 
+            {yearMonths?.result?.length > 0 ? (
+              yearMonths.result.map((month, index) => (
+                <div
                   key={index}
                   className="table-row grid grid-cols-2 gap-4 px-6 py-4 items-center"
                 >
@@ -181,28 +186,28 @@ const MealSheets = () => {
                     </div>
                     <div>
                       <div className="text-slate-800 font-semibold text-lg">
-                        {getMonthName(yearMonth?.month)} {yearMonth?.year}
+                        {getMonthName(month?.month)} {month?.year}
                       </div>
                       <div className="text-slate-400 text-sm">
                         Meal planning period
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-center">
                     <button
                       onClick={() => {
                         const isConfirm = window.confirm('Are you sure you want to delete this month completely?');
                         if (isConfirm) {
-                          deleteYearMonth(yearMonth);
+                          deleteYearMonth(month);
                         }
                       }}
                       className="delete-btn p-3 rounded-xl bg-red-50 hover:bg-red-100 transition-colors duration-300 relative"
                       title="Delete this month"
                     >
-                      <svg 
-                        className="w-6 h-6 text-red-500 relative z-10" 
-                        fill="currentColor" 
+                      <svg
+                        className="w-6 h-6 text-red-500 relative z-10"
+                        fill="currentColor"
                         viewBox="0 0 48 48"
                       >
                         <path d="M 20.5 4 A 1.50015 1.50015 0 0 0 19.066406 6 L 14.640625 6 C 12.796625 6 11.086453 6.9162188 10.064453 8.4492188 L 7.6972656 12 L 7.5 12 A 1.50015 1.50015 0 1 0 7.5 15 L 40.5 15 A 1.50015 1.50015 0 1 0 40.5 12 L 40.302734 12 L 37.935547 8.4492188 C 36.913547 6.9162187 35.202375 6 33.359375 6 L 28.933594 6 A 1.50015 1.50015 0 0 0 27.5 4 L 20.5 4 z M 8.9726562 18 L 11.125 38.085938 C 11.425 40.887937 13.77575 43 16.59375 43 L 31.40625 43 C 34.22325 43 36.574 40.887938 36.875 38.085938 L 39.027344 18 L 8.9726562 18 z"></path>

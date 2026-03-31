@@ -22,7 +22,7 @@ const FilterBox = ({
       const arr = yearMonth?.yearMonth?.filter((el) => el.month !== todayMonth);
       setYearMonthArr(arr);
     }
-  }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
+  }, [yearMonth?.result.length, todayMonth, todayYear]);
   return (
     <div className={`max-w-[1200px] mx-auto flex justify-between items-center h-[10vh]`}>
       <form className={filterBoxStyle.filterDate}>

@@ -398,8 +398,8 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     getYearMonth: builder.query({
       // query: () => `/year-month`,
-      query: () => ({
-        url: `/api/v1/year-month`,
+      query: (mealManager) => ({
+        url: `/api/v2/year-months?managerId=${mealManager || null}`,
         headers: {
           authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
             }`,

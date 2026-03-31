@@ -108,7 +108,7 @@ const NewMeal = () => {
     const todayMonth = new Date().getMonth();
     const todayYear = new Date().getFullYear();
     const todayDate = new Date().getDate();
-    const { data: yearMonth } = useGetYearMonthQuery();
+    const { data: yearMonth } = useGetYearMonthQuery(user?._id);
     const [updateLunch, { isLoading: updateLunchLoading, isSuccess: updateLunchSuccess, isError: isUpdateLunchError, error: updateLunchError }] = useUpdateLunchMutation()
     const [updateDinner, { isLoading: updateDinnerLoading, isSuccess: updateDinnerSuccess, isError: isUpdateDinnerError, error: updateDinnerError }] = useUpdateDinnerMutation()
     const [updateBreakfast, { isSuccess: updateBreakfastSuccess, isLoading: updateBreakfastLoading }] = useUpdateBreakfastMutation()

@@ -56,12 +56,10 @@ const AdvanceSheet = () => {
     const headRef = useRef();
     const tableBodyRef = useRef();
     const dateRef = useRef();
-    const nameRef = useRef();
     const [arrOfMeals, setArrOfMeals] = useState([]);
     const [nowScroll, setNowScroll] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({});
     const [currentExtraShop, setCurrentExtraShop] = useState({});
-    console.log(currentExtraShop)
     const [currentDeposit, setCurrentDeposit] = useState({});
     const [item, setItem] = useState({});
     const [borderTotalDeposite, setBorderTotalDeposite] = useState(0);
@@ -119,7 +117,9 @@ const AdvanceSheet = () => {
     const todayMonth = new Date().getMonth();
     const todayYear = new Date().getFullYear();
     const todayDate = new Date().getDate();
-    const { data: yearMonth } = useGetYearMonthQuery();
+    const { data: yearMonths } = useGetYearMonthQuery(user?._id, {
+        skip: !user?._id,
+    });
     const [updateLunch, { isLoading: updateLunchLoading, isSuccess: updateLunchSuccess, isError: isUpdateLunchError, error: updateLunchError }] = useUpdateLunchMutation()
     const [updateDinner, { isLoading: updateDinnerLoading, isSuccess: updateDinnerSuccess, isError: isUpdateDinnerError, error: updateDinnerError }] = useUpdateDinnerMutation()
     const [updateBreakfast, { isSuccess: updateBreakfastSuccess, isLoading: updateBreakfastLoading }] = useUpdateBreakfastMutation()
@@ -263,7 +263,7 @@ const AdvanceSheet = () => {
         dispatch(locationPathChanged(window.location.pathname));
     }, []);
     useEffect(() => {
-    }, [yearMonth?.yearMonth]);
+    }, [yearMonths?.result]);
     let year = 2026;
     let month = 11;
     const currentDay = new Date().getDate();
@@ -1272,7 +1272,7 @@ const AdvanceSheet = () => {
                                                     </label>
                                                     <input
                                                         type="number"
-                                                        value={deposit.amount==0?"":deposit.amount}
+                                                        value={deposit.amount == 0 ? "" : deposit.amount}
                                                         onChange={(e) =>
                                                             depositHandleChange(index, "amount", e.target.value)
                                                         }
@@ -1360,7 +1360,7 @@ const AdvanceSheet = () => {
                 setGetMonth={setGetMonth}
                 setGetYear={setGetYear}
                 style={style}
-                yearMonth={yearMonth}
+                yearMonth={yearMonths}
                 registeredUsers={registeredUsers}
                 setCurrentIndex={setCurrentIndex}
                 setCurrentUser={setCurrentUser}
@@ -2445,14 +2445,14 @@ const AdvanceSheet = () => {
                                                                             borderMeal: el.borderMealId
                                                                         });
                                                                         console.log(el)
-                                                                    
-                                                                        setDeposits(el.depositDetails?.length>0?el.depositDetails.map((item, i) => {
+
+                                                                        setDeposits(el.depositDetails?.length > 0 ? el.depositDetails.map((item, i) => {
                                                                             return {
                                                                                 id: item._id,
                                                                                 removeItem: false,
                                                                                 ...item
                                                                             }
-                                                                        }):[{id:1, borderMeal: el.borderMealId, removeItem:false, amount:0, reason:""}])
+                                                                        }) : [{ id: 1, borderMeal: el.borderMealId, removeItem: false, amount: 0, reason: "" }])
                                                                     }}
                                                                     onChange={(e) => {
                                                                         if (user?.role === "user") {
