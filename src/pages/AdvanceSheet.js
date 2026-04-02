@@ -44,7 +44,7 @@ const AdvanceSheet = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const { data: pCategories } = useGetProductCategoriesQuery();
     console.log(pCategories)
-    const { data: advanceSheet } = useGetAdvanceSheetQuery('69a059226ca3adea43a135b6')
+    const { data: advanceSheet } = useGetAdvanceSheetQuery({mealManager: "699864e1690f1dc9fdfffeff", month: 2, year: 2026}, { skip: false });
     const { data: tags } = useGetTagsQuery();
     useEffect(() => {
         if (selectedCategory) {

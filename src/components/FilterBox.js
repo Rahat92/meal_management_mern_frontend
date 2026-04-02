@@ -15,11 +15,11 @@ const FilterBox = ({
   saveUpdate,
   isLoading,
 }) => {
-  
+  console.log(yearMonth)
   const [yearMonthArr, setYearMonthArr] = useState([]);
   useEffect(() => {
-    if (todayMonth && todayYear && yearMonth?.yearMonth?.length > 0) {
-      const arr = yearMonth?.yearMonth?.filter((el) => el.month !== todayMonth);
+    if (todayMonth && todayYear && yearMonth?.result?.length > 0) {
+      const arr = yearMonth?.result?.filter((el) => el.month !== todayMonth);
       setYearMonthArr(arr);
     }
   }, [yearMonth?.result.length, todayMonth, todayYear]);
@@ -63,7 +63,7 @@ const FilterBox = ({
             {todayYear}
           </option>
 
-          {yearMonth?.yearMonth
+          {yearMonth?.result
             ?.filter(
               (el) => `${el.month}+${el.year}` !== `${todayMonth}+${todayYear}`
             )
@@ -73,29 +73,29 @@ const FilterBox = ({
                   style={{ padding: "10px" }}
                   value={el.month + " " + el.year}
                 >
-                  {el.month === 0
+                  {el.month === 1
                     ? "January"
-                    : el.month === 1
-                    ? "February"
                     : el.month === 2
-                    ? "March"
+                    ? "February"
                     : el.month === 3
-                    ? "April"
+                    ? "March"
                     : el.month === 4
-                    ? "May"
+                    ? "April"
                     : el.month === 5
-                    ? "June"
+                    ? "May"
                     : el.month === 6
-                    ? "July"
+                    ? "June"
                     : el.month === 7
-                    ? "August"
+                    ? "July"
                     : el.month === 8
-                    ? "September"
+                    ? "August"
                     : el.month === 9
-                    ? "October"
+                    ? "September"
                     : el.month === 10
-                    ? "November"
+                    ? "October"
                     : el.month === 11
+                    ? "November"
+                    : el.month === 12
                     ? "December"
                     : ""}{" "}
                   {el.year}
