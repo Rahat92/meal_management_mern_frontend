@@ -44,7 +44,6 @@ const AdvanceSheet = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const { data: pCategories } = useGetProductCategoriesQuery();
     console.log(pCategories)
-    const { data: advanceSheet } = useGetAdvanceSheetQuery({mealManager: "699864e1690f1dc9fdfffeff", month: 2, year: 2026}, { skip: false });
     const { data: tags } = useGetTagsQuery();
     useEffect(() => {
         if (selectedCategory) {
@@ -53,6 +52,7 @@ const AdvanceSheet = () => {
     }, [selectedCategory])
     const [value, setValue] = useState("");
     const { user } = useSelector((state) => state.auth);
+    const { data: advanceSheet } = useGetAdvanceSheetQuery({ mealManager: user?._id, month: 2, year: 2026 }, { skip: !user?._id });
     const headRef = useRef();
     const tableBodyRef = useRef();
     const dateRef = useRef();
