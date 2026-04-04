@@ -5,7 +5,7 @@ const bikriApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createMeal: builder.mutation({
       query: (data) => ({
-        url: `/api/v1/meal`,
+        url: `/api/v2/advance-meal-sheet`,
         method: "POST",
         body: data,
         headers: {

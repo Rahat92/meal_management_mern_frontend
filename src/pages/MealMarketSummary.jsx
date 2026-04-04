@@ -264,7 +264,6 @@ export default function MealExpenseSummary() {
                             </thead>
                             <tbody>
                                 {marketingData?.data?.recent?.map(({ date, product, category, amount, user },index) => {
-                                    console.log(product)
                                     return (
                                         <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                             <td className="py-3 px-4 text-sm text-slate-600">{date}</td>

@@ -15,7 +15,7 @@ const FilterBox = ({
   saveUpdate,
   isLoading,
 }) => {
-  console.log(yearMonth)
+  console.log(todayMonth)
   const [yearMonthArr, setYearMonthArr] = useState([]);
   useEffect(() => {
     if (todayMonth && todayYear && yearMonth?.result?.length > 0) {
@@ -35,29 +35,29 @@ const FilterBox = ({
           }}
         >
           <option value={todayMonth + " " + todayYear}>
-            {todayMonth === 0
+            {todayMonth === 1
               ? "January"
-              : todayMonth === 1
-              ? "February"
               : todayMonth === 2
-              ? "March"
+              ? "February"
               : todayMonth === 3
-              ? "April"
+              ? "March"
               : todayMonth === 4
-              ? "May"
+              ? "April"
               : todayMonth === 5
-              ? "June"
+              ? "May"
               : todayMonth === 6
-              ? "July"
+              ? "June"
               : todayMonth === 7
-              ? "August"
+              ? "July"
               : todayMonth === 8
-              ? "September"
+              ? "August"
               : todayMonth === 9
-              ? "October"
+              ? "September"
               : todayMonth === 10
-              ? "November"
+              ? "October"
               : todayMonth === 11
+              ? "November"
+              : todayMonth === 12
               ? "December"
               : ""}{" "}
             {todayYear}

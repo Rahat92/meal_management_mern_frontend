@@ -8,7 +8,7 @@ import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 const AddSheetModal = ({ showModal, setShowModal }) => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
   const [createMeal, {isLoading, isError, error, isSuccess}] = useCreateMealMutation()
-  
+  console.log(selectedMonth)
   useEffect(() => {
     if(isSuccess){
       alert('Successfully Create Sheet')
@@ -78,7 +78,7 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
         </form>
         <h1 className="md:text-2xl text-3xl font-bold">{process.env.REACT_APP_CURRENT_YEAR}</h1>
         <button onClick={() => {
-          createMeal(dates)
+          createMeal({month: selectedMonth+1, year})
           // console.log(dates)
         }} className="btn border border-blue-500 bg-red-500 text-white text-xl">
           Create

@@ -43,7 +43,6 @@ const AdvanceSheet = () => {
     const [currentItem, setCurrentItem] = useState({});
     const [selectedCategory, setSelectedCategory] = useState("");
     const { data: pCategories } = useGetProductCategoriesQuery();
-    console.log(pCategories)
     const { data: tags } = useGetTagsQuery();
     useEffect(() => {
         if (selectedCategory) {
@@ -52,7 +51,14 @@ const AdvanceSheet = () => {
     }, [selectedCategory])
     const [value, setValue] = useState("");
     const { user } = useSelector((state) => state.auth);
-    const { data: advanceSheet } = useGetAdvanceSheetQuery({ mealManager: user?._id, month: 2, year: 2026 }, { skip: !user?._id });
+    const todayMonth = new Date().getMonth();
+    const todayYear = new Date().getFullYear();
+    const todayDate = new Date().getDate();
+    const [getMonth, setGetMonth] = useState(todayMonth+1);
+    const [getYear, setGetYear] = useState(todayYear);
+
+    const { data: advanceSheet, isSuccess:advanceSheetSuccess, isError:advanceSheetError } = useGetAdvanceSheetQuery({ mealManager: user?._id, month: getMonth, year: getYear }, { skip: !user?._id });
+    console.log(advanceSheetSuccess, advanceSheetError)
     const headRef = useRef();
     const tableBodyRef = useRef();
     const dateRef = useRef();
@@ -89,11 +95,9 @@ const AdvanceSheet = () => {
     const [id, setId] = useState("");
     const [isUserSheetSkip, setIsUserSheetSkip] = useState(false);
     const [currentUser, setCurrentUser] = useState();
-    const { data: userSheetData } = useGetUserAdvanceSheetQuery({ userId: currentUser?.split(' ')[1], year: 2026, month: 2 }, {
+    const { data: userSheetData } = useGetUserAdvanceSheetQuery({ userId: currentUser?.split(' ')[1], year: getYear, month: getMonth }, {
         skip: !isUserSheetSkip
     });
-    console.log(userSheetData)
-    console.log(currentUser)
     const [isChanged, setIsChanged] = useState(false);
     const [totalMeals, setTotalMeals] = useState([]);
     const [prevArrOfMeals, setPrevArrOfMeals] = useState([]);
@@ -114,17 +118,12 @@ const AdvanceSheet = () => {
     const depositModalRef = useRef(null);
     const extraShopModalRef = useRef(null);
 
-    const todayMonth = new Date().getMonth();
-    const todayYear = new Date().getFullYear();
-    const todayDate = new Date().getDate();
     const { data: yearMonths } = useGetYearMonthQuery(user?._id, {
         skip: !user?._id,
     });
     const [updateLunch, { isLoading: updateLunchLoading, isSuccess: updateLunchSuccess, isError: isUpdateLunchError, error: updateLunchError }] = useUpdateLunchMutation()
     const [updateDinner, { isLoading: updateDinnerLoading, isSuccess: updateDinnerSuccess, isError: isUpdateDinnerError, error: updateDinnerError }] = useUpdateDinnerMutation()
     const [updateBreakfast, { isSuccess: updateBreakfastSuccess, isLoading: updateBreakfastLoading }] = useUpdateBreakfastMutation()
-    const [getMonth, setGetMonth] = useState(todayMonth);
-    const [getYear, setGetYear] = useState(todayYear);
     const selectMealRef = useRef(null)
     const [
         updateMoney,
@@ -366,7 +365,7 @@ const AdvanceSheet = () => {
     // }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
 
     useEffect(() => {
-        if (monthlyMeals?.monthlyMeals?.length > 0 && advanceSheet?.data?.length > 0) {
+        if (advanceSheet?.data?.length > 0&& advanceSheetSuccess) {
             const mealDays = {}
             advanceSheet.data.forEach(item => {
                 item.meals.forEach(el => {
@@ -425,8 +424,11 @@ const AdvanceSheet = () => {
             }).sort((a, b) => a.day - b.day);
             setArrOfMeals(Object.values(mealDays));
             setPrevArrOfMeals(mealsArr);
+        }else{
+            setArrOfMeals([]);
+            setRegisteredUsers([]);
         }
-    }, [monthlyMeals?.monthlyMeals, advanceSheet?.data]);
+    }, [monthlyMeals?.monthlyMeals, advanceSheet?.data, advanceSheetSuccess]);
     // submain branch
     // useEffect(() => {
     //     if (prevArrOfMeals?.length > 0) {
@@ -546,11 +548,11 @@ const AdvanceSheet = () => {
     }, [window.screen]);
     useEffect(() => {
         let timer;
-        if (arrOfMeals?.length > 0) {
-            dateRef?.current?.scrollTo({
-                top: (todayDate - 1) * 100,
-                behavior: "smooth",
-            });
+            // dateRef?.current?.scrollTo({
+            //     top: (todayDate - 1) * 100,
+            //     behavior: "smooth",
+            // });
+            console.log(tableBodyRef.current)
             tableBodyRef?.current?.scrollTo({
                 top: (todayDate - 1) * 100 + 5,
                 behavior: "smooth",
@@ -558,9 +560,8 @@ const AdvanceSheet = () => {
             timer = setTimeout(() => {
                 setNowScroll(true);
             }, (todayDate - 1) * 100);
-        }
         return () => clearTimeout(timer)
-    }, [arrOfMeals?.length]);
+    }, [userSheetData, arrOfMeals?.length, currentUser, todayDate]);
     useEffect(() => {
         if (currentIndex !== undefined) {
             let borderTotalBreakfastArr = []
@@ -1365,13 +1366,12 @@ const AdvanceSheet = () => {
                 setCurrentIndex={setCurrentIndex}
                 setCurrentUser={setCurrentUser}
                 user={user}
-                todayMonth={todayMonth}
+                todayMonth={todayMonth+1}
                 todayYear={todayYear}
                 isLoading={isLoading}
                 isChanged={isChanged}
             />
-
-            {monthlyMeals?.monthlyMeals && monthlyMeals.monthlyMeals.length > 0 ? (
+            {advanceSheetSuccess ? (
                 <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto ">
                     <table className="">
                         {/* table header */}
