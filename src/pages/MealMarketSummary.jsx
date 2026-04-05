@@ -6,8 +6,14 @@ import { locationPathChanged } from '../features/locationPath';
 import { useGetYearMonthQuery } from '../features/bikri/bikriApi';
 
 export default function MealExpenseSummary() {
+    const todayMonth = new Date().getMonth() + 1;
+    const todayYear = new Date().getFullYear();
+    const [selectedUser, setSelectedUser] = useState('all');
+    const [selectedTag, setSelectedTag] = useState('all');
+
     const { user } = useSelector((state) => state.auth);
-    console.log(user)
+    const [getYear, setGetYear] = useState(todayYear);
+    const [getMonth, setGetMonth] = useState(todayMonth);
     const { data: yearMonths } = useGetYearMonthQuery(user?.manager?._id, {
         skip: !user?.manager?._id,
     });
@@ -16,12 +22,8 @@ export default function MealExpenseSummary() {
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
-        return months[parseInt(monthNumber)] || "";
+        return months[parseInt(monthNumber) - 1] || "";
     };
-    const todayMonth = new Date().getMonth() + 1;
-    const todayYear = new Date().getFullYear();
-    const [getYear, setGetYear] = useState(todayYear);
-    const [getMonth, setGetMonth] = useState(todayMonth);
     const [totalExpense, setTotalExpense] = useState(0)
     const dispatch = useDispatch();
     useEffect(() => {
@@ -29,21 +31,12 @@ export default function MealExpenseSummary() {
     }, []);
     const [skip, setSkip] = useState(true);
 
-    useEffect(() => {
-        if (user && user?._id) {
-            setSkip(false);
-        } else {
-            setSkip(true);
-        }
-    }, [user]);
-
     const managerId = user?.role === 'admin' ? user?._id : user?.manager._id;
     console.log(managerId)
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [selectedUser, setSelectedUser] = useState('all');
-    const [selectedTag, setSelectedTag] = useState('all');
-    console.log(selectedCategory, selectedUser, selectedTag)
-    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: 2026, month: 4, user: selectedUser === 'all' ? "" : selectedUser }, { skip: skip })
+    console.log(selectedCategory)
+    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag }, { skip: !skip });
+    console.log(marketingData)
     const expenseData = marketingData?.data || [];
 
     const [totalTransactions, setTotalTransactions] = useState(0);
@@ -52,28 +45,25 @@ export default function MealExpenseSummary() {
             setTotalExpense(marketingData?.data?.summary[0]?.totalExpense)
             setTotalTransactions(marketingData?.data?.summary[0]?.totalTransactions)
         }
-    }, [marketingDataLoadSuccess])
-    const summary = useMemo(() => {
+    }, [marketingDataLoadSuccess, marketingData, getMonth, getYear, selectedUser, selectedCategory, selectedTag])
+    console.log(selectedUser)
+    useMemo(() => {
         let filteredData = expenseData;
         if (selectedCategory !== 'all') {
             filteredData = filteredData.categorySummary.filter(item =>
-                item.category.categoryId === selectedCategory || (!item.category.categoryId && selectedCategory === 'uncategorized')
+                item.categoryId === selectedCategory || (!item.categoryId && selectedCategory === 'uncategorized')
             );
         }
         if (selectedUser !== 'all') {
-            filteredData = filteredData.filter(item => item.user.userId === selectedUser);
+            filteredData = filteredData.userSummary.filter(item => item.userId === selectedUser);
         }
         console.log(filteredData)
         if (selectedTag !== 'all') {
-            filteredData = filteredData.filter(item => item.tags && JSON.stringify(item.tags).includes(selectedTag));
-            console.log(filteredData)
+            filteredData = filteredData?.tagSummary?.filter(item => item.tagId === selectedTag);
         }
 
-        console.log(expenseData)
         const totalExpense = expenseData;
         console.log(totalExpense)
-        const totalItems = filteredData.length;
-
         const byCategory = {};
         const byUser = {};
         const byTag = {};
@@ -90,11 +80,17 @@ export default function MealExpenseSummary() {
         //     });
         // });
 
-        return { totalExpense: 0, totalItems: 0, byCategory, byUser, byTag, filteredData };
-    }, [selectedCategory, selectedUser, selectedTag, expenseData]);
+        return { totalExpense: 0, totalItems: 0, byCategory, byUser, byTag, filteredData, marketingDataLoadSuccess };
+    }, [selectedCategory, selectedUser, selectedTag, expenseData, marketingData]);
 
-
-    console.log(totalExpense)
+    useEffect(() => {
+        setSelectedUser('all');
+    }, [getMonth, getYear])
+    useEffect(() => {
+        if(marketingData){
+            
+        }
+    }, [marketingData])
     const categories = [...new Set(expenseData?.categorySummary?.map(item => ({
         id: item.categoryId || 'uncategorized',
         name: item.name || 'Uncategorized'
@@ -135,7 +131,7 @@ export default function MealExpenseSummary() {
                                 }}
                             >
                                 {yearMonths?.result?.map((ym) => (
-                                    <option selected = {ym.month === todayMonth && ym.year === todayYear} className='text-slate-700' key={`${ym.year}-${ym.month}`} value={`${ym.id}`}>
+                                    <option selected={ym.month === todayMonth && ym.year === todayYear} className='text-slate-700' key={`${ym.year}-${ym.month}`} value={`${ym.month} ${ym.year}`}>
                                         {getMonthName(ym.month)} {ym.year}
                                     </option>
                                 ))}

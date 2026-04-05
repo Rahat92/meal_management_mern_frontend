@@ -12,7 +12,7 @@ const advanceSheetApi = apiSlice.injectEndpoints({
         }),
         getAdvanceSheet: builder.query({
             query: (data) => ({
-                url: `/api/v2/advance-meal-sheet?mealManager=${data.mealManager}&month=${data.month}&year=${data.year}`
+                url: `/api/v2/advance-meal-sheet?mealManager=${data.mealManager}&month=${data.month}&year=${data.year}&user=${data.user}&category=${data.category}&tag=${data.tag}`,
             }),
             providesTags: ['AdvanceSheet']
         }),
