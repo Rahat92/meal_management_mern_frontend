@@ -55,7 +55,7 @@ export default function MealExpenseSummary() {
             );
         }
         if (selectedUser !== 'all') {
-            filteredData = filteredData.userSummary.filter(item => item.userId === selectedUser);
+            filteredData = filteredData?.userSummary?.filter(item => item.userId === selectedUser);
         }
         console.log(filteredData)
         if (selectedTag !== 'all') {

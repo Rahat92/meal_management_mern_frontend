@@ -1371,6 +1371,7 @@ const AdvanceSheet = () => {
                 isLoading={isLoading}
                 isChanged={isChanged}
             />
+            {console.log(getMonth)}
             {advanceSheetSuccess ? (
                 <div ref={tableBodyRef} className="max-w-[1200px] mx-auto max-h-[80vh] rounded-lg text-black overflow-auto ">
                     <table className="">
@@ -1423,7 +1424,8 @@ const AdvanceSheet = () => {
                                                 className={`cursor-default ${currentUser === 'all' ? 'w-[50px]' : 'max-w-[50px]'}  text-black sticky left-0 text-center ${el.date.split(" ")[0] == todayDate ? "bg-green-500 text-white" : "bg-white"}`}
                                             >
                                                 {/* {el.date?.split(" ")[0]}  Date body */}
-                                                <span className={`${getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'font-bold text-gray-800 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.date?.split(" ")[0] == currentDay ? <span className="text-[15px]">Today</span> : el.date?.split(" ")[0]}</span>
+                                                {console.log(getMonth)}
+                                                <span className={`${getDayName(getYear, getMonth, el.day) === 'Friday' ? 'font-bold text-gray-800 text-2xl' : 'font-semibold'}`}>{getDayName(getYear, getMonth + 1, el.date.split(" ")[0]) === 'Friday' ? 'Fr' : el.day == currentDay ? <span className="text-[15px] text-white">Today</span> : el.date?.split(" ")[0]}</span>
                                             </td>
                                             <td className="w-1 bg-gray-300  sticky left-[50px]"></td> {/*date body vertical border*/}
                                             <td className={`${selectDate === el.date ? 'bg-gray-300' : 'bg-gray-200'} ${currentUser === 'all' ? 'w-[0px]' : 'w-[200px]'}  text-black md:sticky md:left-[54.39px] border-black h-[100px] pt-[5.5px]`}> {/* meal name body width */}
