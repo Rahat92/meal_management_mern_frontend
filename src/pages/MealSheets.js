@@ -11,7 +11,6 @@ const MealSheets = () => {
   const { data: yearMonths } = useGetYearMonthQuery(user?._id, {
     skip: !user?._id,
   });
-  console.log(yearMonths)
   const [deleteYearMonth, { isSuccess }] = useDeleteYearMonthMutation();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = React.useState(false);
@@ -27,11 +26,13 @@ const MealSheets = () => {
   }, [isSuccess]);
 
   const getMonthName = (monthNumber) => {
+    console.log(monthNumber)
     const months = [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
-    return months[parseInt(monthNumber)] || "";
+    console.log(months[parseInt(monthNumber-1)])
+    return months[parseInt(monthNumber-1)] || "";
   };
 
   return (

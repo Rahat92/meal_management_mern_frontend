@@ -3,8 +3,25 @@ import { DollarSign, TrendingUp, Calendar, User, Tag, Package } from 'lucide-rea
 import { useMarketingSummaryWithCategoryQuery } from '../features/productCategory/productCategoryApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { locationPathChanged } from '../features/locationPath';
+import { useGetYearMonthQuery } from '../features/bikri/bikriApi';
 
 export default function MealExpenseSummary() {
+    const { user } = useSelector((state) => state.auth);
+    console.log(user)
+    const { data: yearMonths } = useGetYearMonthQuery(user?.manager?._id, {
+        skip: !user?.manager?._id,
+    });
+    const getMonthName = (monthNumber) => {
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        return months[parseInt(monthNumber)] || "";
+    };
+    const todayMonth = new Date().getMonth() + 1;
+    const todayYear = new Date().getFullYear();
+    const [getYear, setGetYear] = useState(todayYear);
+    const [getMonth, setGetMonth] = useState(todayMonth);
     const [totalExpense, setTotalExpense] = useState(0)
     const dispatch = useDispatch();
     useEffect(() => {
@@ -12,8 +29,6 @@ export default function MealExpenseSummary() {
     }, []);
     const [skip, setSkip] = useState(true);
 
-    const { user } = useSelector((state) => state.auth);
-    console.log(user)
     useEffect(() => {
         if (user && user?._id) {
             setSkip(false);
@@ -24,17 +39,18 @@ export default function MealExpenseSummary() {
 
     const managerId = user?.role === 'admin' ? user?._id : user?.manager._id;
     console.log(managerId)
-    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery(managerId, { skip: skip })
-    const expenseData = marketingData?.data || [];
-
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedUser, setSelectedUser] = useState('all');
     const [selectedTag, setSelectedTag] = useState('all');
+    console.log(selectedCategory, selectedUser, selectedTag)
+    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: 2026, month: 4, user: selectedUser === 'all' ? "" : selectedUser }, { skip: skip })
+    const expenseData = marketingData?.data || [];
+
     const [totalTransactions, setTotalTransactions] = useState(0);
     useEffect(() => {
         if (marketingDataLoadSuccess) {
-            setTotalExpense(marketingData.data.summary[0].totalExpense)
-            setTotalTransactions(marketingData.data.summary[0].totalTransactions)
+            setTotalExpense(marketingData?.data?.summary[0]?.totalExpense)
+            setTotalTransactions(marketingData?.data?.summary[0]?.totalTransactions)
         }
     }, [marketingDataLoadSuccess])
     const summary = useMemo(() => {
@@ -109,6 +125,22 @@ export default function MealExpenseSummary() {
                 {/* Filters */}
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">Filter By Date</label>
+                            <select
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
+                                onChange={(e) => {
+                                    setGetYear(e.target.value.split(" ")[1] * 1);
+                                    setGetMonth(e.target.value.split(" ")[0] * 1);
+                                }}
+                            >
+                                {yearMonths?.result?.map((ym) => (
+                                    <option selected = {ym.month === todayMonth && ym.year === todayYear} className='text-slate-700' key={`${ym.year}-${ym.month}`} value={`${ym.id}`}>
+                                        {getMonthName(ym.month)} {ym.year}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-2">Filter by Category</label>
                             <select
@@ -263,7 +295,7 @@ export default function MealExpenseSummary() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {marketingData?.data?.recent?.map(({ date, product, category, amount, user },index) => {
+                                {marketingData?.data?.recent?.map(({ date, product, category, amount, user }, index) => {
                                     return (
                                         <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                             <td className="py-3 px-4 text-sm text-slate-600">{date}</td>

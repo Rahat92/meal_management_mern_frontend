@@ -52,8 +52,8 @@ const productCategoryApi = apiSlice.injectEndpoints({
             },
         }),
         marketingSummaryWithCategory: builder.query({
-            query: (managerId) => ({
-                url: `/api/v2/meal-expense-details/expense-summary?year=2026&month=2&user=69577d7fc8fcddb5e936a78e`,
+            query: (data) => ({
+                url: `/api/v2/meal-expense-details/expense-summary?year=${data.year}&month=${data.month}&user=${data.user}`,
                 method: 'GET',
             })
         })

@@ -6,9 +6,8 @@ import { readableDate } from "../utils/readableDate";
 import getCurrentMonthLength from "../utils/getCurrentMonthLength";
 
 const AddSheetModal = ({ showModal, setShowModal }) => {
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()+1)
   const [createMeal, {isLoading, isError, error, isSuccess}] = useCreateMealMutation()
-  console.log(selectedMonth)
   useEffect(() => {
     if(isSuccess){
       alert('Successfully Create Sheet')
@@ -62,23 +61,23 @@ const AddSheetModal = ({ showModal, setShowModal }) => {
           <select value={selectedMonth} onChange={(e) => {
             setSelectedMonth(e.target.value)
           }}>
-            <option value={0}>January</option>
-            <option value={1}>February</option>
-            <option value={2}>March</option>
-            <option value={3}>April</option>
-            <option value={4}>May</option>
-            <option value={5}>June</option>
-            <option value={6}>July</option>
-            <option value={7}>August</option>
-            <option value={8}>September</option>
-            <option value={9}>October</option>
-            <option value={10}>November</option>
-            <option value={11}>December</option>
+            <option value={1}>January</option>
+            <option value={2}>February</option>
+            <option value={3}>March</option>
+            <option value={4}>April</option>
+            <option value={5}>May</option>
+            <option value={6}>June</option>
+            <option value={7}>July</option>
+            <option value={8}>August</option>
+            <option value={9}>September</option>
+            <option value={10}>October</option>
+            <option value={11}>November</option>
+            <option value={12}>December</option>
           </select>
         </form>
         <h1 className="md:text-2xl text-3xl font-bold">{process.env.REACT_APP_CURRENT_YEAR}</h1>
         <button onClick={() => {
-          createMeal({month: selectedMonth+1, year})
+          createMeal({month: Number(selectedMonth), year})
           // console.log(dates)
         }} className="btn border border-blue-500 bg-red-500 text-white text-xl">
           Create
