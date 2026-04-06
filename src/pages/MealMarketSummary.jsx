@@ -32,11 +32,8 @@ export default function MealExpenseSummary() {
     const [skip, setSkip] = useState(true);
 
     const managerId = user?.role === 'admin' ? user?._id : user?.manager._id;
-    console.log(managerId)
     const [selectedCategory, setSelectedCategory] = useState('all');
-    console.log(selectedCategory)
     const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag }, { skip: !skip });
-    console.log(marketingData)
     const expenseData = marketingData?.data || [];
 
     const [totalTransactions, setTotalTransactions] = useState(0);
@@ -47,68 +44,84 @@ export default function MealExpenseSummary() {
         }
     }, [marketingDataLoadSuccess, marketingData, getMonth, getYear, selectedUser, selectedCategory, selectedTag])
     console.log(selectedUser)
-    useMemo(() => {
-        let filteredData = expenseData;
-        if (selectedCategory !== 'all') {
-            filteredData = filteredData.categorySummary.filter(item =>
-                item.categoryId === selectedCategory || (!item.categoryId && selectedCategory === 'uncategorized')
-            );
-        }
-        if (selectedUser !== 'all') {
-            filteredData = filteredData?.userSummary?.filter(item => item.userId === selectedUser);
-        }
-        console.log(filteredData)
-        if (selectedTag !== 'all') {
-            filteredData = filteredData?.tagSummary?.filter(item => item.tagId === selectedTag);
-        }
+    // useMemo(() => {
+    //     let filteredData = expenseData;
+    //     if (selectedCategory !== 'all') {
+    //         filteredData = filteredData.categorySummary.filter(item =>
+    //             item.categoryId === selectedCategory || (!item.categoryId && selectedCategory === 'uncategorized')
+    //         );
+    //     }
+    //     if (selectedUser !== 'all') {
+    //         filteredData = filteredData?.userSummary?.filter(item => item.userId === selectedUser);
+    //     }
+    //     if (selectedTag !== 'all') {
+    //         filteredData = filteredData?.tagSummary?.filter(item => item.tagId === selectedTag);
+    //     }
 
-        const totalExpense = expenseData;
-        console.log(totalExpense)
-        const byCategory = {};
-        const byUser = {};
-        const byTag = {};
-        // filteredData.forEach(item => {
-        //     const category = item.category.categoryName || 'Uncategorized';
-        //     const user = item.user.userName;
-        //     const tagList = item.tags || [];
+    //     const totalExpense = expenseData;
+    //     console.log(totalExpense)
+    //     const byCategory = {};
+    //     const byUser = {};
+    //     const byTag = {};
+    //     // filteredData.forEach(item => {
+    //     //     const category = item.category.categoryName || 'Uncategorized';
+    //     //     const user = item.user.userName;
+    //     //     const tagList = item.tags || [];
 
-        //     byCategory[category] = (byCategory[category] || 0) + item.unitPrice;
-        //     byUser[user] = (byUser[user] || 0) + item.unitPrice;
-        //     tagList.forEach(tag => {
-        //         console.log(tag)
-        //         byTag[tag.tagName] = (byTag[tag.tagName] || 0) + item.unitPrice;
-        //     });
-        // });
+    //     //     byCategory[category] = (byCategory[category] || 0) + item.unitPrice;
+    //     //     byUser[user] = (byUser[user] || 0) + item.unitPrice;
+    //     //     tagList.forEach(tag => {
+    //     //         console.log(tag)
+    //     //         byTag[tag.tagName] = (byTag[tag.tagName] || 0) + item.unitPrice;
+    //     //     });
+    //     // });
 
-        return { totalExpense: 0, totalItems: 0, byCategory, byUser, byTag, filteredData, marketingDataLoadSuccess };
-    }, [selectedCategory, selectedUser, selectedTag, expenseData, marketingData]);
+    //     return { totalExpense: 0, totalItems: 0, byCategory, byUser, byTag, filteredData, marketingDataLoadSuccess };
+    // }, [selectedCategory, selectedUser, selectedTag]);
 
     useEffect(() => {
         setSelectedUser('all');
     }, [getMonth, getYear])
-    useEffect(() => {
-        if(marketingData){
-            
-        }
-    }, [marketingData])
-    const categories = [...new Set(expenseData?.categorySummary?.map(item => ({
-        id: item.categoryId || 'uncategorized',
-        name: item.name || 'Uncategorized'
-    })).map(c => JSON.stringify(c)))].map(c => JSON.parse(c));
+    // const categories = [...new Set(expenseData?.categorySummary?.map(item => ({
+    //     id: item.categoryId || 'uncategorized',
+    //     name: item.name || 'Uncategorized'
+    // })).map(c => JSON.stringify(c)))].map(c => JSON.parse(c));
 
-    const users = [...new Set(expenseData?.userSummary?.map(item => ({
-        id: item.userId,
-        name: item.name
-    })).map(u => JSON.stringify(u)))].map(u => JSON.parse(u));
-    let tags = [...new Set(expenseData?.tagSummary?.map(item => item).flat())].filter(Boolean);
-    // Remove duplicate tags based on tagId
-    const uniqueTagsMap = {};
-    tags.forEach(tag => {
-        if (!uniqueTagsMap[tag.tagId]) {
-            uniqueTagsMap[tag.tagId] = tag;
-        }
-    });
-    tags = Object.values(uniqueTagsMap);
+    // const users = [...new Set(expenseData?.userSummary?.map(item => ({
+    //     id: item.userId,
+    //     name: item.name
+    // })).map(u => JSON.stringify(u)))].map(u => JSON.parse(u));
+    // let tags = [...new Set(expenseData?.tagSummary?.map(item => item).flat())].filter(Boolean);
+    // // Remove duplicate tags based on tagId
+    // const uniqueTagsMap = {};
+    // tags.forEach(tag => {
+    //     if (!uniqueTagsMap[tag.tagId]) {
+    //         uniqueTagsMap[tag.tagId] = tag;
+    //     }
+    // });
+    // tags = Object.values(uniqueTagsMap);
+    const [users, setUsers] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        setUsers(expenseData?.userSummary?.map(item => ({
+            id: item.userId,
+            name: item.name
+        })) || [])
+        setTags(expenseData?.tagSummary?.map(item => ({
+            tagId: item.tagId,
+            tagName: item.tagName
+        })) || [])
+        setCategories(expenseData?.categorySummary?.map(item => ({
+            id: item.categoryId || 'uncategorized',
+            name: item.name || 'Uncategorized'
+        })) || [])
+    }, [marketingDataLoadSuccess])
+    console.log(marketingDataLoadSuccess)
+    console.log(tags)
+    console.log(categories)
+    console.log(users)
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
