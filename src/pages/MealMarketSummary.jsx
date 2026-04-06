@@ -9,12 +9,14 @@ export default function MealExpenseSummary() {
     const todayMonth = new Date().getMonth() + 1;
     const todayYear = new Date().getFullYear();
     const [selectedUser, setSelectedUser] = useState('all');
+    console.log(selectedUser)
     const [selectedTag, setSelectedTag] = useState('all');
 
     const { user } = useSelector((state) => state.auth);
     const [getYear, setGetYear] = useState(todayYear);
     const [getMonth, setGetMonth] = useState(todayMonth);
-    const { data: yearMonths } = useGetYearMonthQuery(user?.manager?._id, {
+    
+    const { data: yearMonths, isSuccess: yearMonthsSuccess, isLoading: yearMonthsLoading } = useGetYearMonthQuery(user?.manager?._id, {
         skip: !user?.manager?._id,
     });
     const getMonthName = (monthNumber) => {
@@ -33,7 +35,7 @@ export default function MealExpenseSummary() {
 
     const managerId = user?.role === 'admin' ? user?._id : user?.manager._id;
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag }, { skip: !skip });
+    const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag });
     const expenseData = marketingData?.data || [];
 
     const [totalTransactions, setTotalTransactions] = useState(0);
@@ -43,7 +45,6 @@ export default function MealExpenseSummary() {
             setTotalTransactions(marketingData?.data?.summary[0]?.totalTransactions)
         }
     }, [marketingDataLoadSuccess, marketingData, getMonth, getYear, selectedUser, selectedCategory, selectedTag])
-    console.log(selectedUser)
     // useMemo(() => {
     //     let filteredData = expenseData;
     //     if (selectedCategory !== 'all') {
@@ -81,7 +82,9 @@ export default function MealExpenseSummary() {
 
     useEffect(() => {
         setSelectedUser('all');
-    }, [getMonth, getYear])
+        setSelectedCategory('all');
+        setSelectedTag('all');
+    }, [getMonth, getYear, yearMonthsSuccess])
     // const categories = [...new Set(expenseData?.categorySummary?.map(item => ({
     //     id: item.categoryId || 'uncategorized',
     //     name: item.name || 'Uncategorized'
@@ -103,25 +106,48 @@ export default function MealExpenseSummary() {
     const [users, setUsers] = useState([]);
     const [tags, setTags] = useState([]);
     const [categories, setCategories] = useState([]);
+    console.log(users)
     useEffect(() => {
-        setUsers(expenseData?.userSummary?.map(item => ({
-            id: item.userId,
-            name: item.name
-        })) || [])
-        setTags(expenseData?.tagSummary?.map(item => ({
-            tagId: item.tagId,
-            tagName: item.tagName
-        })) || [])
-        setCategories(expenseData?.categorySummary?.map(item => ({
-            id: item.categoryId || 'uncategorized',
-            name: item.name || 'Uncategorized'
-        })) || [])
-    }, [marketingDataLoadSuccess])
+        if (users.length === 0) {
+            setUsers(expenseData?.userSummary?.map(item => ({
+                id: item.userId,
+                name: item.name
+            })) || [])
+        }
+        if (tags.length === 0) {
+            setTags(expenseData?.tagSummary?.map(item => ({
+                tagId: item.tagId,
+                tagName: item.tagName
+            })) || [])
+        }
+        if (categories.length === 0) {
+            setCategories(expenseData?.categorySummary?.map(item => ({
+                id: item.categoryId || 'uncategorized',
+                name: item.name || 'Uncategorized'
+            })) || [])
+        }
+    }, [marketingDataLoadSuccess, expenseData])
     console.log(marketingDataLoadSuccess)
     console.log(tags)
     console.log(categories)
     console.log(users)
-
+    useEffect(() => {
+        if (yearMonthsSuccess && marketingDataLoadSuccess && selectedUser === 'all' && selectedCategory === 'all' && selectedTag === 'all') {
+            console.log(yearMonthsSuccess, marketingDataLoadSuccess)
+            setUsers(expenseData?.userSummary?.map(item => ({
+                id: item.userId,
+                name: item.name
+            })) || []);
+            setTags(expenseData?.tagSummary?.map(item => ({
+                tagId: item.tagId,
+                tagName: item.tagName
+            })) || []);
+            setCategories(expenseData?.categorySummary?.map(item => ({
+                id: item.categoryId || 'uncategorized',
+                name: item.name || 'Uncategorized'
+            })) || []);
+        }
+    }, [yearMonthsSuccess, expenseData])
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
@@ -167,7 +193,10 @@ export default function MealExpenseSummary() {
                             <label className="block text-sm font-medium text-slate-700 mb-2">Filter by User</label>
                             <select
                                 value={selectedUser}
-                                onChange={(e) => setSelectedUser(e.target.value)}
+                                onChange={(e) => {
+                                    console.log(e.target.value)
+                                    setSelectedUser(e.target.value)
+                                }}
                                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Users</option>
