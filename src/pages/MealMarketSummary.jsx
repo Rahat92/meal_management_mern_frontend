@@ -37,7 +37,7 @@ export default function MealExpenseSummary() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag });
     const expenseData = marketingData?.data || [];
-
+    console.log(expenseData)
     const [totalTransactions, setTotalTransactions] = useState(0);
     useEffect(() => {
         if (marketingDataLoadSuccess) {
@@ -328,12 +328,13 @@ export default function MealExpenseSummary() {
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-slate-700">Date</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-slate-700">Product</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-slate-700">Category</th>
+                                    <th className="text-left py-3 px-4 text-sm font-semibold text-slate-700">Quantity</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-slate-700">User</th>
                                     <th className="text-right py-3 px-4 text-sm font-semibold text-slate-700">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {marketingData?.data?.recent?.map(({ date, product, category, amount, user }, index) => {
+                                {marketingData?.data?.recent?.map(({ date, product, category, amount,quantity, user }, index) => {
                                     return (
                                         <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                             <td className="py-3 px-4 text-sm text-slate-600">{date}</td>
@@ -343,6 +344,7 @@ export default function MealExpenseSummary() {
                                                     {category || 'N/A'}
                                                 </span>
                                             </td>
+                                            <td className="py-3 px-4 text-sm text-slate-700">{quantity}</td>
                                             <td className="py-3 px-4 text-sm text-slate-700">{user}</td>
                                             <td className="py-3 px-4 text-sm text-right font-semibold text-slate-900">৳{amount}</td>
                                         </tr>
