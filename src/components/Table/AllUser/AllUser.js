@@ -45,7 +45,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     else {
                                                         const breakfast = el.breakfast.find(item => item.user === elem.user._id)
                                                         breakfast.meal = Number(e.target.value);
-                                                        updateLunch({ mealDay: el.mealDay, breakfast })
+                                                        updateLunch({ mealDay: el.mealDay, mealName: "breakfast", mealNumber: Number(e.target.value), userId: breakfast.user})
                                                     }
                                                 }
                                                 }
@@ -86,11 +86,8 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                     alert("You can't change previous Meal!")
                                                 }
                                                 else {
-                                                    // updateMealHandler(e, el.date, el.id, index, "launch")
-                                                    // const lunch = [...el.launch[index]]
                                                     const lunch = el.launch.find(item => item.user === elem.user._id)
-                                                    lunch.meal = Number(e.target.value);
-                                                    updateLunch({ mealDay: el.mealDay, borderIndex: index, lunch })
+                                                    updateLunch({ mealDay: el.mealDay, mealNumber:Number(e.target.value), mealName: "lunch", userId: lunch.user })
                                                 }
                                             }
                                             }
@@ -136,8 +133,7 @@ const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem
                                                 }
                                                 else {
                                                     const dinner = el.dinner.find(item => item.user === elem.user._id)
-                                                    dinner.meal = Number(e.target.value);
-                                                    updateLunch({ mealDay: el.mealDay, borderIndex: index, dinner })
+                                                    updateLunch({ mealDay: el.mealDay, mealNumber:Number(e.target.value), mealName: "dinner", userId: dinner.user })
                                                 }
                                             }
                                             }

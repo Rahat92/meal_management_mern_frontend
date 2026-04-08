@@ -58,7 +58,6 @@ const AdvanceSheet = () => {
     const [getYear, setGetYear] = useState(todayYear);
 
     const { data: advanceSheet, isSuccess:advanceSheetSuccess, isError:advanceSheetError } = useGetAdvanceSheetQuery({ mealManager: user?._id, month: getMonth, year: getYear }, { skip: !user?._id });
-    console.log(advanceSheetSuccess, advanceSheetError)
     const headRef = useRef();
     const tableBodyRef = useRef();
     const dateRef = useRef();
