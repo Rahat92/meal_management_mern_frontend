@@ -385,9 +385,9 @@ const bikriApi = apiSlice.injectEndpoints({
       },
     }),
     getMonthlyStats: builder.query({
-      query: () => {
+      query: (data) => {
         return {
-          url: `/api/v2/advance-meal-sheet/${'69a059226ca3adea43a135b6'}`,
+          url: `/api/v2/advance-meal-sheet?mealManager=${data.mealManager}&month=${data.month}&year=${data.year}`,
           headers: {
             authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
               }`,

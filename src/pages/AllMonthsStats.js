@@ -617,7 +617,7 @@ const AllMonthsStats = () => {
   const [display, setDisplay] = useState(false);
   const [nowScroll, setNowScroll] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth());
+  const [month, setMonth] = useState(new Date().getMonth()+1);
   const [day, setDay] = useState(new Date().getDate());
 
   // Pagination
@@ -631,9 +631,10 @@ const AllMonthsStats = () => {
   const [overAllMealExpense, setOverAllMealExpense] = useState(0);
   const [mealRate, setMealRate] = useState(0);
   const [overAllMeal, setOverAllMeal] = useState(0);
-
+  console.log(year, month, day)
   const { data: getMonthlyMealStats, isLoading } = useGetMonthlyStatsQuery({
     year,
+    mealManager: user?.role === "admin" ? user?._id : user?.manager._id,
     month,
     day,
   });
@@ -644,8 +645,8 @@ const AllMonthsStats = () => {
   });
 
   const currentBorders = monthlyMeals?.monthlyMeals?.[0]?.border;
-
-  const { data: yearMonth } = useGetYearMonthQuery();
+  console.log(user)
+  const { data: yearMonth } = useGetYearMonthQuery(`${user?.role === 'admin' ? user?._id : user?.manager._id}`);
   const [yearMonthArr, setYearMonthArr] = useState([]);
   const [sendSms] = useSendSmsMutation();
 
@@ -670,6 +671,8 @@ const AllMonthsStats = () => {
           .filter((item) => item.day <= day)
           .reduce((f, c) => f + c.mealExpense, 0)
       );
+      console.log(getMonthlyMealStats.dailyTotals
+          .reduce((f, c) => f + c.overAllExpense, 0))
       setOverAllExpense(
         getMonthlyMealStats.dailyTotals
           .filter((item) => item.day <= day)
@@ -685,7 +688,7 @@ const AllMonthsStats = () => {
       );
     }
   }, [getMonthlyMealStats?.data?.length, day]);
-
+  console.log(overAllExpense, day)
   useEffect(() => {
     if (overAllMeal > 0 && overAllMealExpense > 0) {
       setMealRate((overAllMealExpense / overAllMeal).toFixed(2));
@@ -698,8 +701,8 @@ const AllMonthsStats = () => {
         yearMonth.yearMonth.filter((el) => el.month !== todayMonth)
       );
     }
-  }, [yearMonth?.yearMonth.length, todayMonth, todayYear]);
-
+  }, [yearMonth?.yearMonth?.length, todayMonth, todayYear]);
+  console.log(getMonthlyMealStats);
   useEffect(() => {
     if (getMonthlyMealStats?.monthlyMeals?.length > 0) {
       let mealInfo = [];
@@ -831,7 +834,7 @@ const AllMonthsStats = () => {
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Meal Statistics</h1>
         <p className="text-sm text-gray-500 mt-1">
-          {MONTHS[month]} {year} &mdash; up to day {day}
+          {MONTHS[month-1]} {year} &mdash; up to day {day}
         </p>
       </div>
 
@@ -850,7 +853,7 @@ const AllMonthsStats = () => {
           value={month}
           onChange={(e) => setMonth(Number(e.target.value))}
         >
-          {MONTHS.map((m, i) => <option key={i} value={i}>{m}</option>)}
+          {MONTHS.map((m, i) => <option key={i} value={i+1}>{m}</option>)}
         </FilterSelect>
 
         <FilterSelect
