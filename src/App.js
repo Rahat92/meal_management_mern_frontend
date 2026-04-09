@@ -22,6 +22,7 @@ import MealExpenseSummary from "./pages/MealMarketSummary";
 import MealHomePage from "./pages/UserDashboard";
 import NewMeal from "./pages/NewMeal";
 import AdvanceSheet from "./pages/AdvanceSheet";
+import Users from "./pages/Users";
 const App = () => {
   const { pathname } = useSelector((state) => state.currentPath);
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/" element={<SignIn />} />
           </Route>
           <Route element={<ProtectedRoute />}>
+            <Route path="/users" element={<Users />} />
             <Route path="/all-month-stats" element={<AllMonthsStats />} />
             <Route path="/extra-expense-summary" element={<ExpenseSummary />} />
             <Route path="/meal-expense-summary" element={<MealExpenseSummary />} />
