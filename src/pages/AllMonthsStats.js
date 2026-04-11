@@ -471,7 +471,7 @@ const AllMonthsStats = () => {
                 </tbody>
               </table>
             </div>
-
+              
             {/* ── Pagination footer ─────────────────────────────────────────────── */}
             <div className="flex items-center justify-between flex-wrap gap-2 px-4 py-2.5 border-t border-gray-200 bg-gray-50">
               <span className="text-xs text-gray-500">

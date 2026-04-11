@@ -660,6 +660,15 @@ const AdvanceSheet = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(products?.length === 0){
+            alert("Please add at least one product")
+            return;
+        }
+        console.log(products)
+        if(products?.length>0&&products?.filter(item => ((item.category === undefined || item.category === "") && item.removeProduct !== true)).length > 0){
+            alert("Please select category for all products")
+            return;
+        }
         updateShopMoney({
             type: 'regular',
             userId: currentUser?.split(' ')[1],
