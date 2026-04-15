@@ -540,6 +540,9 @@
 
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetUsersQuery } from '../features/bikri/bikriApi';
+import { locationPathChanged } from '../features/locationPath';
 
 /* ── Google Fonts injected once ── */
 const FontLoader = () => (
@@ -620,18 +623,18 @@ const FontLoader = () => (
 
 /* ── Data ── */
 const INITIAL_USERS = [
-  { _id: "69577c3fc8fcddb5e936a789", active: true,  name: "Rahat",   role: "user",      email: "rahat@gmail.com",   photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "69577d7fc8fcddb5e936a78e", active: true,  name: "Sweety",  role: "admin",     email: "sweety@gmail.com",  photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "69577e1fc8fcddb5e936a791", active: false, name: "Arif",    role: "user",      email: "arif@gmail.com",    photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "69577f2ac8fcddb5e936a792", active: true,  name: "Mitu",    role: "moderator", email: "mitu@gmail.com",    photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "695780abc8fcddb5e936a793", active: true,  name: "Rafi",    role: "user",      email: "rafi@gmail.com",    photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "695781bcc8fcddb5e936a794", active: false, name: "Nadia",   role: "user",      email: "nadia@gmail.com",   photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "695782cdc8fcddb5e936a795", active: true,  name: "Karim",   role: "admin",     email: "karim@gmail.com",   photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "695783edc8fcddb5e936a796", active: true,  name: "Tania",   role: "moderator", email: "tania@gmail.com",   photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "695784fec8fcddb5e936a797", active: false, name: "Sabbir",  role: "user",      email: "sabbir@gmail.com",  photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "6957850fc8fcddb5e936a798", active: true,  name: "Puja",    role: "user",      email: "puja@gmail.com",    photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "6957861ac8fcddb5e936a799", active: true,  name: "Hasan",   role: "admin",     email: "hasan@gmail.com",   photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
-  { _id: "6957872bc8fcddb5e936a800", active: false, name: "Sharmin", role: "user",      email: "sharmin@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "69577c3fc8fcddb5e936a789", active: true, name: "Rahat", role: "user", email: "rahat@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "69577d7fc8fcddb5e936a78e", active: true, name: "Sweety", role: "admin", email: "sweety@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "69577e1fc8fcddb5e936a791", active: false, name: "Arif", role: "user", email: "arif@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "69577f2ac8fcddb5e936a792", active: true, name: "Mitu", role: "moderator", email: "mitu@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "695780abc8fcddb5e936a793", active: true, name: "Rafi", role: "user", email: "rafi@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "695781bcc8fcddb5e936a794", active: false, name: "Nadia", role: "user", email: "nadia@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "695782cdc8fcddb5e936a795", active: true, name: "Karim", role: "admin", email: "karim@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "695783edc8fcddb5e936a796", active: true, name: "Tania", role: "moderator", email: "tania@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "695784fec8fcddb5e936a797", active: false, name: "Sabbir", role: "user", email: "sabbir@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "6957850fc8fcddb5e936a798", active: true, name: "Puja", role: "user", email: "puja@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "6957861ac8fcddb5e936a799", active: true, name: "Hasan", role: "admin", email: "hasan@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
+  { _id: "6957872bc8fcddb5e936a800", active: false, name: "Sharmin", role: "user", email: "sharmin@gmail.com", photo: "default.png", manager: "69577d7fc8fcddb5e936a78e" },
 ];
 
 /* ── Breakpoint hook ── */
@@ -639,8 +642,8 @@ function useBreakpoint() {
   const get = () => {
     if (typeof window === "undefined") return "md";
     const w = window.innerWidth;
-    if (w < 480)  return "xs";
-    if (w < 768)  return "sm";
+    if (w < 480) return "xs";
+    if (w < 768) return "sm";
     if (w < 1024) return "md";
     if (w < 1280) return "lg";
     return "xl";
@@ -656,9 +659,9 @@ function useBreakpoint() {
 
 /* ── Role config ── */
 const ROLE = {
-  admin:     { avatar: "bg-sky-100 text-sky-800",     badge: "bg-sky-100 text-sky-800 border-sky-200",     dot: "bg-sky-500"    },
+  admin: { avatar: "bg-sky-100 text-sky-800", badge: "bg-sky-100 text-sky-800 border-sky-200", dot: "bg-sky-500" },
   moderator: { avatar: "bg-violet-100 text-violet-800", badge: "bg-violet-100 text-violet-800 border-violet-200", dot: "bg-violet-500" },
-  user:      { avatar: "bg-stone-100 text-stone-600", badge: "bg-stone-100 text-stone-600 border-stone-200", dot: "bg-stone-400"  },
+  user: { avatar: "bg-stone-100 text-stone-600", badge: "bg-stone-100 text-stone-600 border-stone-200", dot: "bg-stone-400" },
 };
 
 const initials = (n) => n.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
@@ -687,11 +690,10 @@ function RoleBadge({ role }) {
 /* ── StatusBadge ── */
 function StatusBadge({ active }) {
   return (
-    <span className={`flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-md border font-body ${
-      active
-        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-        : "bg-red-50 text-red-600 border-red-200"
-    }`}>
+    <span className={`flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-md border font-body ${active
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+      : "bg-red-50 text-red-600 border-red-200"
+      }`}>
       <span className={`w-1.5 h-1.5 rounded-full ${active ? "bg-emerald-500" : "bg-red-400"}`} />
       {active ? "active" : "inactive"}
     </span>
@@ -709,8 +711,7 @@ function StatCard({ label, value, accent }) {
 }
 
 /* ── ActionMenu (⋯ dropdown) ── */
-function ActionMenu({ user, onAddToSheet, onToggleActive }) {
-  const [open, setOpen] = useState(false);
+function ActionMenu({ user, onAddToSheet, onToggleActive, open, setOpen }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -721,7 +722,7 @@ function ActionMenu({ user, onAddToSheet, onToggleActive }) {
   }, [open]);
 
   const menuItemCls = "menu-item w-full flex items-center gap-2.5 px-3 py-2 text-left font-body text-sm text-stone-600 rounded-lg cursor-pointer transition-colors";
-  const dangerCls   = "menu-item menu-item-danger w-full flex items-center gap-2.5 px-3 py-2 text-left font-body text-sm text-red-500 rounded-lg cursor-pointer transition-colors";
+  const dangerCls = "menu-item menu-item-danger w-full flex items-center gap-2.5 px-3 py-2 text-left font-body text-sm text-red-500 rounded-lg cursor-pointer transition-colors";
 
   return (
     <div className="relative" ref={ref}>
@@ -764,15 +765,16 @@ function ActionMenu({ user, onAddToSheet, onToggleActive }) {
 /* ── UserCard ── */
 function UserCard({ user, onEdit, onAddToSheet, onToggleActive, compact }) {
   const isAdmin = user.role === "admin";
-  const isSelf  = user.manager === user._id;
+  const isSelf = user.manager === user._id;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div
-      className={`bg-white rounded-xl card-hover card-enter border transition-all ${
-        isAdmin ? "border-sky-300 shadow-sky-100 shadow-sm" : "border-stone-200/80"
-      }`}
+      className={`bg-white rounded-xl card-hover card-enter border transition-all relative ${isAdmin ? "border-sky-300 shadow-sky-100 shadow-sm" : "border-stone-200/80"
+        }`}
+      style={{ zIndex: menuOpen ? 10 : undefined }}
     >
-      <div className={`flex bg-red-500 items-start gap-3 ${compact ? "p-4" : "p-5"}`}>
+      <div className={`flex items-start gap-3 ${compact ? "p-4" : "p-5"}`}>
         <Avatar name={user.name} role={user.role} size={compact ? "sm" : "md"} />
 
         <div className="flex-1 min-w-0">
@@ -805,7 +807,7 @@ function UserCard({ user, onEdit, onAddToSheet, onToggleActive, compact }) {
           >
             Edit
           </button>
-          <ActionMenu user={user} onAddToSheet={onAddToSheet} onToggleActive={onToggleActive} />
+          <ActionMenu user={user} onAddToSheet={onAddToSheet} onToggleActive={onToggleActive} open={menuOpen} setOpen={setMenuOpen} />
         </div>
       </div>
 
@@ -947,18 +949,17 @@ function Pagination({ page, pages, onPage, isXs }) {
     const delta = isXs ? 1 : 2;
     const range = [];
     for (let i = Math.max(1, page - delta); i <= Math.min(pages, page + delta); i++) range.push(i);
-    if (range[0] > 2)                              { range.unshift("…l"); range.unshift(1); }
-    else if (range[0] > 1)                           range.unshift(1);
-    if (range[range.length - 1] < pages - 1)       { range.push("…r"); range.push(pages); }
-    else if (range[range.length - 1] < pages)        range.push(pages);
+    if (range[0] > 2) { range.unshift("…l"); range.unshift(1); }
+    else if (range[0] > 1) range.unshift(1);
+    if (range[range.length - 1] < pages - 1) { range.push("…r"); range.push(pages); }
+    else if (range[range.length - 1] < pages) range.push(pages);
     return range;
   }, [page, pages, isXs]);
 
   const pgCls = (active, disabled) =>
-    `w-8 h-8 flex items-center justify-center rounded-lg border text-sm font-body transition-all ${
-      active
-        ? "border-sky-300 bg-sky-50 text-sky-700 font-medium"
-        : disabled
+    `w-8 h-8 flex items-center justify-center rounded-lg border text-sm font-body transition-all ${active
+      ? "border-sky-300 bg-sky-50 text-sky-700 font-medium"
+      : disabled
         ? "border-stone-100 text-stone-300 cursor-not-allowed"
         : "border-stone-200 text-stone-500 cursor-pointer hover:bg-stone-50 hover:border-stone-300"
     }`;
@@ -1023,20 +1024,23 @@ export default function UserManagement() {
   const isXs = bp === "xs";
   const isSm = bp === "sm";
   const toastTimer = useRef(null);
+  const { user } = useSelector(state => state.auth);
+  const { data: currentUsers } = useGetUsersQuery({ managerId: user?.role === "admin" ? user.id : user?.manager?.id });
+  console.log("Fetched users:", currentUsers);
 
-  const [users, setUsers]           = useState(INITIAL_USERS);
-  const [search, setSearch]         = useState("");
+  const [users, setUsers] = useState(INITIAL_USERS);
+  const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const [statusFilter, setStatus]   = useState("all");
-  const [limit, setLimit]           = useState(5);
-  const [page, setPage]             = useState(1);
-  const [editUser, setEditUser]     = useState(null);
-  const [toast, setToast]           = useState(null);  // { msg, type }
+  const [statusFilter, setStatus] = useState("all");
+  const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(1);
+  const [editUser, setEditUser] = useState(null);
+  const [toast, setToast] = useState(null);  // { msg, type }
 
   const showToast = useCallback((msg, type = "success") => {
     clearTimeout(toastTimer.current);
     setToast({ msg, type });
-    toastTimer.current = setTimeout(() => setToast(null), 3000);
+    toastTimer.current = setTimeout(() => setToast(null), 5000);
   }, []);
 
   const handleAddToSheet = useCallback((user) => {
@@ -1053,6 +1057,17 @@ export default function UserManagement() {
     );
   }, [showToast]);
 
+
+  useEffect(() => {
+    if (currentUsers?.data?.users) {
+      setUsers(currentUsers.data.users);
+    }
+  }, [currentUsers]);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(locationPathChanged(window.location.pathname));
+  }, []);
+
   const filtered = useMemo(() =>
     users.filter(u => {
       const q = search.toLowerCase();
@@ -1065,22 +1080,22 @@ export default function UserManagement() {
     [users, search, roleFilter, statusFilter]
   );
 
-  const pages     = Math.max(1, Math.ceil(filtered.length / limit));
-  const safePage  = Math.min(page, pages);
+  const pages = Math.max(1, Math.ceil(filtered.length / limit));
+  const safePage = Math.min(page, pages);
   const paginated = filtered.slice((safePage - 1) * limit, safePage * limit);
 
   const resetPage = useCallback(() => setPage(1), []);
-  const goPage    = p => setPage(Math.max(1, Math.min(p, pages)));
+  const goPage = p => setPage(Math.max(1, Math.min(p, pages)));
 
   const handleSave = updated => {
     setUsers(prev => prev.map(u => u._id === updated._id ? updated : u));
     setEditUser(null);
   };
 
-  const compact    = isXs || isSm || bp === "md";
-  const twoCol     = bp === "xl";
-  const maxW       = { xs: "100%", sm: "100%", md: "760px", lg: "960px", xl: "1200px" }[bp];
-  const outerPad   = isXs ? "1rem" : isSm ? "1.25rem 1.5rem" : "2rem 2.5rem";
+  const compact = isXs || isSm || bp === "md";
+  const twoCol = bp === "xl";
+  const maxW = { xs: "100%", sm: "100%", md: "760px", lg: "960px", xl: "1200px" }[bp];
+  const outerPad = isXs ? "1rem" : isSm ? "1.25rem 1.5rem" : "2rem 2.5rem";
 
   return (
     <>
@@ -1109,18 +1124,18 @@ export default function UserManagement() {
 
         {/* ── Stats ── */}
         <div className={`grid gap-3 mb-6 ${isXs ? "grid-cols-2" : "grid-cols-3"}`}>
-          <StatCard label="Total users" value={users.length} />
-          <StatCard label="Active"      value={users.filter(u => u.active).length} accent="text-emerald-700" />
-          {!isXs && <StatCard label="Admins"      value={users.filter(u => u.role === "admin").length} accent="text-sky-700" />}
+          <StatCard label="Total users" value={currentUsers?.data?.totalUsers} />
+          <StatCard label="Active" value={users.filter(u => u.active).length} accent="text-emerald-700" />
+          {!isXs && <StatCard label="Admins" value={users.filter(u => u.role === "admin").length} accent="text-sky-700" />}
         </div>
 
         {/* ── Filters ── */}
         <FilterBar
-          search={search}             setSearch={setSearch}
-          roleFilter={roleFilter}     setRoleFilter={setRoleFilter}
+          search={search} setSearch={setSearch}
+          roleFilter={roleFilter} setRoleFilter={setRoleFilter}
           statusFilter={statusFilter} setStatusFilter={setStatus}
-          limit={limit}               setLimit={setLimit}
-          bp={bp}                     onReset={resetPage}
+          limit={limit} setLimit={setLimit}
+          bp={bp} onReset={resetPage}
         />
 
         {/* ── Cards ── */}
@@ -1168,13 +1183,12 @@ export default function UserManagement() {
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 toast-enter"
           style={{ transform: "translateX(-50%)" }}>
-          <div className={`flex items-center gap-2.5 font-body text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg border ${
-            toast.type === "danger"
-              ? "bg-red-50 text-red-700 border-red-200"
-              : toast.type === "sheet"
+          <div className={`flex items-center gap-2.5 font-body text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg border ${toast.type === "danger"
+            ? "bg-red-50 text-red-700 border-red-200"
+            : toast.type === "sheet"
               ? "bg-emerald-50 text-emerald-700 border-emerald-200"
               : "bg-white text-stone-700 border-stone-200"
-          }`}>
+            }`}>
             <span>{toast.type === "danger" ? "⊘" : toast.type === "sheet" ? "⊞" : "✓"}</span>
             {toast.msg}
           </div>
