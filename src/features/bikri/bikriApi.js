@@ -421,7 +421,7 @@ const bikriApi = apiSlice.injectEndpoints({
     }),
     getUsers: builder.query({
       query: (data) => ({
-        url: `/api/v1/users?managerId=${data.managerId || null}`,
+        url: `/api/v1/users?managerId=${data.managerId || null}&page=${data.page || 1}&limit=${data.limit || 10}&search=${data.search || ''}`,
         method: 'GET',
         headers: {
           authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token}`,

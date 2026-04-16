@@ -1025,15 +1025,24 @@ export default function UserManagement() {
   const isSm = bp === "sm";
   const toastTimer = useRef(null);
   const { user } = useSelector(state => state.auth);
-  const { data: currentUsers } = useGetUsersQuery({ managerId: user?.role === "admin" ? user.id : user?.manager?.id });
+  const [limit, setLimit] = useState(2);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 1000);
+    return () => clearTimeout(handler);
+  }, [search])
+
+  const [page, setPage] = useState(1);
+
+  const { data: currentUsers, isSuccess: currentUserSuccess } = useGetUsersQuery({ managerId: user?.role === "admin" ? user.id : user?.manager?.id, page, limit, search: debouncedSearch });
   console.log("Fetched users:", currentUsers);
 
-  const [users, setUsers] = useState(INITIAL_USERS);
-  const [search, setSearch] = useState("");
+  const [users, setUsers] = useState([]);
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatus] = useState("all");
-  const [limit, setLimit] = useState(2);
-  const [page, setPage] = useState(1);
   const [editUser, setEditUser] = useState(null);
   const [toast, setToast] = useState(null);  // { msg, type }
 
@@ -1062,7 +1071,7 @@ export default function UserManagement() {
     if (currentUsers?.data?.users) {
       setUsers(currentUsers.data.users);
     }
-  }, [currentUsers]);
+  }, [currentUsers, currentUserSuccess]);
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(locationPathChanged(window.location.pathname));
@@ -1084,10 +1093,9 @@ export default function UserManagement() {
   console.log("Filtered users:", filtered, "Pages:", pages);
   const safePage = Math.min(page, pages);
   const paginated = filtered.slice((safePage - 1) * limit, safePage * limit);
-
+  console.log("Paginated users:", paginated);
   const resetPage = useCallback(() => setPage(1), []);
   const goPage = p => setPage(Math.max(1, Math.min(p, pages)));
-
   const handleSave = updated => {
     setUsers(prev => prev.map(u => u._id === updated._id ? updated : u));
     setEditUser(null);
@@ -1140,14 +1148,14 @@ export default function UserManagement() {
         />
 
         {/* ── Cards ── */}
-        {paginated.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-stone-300">
             <span className="text-5xl mb-4">◌</span>
             <p className="font-body text-sm">No users match your filters.</p>
           </div>
         ) : (
           <div className={`grid gap-3 ${twoCol ? "grid-cols-2" : "grid-cols-1"}`}>
-            {paginated.map(u => (
+            {filtered.map(u => (
               <UserCard
                 key={u._id}
                 user={u}
