@@ -1032,7 +1032,7 @@ export default function UserManagement() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatus] = useState("all");
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(2);
   const [page, setPage] = useState(1);
   const [editUser, setEditUser] = useState(null);
   const [toast, setToast] = useState(null);  // { msg, type }
@@ -1080,7 +1080,8 @@ export default function UserManagement() {
     [users, search, roleFilter, statusFilter]
   );
 
-  const pages = Math.max(1, Math.ceil(filtered.length / limit));
+  const pages = currentUsers?.data?.totalPages;
+  console.log("Filtered users:", filtered, "Pages:", pages);
   const safePage = Math.min(page, pages);
   const paginated = filtered.slice((safePage - 1) * limit, safePage * limit);
 
