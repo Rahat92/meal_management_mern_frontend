@@ -285,7 +285,7 @@ export default function MealExpenseSummary() {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center">
                                         <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                            {name.charAt(0)}
+                                            {name?.charAt(0)}
                                         </div>
                                         <span className="font-semibold text-slate-800">{name}</span>
                                     </div>

@@ -22,7 +22,23 @@ const advanceSheetApi = apiSlice.injectEndpoints({
                 url: `/api/v2/advance-meal-sheet/${monthId}`
             })
         }),
+        addUserToAdvanceSheet: builder.mutation({
+            query: ({ userId }) => ({
+                url: `/api/v2/advance-meal-sheet/user-to-monthly-sheet`,
+                method: 'POST',
+                body: { userId },
+                headers: {
+                    authorization: `Bearer ${JSON.parse(localStorage.getItem("auth")).token
+                        }`,
+                },
+            }),
+
+            invalidatesTags: (result, error, arg) => [
+                { type: "userAdvanceSheet", id: `${arg.userId}-${arg.year}-${arg.month}` },
+                'AdvanceSheet'
+            ]
+        }),
     })
 })
 
-export const { useGetAdvanceSheetQuery, useGetUserAdvanceSheetQuery } = advanceSheetApi;
+export const { useGetAdvanceSheetQuery, useGetUserAdvanceSheetQuery, useAddUserToAdvanceSheetMutation } = advanceSheetApi;

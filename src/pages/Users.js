@@ -543,6 +543,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUsersQuery } from '../features/bikri/bikriApi';
 import { locationPathChanged } from '../features/locationPath';
+import { useAddUserToAdvanceSheetMutation } from "../features/advance-sheet/advanceSheetApi";
 
 /* ── Google Fonts injected once ── */
 const FontLoader = () => (
@@ -607,12 +608,12 @@ const FontLoader = () => (
 
     .toast-enter { animation: toastIn 0.3s cubic-bezier(0.34,1.3,0.64,1) both; }
     @keyframes toastIn {
-      from { opacity: 0; transform: translateY(16px) scale(0.96); }
-      to   { opacity: 1; transform: none; }
+      from { opacity: 0; transform:translateX(-50%) translateY(-100px) scale(0.96); }
+      to   { opacity: 1; transform:translateX(-50%) translateY(0) scale(1); }
     }
     .toast-exit { animation: toastOut 0.2s ease-in forwards; }
     @keyframes toastOut {
-      to { opacity: 0; transform: translateY(8px); }
+      to { opacity: 0; transform:translateX(-50%) translateY(8px); }
     }
 
     .action-btn:hover { background: #F0EDE6; }
@@ -1038,8 +1039,7 @@ export default function UserManagement() {
   const [page, setPage] = useState(1);
 
   const { data: currentUsers, isSuccess: currentUserSuccess } = useGetUsersQuery({ managerId: user?.role === "admin" ? user.id : user?.manager?.id, page, limit, search: debouncedSearch });
-  console.log("Fetched users:", currentUsers);
-
+  const [addUserToAdvanceSheet, { isSuccess: addUserToAdvanceSheetSuccess, isError: isAddUserToAdvanceSheetError, error: addUserToAdvanceSheetError }] = useAddUserToAdvanceSheetMutation();
   const [users, setUsers] = useState([]);
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatus] = useState("all");
@@ -1049,12 +1049,24 @@ export default function UserManagement() {
   const showToast = useCallback((msg, type = "success") => {
     clearTimeout(toastTimer.current);
     setToast({ msg, type });
-    toastTimer.current = setTimeout(() => setToast(null), 5000);
+    toastTimer.current = setTimeout(() => setToast(null), 3000);
   }, []);
 
   const handleAddToSheet = useCallback((user) => {
-    showToast(`${user.name} added to sheet ⊞`, "sheet");
-  }, [showToast]);
+    // showToast(`${user.name} added to sheet ⊞`, "sheet");
+    addUserToAdvanceSheet({ userId: user._id });
+  }, [addUserToAdvanceSheet]);
+
+  useEffect(() => {
+    if (addUserToAdvanceSheetSuccess) {
+      showToast(`User added to sheet ⊞`, "sheet");
+    }
+  }, [addUserToAdvanceSheetSuccess, showToast]);
+  useEffect(() => {
+    if (addUserToAdvanceSheetError) {
+      showToast(`${ addUserToAdvanceSheetError?.data?.message }`, "danger");
+    }
+  }, [isAddUserToAdvanceSheetError, addUserToAdvanceSheetError,  showToast]);
 
   const handleToggleActive = useCallback((user) => {
     setUsers(prev => prev.map(u =>
@@ -1090,10 +1102,8 @@ export default function UserManagement() {
   );
 
   const pages = currentUsers?.data?.totalPages;
-  console.log("Filtered users:", filtered, "Pages:", pages);
   const safePage = Math.min(page, pages);
   const paginated = filtered.slice((safePage - 1) * limit, safePage * limit);
-  console.log("Paginated users:", paginated);
   const resetPage = useCallback(() => setPage(1), []);
   const goPage = p => setPage(Math.max(1, Math.min(p, pages)));
   const handleSave = updated => {
@@ -1188,9 +1198,8 @@ export default function UserManagement() {
         />
       )}
 
-      {/* ── Toast ── */}
       {toast && (
-        <div className="fixed bottom-6 left-1/2 z-50 toast-enter"
+        <div className="fixed top-24 w-[100] left-1/2 m-auto z-50 toast-enter"
           style={{ transform: "translateX(-50%)" }}>
           <div className={`flex items-center gap-2.5 font-body text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg border ${toast.type === "danger"
             ? "bg-red-50 text-red-700 border-red-200"
