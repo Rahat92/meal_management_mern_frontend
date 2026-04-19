@@ -54,10 +54,10 @@ const AdvanceSheet = () => {
     const todayMonth = new Date().getMonth();
     const todayYear = new Date().getFullYear();
     const todayDate = new Date().getDate();
-    const [getMonth, setGetMonth] = useState(todayMonth+1);
+    const [getMonth, setGetMonth] = useState(todayMonth + 1);
     const [getYear, setGetYear] = useState(todayYear);
 
-    const { data: advanceSheet, isSuccess:advanceSheetSuccess, isError:advanceSheetError } = useGetAdvanceSheetQuery({ mealManager: user?._id, month: getMonth, year: getYear }, { skip: !user?._id });
+    const { data: advanceSheet, isSuccess: advanceSheetSuccess, isError: advanceSheetError } = useGetAdvanceSheetQuery({ mealManager: user?._id, month: getMonth, year: getYear }, { skip: !user?._id });
     const headRef = useRef();
     const tableBodyRef = useRef();
     const dateRef = useRef();
@@ -364,7 +364,7 @@ const AdvanceSheet = () => {
     // }, [updateDinnerSuccess, updateDinnerLoading, updateBreakfastSuccess, updateBreakfastLoading])
 
     useEffect(() => {
-        if (advanceSheet?.data?.length > 0&& advanceSheetSuccess) {
+        if (advanceSheet?.data?.length > 0 && advanceSheetSuccess) {
             const mealDays = {}
             advanceSheet.data.forEach(item => {
                 item.meals.forEach(el => {
@@ -423,7 +423,7 @@ const AdvanceSheet = () => {
             }).sort((a, b) => a.day - b.day);
             setArrOfMeals(Object.values(mealDays));
             setPrevArrOfMeals(mealsArr);
-        }else{
+        } else {
             setArrOfMeals([]);
             setRegisteredUsers([]);
         }
@@ -547,18 +547,18 @@ const AdvanceSheet = () => {
     }, [window.screen]);
     useEffect(() => {
         let timer;
-            // dateRef?.current?.scrollTo({
-            //     top: (todayDate - 1) * 100,
-            //     behavior: "smooth",
-            // });
-            console.log(tableBodyRef.current)
-            tableBodyRef?.current?.scrollTo({
-                top: (todayDate - 1) * 100 + 5,
-                behavior: "smooth",
-            });
-            timer = setTimeout(() => {
-                setNowScroll(true);
-            }, (todayDate - 1) * 100);
+        // dateRef?.current?.scrollTo({
+        //     top: (todayDate - 1) * 100,
+        //     behavior: "smooth",
+        // });
+        console.log(tableBodyRef.current)
+        tableBodyRef?.current?.scrollTo({
+            top: (todayDate - 1) * 100 + 5,
+            behavior: "smooth",
+        });
+        timer = setTimeout(() => {
+            setNowScroll(true);
+        }, (todayDate - 1) * 100);
         return () => clearTimeout(timer)
     }, [userSheetData, arrOfMeals?.length, currentUser, todayDate]);
     useEffect(() => {
@@ -660,12 +660,12 @@ const AdvanceSheet = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(products?.length === 0){
+        if (products?.length === 0) {
             alert("Please add at least one product")
             return;
         }
         console.log(products)
-        if(products?.length>0&&products?.filter(item => ((item.category === undefined || item.category === "") && item.removeProduct !== true)).length > 0){
+        if (products?.length > 0 && products?.filter(item => ((item.category === undefined || item.category === "") && item.removeProduct !== true)).length > 0) {
             alert("Please select category for all products")
             return;
         }
@@ -1374,7 +1374,7 @@ const AdvanceSheet = () => {
                 setCurrentIndex={setCurrentIndex}
                 setCurrentUser={setCurrentUser}
                 user={user}
-                todayMonth={todayMonth+1}
+                todayMonth={todayMonth + 1}
                 todayYear={todayYear}
                 isLoading={isLoading}
                 isChanged={isChanged}
@@ -2190,11 +2190,14 @@ const AdvanceSheet = () => {
                                                                             else {
                                                                                 // updateMealHandler(e, el.date, el.id, index, "launch")
                                                                                 // updateLunch({id:el.id, borderIndex:index, })
-                                                                                const breakfast = {}
-                                                                                breakfast.meal = Number(e.target.value)
-                                                                                breakfast.user = currentUser.split(' ')[1]
-                                                                                console.log(breakfast)
-                                                                                updateLunch({ mealDay: el.mealDay, breakfast })
+                                                                                // const breakfast = {}
+                                                                                // breakfast.meal = Number(e.target.value)
+                                                                                // breakfast.user = currentUser.split(' ')[1]
+                                                                                // console.log(breakfast)
+                                                                                // updateLunch({ mealDay: el.mealDay, breakfast })
+
+                                                                                updateLunch({ mealDay: el.mealDay, mealName: "breakfast", mealNumber: Number(e.target.value), userId: currentUser.split(' ')[1] })
+
                                                                             }
                                                                         }
                                                                         }
@@ -2286,12 +2289,7 @@ const AdvanceSheet = () => {
                                                                             }
 
                                                                             else {
-                                                                                // updateMealHandler(e, el.date, el.id, index, "launch")
-                                                                                // updateLunch({id:el.id, borderIndex:index, })
-                                                                                const lunch = {}
-                                                                                lunch.meal = Number(e.target.value)
-                                                                                lunch.user = currentUser.split(' ')[1]
-                                                                                updateLunch({ mealDay: el.mealDay, lunch })
+                                                                                updateLunch({ mealDay: el.mealDay, mealName: "lunch", mealNumber: Number(e.target.value), userId: currentUser.split(' ')[1] })
                                                                             }
                                                                         }
                                                                         }
@@ -2701,12 +2699,7 @@ const AdvanceSheet = () => {
                                                                                 alert("You can't change previous Meall!")
                                                                             }
                                                                             else {
-                                                                                // updateMealHandler(e, el.date, el.id, index, "dinner")
-                                                                                // updateLunch({id:el.id, borderIndex:index, })
-                                                                                const dinner = {}
-                                                                                dinner.meal = Number(e.target.value)
-                                                                                dinner.user = currentUser.split(' ')[1]
-                                                                                updateLunch({ mealDay: el.mealDay, dinner })
+                                                                                updateLunch({ mealDay: el.mealDay, mealName: "dinner", mealNumber: Number(e.target.value), userId: currentUser.split(' ')[1] })
                                                                             }
                                                                         }
                                                                         }
