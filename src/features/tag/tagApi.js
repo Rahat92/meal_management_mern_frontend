@@ -9,8 +9,17 @@ const tagApi = apiSlice.injectEndpoints({
                     method: 'GET'
                 }
             }
-        })
+        }),
+        createTag: builder.mutation({
+            query: (body) => {
+                return {
+                    url: `/api/v1/product-tags`,
+                    method: 'POST',
+                    body
+                }
+            }
+        }),
     })
 })
 
-export const {useGetTagsQuery} = tagApi;
+export const {useGetTagsQuery, useCreateTagMutation} = tagApi;

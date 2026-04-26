@@ -4,6 +4,7 @@ import { uuid } from "./uuid";
 import { classNames } from "./classNames";
 
 export const Select = ({ options, value, onChange }) => {
+    console.log(value)
     const [search, setSearch] = useState("");
     const [open, setOpen] = useState(false);
 
@@ -59,7 +60,7 @@ export const Select = ({ options, value, onChange }) => {
     }, [options, search]);
 
     useMemo(() => setSearch(value), [value]);
-
+    console.log(search)
     return (
         <div
             id={`Select-${id}`}

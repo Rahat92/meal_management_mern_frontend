@@ -3,12 +3,12 @@ import { locationPathChanged } from '../features/locationPath';
 import { useDispatch } from 'react-redux';
 import { useCreateProductCategoryMutation, useDeleteProductCategoryMutation, useGetProductCategoriesQuery, useUpdateProductCategoryMutation } from '../features/productCategory/productCategoryApi';
 const ProductCategories = () => {
-    const [createProductCategory, {isSuccess}] = useCreateProductCategoryMutation();
-    const {data:pCategories, isSuccess:pCategorySuccess} = useGetProductCategoriesQuery();
-    const [updateProductCategory, {isSuccess: updateProductCategorySuccess}] = useUpdateProductCategoryMutation()
-    const [deleteProductCategory, {isSuccess: deleteProductCategorySuccess, isLoading:deleteProductCategoryIsLoading, isError: deleteProductCategoryIsError}] = useDeleteProductCategoryMutation()
+    const [createProductCategory, { isSuccess }] = useCreateProductCategoryMutation();
+    const { data: pCategories, isSuccess: pCategorySuccess } = useGetProductCategoriesQuery();
+    const [updateProductCategory, { isSuccess: updateProductCategorySuccess }] = useUpdateProductCategoryMutation()
+    const [deleteProductCategory, { isSuccess: deleteProductCategorySuccess, isLoading: deleteProductCategoryIsLoading, isError: deleteProductCategoryIsError }] = useDeleteProductCategoryMutation()
     const [categories, setCategories] = useState([]);
-    const [newCategory, setNewCategory] = useState('');
+    const [newCategory, setNewCategory] = useState({ name: '', bnName: '' });
     const [editingId, setEditingId] = useState(null);
     const [editingName, setEditingName] = useState('');
     const [loading, setLoading] = useState(false);
@@ -17,15 +17,15 @@ const ProductCategories = () => {
     // Fetch categories on component mount
     const dispatch = useDispatch();
     useEffect(() => {
-        if(isSuccess){
+        if (isSuccess) {
             alert('A New Category created successfully')
         }
-        if(deleteProductCategorySuccess){
+        if (deleteProductCategorySuccess) {
             alert('Delete a category successfully')
         }
     }, [isSuccess, deleteProductCategorySuccess])
     useEffect(() => {
-        if(isSuccess || deleteProductCategorySuccess){
+        if (isSuccess || deleteProductCategorySuccess) {
             setCategories([...pCategories])
         }
     }, [pCategories, deleteProductCategorySuccess])
@@ -43,7 +43,7 @@ const ProductCategories = () => {
             // const data = await response.json();
             // setCategories(getProductCategories);
             // setError('');
-            if(pCategories?.length>0){
+            if (pCategories?.length > 0) {
                 setCategories(pCategories)
             }
         } catch (err) {
@@ -53,33 +53,25 @@ const ProductCategories = () => {
             setLoading(false);
         }
     };
-    console.log(categories)
     const handleAddCategory = async (e) => {
         e.preventDefault();
-        if (!newCategory.trim()) return;
-
+        if (!newCategory.name.trim() || !newCategory.bnName.trim()) return;
         try {
-            // const response = await fetch('/api/categories', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ name: newCategory })
-            // });
-
-            // if (response.ok) {
-            //     const data = await response.json();
-            //     setCategories([...categories, data]);
-            //     setNewCategory('');
-            //     setError('');
-            // } else {
-            //     const errorData = await response.json();
-            //     setError(errorData.message || 'Failed to add category');
-            // }
-            createProductCategory({ name: newCategory })
+            createProductCategory({ name: newCategory.name, bnName: newCategory.bnName })
         } catch (err) {
             setError('Failed to add category');
             console.error(err);
         }
     };
+
+    // const handleAddCategory = async (e) => {
+    //     e.preventDefault();
+    //     if (!newCategory.name.trim() || !newCategory.bnName.trim()) return;
+
+    //     await yourApiCall({ name: newCategory.name, bnName: newCategory.bnName });
+
+    //     setNewCategory({ name: '', bnName: '' }); // Reset both fields
+    // };
 
     const handleUpdateCategory = async (id) => {
         if (!editingName.trim()) return;
@@ -102,14 +94,14 @@ const ProductCategories = () => {
             //     setError(errorData.message || 'Failed to update category');
             // }
             console.log(id, editingName)
-            updateProductCategory({id, data:{name: editingName}})
+            updateProductCategory({ id, data: { name: editingName } })
         } catch (err) {
             setError('Failed to update category');
             console.error(err);
         }
     };
     useEffect(() => {
-        if(updateProductCategorySuccess){
+        if (updateProductCategorySuccess) {
             alert('Update a category successfully')
         }
     }, [updateProductCategorySuccess])
@@ -156,20 +148,29 @@ const ProductCategories = () => {
 
             {/* Add Category Form */}
             <form onSubmit={handleAddCategory} className="mb-8">
-                <div className="flex gap-2 text-gray-500">
-                    <input
-                        type="text"
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)}
-                        placeholder="Enter category name"
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button
-                        type="submit"
-                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Add Category
-                    </button>
+                <div className="flex flex-col gap-3 text-gray-500">
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            value={newCategory.name}
+                            onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                            placeholder="Enter category name (English)"
+                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <input
+                            type="text"
+                            value={newCategory.bnName}
+                            onChange={(e) => setNewCategory({ ...newCategory, bnName: e.target.value })}
+                            placeholder="বিভাগের নাম লিখুন (বাংলা)"
+                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <button
+                            type="submit"
+                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
+                        >
+                            Add Category
+                        </button>
+                    </div>
                 </div>
             </form>
 

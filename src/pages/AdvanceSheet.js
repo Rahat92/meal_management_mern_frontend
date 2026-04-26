@@ -875,7 +875,7 @@ const AdvanceSheet = () => {
                                                             }}
                                                             options={[
                                                                 ...(pCategories?.length > 0
-                                                                    ? pCategories.map((item) => item.name + "~" + item._id)
+                                                                    ? pCategories.map((item) => item.name + "~" + item._id + "~" + item.bnName)
                                                                     : []),
                                                             ]}
                                                         />
@@ -905,7 +905,7 @@ const AdvanceSheet = () => {
                                                                 ...(pCategories?.length > 0
                                                                     ? pCategories
                                                                         .find((item) => item._id === product.category)
-                                                                        ?.productTags?.map((sub) => sub.name + "~" + sub._id) || []
+                                                                        ?.productTags?.map((sub) => sub.name + "~" + sub._id + "~" + sub.bnName) || []
                                                                     : []),
                                                             ]}
                                                         />
