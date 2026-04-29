@@ -2,6 +2,7 @@ import React from 'react'
 
 const AllUser = ({ registeredUsers, currentIndex, currentUser, el, item, setItem, updateMealHandler, user, updatebreakfast, updateLunch, updateDinner, mealInfo }) => {
     const loggedInUserIndex = registeredUsers.findIndex((itm, i) => itm._id === user._id)
+    console.log(el)
     return (
         <>
             {registeredUsers?.length > 0 && registeredUsers.map((elem, index) => {
