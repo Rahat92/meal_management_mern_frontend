@@ -166,6 +166,9 @@ export default function MealExpenseSummary() {
                 tagId: item.tagId,
                 tagName: item.tagName
             })) || [])
+        }else {
+            setUsersCategory([])
+            // setUsersTag([])
         }
     }, [selectedUser, selectedCategory, expenseData])
 
@@ -175,6 +178,8 @@ export default function MealExpenseSummary() {
                 tagId: item.tagId,
                 tagName: item.tagName
             })) || [])
+        } else {
+            setUsersTag([])
         }
     }, [selectedTag, selectedCategory, expenseData])
     return (
