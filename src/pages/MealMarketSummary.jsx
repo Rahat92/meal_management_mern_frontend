@@ -9,13 +9,14 @@ export default function MealExpenseSummary() {
     const todayMonth = new Date().getMonth() + 1;
     const todayYear = new Date().getFullYear();
     const [selectedUser, setSelectedUser] = useState('all');
-    console.log(selectedUser)
     const [selectedTag, setSelectedTag] = useState('all');
-
+    const [usersCategory, setUsersCategory] = useState([])
+    const [usersTag, setUsersTag] = useState([])
+    console.log(usersCategory.length)
     const { user } = useSelector((state) => state.auth);
     const [getYear, setGetYear] = useState(todayYear);
     const [getMonth, setGetMonth] = useState(todayMonth);
-    
+
     const { data: yearMonths, isSuccess: yearMonthsSuccess, isLoading: yearMonthsLoading } = useGetYearMonthQuery(user?.manager?._id, {
         skip: !user?.manager?._id,
     });
@@ -37,7 +38,6 @@ export default function MealExpenseSummary() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag });
     const expenseData = marketingData?.data || [];
-    console.log(expenseData)
     const [totalTransactions, setTotalTransactions] = useState(0);
     useEffect(() => {
         if (marketingDataLoadSuccess) {
@@ -127,10 +127,7 @@ export default function MealExpenseSummary() {
             })) || [])
         }
     }, [marketingDataLoadSuccess, expenseData])
-    console.log(marketingDataLoadSuccess)
-    console.log(tags)
-    console.log(categories)
-    console.log(users)
+
     useEffect(() => {
         if (yearMonthsSuccess && marketingDataLoadSuccess && selectedUser === 'all' && selectedCategory === 'all' && selectedTag === 'all') {
             console.log(yearMonthsSuccess, marketingDataLoadSuccess)
@@ -148,6 +145,38 @@ export default function MealExpenseSummary() {
             })) || []);
         }
     }, [yearMonthsSuccess, expenseData])
+    useEffect(() => {
+        if (selectedUser) {
+            setSelectedCategory('all')
+            setSelectedTag('all')
+        }
+    }, [selectedUser])
+    useEffect(() => {
+        if (selectedCategory) {
+            setSelectedTag('all')
+        }
+    }, [selectedCategory])
+    useEffect(() => {
+        if (selectedUser !== 'all' && selectedCategory === 'all') {
+            setUsersCategory(expenseData?.categorySummary?.map(item => ({
+                id: item.categoryId || 'uncategorized',
+                name: item.name || 'Uncategorized'
+            })) || [])
+            setUsersTag(expenseData?.tagSummary?.map(item => ({
+                tagId: item.tagId,
+                tagName: item.tagName
+            })) || [])
+        }
+    }, [selectedUser, selectedCategory, expenseData])
+
+    useEffect(() => {
+        if (selectedCategory !== 'all' && selectedTag === 'all') {
+            setUsersTag(expenseData?.tagSummary?.map(item => ({
+                tagId: item.tagId,
+                tagName: item.tagName
+            })) || [])
+        }
+    }, [selectedTag, selectedCategory, expenseData])
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
@@ -184,7 +213,9 @@ export default function MealExpenseSummary() {
                                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Categories</option>
-                                {categories.map(cat => (
+                                {usersCategory?.length == 0 ? categories.map(cat => (
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                )) : usersCategory.map(cat => (
                                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                                 ))}
                             </select>
@@ -213,7 +244,9 @@ export default function MealExpenseSummary() {
                                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Tags</option>
-                                {tags.map(tag => (
+                                {usersTag?.length==0?tags.map(tag => (
+                                    <option key={tag.tagId} value={tag.tagId}>{tag.tagName}</option>
+                                )):usersTag.map(tag => (
                                     <option key={tag.tagId} value={tag.tagId}>{tag.tagName}</option>
                                 ))}
                             </select>
@@ -250,7 +283,7 @@ export default function MealExpenseSummary() {
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <div className="flex items-center mb-4">
                         <Tag className="w-5 h-5 text-blue-600 mr-2" />
-                        <h2 className="text-xl font-bold text-slate-800">Expenses by Category</h2>
+                        <h2 className="text-xl font-bold text-slate-800">Expenses by Category({marketingData?.data?.categorySummary?.length})</h2>
                     </div>
                     <div className="space-y-3">
                         {marketingData?.data?.categorySummary?.map(({ total, name, categoryId }) => {
@@ -298,7 +331,7 @@ export default function MealExpenseSummary() {
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <div className="flex items-center mb-4">
                         <User className="w-5 h-5 text-purple-600 mr-2" />
-                        <h2 className="text-xl font-bold text-slate-800">Expenses by Tag</h2>
+                        <h2 className="text-xl font-bold text-slate-800">Expenses by Tag({marketingData?.data?.tagSummary?.length})</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {console.log(marketingData?.data?.tagSummary)}
@@ -334,7 +367,7 @@ export default function MealExpenseSummary() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {marketingData?.data?.recent?.map(({ date, product, category, amount,quantity, user }, index) => {
+                                {marketingData?.data?.recent?.map(({ date, product, category, amount, quantity, user }, index) => {
                                     return (
                                         <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                             <td className="py-3 px-4 text-sm text-slate-600">{date}</td>
