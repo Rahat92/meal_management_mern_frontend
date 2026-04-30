@@ -7,6 +7,7 @@ import { useGetYearMonthQuery } from '../features/bikri/bikriApi';
 
 export default function MealExpenseSummary() {
     const todayMonth = new Date().getMonth() + 1;
+    const [renderTime, setRenderTime] = useState(0)
     const todayYear = new Date().getFullYear();
     const [selectedUser, setSelectedUser] = useState('all');
     const [selectedTag, setSelectedTag] = useState('all');
@@ -107,26 +108,26 @@ export default function MealExpenseSummary() {
     const [tags, setTags] = useState([]);
     const [categories, setCategories] = useState([]);
     console.log(users)
-    useEffect(() => {
-        if (users.length === 0) {
-            setUsers(expenseData?.userSummary?.map(item => ({
-                id: item.userId,
-                name: item.name
-            })) || [])
-        }
-        if (tags.length === 0) {
-            setTags(expenseData?.tagSummary?.map(item => ({
-                tagId: item.tagId,
-                tagName: item.tagName
-            })) || [])
-        }
-        if (categories.length === 0) {
-            setCategories(expenseData?.categorySummary?.map(item => ({
-                id: item.categoryId || 'uncategorized',
-                name: item.name || 'Uncategorized'
-            })) || [])
-        }
-    }, [marketingDataLoadSuccess, expenseData])
+    // useEffect(() => {
+    //     if (users.length === 0) {
+    //         setUsers(expenseData?.userSummary?.map(item => ({
+    //             id: item.userId,
+    //             name: item.name
+    //         })) || [])
+    //     }
+    //     if (tags.length === 0) {
+    //         setTags(expenseData?.tagSummary?.map(item => ({
+    //             tagId: item.tagId,
+    //             tagName: item.tagName
+    //         })) || [])
+    //     }
+    //     if (categories.length === 0) {
+    //         setCategories(expenseData?.categorySummary?.map(item => ({
+    //             id: item.categoryId || 'uncategorized',
+    //             name: item.name || 'Uncategorized'
+    //         })) || [])
+    //     }
+    // }, [marketingDataLoadSuccess, expenseData])
 
     useEffect(() => {
         if (yearMonthsSuccess && marketingDataLoadSuccess && selectedUser === 'all' && selectedCategory === 'all' && selectedTag === 'all') {
@@ -199,7 +200,7 @@ export default function MealExpenseSummary() {
     }, [selectedUser, expenseData])
 
     useEffect(() => {
-        if(categories){
+        if(categories && selectedTag =='all'){
             setTags(expenseData?.tagSummary?.map(item => ({
                 tagId: item.tagId,
                 tagName: item.tagName
