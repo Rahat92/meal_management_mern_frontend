@@ -145,6 +145,43 @@ export default function MealExpenseSummary() {
             })) || []);
         }
     }, [yearMonthsSuccess, expenseData])
+    // useEffect(() => {
+    //     if (selectedUser) {
+    //         setSelectedCategory('all')
+    //         setSelectedTag('all')
+    //     }
+    // }, [selectedUser])
+    // useEffect(() => {
+    //     if (selectedCategory) {
+    //         setSelectedTag('all')
+    //     }
+    // }, [selectedCategory])
+    // useEffect(() => {
+    //     if (selectedUser !== 'all' && selectedCategory === 'all') {
+    //         setUsersCategory(expenseData?.categorySummary?.map(item => ({
+    //             id: item.categoryId || 'uncategorized',
+    //             name: item.name || 'Uncategorized'
+    //         })) || [])
+    //         setUsersTag(expenseData?.tagSummary?.map(item => ({
+    //             tagId: item.tagId,
+    //             tagName: item.tagName
+    //         })) || [])
+    //     }else {
+    //         setUsersCategory([])
+    //         // setUsersTag([])
+    //     }
+    // }, [selectedUser, selectedCategory, expenseData])
+
+    // useEffect(() => {
+    //     if (selectedCategory !== 'all' && selectedTag === 'all') {
+    //         setUsersTag(expenseData?.tagSummary?.map(item => ({
+    //             tagId: item.tagId,
+    //             tagName: item.tagName
+    //         })) || [])
+    //     } else {
+    //         setUsersTag([])
+    //     }
+    // }, [selectedTag, selectedCategory, expenseData])
     useEffect(() => {
         if (selectedUser) {
             setSelectedCategory('all')
@@ -152,36 +189,27 @@ export default function MealExpenseSummary() {
         }
     }, [selectedUser])
     useEffect(() => {
-        if (selectedCategory) {
-            setSelectedTag('all')
-        }
-    }, [selectedCategory])
-    useEffect(() => {
-        if (selectedUser !== 'all' && selectedCategory === 'all') {
+        if (selectedUser && selectedCategory === 'all') {
+            setSelectedCategory('all')
             setUsersCategory(expenseData?.categorySummary?.map(item => ({
                 id: item.categoryId || 'uncategorized',
                 name: item.name || 'Uncategorized'
             })) || [])
-            setUsersTag(expenseData?.tagSummary?.map(item => ({
-                tagId: item.tagId,
-                tagName: item.tagName
-            })) || [])
-        }else {
-            setUsersCategory([])
-            // setUsersTag([])
         }
-    }, [selectedUser, selectedCategory, expenseData])
+    }, [selectedUser, expenseData])
 
     useEffect(() => {
-        if (selectedCategory !== 'all' && selectedTag === 'all') {
+        if(categories){
+            setTags(expenseData?.tagSummary?.map(item => ({
+                tagId: item.tagId,
+                tagName: item.tagName
+            })) || [])
             setUsersTag(expenseData?.tagSummary?.map(item => ({
                 tagId: item.tagId,
                 tagName: item.tagName
             })) || [])
-        } else {
-            setUsersTag([])
         }
-    }, [selectedTag, selectedCategory, expenseData])
+    }, [categories, expenseData])
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
@@ -218,7 +246,7 @@ export default function MealExpenseSummary() {
                                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Categories</option>
-                                {usersCategory?.length == 0 ? categories.map(cat => (
+                                {usersCategory?.length == 0 && selectedUser === 'all' ? categories.map(cat => (
                                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                                 )) : usersCategory.map(cat => (
                                     <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -249,9 +277,9 @@ export default function MealExpenseSummary() {
                                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Tags</option>
-                                {usersTag?.length==0?tags.map(tag => (
+                                {usersTag?.length == 0 && selectedUser === 'all' ? tags.map(tag => (
                                     <option key={tag.tagId} value={tag.tagId}>{tag.tagName}</option>
-                                )):usersTag.map(tag => (
+                                )) : usersTag.map(tag => (
                                     <option key={tag.tagId} value={tag.tagId}>{tag.tagName}</option>
                                 ))}
                             </select>
