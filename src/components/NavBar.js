@@ -133,7 +133,7 @@ export default function Example() {
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
               {/* Logo */}
               <div className="flex shrink-0 items-center">
-                <Link to="/" className="flex items-center gap-3 group">
+                <Link to="/advance-sheet" className="flex items-center gap-3 group">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg blur-sm opacity-50 group-hover:opacity-75 transition-opacity"></div>
                     <img
