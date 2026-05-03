@@ -13,7 +13,6 @@ export default function MealExpenseSummary() {
     const [selectedTag, setSelectedTag] = useState('all');
     const [usersCategory, setUsersCategory] = useState([])
     const [usersTag, setUsersTag] = useState([])
-    console.log(usersCategory.length)
     const { user } = useSelector((state) => state.auth);
     const [getYear, setGetYear] = useState(todayYear);
     const [getMonth, setGetMonth] = useState(todayMonth);

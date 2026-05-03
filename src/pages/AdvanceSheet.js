@@ -367,15 +367,16 @@ const AdvanceSheet = () => {
         if (advanceSheet?.data?.length > 0 && advanceSheetSuccess) {
             const mealDays = {}
             advanceSheet.data.forEach(item => {
+                console.log('item', item)
                 item.meals.forEach(el => {
                     if (mealDays[el.mealDay]) {
                         mealDays[el.mealDay] = { mealDay: el.mealDay, month: el.month, date: `${el.day} February 2026`, day: el.day, user: [...mealDays[el.mealDay].user, item.name], breakfast: [...mealDays[el.mealDay].breakfast, { user: item.userId, meal: el.breakfast }], launch: [...mealDays[el.mealDay].launch, { user: item.userId, meal: el.lunch }], dinner: [...mealDays[el.mealDay].dinner, { user: item.userId, meal: el.dinner }] }
                     } else {
-                        mealDays[el.mealDay] = { day: el.day, month: el.month, date: `${el.day} February 2026`, user: [item.name], breakfast: [{ user: item.userId, meal: el.breakfast }], launch: [{ user: item.userId, meal: el.lunch }], dinner: [{ user: item.userId, meal: el.dinner }] };
+                        mealDays[el.mealDay] = { mealDay: el.mealDay, day: el.day, month: el.month, date: `${el.day} February 2026`, user: [item.name], breakfast: [{ user: item.userId, meal: el.breakfast }], launch: [{ user: item.userId, meal: el.lunch }], dinner: [{ user: item.userId, meal: el.dinner }] };
                     }
                 })
             })
-
+            console.log('mealDays', mealDays)
             setRegisteredUsers(advanceSheet.data.map(item => {
                 return {
                     user: {
@@ -422,6 +423,7 @@ const AdvanceSheet = () => {
                 };
             }).sort((a, b) => a.day - b.day);
             setArrOfMeals(Object.values(mealDays));
+
             setPrevArrOfMeals(mealsArr);
         } else {
             setArrOfMeals([]);
