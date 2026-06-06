@@ -39,6 +39,7 @@ export default function MealExpenseSummary() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const { data: marketingData, isSuccess: marketingDataLoadSuccess, isLoading, isError } = useMarketingSummaryWithCategoryQuery({ year: getYear, month: getMonth, user: selectedUser === 'all' ? "" : selectedUser, category: selectedCategory === 'all' ? "" : selectedCategory, tag: selectedTag === 'all' ? "" : selectedTag });
     const expenseData = marketingData?.data || [];
+    console.log(expenseData)
     const [totalTransactions, setTotalTransactions] = useState(0);
     useEffect(() => {
         if (marketingDataLoadSuccess) {
@@ -52,7 +53,7 @@ export default function MealExpenseSummary() {
         setSelectedCategory('all');
         setSelectedTag('all');
     }, [getMonth, getYear, yearMonthsSuccess])
-   
+
     const [users, setUsers] = useState([]);
     const [tags, setTags] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -79,14 +80,14 @@ export default function MealExpenseSummary() {
     }, [marketingDataLoadSuccess, expenseData])
 
     useEffect(() => {
-        if(selectedUser !== 'all') {
+        if (selectedUser !== 'all') {
             setSelectedCategory('all');
             setSelectedTag('all');
         }
     }, [selectedUser])
 
     useEffect(() => {
-        if(selectedUser !== 'all' && selectedCategory === 'all' && selectedTag === 'all') {
+        if (selectedCategory === 'all' && selectedTag === 'all') {
             setCategories(expenseData?.categorySummary?.map(item => ({
                 id: item.categoryId || 'uncategorized',
                 name: item.name || 'Uncategorized'
@@ -99,37 +100,50 @@ export default function MealExpenseSummary() {
     }, [selectedUser, expenseData])
 
     useEffect(() => {
-        if(selectedUser === 'all') {
-            setTags(expenseData?.tagSummary?.map(item => ({
-                tagId: item.tagId,
-                tagName: item.tagName
+        // if (selectedUser === 'all') {
+        //     setTags(expenseData?.tagSummary?.map(item => ({
+        //         tagId: item.tagId,
+        //         tagName: item.tagName
+        //     })) || [])
+        // }
+        if (selectedUser !== 'all') {
+            setCategories(expenseData?.
+                userAllCategorySummary
+                ?.map(item => ({
+                    id: item.categoryId || 'uncategorized',
+                    name: item.name || 'Uncategorized'
+                })) || [])
+        }else {
+            setCategories(expenseData?.categorySummary?.map(item => ({
+                id: item.categoryId || 'uncategorized',
+                name: item.name || 'Uncategorized'
             })) || [])
         }
     }, [selectedUser])
 
+    // useEffect(() => {
+    //     if (selectedUser === 'all') {
+    //         setTags(expenseData?.tagSummary?.map(item => ({
+    //             tagId: item.tagId,
+    //             tagName: item.tagName
+    //         })) || [])
+    //     }
+    // }, [selectedUser])
     useEffect(() => {
-        if(selectedUser === 'all'){
-            setTags(expenseData?.tagSummary?.map(item => ({
-                tagId: item.tagId,
-                tagName: item.tagName
-            })) || [])
-        }
-    }, [selectedUser])
-    useEffect(() => {
-        if(selectedUser === 'all') {
+        if (selectedUser === 'all') {
             setSelectedCategory('all');
             setSelectedTag('all');
         }
     }, [selectedUser])
 
     useEffect(() => {
-        if(selectedCategory){
+        if (selectedCategory) {
             setSelectedTag('all');
         }
     }, [selectedCategory])
 
     useEffect(() => {
-        if(selectedCategory !=='all'){
+        if (selectedCategory) {
             setTags(expenseData?.tagSummary?.map(item => ({
                 tagId: item.tagId,
                 tagName: item.tagName
@@ -137,22 +151,22 @@ export default function MealExpenseSummary() {
         }
     }, [selectedCategory, expenseData])
 
-    useEffect(() => {
-        if(selectedUser === 'all'){
-            setTags(expenseData?.tagSummary?.map(item => ({
-                tagId: item.tagId,
-                tagName: item.tagName
-            })) || [])
-        }
-    }, [selectedUser])
-    useEffect(() => {
-        if(selectedCategory === 'all'){
-            setTags(expenseData?.tagSummary?.map(item => ({
-                tagId: item.tagId,
-                tagName: item.tagName
-            })) || [])
-        }
-    }, [selectedCategory])
+    // useEffect(() => {
+    //     if (selectedUser === 'all') {
+    //         setTags(expenseData?.tagSummary?.map(item => ({
+    //             tagId: item.tagId,
+    //             tagName: item.tagName
+    //         })) || [])
+    //     }
+    // }, [selectedUser])
+    // useEffect(() => {
+    //     if (selectedCategory === 'all') {
+    //         setTags(expenseData?.tagSummary?.map(item => ({
+    //             tagId: item.tagId,
+    //             tagName: item.tagName
+    //         })) || [])
+    //     }
+    // }, [selectedCategory])
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
@@ -184,13 +198,13 @@ export default function MealExpenseSummary() {
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-2">Filter by Category</label>
                             <select
-                                value={selectedCategory}
+                                // value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
                             >
                                 <option value="all">All Categories</option>
                                 {categories.map(cat => (
-                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                    <option selected = {expenseData?.categorySummary?.length===1 && expenseData?.categorySummary[0]?.categoryId === cat.id} key={cat.id} value={cat.id}>{cat.name}</option>
                                 ))}
                             </select>
                         </div>
