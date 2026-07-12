@@ -53,7 +53,7 @@ const productCategoryApi = apiSlice.injectEndpoints({
         }),
         marketingSummaryWithCategory: builder.query({
             query: (data) => ({
-                url: `/api/v2/meal-expense-details/expense-summary?year=${data.year}&month=${data.month}&user=${data.user}&category=${data.category}&tag=${data.tag}`,
+                url: `/api/v2/meal-expense-details/expense-summary?year=${data.year}&month=${data.month}&user=${data.user}&category=${data.category}&tag=${data.tag}&page=${data.page}&limit=${data.limit}`,
                 method: 'GET',
             })
         })
