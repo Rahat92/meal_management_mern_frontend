@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, Calendar, User, Tag, Package, ChevronLeft, ChevronRight } from 'lucide-react';
+import { DollarSign, TrendingUp, Calendar, User, Tag, Package, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { useMarketingSummaryWithCategoryQuery } from '../features/productCategory/productCategoryApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { locationPathChanged } from '../features/locationPath';
 import { useGetYearMonthQuery } from '../features/bikri/bikriApi';
+
+// Small reusable skeleton block
+function Skeleton({ className = '' }) {
+    return <div className={`animate-pulse bg-slate-200 rounded ${className}`} />;
+}
 
 export default function MealExpenseSummary() {
     const todayMonth = new Date().getMonth() + 1;
@@ -20,7 +25,7 @@ export default function MealExpenseSummary() {
     const [getYear, setGetYear] = useState(todayYear);
     const [getMonth, setGetMonth] = useState(todayMonth);
 
-    const { data: yearMonths } = useGetYearMonthQuery(user?.manager?._id, {
+    const { data: yearMonths, isLoading: yearMonthsLoading } = useGetYearMonthQuery(user?.manager?._id, {
         skip: !user?.manager?._id,
     });
 
@@ -43,7 +48,9 @@ export default function MealExpenseSummary() {
     const {
         data: marketingData,
         isSuccess: marketingDataLoadSuccess,
-        isFetching: marketingDataFetching,
+        isLoading: marketingDataLoading,   // true only on the very first load (no data in cache yet)
+        isFetching: marketingDataFetching, // true on the first load AND every refetch after filter/page changes
+        isError: marketingDataError,
     } = useMarketingSummaryWithCategoryQuery(
         {
             year: getYear,
@@ -63,6 +70,13 @@ export default function MealExpenseSummary() {
 
     const expenseData = marketingData?.data || {};
     const pagination = marketingData?.pagination || { total: 0, page: 1, limit, totalPages: 1 };
+
+    // True only before we have ever received data for this view (first paint / month change).
+    // Once we have data, later filter changes should feel like a quiet refresh, not a full skeleton reset.
+    const isInitialLoading = marketingDataLoading && !marketingData;
+    // True for any in-flight request (initial or refetch) — used to disable controls so
+    // a user can't stack up filter/page clicks while a request is already in progress.
+    const isBusy = marketingDataFetching;
 
     useEffect(() => {
         if (marketingDataLoadSuccess) {
@@ -144,37 +158,56 @@ export default function MealExpenseSummary() {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-slate-800 mb-2">Expense Summary</h1>
-                    <p className="text-slate-600">{getMonthName(getMonth)} {getYear} - Track your spending</p>
+                <div className="mb-8 flex items-center gap-3">
+                    <div>
+                        <h1 className="text-4xl font-bold text-slate-800 mb-2">Expense Summary</h1>
+                        <p className="text-slate-600">{getMonthName(getMonth)} {getYear} - Track your spending</p>
+                    </div>
+                    {/* Quiet "updating" indicator — only shows once we already have data on screen */}
+                    {isBusy && !isInitialLoading && (
+                        <span className="flex items-center gap-1.5 text-sm text-blue-600 mt-4">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Updating…
+                        </span>
+                    )}
                 </div>
 
+                {marketingDataError && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6 text-sm">
+                        Couldn't load expense data. Please try again.
+                    </div>
+                )}
+
                 {/* Filters */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                <fieldset disabled={isBusy} className="bg-white rounded-2xl shadow-lg p-6 mb-6 disabled:opacity-70 transition-opacity">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-2">Filter By Date</label>
-                            <select
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
-                                value={`${getMonth} ${getYear}`}
-                                onChange={(e) => {
-                                    setGetYear(e.target.value.split(" ")[1] * 1);
-                                    setGetMonth(e.target.value.split(" ")[0] * 1);
-                                }}
-                            >
-                                {yearMonths?.result?.map((ym) => (
-                                    <option className='text-slate-700' key={`${ym.year}-${ym.month}`} value={`${ym.month} ${ym.year}`}>
-                                        {getMonthName(ym.month)} {ym.year}
-                                    </option>
-                                ))}
-                            </select>
+                            {yearMonthsLoading ? (
+                                <Skeleton className="h-[42px] w-full" />
+                            ) : (
+                                <select
+                                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+                                    value={`${getMonth} ${getYear}`}
+                                    onChange={(e) => {
+                                        setGetYear(e.target.value.split(" ")[1] * 1);
+                                        setGetMonth(e.target.value.split(" ")[0] * 1);
+                                    }}
+                                >
+                                    {yearMonths?.result?.map((ym) => (
+                                        <option className='text-slate-700' key={`${ym.year}-${ym.month}`} value={`${ym.month} ${ym.year}`}>
+                                            {getMonthName(ym.month)} {ym.year}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-2">Filter by Category</label>
                             <select
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
                             >
                                 <option value="all">All Categories</option>
                                 {categories.map(cat => (
@@ -187,7 +220,7 @@ export default function MealExpenseSummary() {
                             <select
                                 value={selectedUser}
                                 onChange={(e) => setSelectedUser(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
                             >
                                 <option value="all">All Users</option>
                                 {users.map(u => (
@@ -200,7 +233,7 @@ export default function MealExpenseSummary() {
                             <select
                                 value={selectedTag}
                                 onChange={(e) => setSelectedTag(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500"
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
                             >
                                 <option value="all">All Tags</option>
                                 {tags.map(tag => (
@@ -209,7 +242,7 @@ export default function MealExpenseSummary() {
                             </select>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -221,7 +254,11 @@ export default function MealExpenseSummary() {
                             <TrendingUp className="w-6 h-6 opacity-80" />
                         </div>
                         <h3 className="text-sm font-medium opacity-90 mb-1">Total Expenses</h3>
-                        <p className="text-4xl font-bold">৳{totalExpense}</p>
+                        {isInitialLoading ? (
+                            <Skeleton className="h-10 w-32 bg-white/30" />
+                        ) : (
+                            <p className="text-4xl font-bold">৳{totalExpense}</p>
+                        )}
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-xl p-6 text-white">
@@ -232,7 +269,11 @@ export default function MealExpenseSummary() {
                             <Calendar className="w-6 h-6 opacity-80" />
                         </div>
                         <h3 className="text-sm font-medium opacity-90 mb-1">Total Transactions</h3>
-                        <p className="text-4xl font-bold">{totalTransactions}</p>
+                        {isInitialLoading ? (
+                            <Skeleton className="h-10 w-20 bg-white/30" />
+                        ) : (
+                            <p className="text-4xl font-bold">{totalTransactions}</p>
+                        )}
                     </div>
                 </div>
 
@@ -240,27 +281,45 @@ export default function MealExpenseSummary() {
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <div className="flex items-center mb-4">
                         <Tag className="w-5 h-5 text-blue-600 mr-2" />
-                        <h2 className="text-xl font-bold text-slate-800">Expenses by Category ({expenseData?.categorySummary?.length || 0})</h2>
+                        <h2 className="text-xl font-bold text-slate-800">
+                            Expenses by Category {!isInitialLoading && `(${expenseData?.categorySummary?.length || 0})`}
+                        </h2>
                     </div>
-                    <div className="space-y-3">
-                        {expenseData?.categorySummary?.map(({ total, name, categoryId }) => {
-                            const percentage = totalExpense ? (total / totalExpense) * 100 : 0;
-                            return (
-                                <div key={categoryId} className="space-y-2">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-slate-700 font-medium">{name}</span>
-                                        <span className="text-slate-900 font-semibold">৳{total.toLocaleString()}</span>
+                    {isInitialLoading ? (
+                        <div className="space-y-4">
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} className="space-y-2">
+                                    <div className="flex justify-between">
+                                        <Skeleton className="h-4 w-24" />
+                                        <Skeleton className="h-4 w-16" />
                                     </div>
-                                    <div className="w-full bg-slate-200 rounded-full h-2.5">
-                                        <div
-                                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-500"
-                                            style={{ width: `${percentage}%` }}
-                                        ></div>
-                                    </div>
+                                    <Skeleton className="h-2.5 w-full" />
                                 </div>
-                            );
-                        })}
-                    </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={`space-y-3 transition-opacity ${isBusy ? 'opacity-50' : ''}`}>
+                            {expenseData?.categorySummary?.length ? expenseData.categorySummary.map(({ total, name, categoryId }) => {
+                                const percentage = totalExpense ? (total / totalExpense) * 100 : 0;
+                                return (
+                                    <div key={categoryId} className="space-y-2">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-700 font-medium">{name}</span>
+                                            <span className="text-slate-900 font-semibold">৳{total.toLocaleString()}</span>
+                                        </div>
+                                        <div className="w-full bg-slate-200 rounded-full h-2.5">
+                                            <div
+                                                className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-500"
+                                                style={{ width: `${percentage}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                );
+                            }) : (
+                                <p className="text-sm text-slate-500">No category data for this selection.</p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* User Breakdown */}
@@ -269,44 +328,66 @@ export default function MealExpenseSummary() {
                         <User className="w-5 h-5 text-purple-600 mr-2" />
                         <h2 className="text-xl font-bold text-slate-800">Expenses by User</h2>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {expenseData?.userSummary?.map(({ name, total, userId }) => (
-                            <div key={userId} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center">
-                                        <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                            {name?.charAt(0)}
+                    {isInitialLoading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[...Array(4)].map((_, i) => (
+                                <Skeleton key={i} className="h-16 w-full" />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity ${isBusy ? 'opacity-50' : ''}`}>
+                            {expenseData?.userSummary?.length ? expenseData.userSummary.map(({ name, total, userId }) => (
+                                <div key={userId} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center">
+                                            <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                                                {name?.charAt(0)}
+                                            </div>
+                                            <span className="font-semibold text-slate-800">{name}</span>
                                         </div>
-                                        <span className="font-semibold text-slate-800">{name}</span>
+                                        <span className="text-lg font-bold text-purple-600">৳{total.toLocaleString()}</span>
                                     </div>
-                                    <span className="text-lg font-bold text-purple-600">৳{total.toLocaleString()}</span>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            )) : (
+                                <p className="text-sm text-slate-500 col-span-2">No user data for this selection.</p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Tag Breakdown */}
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <div className="flex items-center mb-4">
                         <User className="w-5 h-5 text-purple-600 mr-2" />
-                        <h2 className="text-xl font-bold text-slate-800">Expenses by Tag ({expenseData?.tagSummary?.length || 0})</h2>
+                        <h2 className="text-xl font-bold text-slate-800">
+                            Expenses by Tag {!isInitialLoading && `(${expenseData?.tagSummary?.length || 0})`}
+                        </h2>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {expenseData?.tagSummary?.map(({ tagName, tagId, total }) => (
-                            <div key={tagId} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center">
-                                        <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                            {tagName?.charAt(0)}
+                    {isInitialLoading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[...Array(4)].map((_, i) => (
+                                <Skeleton key={i} className="h-16 w-full" />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity ${isBusy ? 'opacity-50' : ''}`}>
+                            {expenseData?.tagSummary?.length ? expenseData.tagSummary.map(({ tagName, tagId, total }) => (
+                                <div key={tagId} className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center">
+                                            <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                                                {tagName?.charAt(0)}
+                                            </div>
+                                            <span className="font-semibold text-slate-800">{tagName}</span>
                                         </div>
-                                        <span className="font-semibold text-slate-800">{tagName}</span>
+                                        <span className="text-lg font-bold text-purple-600">৳{total.toLocaleString()}</span>
                                     </div>
-                                    <span className="text-lg font-bold text-purple-600">৳{total.toLocaleString()}</span>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            )) : (
+                                <p className="text-sm text-slate-500 col-span-2">No tag data for this selection.</p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Recent Transactions */}
@@ -318,7 +399,8 @@ export default function MealExpenseSummary() {
                             <select
                                 value={limit}
                                 onChange={(e) => setLimit(Number(e.target.value))}
-                                className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                disabled={isBusy}
+                                className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:bg-slate-50 disabled:cursor-not-allowed"
                             >
                                 {[5, 10, 25, 50, 100].map(n => (
                                     <option key={n} value={n}>{n}</option>
@@ -338,8 +420,16 @@ export default function MealExpenseSummary() {
                                     <th className="text-right py-3 px-4 text-sm font-semibold text-slate-700">Amount</th>
                                 </tr>
                             </thead>
-                            <tbody className={marketingDataFetching ? 'opacity-50' : ''}>
-                                {expenseData?.recent?.length ? expenseData.recent.map(({ date, product, category, amount, quantity, user: rowUser }, index) => (
+                            <tbody className={`transition-opacity ${isBusy && !isInitialLoading ? 'opacity-50' : ''}`}>
+                                {isInitialLoading ? (
+                                    [...Array(limit > 5 ? 5 : limit)].map((_, i) => (
+                                        <tr key={i} className="border-b border-slate-100">
+                                            {[...Array(6)].map((__, j) => (
+                                                <td key={j} className="py-3 px-4"><Skeleton className="h-4 w-full" /></td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                ) : expenseData?.recent?.length ? expenseData.recent.map(({ date, product, category, amount, quantity, user: rowUser }, index) => (
                                     <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                         <td className="py-3 px-4 text-sm text-slate-600">{date}</td>
                                         <td className="py-3 px-4 text-sm text-slate-800 font-medium">{product}</td>
@@ -366,15 +456,17 @@ export default function MealExpenseSummary() {
                     {/* Pagination footer */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-500">
-                            {pagination.total === 0
-                                ? 'No results'
-                                : `Showing ${(pagination.page - 1) * pagination.limit + 1}–${Math.min(pagination.page * pagination.limit, pagination.total)} of ${pagination.total}`}
+                            {isInitialLoading
+                                ? <Skeleton className="h-4 w-40" />
+                                : pagination.total === 0
+                                    ? 'No results'
+                                    : `Showing ${(pagination.page - 1) * pagination.limit + 1}–${Math.min(pagination.page * pagination.limit, pagination.total)} of ${pagination.total}`}
                         </p>
                         <div className="flex items-center gap-2">
                             <button
                                 type="button"
                                 onClick={() => setPage(p => Math.max(1, p - 1))}
-                                disabled={pagination.page <= 1}
+                                disabled={isBusy || pagination.page <= 1}
                                 className="p-2 rounded-lg border border-slate-300 text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
                                 aria-label="Previous page"
                             >
@@ -386,7 +478,7 @@ export default function MealExpenseSummary() {
                             <button
                                 type="button"
                                 onClick={() => setPage(p => Math.min(pagination.totalPages || 1, p + 1))}
-                                disabled={pagination.page >= pagination.totalPages}
+                                disabled={isBusy || pagination.page >= pagination.totalPages}
                                 className="p-2 rounded-lg border border-slate-300 text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
                                 aria-label="Next page"
                             >
