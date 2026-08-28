@@ -5,7 +5,7 @@ import { Outlet, Navigate } from "react-router-dom";
 const AuthRoute = () => {
   const { user } = useSelector((state) => state.auth);
   if (user) {
-    return <Navigate to="/meals" />;
+    return <Navigate to="/advance-sheet" />;
   }
   return <Outlet />;
 };

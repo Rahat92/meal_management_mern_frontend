@@ -22,6 +22,7 @@ export default function Example() {
       setNavigation([
         { name: 'Dashboard', href: '/admin-dashboard', current: true },
         { name: 'Summary', href: '/all-month-stats', current: false },
+        { name: 'Expenses', href: '/meal-expense-summary', current: false },
       ]);
     }
   }, [user]);

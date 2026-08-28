@@ -55,7 +55,6 @@ const FilterSelect = ({ label, value, onChange, children }) => (
   </div>
 );
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 const AllMonthsStats = () => {
   const todayMonth = new Date().getMonth();
   const todayYear = new Date().getFullYear();
@@ -69,7 +68,6 @@ const AllMonthsStats = () => {
   const [month, setMonth] = useState(new Date().getMonth()+1);
   const [day, setDay] = useState(new Date().getDate());
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -80,21 +78,18 @@ const AllMonthsStats = () => {
   const [overAllMealExpense, setOverAllMealExpense] = useState(0);
   const [mealRate, setMealRate] = useState(0);
   const [overAllMeal, setOverAllMeal] = useState(0);
-  console.log(year, month, day)
   const { data: getMonthlyMealStats, isLoading } = useGetMonthlyStatsQuery({
     year,
     mealManager: user?.role === "admin" ? user?._id : user?.manager._id,
     month,
     day,
   });
-  console.log(getMonthlyMealStats)
   const { data: monthlyMeals } = useGetMonthlyMealsQuery({
     getMonth: month,
     getYear: 2026,
   });
 
   const currentBorders = monthlyMeals?.monthlyMeals?.[0]?.border;
-  console.log(user)
   const { data: yearMonth } = useGetYearMonthQuery(`${user?.role === 'admin' ? user?._id : user?.manager._id}`);
   const [yearMonthArr, setYearMonthArr] = useState([]);
   const [sendSms] = useSendSmsMutation();
@@ -120,6 +115,7 @@ const AllMonthsStats = () => {
           .filter((item) => item.day <= day)
           .reduce((f, c) => f + c.mealExpense, 0)
       );
+      console.log('meal expense ', overAllMealExpense)
       console.log(getMonthlyMealStats.dailyTotals
           .reduce((f, c) => f + c.overAllExpense, 0))
       setOverAllExpense(
